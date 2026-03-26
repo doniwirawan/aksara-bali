@@ -1,0 +1,38 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://transliterasi-latin-ke-bahasa-bali.vercel.app/sitemap.xml
+
+# Crawl-delay for responsible crawling
+Crawl-delay: 10
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+# Block AI training crawlers (optional - remove if you want AI indexing)
+# User-agent: GPTBot
+# Disallow: /
+
+# Allow ChatGPT plugin crawler for AI visibility
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /

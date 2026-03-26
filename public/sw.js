@@ -1,19 +1,17 @@
-const CACHE_NAME = 'aksara-bali-v1.0.0';
+const CACHE_NAME = 'aksara-bali-v2.0.0';
 const urlsToCache = [
     '/',
-    '/index.html',
-    '/_next/static/css/app/layout.css',
-    '/_next/static/js/app/layout.js',
-    '/_next/static/js/app/page.js',
+    '/practice',
+    '/blog',
+    '/faq',
+    '/sitemap.xml',
     '/android-chrome-192x192.png',
     '/android-chrome-512x512.png',
     '/apple-touch-icon.png',
     '/favicon.ico',
     '/favicon-16x16.png',
     '/favicon-32x32.png',
-    // Add critical fonts
-    'https://fonts.googleapis.com/css2?family=Noto+Sans+Balinese:wght@400;500;600;700&display=swap',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
+    '/robots.txt',
 ];
 
 // Install event - cache resources

@@ -17,8 +17,10 @@ import {
     Smartphone,
     Bug
 } from 'lucide-react'
-import LatinBalineseConverter from '../components/LatinBalineseConverterv1'
+import LatinBalineseConverter from '../components/LatinBalineseConverter'
 import LanguageSwitcher, { translations } from '../components/LanguageSwitcher'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 export default function Home({ locale, setLocale }) {
     const [darkMode, setDarkMode] = useState(false)
@@ -140,8 +142,8 @@ export default function Home({ locale, setLocale }) {
     useEffect(() => {
         if (typeof window !== 'undefined' && !isLoaded) {
             try {
-                const savedTheme = localStorage.getItem('balinese-converter-theme')
-                if (savedTheme === 'dark') {
+                const savedTheme = localStorage.getItem('aksara-dark-mode')
+                if (savedTheme === 'true') {
                     setDarkMode(true)
                 }
                 setIsLoaded(true)
@@ -157,7 +159,7 @@ export default function Home({ locale, setLocale }) {
             const newMode = !prev
             if (typeof window !== 'undefined') {
                 try {
-                    localStorage.setItem('balinese-converter-theme', newMode ? 'dark' : 'light')
+                    localStorage.setItem('aksara-dark-mode', String(newMode))
                     if (newMode) {
                         document.documentElement.setAttribute('data-bs-theme', 'dark')
                     } else {
@@ -354,426 +356,18 @@ export default function Home({ locale, setLocale }) {
                     </div>
                 )}
 
-                <header className={`sticky-top shadow-sm border-bottom ${darkMode ? 'bg-dark border-secondary' : 'bg-white border-light'}`}>
-                    <div className="container-fluid px-3">
-                        <nav className="navbar navbar-expand-lg py-2 py-md-3">
-                            <div className="d-flex d-lg-none w-100 justify-content-between align-items-center">
-                                <div className="navbar-brand mb-0 d-flex align-items-center flex-grow-1">
-                                    <div
-                                        className="me-2 d-flex align-items-center justify-content-center rounded-2"
-                                        style={{
-                                            backgroundColor: '#ffffff',
-                                            width: '60px',
-                                            height: '60px',
-                                            minWidth: '60px'
-                                        }}
-                                    >
-                                        <img
-                                            src="/icons/android-chrome-192x192.png"
-                                            alt="Aksara Bali"
-                                            width="60"
-                                            height="60"
-                                            style={{ display: 'block' }}
-                                        />
-                                    </div>
-
-                                    <div className="d-none d-sm-block">
-                                        <span className="fw-bold fs-6">{t.appTitle}</span>
-                                        <small className={`d-block lh-1 ${darkMode ? 'text-light-emphasis' : 'text-muted'}`} style={{ fontSize: '0.65rem' }}>
-                                            {t.appSubtitle}
-                                        </small>
-                                    </div>
-                                </div>
-
-                                <div className="d-flex align-items-center gap-1">
-                                    <LanguageSwitcher
-                                        locale={locale}
-                                        setLocale={setLocale}
-                                        darkMode={darkMode}
-                                    />
-
-                                    <button
-                                        onClick={toggleDarkMode}
-                                        className={`btn btn-sm ${darkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
-                                        title={darkMode ? t.lightMode : t.darkMode}
-                                        aria-label={darkMode ? t.lightMode : t.darkMode}
-                                    >
-                                        {darkMode ? <Sun size={14} /> : <Moon size={14} />}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="d-none d-lg-flex w-100 align-items-center">
-                                <div className="d-flex align-items-center flex-grow-1">
-                                    <div className="navbar-brand mb-0 d-flex align-items-center">
-                                        <div
-                                            className="me-2 d-flex align-items-center justify-content-center rounded-3"
-                                            style={{
-                                                backgroundColor: '#ffffff',
-                                                width: '40px',
-                                                height: '40px',
-                                                minWidth: '40px'
-                                            }}
-                                        >
-                                            <img
-                                                src="/icons/android-chrome-192x192.png"
-                                                alt="Aksara Bali"
-                                                width="32"
-                                                height="32"
-                                                style={{ display: 'block' }}
-                                            />
-                                        </div>
-                                        <div>
-                                            <span className="fw-bold fs-5">{t.appTitle}</span>
-                                            <small className={`d-block lh-1 ${darkMode ? 'text-light-emphasis' : 'text-muted'}`} style={{ fontSize: '0.7rem' }}>
-                                                {t.appSubtitle}
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="d-flex align-items-center gap-2">
-                                    <LanguageSwitcher
-                                        locale={locale}
-                                        setLocale={setLocale}
-                                        darkMode={darkMode}
-                                    />
-
-                                    <button
-                                        onClick={toggleDarkMode}
-                                        className={`btn btn-sm ${darkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
-                                        title={darkMode ? t.lightMode : t.darkMode}
-                                        aria-label={darkMode ? t.lightMode : t.darkMode}
-                                    >
-                                        {darkMode ? <Sun size={16} /> : <Moon size={16} />}
-                                    </button>
-
-                                    <a
-                                        href="https://github.com/doniwirawan/transliterasi-latin-ke-bahasa-bali"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={`btn btn-sm ${darkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
-                                        title="View on GitHub"
-                                        aria-label="View source code on GitHub"
-                                    >
-                                        <Github size={16} />
-                                    </a>
-
-                                    <a
-                                        href="https://www.linkedin.com/in/doniwirawan/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={`btn btn-sm ${darkMode ? 'btn-outline-primary' : 'btn-outline-primary'}`}
-                                        title="Connect on LinkedIn"
-                                        aria-label="Connect with Doni Wirawan on LinkedIn"
-                                    >
-                                        <Linkedin size={16} />
-                                    </a>
-                                </div>
-                            </div>
-                        </nav>
-                    </div>
-                </header>
+                <Navbar
+                    darkMode={darkMode}
+                    onToggleDarkMode={toggleDarkMode}
+                    locale={locale}
+                    onToggleLocale={() => setLocale(locale === 'id' ? 'en' : 'id')}
+                />
 
                 <main className="pb-4">
                     <LatinBalineseConverter locale={locale} darkMode={darkMode} />
                 </main>
 
-                <footer className={`mt-4 pt-4 border-top ${darkMode ? 'bg-dark border-secondary' : 'bg-light border-light'}`}>
-                    <div className="container px-3">
-                        <div className="d-block d-lg-none">
-                            <div className="text-center mb-4">
-                                <div className="mb-3 d-flex align-items-center justify-content-center">
-                                    <div
-                                        className="d-flex align-items-center justify-content-center rounded-2"
-                                        style={{
-                                            backgroundColor: '#ffffff',
-                                            width: '60px',
-                                            height: '60px',
-                                            minWidth: '60px'
-                                        }}
-                                    >
-                                        <img
-                                            src="/icons/android-chrome-192x192.png"
-                                            alt="Aksara Bali"
-                                            width="60"
-                                            height="60"
-                                            style={{ objectFit: 'contain' }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mb-3">
-                                    <h6 className={`d-inline ${darkMode ? 'text-light' : 'text-dark'}`}>{t.appTitle}</h6>
-                                </div>
-                                <small className={`d-block ${darkMode ? 'text-light-emphasis' : 'text-muted'}`}>
-                                    {t.openSource}
-                                </small>
-                            </div>
-
-                            <div className={`text-center py-3 border-top ${darkMode ? 'border-secondary' : 'border-light'}`}>
-                                <small className={`d-block mb-2 ${darkMode ? 'text-light-emphasis' : 'text-muted'}`} style={{ fontSize: '0.75rem' }}>
-                                    {t.footerNote}
-                                </small>
-                                <small className={`d-block mb-2 ${darkMode ? 'text-light-emphasis' : 'text-muted'}`} style={{ fontSize: '0.7rem' }}>
-                                    Created by Doni Wirawan • MIT License <br />
-                                    {locale === 'id' ? 'Terinspirasi dari ' : 'Inspired by '}
-                                    <a
-                                        href="https://github.com/bennylin/transliterasijawa"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={`text-decoration-none ${darkMode ? 'text-info' : 'text-primary'}`}
-                                    >
-                                        transliterasijawa
-                                    </a>
-                                    {locale === 'id' ? ' oleh bennylin' : ' by bennylin'}
-                                </small>
-
-                                <div className="mt-3">
-                                    <small className={`d-block mb-2 ${darkMode ? 'text-light-emphasis' : 'text-muted'}`} style={{ fontSize: '0.7rem' }}>
-                                        <Bug size={12} className="me-1" />
-                                        {locale === 'id' ? 'Menemukan bug? Laporkan di:' : 'Found a bug? Report it at:'}
-                                    </small>
-                                    <div className="d-flex justify-content-center gap-2">
-                                        <a
-                                            href="https://github.com/doniwirawan/transliterasi-latin-ke-bahasa-bali/issues"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={`btn btn-sm ${darkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
-                                            title="Report bug on GitHub"
-                                        >
-                                            <Github size={12} className="me-1" />
-                                            GitHub
-                                        </a>
-                                        <a
-                                            href="https://www.linkedin.com/in/doniwirawan/"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="btn btn-sm btn-outline-primary"
-                                            title="Contact via LinkedIn"
-                                        >
-                                            <Linkedin size={12} className="me-1" />
-                                            LinkedIn
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="d-none d-lg-block">
-                            <div className="row">
-                                <div className="col-lg-4 mb-4">
-                                    <div className="align-items-center mb-3">
-                                        <div
-                                            className="me-2 d-flex align-items-center justify-content-center rounded-2"
-                                            style={{
-                                                backgroundColor: '#ffffff',
-                                                width: '80px',
-                                                height: '80px',
-                                                minWidth: '80px',
-                                                borderRadius: '50%',
-                                                marginBottom: '0.5rem'
-                                            }}
-                                        >
-                                            <img
-                                                src="/icons/android-chrome-192x192.png"
-                                                alt="Aksara Bali"
-                                                width="80"
-                                                height="80"
-                                                style={{ display: 'block' }}
-                                            />
-                                        </div>
-                                        <div>
-                                            <h5 className={`mb-0 ${darkMode ? 'text-light' : 'text-dark'}`}>{t.appTitle}</h5>
-                                            <small className={`${darkMode ? 'text-light-emphasis' : 'text-muted'}`}>
-                                                {t.appSubtitle}
-                                            </small>
-                                        </div>
-                                    </div>
-
-                                    <small className={`${darkMode ? 'text-light-emphasis' : 'text-muted'}`}>
-                                        {t.footerNote}
-                                    </small>
-                                </div>
-
-                                <div className="col-lg-4 mb-4">
-                                    <h5 className={`mb-3 ${darkMode ? 'text-light' : 'text-dark'}`}>
-                                        {locale === 'id' ? 'Tautan Cepat' : 'Quick Links'}
-                                    </h5>
-                                    <ul className="list-unstyled">
-                                        <li className="mb-2">
-                                            <a
-                                                href="https://github.com/doniwirawan/transliterasi-latin-ke-bahasa-bali"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className={`text-decoration-none d-flex align-items-center ${darkMode ? 'text-light-emphasis' : 'text-muted'}`}
-                                            >
-                                                <Github size={16} className="me-2" />
-                                                {locale === 'id' ? 'Kode Sumber Terbuka' : 'Source Code'}
-                                            </a>
-                                        </li>
-                                        <li className="mb-2">
-                                            <a
-                                                href="https://github.com/doniwirawan/transliterasi-latin-ke-bahasa-bali/issues"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className={`text-decoration-none d-flex align-items-center ${darkMode ? 'text-light-emphasis' : 'text-muted'}`}
-                                            >
-                                                <Bug size={16} className="me-2" />
-                                                {locale === 'id' ? 'Laporkan Bug' : 'Report Bug'}
-                                            </a>
-                                        </li>
-                                        <li className="mb-2">
-                                            <a
-                                                href="https://www.linkedin.com/in/doniwirawan/"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className={`text-decoration-none d-flex align-items-center ${darkMode ? 'text-light-emphasis' : 'text-muted'}`}
-                                            >
-                                                <Linkedin size={16} className="me-2" />
-                                                {locale === 'id' ? 'Kontak Developer' : 'Contact Developer'}
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div className="col-lg-4 mb-4">
-                                    <h5 className={`mb-3 ${darkMode ? 'text-light' : 'text-dark'}`}>
-                                        {locale === 'id' ? 'Sumber Daya' : 'Resources'}
-                                    </h5>
-                                    <ul className="list-unstyled">
-                                        {locale === 'id' ? (
-                                            <>
-                                                <li className="mb-2">
-                                                    <a
-                                                        href="https://id.wikipedia.org/wiki/Aksara_Bali"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className={`text-decoration-none d-flex align-items-center ${darkMode ? 'text-light-emphasis' : 'text-muted'}`}
-                                                    >
-                                                        <ExternalLink size={14} className="me-2" />
-                                                        Aksara Bali (Wikipedia)
-                                                    </a>
-                                                </li>
-                                                <li className="mb-2">
-                                                    <a
-                                                        href="https://id.wikipedia.org/wiki/Bahasa_Sansekerta"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className={`text-decoration-none d-flex align-items-center ${darkMode ? 'text-light-emphasis' : 'text-muted'}`}
-                                                    >
-                                                        <ExternalLink size={14} className="me-2" />
-                                                        Bahasa Sansekerta
-                                                    </a>
-                                                </li>
-                                                <li className="mb-2">
-                                                    <a
-                                                        href="https://id.wikipedia.org/wiki/Budaya_Bali"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className={`text-decoration-none d-flex align-items-center ${darkMode ? 'text-light-emphasis' : 'text-muted'}`}
-                                                    >
-                                                        <ExternalLink size={14} className="me-2" />
-                                                        Budaya Bali
-                                                    </a>
-                                                </li>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <li className="mb-2">
-                                                    <a
-                                                        href="https://en.wikipedia.org/wiki/Balinese_script"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className={`text-decoration-none d-flex align-items-center ${darkMode ? 'text-light-emphasis' : 'text-muted'}`}
-                                                    >
-                                                        <ExternalLink size={14} className="me-2" />
-                                                        Balinese Script
-                                                    </a>
-                                                </li>
-                                                <li className="mb-2">
-                                                    <a
-                                                        href="https://en.wikipedia.org/wiki/Sanskrit"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className={`text-decoration-none d-flex align-items-center ${darkMode ? 'text-light-emphasis' : 'text-muted'}`}
-                                                    >
-                                                        <ExternalLink size={14} className="me-2" />
-                                                        Sanskrit Language
-                                                    </a>
-                                                </li>
-                                                <li className="mb-2">
-                                                    <a
-                                                        href="https://en.wikipedia.org/wiki/Balinese_culture"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className={`text-decoration-none d-flex align-items-center ${darkMode ? 'text-light-emphasis' : 'text-muted'}`}
-                                                    >
-                                                        <ExternalLink size={14} className="me-2" />
-                                                        Balinese Culture
-                                                    </a>
-                                                </li>
-                                            </>
-                                        )}
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className={`py-3 border-top ${darkMode ? 'border-secondary' : 'border-light'}`}>
-                                <div className="row mt-2">
-                                    <div className="col-12 text-center">
-                                        <small className={`d-block mb-2 ${darkMode ? 'text-light-emphasis' : 'text-muted'}`} style={{ fontSize: '0.75rem' }}>
-                                            {locale === 'id'
-                                                ? 'Terinspirasi dari '
-                                                : 'Inspired by '
-                                            }
-                                            <a
-                                                href="https://github.com/bennylin/transliterasijawa"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className={`text-decoration-none ${darkMode ? 'text-info' : 'text-primary'}`}
-                                            >
-                                                transliterasijawa
-                                            </a>
-                                            {locale === 'id'
-                                                ? ' oleh bennylin'
-                                                : ' by bennylin'
-                                            }
-                                        </small>
-
-                                        <div className="mt-3">
-                                            <small className={`d-block mb-2 ${darkMode ? 'text-light-emphasis' : 'text-muted'}`} style={{ fontSize: '0.7rem' }}>
-                                                <Bug size={12} className="me-1" />
-                                                {locale === 'id' ? 'Menemukan bug atau punya saran?' : 'Found a bug or have suggestions?'}
-                                            </small>
-                                            <div className="d-flex justify-content-center gap-2">
-                                                <a
-                                                    href="https://github.com/doniwirawan/transliterasi-latin-ke-bahasa-bali/issues"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className={`btn btn-sm ${darkMode ? 'btn-outline-light' : 'btn-outline-dark'}`}
-                                                    title={locale === 'id' ? 'Laporkan di GitHub Issues' : 'Report on GitHub Issues'}
-                                                >
-                                                    <Github size={12} className="me-1" />
-                                                    {locale === 'id' ? 'GitHub Issues' : 'GitHub Issues'}
-                                                </a>
-                                                <a
-                                                    href="https://www.linkedin.com/in/doniwirawan/"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="btn btn-sm btn-outline-primary"
-                                                    title={locale === 'id' ? 'Hubungi via LinkedIn' : 'Contact via LinkedIn'}
-                                                >
-                                                    <Linkedin size={12} className="me-1" />
-                                                    LinkedIn
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                <Footer darkMode={darkMode} locale={locale} />
             </div>
 
             <style jsx>{`

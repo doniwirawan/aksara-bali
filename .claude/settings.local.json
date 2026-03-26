@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(npx next:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(node:*)",
+      "Bash(node -e \":*)",
+      "Bash(grep -n \"404\\\\|notFound\\\\|return\\\\s*null\\\\|BLOG_POSTS\\\\|getStaticPaths\\\\|getStaticProps\" /c/Users/doniw/Downloads/transliterasi-latin-ke-bahasa-bali-master/pages/blog/[slug].jsx)",
+      "Bash(grep -o \"^\\\\s*''''[^'''']*'''':\\\\s*{\" /c/Users/doniw/Downloads/transliterasi-latin-ke-bahasa-bali-master/pages/blog/[slug].jsx)"
+    ]
+  }
+}

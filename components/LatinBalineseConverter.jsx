@@ -1067,6 +1067,26 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
         }
     }, [latinText, balineseText, convertToBalinese, convertToLatin, isReverseMode])
 
+    // Debounced conversion logging — fires 2s after user stops typing
+    useEffect(() => {
+        const inputText = isReverseMode ? balineseText : latinText
+        const outputText = isReverseMode ? latinText : balineseText
+        if (!inputText || inputText.length < 3) return
+        const timer = setTimeout(() => {
+            fetch('/api/conversions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    inputText,
+                    outputLength: outputText.length,
+                    mode: isReverseMode ? 'bali_to_latin' : 'latin_to_bali',
+                    locale,
+                }),
+            }).catch(() => {})
+        }, 2000)
+        return () => clearTimeout(timer)
+    }, [latinText, balineseText, isReverseMode, locale])
+
     const handleModeSwitch = () => {
         setIsReverseMode(!isReverseMode)
     }
