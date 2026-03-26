@@ -9,6 +9,7 @@ function loadScript(src) {
     const s = document.createElement('script')
     s.src = src
     s.crossOrigin = 'anonymous'
+    s.async = true
     s.onload = resolve
     s.onerror = () => reject(new Error(`Failed to load ${src}`))
     document.head.appendChild(s)
@@ -366,14 +367,14 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
     setStatus('loading')
     setErrorMsg('')
     try {
-      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js')
-      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js')
-      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js')
+      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1640029074/camera_utils.js')
+      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1620248257/drawing_utils.js')
+      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js')
 
       if (!window.Hands) throw new Error('MediaPipe Hands failed to load')
 
       const hands = new window.Hands({
-        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/${file}`
       })
       hands.setOptions({
         maxNumHands: 1,
