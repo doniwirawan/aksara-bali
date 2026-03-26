@@ -7,7 +7,7 @@ export default function Document() {
                 <meta charSet="utf-8" />
 
                 {/* Preconnect for performance */}
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link rel="dns-prefetch" href="//fonts.googleapis.com" />
                 <link rel="dns-prefetch" href="//fonts.gstatic.com" />
@@ -20,6 +20,7 @@ export default function Document() {
                 />
 
                 {/* Preload critical Balinese font woff2 */}
+                {/* eslint-disable-next-line @next/next/google-font-preconnect */}
                 <link
                     rel="preload"
                     href="https://fonts.gstatic.com/s/notosansbalinese/v18/NaPwcH_SC65F4aFg5FlhMrONeFVbJp1qYMOBhVGpOzMO.woff2"

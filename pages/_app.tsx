@@ -1,5 +1,6 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
+import Script from 'next/script'
 import { useRouter } from 'next/router'
 import { useState, useEffect, useCallback } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -543,22 +544,22 @@ function MyApp({ Component, pageProps }) {
                 {/* Google Analytics 4 (replace with your actual GA4 ID) */}
                 {process.env.NODE_ENV === 'production' && (
                     <>
-                        <script
-                            async
+                        <Script
                             src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+                            strategy="afterInteractive"
                         />
-                        <script
+                        <Script
+                            id="ga-init"
+                            strategy="afterInteractive"
                             dangerouslySetInnerHTML={{
                                 __html: `
                                     window.dataLayer = window.dataLayer || [];
                                     function gtag(){dataLayer.push(arguments);}
                                     gtag('js', new Date());
                                     gtag('config', 'GA_MEASUREMENT_ID', {
-                                        page_title: '${currentContent.title}',
                                         page_location: window.location.href,
                                         content_group1: 'Cultural Education',
                                         content_group2: 'Balinese Script',
-                                        content_group3: '${locale}',
                                         custom_map: {
                                             'dimension1': 'user_language',
                                             'dimension2': 'conversion_mode',
