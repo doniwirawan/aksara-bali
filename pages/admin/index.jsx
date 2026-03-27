@@ -43,6 +43,10 @@ export default function AdminDashboard() {
   const [showFaqForm, setShowFaqForm] = useState(false)
   const [faqSaving, setFaqSaving] = useState(false)
 
+  // Users
+  const [users, setUsers] = useState([])
+  const [usersLoading, setUsersLoading] = useState(false)
+
   // Unsplash picker
   const [showPicker, setShowPicker] = useState(false)
   const [pickerQuery, setPickerQuery] = useState('')
@@ -50,14 +54,14 @@ export default function AdminDashboard() {
   const [pickerLoading, setPickerLoading] = useState(false)
   const pickerPage = useRef(1)
 
-  const [sessionToken, setSessionToken] = useState('')
-  const adminHeaders = { 'Content-Type': 'application/json', Authorization: `Bearer ${sessionToken}` }
+  const tokenRef = useRef('')
+  const getHeaders = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${tokenRef.current}` })
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user?.email === ADMIN_EMAIL) {
+        tokenRef.current = session.access_token
         setAuthenticated(true)
-        setSessionToken(session.access_token)
       }
     })
   }, [])
@@ -72,8 +76,8 @@ export default function AdminDashboard() {
       setError('Akun ini bukan admin')
       return
     }
+    tokenRef.current = data.session.access_token
     setAuthenticated(true)
-    setSessionToken(data.session.access_token)
   }
 
   // ─── Stats ────────────────────────────────────────────────
@@ -93,7 +97,7 @@ export default function AdminDashboard() {
   // ─── Blog ─────────────────────────────────────────────────
   const fetchBlog = useCallback(async () => {
     setBlogLoading(true)
-    const res = await fetch('/api/blog-posts', { headers: adminHeaders })
+    const res = await fetch('/api/blog-posts', { headers: getHeaders() })
     if (res.ok) setBlogPosts(await res.json())
     setBlogLoading(false)
   }, [])
@@ -107,7 +111,7 @@ export default function AdminDashboard() {
     }
     const method = editingBlog ? 'PUT' : 'POST'
     if (editingBlog) payload.id = editingBlog
-    const res = await fetch('/api/blog-posts', { method, headers: adminHeaders, body: JSON.stringify(payload) })
+    const res = await fetch('/api/blog-posts', { method, headers: getHeaders(), body: JSON.stringify(payload) })
     if (res.ok) {
       setShowBlogForm(false)
       setEditingBlog(null)
@@ -128,19 +132,19 @@ export default function AdminDashboard() {
 
   const deleteBlog = async (id) => {
     if (!confirm('Hapus artikel ini?')) return
-    await fetch('/api/blog-posts', { method: 'DELETE', headers: adminHeaders, body: JSON.stringify({ id }) })
+    await fetch('/api/blog-posts', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
     fetchBlog()
   }
 
   const toggleBlogPublish = async (post) => {
-    await fetch('/api/blog-posts', { method: 'PUT', headers: adminHeaders, body: JSON.stringify({ id: post.id, published: !post.published }) })
+    await fetch('/api/blog-posts', { method: 'PUT', headers: getHeaders(), body: JSON.stringify({ id: post.id, published: !post.published }) })
     fetchBlog()
   }
 
   // ─── FAQ ──────────────────────────────────────────────────
   const fetchFaq = useCallback(async () => {
     setFaqLoading(true)
-    const res = await fetch('/api/faq-items', { headers: adminHeaders })
+    const res = await fetch('/api/faq-items', { headers: getHeaders() })
     if (res.ok) setFaqItems(await res.json())
     setFaqLoading(false)
   }, [])
@@ -150,7 +154,7 @@ export default function AdminDashboard() {
     setFaqSaving(true)
     const method = editingFaq ? 'PUT' : 'POST'
     const payload = editingFaq ? { ...faqForm, id: editingFaq } : faqForm
-    const res = await fetch('/api/faq-items', { method, headers: adminHeaders, body: JSON.stringify(payload) })
+    const res = await fetch('/api/faq-items', { method, headers: getHeaders(), body: JSON.stringify(payload) })
     if (res.ok) {
       setShowFaqForm(false)
       setEditingFaq(null)
@@ -167,7 +171,7 @@ export default function AdminDashboard() {
 
   const deleteFaq = async (id) => {
     if (!confirm('Hapus FAQ ini?')) return
-    await fetch('/api/faq-items', { method: 'DELETE', headers: adminHeaders, body: JSON.stringify({ id }) })
+    await fetch('/api/faq-items', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
     fetchFaq()
   }
 
@@ -204,10 +208,24 @@ export default function AdminDashboard() {
     fetchStats()
   }, [authenticated, fetchStats])
 
+  const fetchUsers = useCallback(async () => {
+    setUsersLoading(true)
+    const res = await fetch('/api/admin-users', { headers: getHeaders() })
+    if (res.ok) setUsers(await res.json())
+    setUsersLoading(false)
+  }, [])
+
+  const deleteUser = async (id, email) => {
+    if (!confirm(`Hapus akun ${email}?`)) return
+    await fetch('/api/admin-users', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
+    fetchUsers()
+  }
+
   useEffect(() => {
     if (!authenticated) return
     if (activeTab === 'blog') fetchBlog()
     if (activeTab === 'faq') fetchFaq()
+    if (activeTab === 'users') fetchUsers()
   }, [activeTab, authenticated])
 
   // ─── Styles ───────────────────────────────────────────────
@@ -252,6 +270,7 @@ export default function AdminDashboard() {
     { key: 'stats', label: '📊 Statistik' },
     { key: 'blog', label: '✍️ Blog' },
     { key: 'faq', label: '❓ FAQ' },
+    { key: 'users', label: '👥 Pengguna' },
   ]
 
   return (
@@ -581,6 +600,58 @@ export default function AdminDashboard() {
                       </div>
                     </div>
                   ))}
+                </div>
+              )}
+            </>
+          )}
+
+          {/* ── USERS TAB ── */}
+          {activeTab === 'users' && (
+            <>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>Pengguna Terdaftar</h2>
+                <button onClick={fetchUsers} disabled={usersLoading} style={s.btnOutline}>{usersLoading ? '⏳ Memuat...' : '🔄 Perbarui'}</button>
+              </div>
+              {usersLoading ? (
+                <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Memuat data pengguna...</div>
+              ) : (
+                <div style={s.card}>
+                  <div style={{ marginBottom: '12px', fontSize: '13px', color: '#666' }}>Total: <strong>{users.length}</strong> akun</div>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                      <thead>
+                        <tr>{['Email', 'Status', 'Bergabung', 'Login Terakhir', 'Aksi'].map(h => (
+                          <th key={h} style={{ textAlign: 'left', padding: '8px 12px', borderBottom: '2px solid #f0f0f0', color: '#555', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
+                        ))}</tr>
+                      </thead>
+                      <tbody>
+                        {users.map(u => (
+                          <tr key={u.id}>
+                            <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', fontWeight: u.email === ADMIN_EMAIL ? '700' : '400' }}>
+                              {u.email}
+                              {u.email === ADMIN_EMAIL && <span style={{ marginLeft: '6px', fontSize: '10px', background: '#0d6efd20', color: '#0d6efd', padding: '1px 6px', borderRadius: '8px', fontWeight: '700' }}>ADMIN</span>}
+                            </td>
+                            <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8' }}>
+                              <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '8px', fontWeight: '600', background: u.email_confirmed_at ? '#19875420' : '#88888820', color: u.email_confirmed_at ? '#198754' : '#888' }}>
+                                {u.email_confirmed_at ? 'Terverifikasi' : 'Belum verifikasi'}
+                              </span>
+                            </td>
+                            <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', color: '#666', whiteSpace: 'nowrap' }}>
+                              {u.created_at ? new Date(u.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
+                            </td>
+                            <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', color: '#666', whiteSpace: 'nowrap' }}>
+                              {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Belum pernah'}
+                            </td>
+                            <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8' }}>
+                              {u.email !== ADMIN_EMAIL && (
+                                <button onClick={() => deleteUser(u.id, u.email)} style={{ ...s.btn('#dc3545'), padding: '4px 10px', fontSize: '12px' }}>Hapus</button>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
             </>
