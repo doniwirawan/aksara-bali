@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 
-// Simple password-protected admin dashboard
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'aksarabali2026'
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'doniwirawan166@gmail.com'
+const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'Denpasar12'
 
 export default function AdminDashboard() {
   const [authenticated, setAuthenticated] = useState(false)
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [stats, setStats] = useState(null)
@@ -24,12 +25,12 @@ export default function AdminDashboard() {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    if (password === ADMIN_PASSWORD) {
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       setAuthenticated(true)
       sessionStorage.setItem('admin-auth', 'true')
       setError('')
     } else {
-      setError('Password salah')
+      setError('Email atau password salah')
     }
   }
 
@@ -58,17 +59,27 @@ export default function AdminDashboard() {
         <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f0', fontFamily: 'system-ui, sans-serif' }}>
           <div style={{ padding: '40px', borderRadius: '16px', background: '#fff', border: '1px solid #e0e0d8', width: '360px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
             <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-              <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '36px' }}>ᬅ</span>
-              <h1 style={{ fontSize: '20px', fontWeight: '700', margin: '8px 0 4px' }}>Admin Dashboard</h1>
+              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
+                style={{ borderRadius: '12px', marginBottom: '12px', display: 'inline-block' }} />
+              <h1 style={{ fontSize: '20px', fontWeight: '700', margin: '0 0 4px' }}>Admin Dashboard</h1>
               <p style={{ color: '#888', fontSize: '13px', margin: 0 }}>Aksara Bali Converter</p>
             </div>
             <form onSubmit={handleLogin}>
               <input
+                type="email"
+                placeholder="Email admin"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                autoFocus
+                required
+                style={{ width: '100%', padding: '12px 14px', borderRadius: '10px', border: '1px solid #e0e0d8', fontSize: '15px', marginBottom: '10px', boxSizing: 'border-box', outline: 'none' }}
+              />
+              <input
                 type="password"
-                placeholder="Password admin"
+                placeholder="Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                autoFocus
+                required
                 style={{ width: '100%', padding: '12px 14px', borderRadius: '10px', border: `1px solid ${error ? '#ef4444' : '#e0e0d8'}`, fontSize: '15px', marginBottom: '12px', boxSizing: 'border-box', outline: 'none' }}
               />
               {error && <p style={{ color: '#ef4444', fontSize: '13px', margin: '0 0 10px' }}>{error}</p>}
@@ -76,6 +87,9 @@ export default function AdminDashboard() {
                 Masuk
               </button>
             </form>
+            <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '13px' }}>
+              <a href="/" style={{ color: '#888', textDecoration: 'none' }}>← Ke Aplikasi</a>
+            </p>
           </div>
         </div>
       </>
@@ -95,13 +109,13 @@ export default function AdminDashboard() {
     <>
       <Head><title>Admin Dashboard — Aksara Bali</title></Head>
       <div style={{ minHeight: '100vh', background: '#f5f5f0', fontFamily: 'system-ui, sans-serif' }}>
-        {/* Header */}
         <header style={{ background: '#fff', borderBottom: '1px solid #e0e0d8', padding: '0 24px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '24px' }}>ᬅ</span>
+            <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="32" height="32" style={{ borderRadius: '8px' }} />
             <span style={{ fontWeight: '700', fontSize: '15px' }}>Aksara Bali — Admin</span>
           </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <span style={{ fontSize: '12px', color: '#888' }}>{ADMIN_EMAIL}</span>
             <a href="/" style={{ color: '#0d6efd', fontSize: '13px', textDecoration: 'none' }}>← Ke Aplikasi</a>
             <button onClick={() => { sessionStorage.removeItem('admin-auth'); setAuthenticated(false) }} style={{ padding: '5px 12px', borderRadius: '8px', border: '1px solid #e0e0d8', background: 'transparent', cursor: 'pointer', fontSize: '13px', color: '#666' }}>
               Keluar
@@ -117,7 +131,6 @@ export default function AdminDashboard() {
             </button>
           </div>
 
-          {/* Stat cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '28px' }}>
             {STAT_CARDS.map(card => (
               <div key={card.label} style={{ background: '#fff', borderRadius: '14px', border: '1px solid #e0e0d8', padding: '20px' }}>
@@ -128,7 +141,6 @@ export default function AdminDashboard() {
             ))}
           </div>
 
-          {/* Recent quiz sessions */}
           {quizStats?.recentSessions?.length > 0 && (
             <div style={{ background: '#fff', borderRadius: '14px', border: '1px solid #e0e0d8', padding: '20px', marginBottom: '20px' }}>
               <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 16px' }}>Sesi Kuis Terbaru</h2>
@@ -161,7 +173,6 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* Setup guide */}
           <div style={{ background: '#f0f4ff', borderRadius: '14px', border: '1px solid #c5d8fc', padding: '20px' }}>
             <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 12px', color: '#1e40af' }}>📋 Setup Supabase</h2>
             <ol style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 2, color: '#374151' }}>
@@ -169,7 +180,9 @@ export default function AdminDashboard() {
               <li>Jalankan isi file <code>supabase-schema.sql</code> di root project</li>
               <li>Tambahkan environment variables di Vercel: <b>Settings → Environment Variables</b></li>
               <li>Set <code>NEXT_PUBLIC_SUPABASE_URL</code> dan <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code></li>
-              <li>Set <code>SUPABASE_SERVICE_ROLE_KEY</code> (server-only, tidak diawali NEXT_PUBLIC_)</li>
+              <li>Set <code>SUPABASE_SERVICE_ROLE_KEY</code> (server-only)</li>
+              <li>Set <code>NEXT_PUBLIC_ADMIN_EMAIL</code> = doniwirawan166@gmail.com</li>
+              <li>Set <code>NEXT_PUBLIC_ADMIN_PASSWORD</code> = Denpasar12</li>
               <li>Deploy ulang di Vercel setelah menambahkan env vars</li>
             </ol>
           </div>

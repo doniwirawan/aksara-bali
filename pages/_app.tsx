@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useState, useEffect, useCallback } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../styles/globals.css'
+import { AuthProvider } from '../context/AuthContext'
 
 // Enhanced SEO Content in multiple languages
 const seoContent = {
@@ -593,7 +594,9 @@ function MyApp({ Component, pageProps }) {
                 }} />
             </Head>
 
-            <Component {...pageProps} locale={locale} setLocale={handleSetLocale} />
+            <AuthProvider>
+              <Component {...pageProps} locale={locale} setLocale={handleSetLocale} />
+            </AuthProvider>
         </>
     )
 }

@@ -94,8 +94,12 @@ export default function PracticePage({ locale, setLocale }) {
         />
 
         <main style={{ maxWidth: 900, margin: '0 auto', padding: '24px 16px' }}>
-          {/* Page title */}
+          {/* Page header with logo */}
           <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+            <a href="/">
+              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
+                style={{ borderRadius: '14px', marginBottom: '12px', display: 'inline-block', boxShadow: '0 2px 12px rgba(13,110,253,0.2)' }} />
+            </a>
             <h1 style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 8px', color: textColor }}>
               {pt.title}
             </h1>

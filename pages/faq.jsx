@@ -239,8 +239,12 @@ export default function FAQPage({ locale, setLocale }) {
         />
 
         <main style={{ maxWidth: 800, margin: '0 auto', padding: '40px 16px 80px' }}>
-          {/* Hero */}
+          {/* Hero with logo */}
           <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+            <a href="/">
+              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
+                style={{ borderRadius: '14px', marginBottom: '12px', display: 'inline-block', boxShadow: '0 2px 12px rgba(13,110,253,0.2)' }} />
+            </a>
             <h1 style={{ fontSize: '30px', fontWeight: '700', margin: '0 0 10px' }}>
               {ui.title}
             </h1>

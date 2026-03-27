@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { useAuth } from '../context/AuthContext'
 
 const NAV_LINKS = [
   { href: '/', label: 'Konverter', labelEn: 'Converter', icon: '⚡' },
@@ -10,7 +11,9 @@ const NAV_LINKS = [
 
 export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLocale }) {
   const router = useRouter()
+  const { user, signOut, isAdmin } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
   const currentPath = router.pathname
 
   const bg = darkMode ? '#12121e' : '#ffffff'
@@ -18,13 +21,26 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
   const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
   const mutedColor = darkMode ? '#888' : '#666'
 
-  // Close menu on route change
   useEffect(() => { setMenuOpen(false) }, [router.pathname])
 
   const isActive = (href) => {
     if (href === '/') return currentPath === '/'
     return currentPath.startsWith(href)
   }
+
+  const handleSignOut = async () => {
+    await signOut()
+    setProfileOpen(false)
+    router.push('/')
+  }
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    if (!profileOpen) return
+    const close = () => setProfileOpen(false)
+    document.addEventListener('click', close)
+    return () => document.removeEventListener('click', close)
+  }, [profileOpen])
 
   return (
     <header style={{
@@ -115,6 +131,72 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
             {darkMode ? '☀️' : '🌙'}
           </button>
 
+          {/* Profile / Login */}
+          {user ? (
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={e => { e.stopPropagation(); setProfileOpen(!profileOpen) }}
+                style={{
+                  width: '34px', height: '34px', borderRadius: '50%',
+                  background: isAdmin ? '#0d6efd' : '#6f42c1',
+                  border: 'none', cursor: 'pointer', fontSize: '14px',
+                  color: '#fff', fontWeight: '700', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center',
+                }}
+                title={user.email}
+                aria-label="User profile"
+              >
+                {user.email?.[0]?.toUpperCase() ?? '?'}
+              </button>
+              {profileOpen && (
+                <div style={{
+                  position: 'absolute', right: 0, top: '42px',
+                  background: bg, border: `1px solid ${borderColor}`,
+                  borderRadius: '12px', padding: '8px',
+                  minWidth: '180px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                  zIndex: 300,
+                }}>
+                  <div style={{ padding: '8px 12px', borderBottom: `1px solid ${borderColor}`, marginBottom: '4px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: '600', color: textColor, wordBreak: 'break-all' }}>{user.email}</div>
+                    {isAdmin && <div style={{ fontSize: '11px', color: '#0d6efd', marginTop: '2px' }}>Admin</div>}
+                  </div>
+                  {isAdmin && (
+                    <a href="/admin" style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', fontSize: '13px', color: textColor, textDecoration: 'none' }}
+                      onMouseEnter={e => e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                      📊 Dashboard Admin
+                    </a>
+                  )}
+                  <button
+                    onClick={handleSignOut}
+                    style={{
+                      width: '100%', padding: '8px 12px', borderRadius: '8px',
+                      background: 'transparent', border: 'none', cursor: 'pointer',
+                      fontSize: '13px', color: '#ef4444', textAlign: 'left',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    Keluar
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <a
+              href="/auth/login"
+              style={{
+                padding: '6px 14px', borderRadius: '16px',
+                border: `1px solid ${borderColor}`, background: 'transparent',
+                textDecoration: 'none', fontSize: '13px', fontWeight: '600',
+                color: '#0d6efd', transition: 'all 0.15s',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Masuk
+            </a>
+          )}
+
           {/* Mobile hamburger */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -160,6 +242,21 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
               <span>{locale === 'en' ? link.labelEn : link.label}</span>
             </a>
           ))}
+          <div style={{ paddingTop: '8px', borderTop: `1px solid ${borderColor}` }}>
+            {user ? (
+              <div>
+                <div style={{ fontSize: '12px', color: mutedColor, padding: '4px 8px', marginBottom: '4px' }}>{user.email}</div>
+                {isAdmin && <a href="/admin" style={{ display: 'block', padding: '10px 8px', color: '#0d6efd', textDecoration: 'none', fontSize: '14px' }}>📊 Dashboard Admin</a>}
+                <button onClick={handleSignOut} style={{ width: '100%', padding: '10px 8px', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '14px', color: '#ef4444', textAlign: 'left' }}>
+                  Keluar
+                </button>
+              </div>
+            ) : (
+              <a href="/auth/login" style={{ display: 'block', padding: '10px 8px', color: '#0d6efd', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>
+                Masuk / Daftar
+              </a>
+            )}
+          </div>
         </div>
       )}
 

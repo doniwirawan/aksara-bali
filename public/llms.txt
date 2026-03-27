@@ -1,0 +1,61 @@
+# Aksara Bali Converter
+
+> Konverter Latin ke Aksara Bali | Latin to Balinese Script Converter
+
+A free, open-source web application for converting Latin text to traditional Balinese script (Aksara Bali) with comprehensive Sanskrit support, educational tools, and cultural preservation features.
+
+## Site Information
+
+- **URL**: https://transliterasi-latin-ke-bahasa-bali.vercel.app
+- **Author**: Doni Wirawan
+- **Language**: Indonesian (id), English (en)
+- **License**: MIT
+- **Last Updated**: 2026-03-27
+
+## Pages
+
+### Core Pages
+- `/` — Main Latin to Balinese script converter (real-time conversion)
+- `/practice` — Interactive learning: quiz mode, writing canvas with hand gesture recognition, virtual Balinese keyboard
+- `/blog` — Articles about Balinese script, history, culture, and linguistics
+- `/faq` — Frequently asked questions about Balinese script and the tool
+- `/admin` — Admin dashboard (authentication required)
+
+### Blog Articles
+- `/blog/mengenal-aksara-bali` — History and structure of Balinese script
+- `/blog/cara-belajar-aksara-bali` — Beginner's guide to learning Balinese script
+- `/blog/aksara-bali-dan-bahasa-sansekerta` — Relationship between Balinese script and Sanskrit
+- `/blog/lontar-naskah-kuno-bali` — Lontar palm leaf manuscripts and cultural preservation
+- `/blog/perbedaan-aksara-bali-jawa-latin` — Comparison of Balinese, Javanese, and Latin scripts
+- `/blog/upaya-pelestarian-aksara-bali-digital` — Digital preservation of Balinese script
+
+## Key Features
+
+- Real-time Latin to Balinese Unicode script (U+1B00–U+1B7F) conversion
+- Sanskrit word recognition (100+ common words) with automatic murda (retroflex) forms
+- V=W phonological equivalency support
+- Interactive quiz with easy/medium/hard difficulty levels
+- Hand gesture drawing recognition using MediaPipe (webcam-based)
+- Virtual Balinese keyboard for direct script input
+- PWA (Progressive Web App) — installable, works offline
+- Bilingual UI: Indonesian and English
+- Dark mode support
+- Supabase analytics backend (conversion logs, quiz results, writing checks)
+
+## Technical Stack
+
+- **Framework**: Next.js 15 (Pages Router)
+- **Frontend**: React 19, Bootstrap 5, Lucide React
+- **Backend**: Supabase (PostgreSQL + Auth)
+- **Deployment**: Vercel
+- **Script**: Unicode Balinese (U+1B00–U+1B7F)
+- **Font**: Noto Sans Balinese (Google Fonts)
+
+## Balinese Script Facts
+
+Balinese script (Aksara Bali) is a traditional Brahmic abugida used in Bali, Indonesia. Each consonant inherently carries the vowel /a/, with other vowels written as diacritical marks (pangangge). The script has 47 base consonants, 8 independent vowels, and uses virama (adeg-adeg) for consonant clusters. It was added to Unicode in version 5.0 (2006) at block U+1B00–U+1B7F.
+
+## Contact
+
+- **GitHub**: https://github.com/doniwirawan
+- **Email**: doniwirawan166@gmail.com
