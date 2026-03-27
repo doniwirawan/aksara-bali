@@ -518,6 +518,7 @@ export default function AdminDashboard() {
                       </div>
                       <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                         <button onClick={() => toggleBlogPublish(post)} style={{ ...s.btnOutline, fontSize: '12px' }}>{post.published ? 'Sembunyikan' : 'Publikasikan'}</button>
+                        <a href={`/blog/${post.slug}`} target="_blank" rel="noreferrer" style={{ ...s.btn('#198754'), padding: '6px 12px', textDecoration: 'none' }}>Lihat</a>
                         <button onClick={() => editBlog(post)} style={{ ...s.btn('#fd7e14'), padding: '6px 12px' }}>Edit</button>
                         <button onClick={() => deleteBlog(post.id)} style={{ ...s.btn('#dc3545'), padding: '6px 12px' }}>Hapus</button>
                       </div>

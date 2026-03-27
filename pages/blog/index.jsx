@@ -1,98 +1,37 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
+import { createClient } from '@supabase/supabase-js'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 
-// Unsplash images: always use real photos for blog posts
-const UNSPLASH = {
-  'mengenal-aksara-bali': 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80',
-  'cara-belajar-aksara-bali': 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80',
-  'aksara-bali-dan-bahasa-sansekerta': 'https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=800&q=80',
-  'lontar-naskah-kuno-bali': 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=800&q=80',
-  'perbedaan-aksara-bali-jawa-latin': 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80',
-  'upaya-pelestarian-aksara-bali-digital': 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=800&q=80',
+export async function getServerSideProps() {
+  try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    )
+    const { data } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('published', true)
+      .order('created_at', { ascending: false })
+    const posts = (data || []).map(p => ({
+      slug: p.slug,
+      title: p.title,
+      titleEn: p.title_en || p.title,
+      excerpt: p.excerpt || '',
+      excerptEn: p.excerpt_en || p.excerpt || '',
+      category: p.category,
+      date: p.created_at ? p.created_at.split('T')[0] : '',
+      readTime: p.read_time || '5 menit',
+      tags: Array.isArray(p.tags) ? p.tags : [],
+      imageUrl: p.image_url || 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80',
+    }))
+    return { props: { posts } }
+  } catch {
+    return { props: { posts: [] } }
+  }
 }
-
-const BLOG_POSTS = [
-  {
-    slug: 'mengenal-aksara-bali',
-    title: 'Mengenal Aksara Bali: Warisan Budaya yang Perlu Dilestarikan',
-    titleEn: 'Understanding Balinese Script: A Cultural Heritage Worth Preserving',
-    excerpt: 'Aksara Bali adalah sistem tulisan tradisional yang digunakan oleh masyarakat Bali sejak berabad-abad lalu. Pelajari sejarah, struktur, dan cara membacanya.',
-    excerptEn: 'Balinese script is a traditional writing system used by Balinese people for centuries. Learn its history, structure, and how to read it.',
-    category: 'Sejarah & Budaya',
-    categoryEn: 'History & Culture',
-    date: '2026-03-15',
-    readTime: '6 menit',
-    tags: ['aksara bali', 'sejarah', 'budaya', 'script'],
-    imageUrl: UNSPLASH['mengenal-aksara-bali'],
-  },
-  {
-    slug: 'cara-belajar-aksara-bali',
-    title: 'Cara Belajar Aksara Bali untuk Pemula: Panduan Lengkap',
-    titleEn: 'How to Learn Balinese Script for Beginners: Complete Guide',
-    excerpt: 'Panduan langkah demi langkah untuk mempelajari aksara Bali dari nol. Mulai dari aksara dasar (hanacaraka), tanda baca, hingga menulis kata pertama Anda.',
-    excerptEn: 'Step-by-step guide to learn Balinese script from scratch. From basic letters (hanacaraka) to punctuation marks and writing your first word.',
-    category: 'Panduan Belajar',
-    categoryEn: 'Learning Guide',
-    date: '2026-03-10',
-    readTime: '8 menit',
-    tags: ['belajar', 'pemula', 'hanacaraka', 'tutorial'],
-    imageUrl: UNSPLASH['cara-belajar-aksara-bali'],
-  },
-  {
-    slug: 'aksara-bali-dan-bahasa-sansekerta',
-    title: 'Hubungan Aksara Bali dan Bahasa Sansekerta',
-    titleEn: 'The Connection Between Balinese Script and Sanskrit Language',
-    excerpt: 'Aksara Bali memiliki akar yang dalam pada bahasa Sansekerta. Temukan bagaimana pengaruh Hindu-Bali membentuk sistem penulisan yang unik ini.',
-    excerptEn: 'Balinese script has deep roots in Sanskrit language. Discover how Hindu-Balinese influence shaped this unique writing system.',
-    category: 'Linguistik',
-    categoryEn: 'Linguistics',
-    date: '2026-03-05',
-    readTime: '7 menit',
-    tags: ['sansekerta', 'linguistik', 'hindu', 'bali'],
-    imageUrl: UNSPLASH['aksara-bali-dan-bahasa-sansekerta'],
-  },
-  {
-    slug: 'lontar-naskah-kuno-bali',
-    title: 'Lontar: Naskah Kuno Bali dan Perannya dalam Melestarikan Budaya',
-    titleEn: 'Lontar: Ancient Balinese Manuscripts and Their Role in Cultural Preservation',
-    excerpt: 'Lontar adalah daun palem yang digunakan sebagai media tulisan tradisional Bali. Pelajari bagaimana naskah kuno ini menyimpan kearifan dan pengetahuan leluhur.',
-    excerptEn: 'Lontar are palm leaves used as traditional Balinese writing media. Learn how these ancient manuscripts preserve ancestral wisdom and knowledge.',
-    category: 'Naskah Kuno',
-    categoryEn: 'Ancient Manuscripts',
-    date: '2026-02-28',
-    readTime: '5 menit',
-    tags: ['lontar', 'naskah kuno', 'budaya', 'preservasi'],
-    imageUrl: UNSPLASH['lontar-naskah-kuno-bali'],
-  },
-  {
-    slug: 'perbedaan-aksara-bali-jawa-latin',
-    title: 'Perbedaan Aksara Bali, Jawa, dan Latin: Panduan Perbandingan',
-    titleEn: 'Differences Between Balinese, Javanese, and Latin Scripts: A Comparison Guide',
-    excerpt: 'Aksara Bali dan Jawa memiliki asal-usul yang sama namun berkembang secara berbeda. Bandingkan keduanya dengan aksara Latin yang kita gunakan sehari-hari.',
-    excerptEn: 'Balinese and Javanese scripts share common origins but evolved differently. Compare them with the Latin script we use daily.',
-    category: 'Linguistik',
-    categoryEn: 'Linguistics',
-    date: '2026-02-20',
-    readTime: '9 menit',
-    tags: ['perbandingan', 'aksara jawa', 'linguistik'],
-    imageUrl: UNSPLASH['perbedaan-aksara-bali-jawa-latin'],
-  },
-  {
-    slug: 'upaya-pelestarian-aksara-bali-digital',
-    title: 'Pelestarian Aksara Bali di Era Digital: Tantangan dan Peluang',
-    titleEn: 'Preserving Balinese Script in the Digital Age: Challenges and Opportunities',
-    excerpt: 'Di era digital, aksara Bali menghadapi tantangan baru. Bagaimana teknologi dapat membantu melestarikan warisan budaya ini untuk generasi mendatang?',
-    excerptEn: 'In the digital age, Balinese script faces new challenges. How can technology help preserve this cultural heritage for future generations?',
-    category: 'Teknologi & Budaya',
-    categoryEn: 'Technology & Culture',
-    date: '2026-02-15',
-    readTime: '6 menit',
-    tags: ['digital', 'pelestarian', 'teknologi', 'unicode'],
-    imageUrl: UNSPLASH['upaya-pelestarian-aksara-bali-digital'],
-  },
-]
 
 const CATEGORIES = [
   { id: 'all', labelId: 'Semua', labelEn: 'All' },
@@ -103,7 +42,7 @@ const CATEGORIES = [
   { id: 'Teknologi & Budaya', labelId: 'Teknologi & Budaya', labelEn: 'Technology & Culture' },
 ]
 
-export default function BlogIndex({ locale, setLocale }) {
+export default function BlogIndex({ locale, setLocale, posts = [] }) {
   const [darkMode, setDarkMode] = useState(false)
   const [activeCategory, setActiveCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
@@ -125,7 +64,7 @@ export default function BlogIndex({ locale, setLocale }) {
     category: lang === 'en' ? (post.categoryEn || post.category) : post.category,
   })
 
-  const filteredPosts = BLOG_POSTS.filter(post => {
+  const filteredPosts = posts.filter(post => {
     const d = displayPost(post)
     const matchCategory = activeCategory === 'all' || post.category === activeCategory
     const q = searchQuery.toLowerCase()
@@ -154,7 +93,7 @@ export default function BlogIndex({ locale, setLocale }) {
       name: 'Aksara Bali Converter',
       url: 'https://aksarabali.id',
     },
-    blogPost: BLOG_POSTS.map(post => ({
+    blogPost: posts.map(post => ({
       '@type': 'BlogPosting',
       headline: post.title,
       description: post.excerpt,
@@ -176,14 +115,14 @@ export default function BlogIndex({ locale, setLocale }) {
         <meta property="og:title" content="Blog Aksara Bali — Artikel Budaya & Panduan Belajar" />
         <meta property="og:description" content="Artikel mendalam tentang aksara Bali: sejarah, cara belajar, linguistik, dan pelestarian budaya." />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content={BLOG_POSTS[0].imageUrl} />
+        <meta property="og:image" content={posts[0]?.imageUrl || ''} />
         <meta property="og:image:width" content="800" />
         <meta property="og:image:height" content="533" />
         <meta property="og:url" content="https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Blog Aksara Bali — Artikel Budaya & Panduan Belajar" />
         <meta name="twitter:description" content="Artikel mendalam tentang aksara Bali: sejarah, cara belajar, linguistik, dan pelestarian budaya." />
-        <meta name="twitter:image" content={BLOG_POSTS[0].imageUrl} />
+        <meta name="twitter:image" content={posts[0].imageUrl} />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <link rel="canonical" href="https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog" />
         <script
