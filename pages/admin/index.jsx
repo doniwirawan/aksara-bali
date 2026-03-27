@@ -169,6 +169,11 @@ export default function AdminDashboard() {
 
   const editFaq = (item) => { setFaqForm(item); setEditingFaq(item.id); setShowFaqForm(true) }
 
+  const saveFaqToggle = async (item) => {
+    await fetch('/api/faq-items', { method: 'PUT', headers: getHeaders(), body: JSON.stringify({ id: item.id, published: !item.published }) })
+    fetchFaq()
+  }
+
   const deleteFaq = async (id) => {
     if (!confirm('Hapus FAQ ini?')) return
     await fetch('/api/faq-items', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
@@ -512,9 +517,12 @@ export default function AdminDashboard() {
                         <div style={{ display: 'flex', gap: '6px', marginBottom: '4px', flexWrap: 'wrap', alignItems: 'center' }}>
                           <span style={s.badge(post.published ? '#198754' : '#888')}>{post.published ? 'Dipublikasikan' : 'Draft'}</span>
                           <span style={s.badge('#0d6efd')}>{post.category}</span>
+                          {post.updated_at && (Date.now() - new Date(post.updated_at)) < 86400000 && (
+                            <span style={s.badge('#fd7e14')}>🕐 Baru Diupdate</span>
+                          )}
                         </div>
                         <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{post.title}</div>
-                        <div style={{ fontSize: '12px', color: '#888' }}>/{post.slug} · {post.read_time}</div>
+                        <div style={{ fontSize: '12px', color: '#888' }}>/{post.slug} · {post.read_time} · {post.updated_at ? new Date(post.updated_at).toLocaleString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}</div>
                       </div>
                       <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                         <button onClick={() => toggleBlogPublish(post)} style={{ ...s.btnOutline, fontSize: '12px' }}>{post.published ? 'Sembunyikan' : 'Publikasikan'}</button>
@@ -590,12 +598,14 @@ export default function AdminDashboard() {
                         <div style={{ display: 'flex', gap: '6px', marginBottom: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
                           <span style={s.badge(item.published ? '#198754' : '#888')}>{item.published ? 'Ditampilkan' : 'Disembunyikan'}</span>
                           <span style={s.badge('#6f42c1')}>{item.category}</span>
-                          <span style={{ fontSize: '11px', color: '#aaa' }}>#{item.sort_order}</span>
+                          <span style={{ fontSize: '11px', color: '#aaa' }}>urutan #{item.sort_order}</span>
                         </div>
                         <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px' }}>{item.question}</div>
                         <div style={{ fontSize: '13px', color: '#666', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{item.answer}</div>
                       </div>
-                      <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                      <div style={{ display: 'flex', gap: '6px', flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                        <button onClick={() => saveFaqToggle(item)} style={{ ...s.btnOutline, fontSize: '12px' }}>{item.published ? 'Sembunyikan' : 'Tampilkan'}</button>
+                        <a href="/faq" target="_blank" rel="noreferrer" style={{ ...s.btn('#198754'), padding: '6px 12px', textDecoration: 'none' }}>Lihat</a>
                         <button onClick={() => editFaq(item)} style={{ ...s.btn('#fd7e14'), padding: '6px 12px' }}>Edit</button>
                         <button onClick={() => deleteFaq(item.id)} style={{ ...s.btn('#dc3545'), padding: '6px 12px' }}>Hapus</button>
                       </div>
