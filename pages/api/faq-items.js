@@ -1,17 +1,20 @@
-import { createServerClient } from '../../utils/supabase'
+import { createServerClient, supabase as anonClient } from '../../utils/supabase'
 
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'Denpasar12'
+const ADMIN_EMAIL = 'doniwirawan166@gmail.com'
 
-function isAdmin(req) {
+async function isAdmin(req) {
   const auth = req.headers.authorization || ''
-  return auth === `Bearer ${ADMIN_PASSWORD}`
+  const token = auth.replace('Bearer ', '')
+  if (!token) return false
+  const { data: { user } } = await anonClient.auth.getUser(token)
+  return user?.email === ADMIN_EMAIL
 }
 
 export default async function handler(req, res) {
   const supabase = createServerClient()
 
   if (req.method === 'GET') {
-    const admin = isAdmin(req)
+    const admin = await isAdmin(req)
     let query = supabase.from('faq_items').select('*').order('category').order('sort_order')
     if (!admin) query = query.eq('published', true)
     const { data, error } = await query
@@ -19,7 +22,7 @@ export default async function handler(req, res) {
     return res.status(200).json(data)
   }
 
-  if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' })
+  if (!await isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' })
 
   if (req.method === 'POST') {
     const { data, error } = await supabase.from('faq_items').insert([req.body]).select().single()

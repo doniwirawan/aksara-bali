@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Head from 'next/head'
+import { supabase } from '../../utils/supabase'
 
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'doniwirawan166@gmail.com'
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'Denpasar12'
+const ADMIN_EMAIL = 'doniwirawan166@gmail.com'
 
 const BLOG_CATEGORIES = ['Sejarah & Budaya', 'Panduan Belajar', 'Linguistik', 'Naskah Kuno', 'Teknologi & Budaya', 'Umum']
 const FAQ_CATEGORIES = ['Tentang Aksara Bali', 'Cara Menggunakan Konverter', 'Fitur Latihan', 'Teknis & Kompatibilitas', 'Budaya & Sejarah', 'Umum']
@@ -50,22 +50,30 @@ export default function AdminDashboard() {
   const [pickerLoading, setPickerLoading] = useState(false)
   const pickerPage = useRef(1)
 
-  const adminHeaders = { 'Content-Type': 'application/json', Authorization: `Bearer ${ADMIN_PASSWORD}` }
+  const [sessionToken, setSessionToken] = useState('')
+  const adminHeaders = { 'Content-Type': 'application/json', Authorization: `Bearer ${sessionToken}` }
 
   useEffect(() => {
-    const saved = sessionStorage.getItem('admin-auth')
-    if (saved === 'true') setAuthenticated(true)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user?.email === ADMIN_EMAIL) {
+        setAuthenticated(true)
+        setSessionToken(session.access_token)
+      }
+    })
   }, [])
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      setAuthenticated(true)
-      sessionStorage.setItem('admin-auth', 'true')
-      setError('')
-    } else {
-      setError('Email atau password salah')
+    setError('')
+    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    if (authError) { setError('Email atau password salah'); return }
+    if (data.user?.email !== ADMIN_EMAIL) {
+      await supabase.auth.signOut()
+      setError('Akun ini bukan admin')
+      return
     }
+    setAuthenticated(true)
+    setSessionToken(data.session.access_token)
   }
 
   // ─── Stats ────────────────────────────────────────────────
