@@ -58,6 +58,53 @@ create policy "Service role can read quiz_results"
 create policy "Service role can read writing_checks"
   on public.writing_checks for select using (auth.role() = 'service_role');
 
+-- Table: blog_posts (admin-created blog content)
+create table if not exists public.blog_posts (
+  id          bigserial primary key,
+  slug        text unique not null,
+  title       text not null,
+  title_en    text,
+  excerpt     text,
+  excerpt_en  text,
+  content     text,
+  content_en  text,
+  category    text not null default 'Umum',
+  tags        text[] default '{}',
+  image_url   text,
+  published   boolean not null default false,
+  author      text not null default 'Doni Wirawan',
+  read_time   text default '5 menit',
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
+);
+
+alter table public.blog_posts enable row level security;
+
+create policy "Anyone can read published blog posts"
+  on public.blog_posts for select using (published = true);
+
+create policy "Service role full access blog_posts"
+  on public.blog_posts for all using (auth.role() = 'service_role');
+
+-- Table: faq_items (admin-managed FAQ)
+create table if not exists public.faq_items (
+  id          bigserial primary key,
+  category    text not null default 'Umum',
+  question    text not null,
+  answer      text not null,
+  sort_order  integer not null default 0,
+  published   boolean not null default true,
+  created_at  timestamptz not null default now()
+);
+
+alter table public.faq_items enable row level security;
+
+create policy "Anyone can read published faq items"
+  on public.faq_items for select using (published = true);
+
+create policy "Service role full access faq_items"
+  on public.faq_items for all using (auth.role() = 'service_role');
+
 -- Useful views for the dashboard
 create or replace view public.daily_conversions as
   select date_trunc('day', created_at) as day, count(*) as total
