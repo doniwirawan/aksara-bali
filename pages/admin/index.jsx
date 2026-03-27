@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Head from 'next/head'
 import { supabase } from '../../utils/supabase'
 
-const ADMIN_EMAIL = 'doniwirawan166@gmail.com'
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ''
 
 const BLOG_CATEGORIES = ['Sejarah & Budaya', 'Panduan Belajar', 'Linguistik', 'Naskah Kuno', 'Teknologi & Budaya', 'Umum']
 const FAQ_CATEGORIES = ['Tentang Aksara Bali', 'Cara Menggunakan Konverter', 'Fitur Latihan', 'Teknis & Kompatibilitas', 'Budaya & Sejarah', 'Umum']

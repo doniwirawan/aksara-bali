@@ -1,6 +1,6 @@
 import { createServerClient, supabase as anonClient } from '../../utils/supabase'
 
-const ADMIN_EMAIL = 'doniwirawan166@gmail.com'
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ''
 
 async function isAdmin(req) {
   const auth = req.headers.authorization || ''

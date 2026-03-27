@@ -90,7 +90,7 @@ export default function Footer({ darkMode, locale }) {
             </div>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               <li style={{ marginBottom: '8px' }}>
-                <a href="https://github.com/doniwirawan/transliterasi-latin-ke-bahasa-bali" target="_blank" rel="noopener noreferrer"
+                <a href="https://github.com/doniwirawan/aksara-bali" target="_blank" rel="noopener noreferrer"
                   style={{ color: mutedColor, textDecoration: 'none', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
                   onMouseEnter={e => e.currentTarget.style.color = linkColor}
                   onMouseLeave={e => e.currentTarget.style.color = mutedColor}
@@ -99,7 +99,7 @@ export default function Footer({ darkMode, locale }) {
                 </a>
               </li>
               <li style={{ marginBottom: '8px' }}>
-                <a href="https://github.com/doniwirawan/transliterasi-latin-ke-bahasa-bali/issues" target="_blank" rel="noopener noreferrer"
+                <a href="https://github.com/doniwirawan/aksara-bali/issues" target="_blank" rel="noopener noreferrer"
                   style={{ color: mutedColor, textDecoration: 'none', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
                   onMouseEnter={e => e.currentTarget.style.color = linkColor}
                   onMouseLeave={e => e.currentTarget.style.color = mutedColor}

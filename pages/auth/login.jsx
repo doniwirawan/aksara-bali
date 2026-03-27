@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../../context/AuthContext'
 
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'doniwirawan166@gmail.com'
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ''
 
 export default function LoginPage() {
   const router = useRouter()
