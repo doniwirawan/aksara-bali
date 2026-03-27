@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   // GET — public: published posts only; admin: all posts
   if (req.method === 'GET') {
     const admin = await isAdmin(req)
-    let query = supabase.from('blog_posts').select('*').order('created_at', { ascending: false })
+    let query = supabase.from('blog_posts').select('*').order('updated_at', { ascending: false })
     if (!admin) query = query.eq('published', true)
     const { data, error } = await query
     if (error) return res.status(500).json({ error: error.message })
