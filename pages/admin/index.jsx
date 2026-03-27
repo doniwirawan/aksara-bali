@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Head from 'next/head'
 
 const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'doniwirawan166@gmail.com'
@@ -42,6 +42,13 @@ export default function AdminDashboard() {
   const [editingFaq, setEditingFaq] = useState(null)
   const [showFaqForm, setShowFaqForm] = useState(false)
   const [faqSaving, setFaqSaving] = useState(false)
+
+  // Unsplash picker
+  const [showPicker, setShowPicker] = useState(false)
+  const [pickerQuery, setPickerQuery] = useState('')
+  const [pickerPhotos, setPickerPhotos] = useState([])
+  const [pickerLoading, setPickerLoading] = useState(false)
+  const pickerPage = useRef(1)
 
   const adminHeaders = { 'Content-Type': 'application/json', Authorization: `Bearer ${ADMIN_PASSWORD}` }
 
@@ -154,6 +161,34 @@ export default function AdminDashboard() {
     if (!confirm('Hapus FAQ ini?')) return
     await fetch('/api/faq-items', { method: 'DELETE', headers: adminHeaders, body: JSON.stringify({ id }) })
     fetchFaq()
+  }
+
+  // ─── Unsplash Picker ──────────────────────────────────────
+  const searchUnsplash = useCallback(async (q = '', page = 1) => {
+    setPickerLoading(true)
+    const query = q || pickerQuery || 'bali temple culture'
+    const res = await fetch(`/api/unsplash-search?query=${encodeURIComponent(query)}&page=${page}&per_page=12`)
+    if (res.ok) {
+      const data = await res.json()
+      setPickerPhotos(prev => page === 1 ? data.photos : [...prev, ...data.photos])
+    }
+    setPickerLoading(false)
+  }, [pickerQuery])
+
+  const openPicker = () => {
+    setShowPicker(true)
+    pickerPage.current = 1
+    if (pickerPhotos.length === 0) searchUnsplash('bali', 1)
+  }
+
+  const loadMorePhotos = () => {
+    pickerPage.current += 1
+    searchUnsplash(pickerQuery || 'bali', pickerPage.current)
+  }
+
+  const selectPhoto = (photo) => {
+    setBlogForm(f => ({ ...f, image_url: photo.url }))
+    setShowPicker(false)
   }
 
   useEffect(() => {
@@ -351,10 +386,65 @@ export default function AdminDashboard() {
                     <label style={s.label}>Tags (pisah koma)</label>
                     <input style={s.input} value={blogForm.tags} onChange={e => setBlogForm(f => ({ ...f, tags: e.target.value }))} placeholder="aksara bali, budaya, sejarah" />
 
-                    <label style={s.label}>URL Gambar (Unsplash)</label>
-                    <input style={s.input} value={blogForm.image_url} onChange={e => setBlogForm(f => ({ ...f, image_url: e.target.value }))} placeholder="https://images.unsplash.com/photo-...?auto=format&fit=crop&w=800&q=80" />
+                    <label style={s.label}>Foto Artikel (Unsplash)</label>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input style={{ ...s.input, flex: 1 }} value={blogForm.image_url} onChange={e => setBlogForm(f => ({ ...f, image_url: e.target.value }))} placeholder="Pilih foto di bawah atau paste URL..." />
+                      <button type="button" onClick={openPicker} style={{ ...s.btn('#198754'), whiteSpace: 'nowrap', padding: '10px 14px' }}>
+                        🏝 Cari Foto Bali
+                      </button>
+                    </div>
                     {blogForm.image_url && (
-                      <img src={blogForm.image_url} alt="preview" style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '8px', marginTop: '8px' }} onError={e => e.target.style.display = 'none'} />
+                      <img src={blogForm.image_url} alt="preview" style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '10px', marginTop: '8px' }} onError={e => e.target.style.display = 'none'} />
+                    )}
+
+                    {/* Unsplash Picker Modal */}
+                    {showPicker && (
+                      <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+                        <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '760px', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                          <div style={{ padding: '16px 20px', borderBottom: '1px solid #e0e0d8', display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <span style={{ fontWeight: '700', fontSize: '15px', flexShrink: 0 }}>🏝 Foto Bali</span>
+                            <input
+                              style={{ ...s.input, flex: 1 }}
+                              placeholder="Cari: temple, rice terrace, lontar, ceremony..."
+                              value={pickerQuery}
+                              onChange={e => setPickerQuery(e.target.value)}
+                              onKeyDown={e => { if (e.key === 'Enter') { pickerPage.current = 1; searchUnsplash(e.target.value, 1) } }}
+                            />
+                            <button type="button" onClick={() => { pickerPage.current = 1; searchUnsplash(pickerQuery, 1) }} style={s.btn()}>Cari</button>
+                            <button type="button" onClick={() => setShowPicker(false)} style={{ ...s.btnOutline, flexShrink: 0 }}>✕</button>
+                          </div>
+                          <div style={{ overflowY: 'auto', padding: '16px' }}>
+                            {pickerLoading && pickerPhotos.length === 0 ? (
+                              <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Memuat foto Bali...</div>
+                            ) : pickerPhotos.length === 0 ? (
+                              <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>
+                                <p>Tidak ada foto. Pastikan <code>UNSPLASH_ACCESS_KEY</code> sudah diset di Vercel env vars.</p>
+                              </div>
+                            ) : (
+                              <>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '10px' }}>
+                                  {pickerPhotos.map(photo => (
+                                    <div key={photo.id} onClick={() => selectPhoto(photo)} style={{ cursor: 'pointer', borderRadius: '10px', overflow: 'hidden', aspectRatio: '16/10', position: 'relative', border: '2px solid transparent', transition: 'all 0.15s' }}
+                                      onMouseEnter={e => { e.currentTarget.style.border = '2px solid #0d6efd'; e.currentTarget.style.transform = 'scale(1.02)' }}
+                                      onMouseLeave={e => { e.currentTarget.style.border = '2px solid transparent'; e.currentTarget.style.transform = 'scale(1)' }}
+                                    >
+                                      <img src={photo.thumb} alt={photo.alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.5))', padding: '16px 6px 4px', fontSize: '10px', color: '#fff' }}>
+                                        {photo.author}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                                <div style={{ textAlign: 'center', marginTop: '16px' }}>
+                                  <button type="button" onClick={loadMorePhotos} disabled={pickerLoading} style={s.btnOutline}>
+                                    {pickerLoading ? 'Memuat...' : 'Muat lebih banyak'}
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     )}
 
                     <label style={s.label}>Ringkasan (ID)</label>
