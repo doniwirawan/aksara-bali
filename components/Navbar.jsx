@@ -160,6 +160,11 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
                     <div style={{ fontSize: '12px', fontWeight: '600', color: textColor, wordBreak: 'break-all' }}>{user.email}</div>
                     {isAdmin && <div style={{ fontSize: '11px', color: '#0d6efd', marginTop: '2px' }}>Admin</div>}
                   </div>
+                  <a href="/dashboard" style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', fontSize: '13px', color: textColor, textDecoration: 'none' }}
+                    onMouseEnter={e => e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                    👤 Dashboard Saya
+                  </a>
                   {isAdmin && (
                     <a href="/admin" style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', fontSize: '13px', color: textColor, textDecoration: 'none' }}
                       onMouseEnter={e => e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5'}
