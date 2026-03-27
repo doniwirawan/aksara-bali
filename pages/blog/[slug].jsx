@@ -537,17 +537,41 @@ Teknologi bukan ancaman bagi aksara Bali — ia adalah alat. Tantangannya adalah
   },
 }
 
-export async function getStaticPaths() {
-  return {
-    paths: Object.keys(BLOG_CONTENT).map(slug => ({ params: { slug } })),
-    fallback: false,
-  }
-}
+export async function getServerSideProps({ params }) {
+  const { createClient } = require('@supabase/supabase-js')
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  )
+  const { data } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .eq('slug', params.slug)
+    .eq('published', true)
+    .single()
 
-export async function getStaticProps({ params }) {
-  const post = BLOG_CONTENT[params.slug]
-  if (!post) return { notFound: true }
-  return { props: { post, slug: params.slug } }
+  if (data) {
+    const post = {
+      title: data.title,
+      titleEn: data.title_en || data.title,
+      description: data.excerpt || '',
+      descriptionEn: data.excerpt_en || data.excerpt || '',
+      date: data.created_at ? data.created_at.split('T')[0] : '',
+      category: data.category,
+      readTime: data.read_time || '5 menit',
+      tags: Array.isArray(data.tags) ? data.tags : [],
+      imageUrl: data.image_url || 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80',
+      content: data.content || '',
+      contentEn: data.content_en || '',
+    }
+    return { props: { post, slug: params.slug } }
+  }
+
+  // Fallback to hardcoded content
+  const hardcoded = BLOG_CONTENT[params.slug]
+  if (hardcoded) return { props: { post: hardcoded, slug: params.slug } }
+
+  return { notFound: true }
 }
 
 function renderMarkdown(content) {
