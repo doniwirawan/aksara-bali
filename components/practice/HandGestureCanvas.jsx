@@ -76,7 +76,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const drawingRef = useRef(false)
   const lastPosRef = useRef(null)
   const handsRef = useRef(null)
-  const cameraRef = useRef(null)
+  const rafIdRef = useRef(null)
   const strokesRef = useRef([]) // array of paths for undo
 
   const [mode, setMode] = useState('mouse') // 'mouse' | 'gesture'
@@ -362,12 +362,11 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
     currentPathRef.current = []
   }, [isDrawingMouse])
 
-  // MediaPipe Hands setup
+  // MediaPipe Hands setup — uses manual RAF loop (no camera_utils dependency)
   const initGestureMode = useCallback(async () => {
     setStatus('loading')
     setErrorMsg('')
     try {
-      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1640029074/camera_utils.js')
       await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1620248257/drawing_utils.js')
       await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js')
 
@@ -458,17 +457,15 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       videoRef.current.srcObject = stream
       await videoRef.current.play()
 
-      const camera = new window.Camera(videoRef.current, {
-        onFrame: async () => {
-          if (handsRef.current) {
-            await handsRef.current.send({ image: videoRef.current })
-          }
-        },
-        width: CANVAS_W,
-        height: CANVAS_H,
-      })
-      await camera.start()
-      cameraRef.current = camera
+      // Manual frame loop — no dependency on camera_utils CDN
+      const processFrame = async () => {
+        if (!handsRef.current || !videoRef.current) return
+        if (videoRef.current.readyState >= 2) {
+          await handsRef.current.send({ image: videoRef.current })
+        }
+        rafIdRef.current = requestAnimationFrame(processFrame)
+      }
+      rafIdRef.current = requestAnimationFrame(processFrame)
 
       setStatus('ready')
     } catch (err) {
@@ -479,13 +476,12 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   }, [strokeColor, strokeWidth])
 
   const stopGestureMode = useCallback(() => {
-    cameraRef.current?.stop?.()
+    if (rafIdRef.current) { cancelAnimationFrame(rafIdRef.current); rafIdRef.current = null }
     handsRef.current?.close?.()
     if (videoRef.current?.srcObject) {
       videoRef.current.srcObject.getTracks().forEach(t => t.stop())
       videoRef.current.srcObject = null
     }
-    cameraRef.current = null
     handsRef.current = null
     setStatus('idle')
     setGesture('none')

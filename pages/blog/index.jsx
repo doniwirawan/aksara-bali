@@ -3,6 +3,16 @@ import { useState, useEffect } from 'react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 
+// Unsplash images: always use real photos for blog posts
+const UNSPLASH = {
+  'mengenal-aksara-bali': 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80',
+  'cara-belajar-aksara-bali': 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80',
+  'aksara-bali-dan-bahasa-sansekerta': 'https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=800&q=80',
+  'lontar-naskah-kuno-bali': 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=800&q=80',
+  'perbedaan-aksara-bali-jawa-latin': 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80',
+  'upaya-pelestarian-aksara-bali-digital': 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=800&q=80',
+}
+
 const BLOG_POSTS = [
   {
     slug: 'mengenal-aksara-bali',
@@ -15,7 +25,7 @@ const BLOG_POSTS = [
     date: '2026-03-15',
     readTime: '6 menit',
     tags: ['aksara bali', 'sejarah', 'budaya', 'script'],
-    image: '📜',
+    imageUrl: UNSPLASH['mengenal-aksara-bali'],
   },
   {
     slug: 'cara-belajar-aksara-bali',
@@ -28,7 +38,7 @@ const BLOG_POSTS = [
     date: '2026-03-10',
     readTime: '8 menit',
     tags: ['belajar', 'pemula', 'hanacaraka', 'tutorial'],
-    image: '📖',
+    imageUrl: UNSPLASH['cara-belajar-aksara-bali'],
   },
   {
     slug: 'aksara-bali-dan-bahasa-sansekerta',
@@ -41,7 +51,7 @@ const BLOG_POSTS = [
     date: '2026-03-05',
     readTime: '7 menit',
     tags: ['sansekerta', 'linguistik', 'hindu', 'bali'],
-    image: '🕉️',
+    imageUrl: UNSPLASH['aksara-bali-dan-bahasa-sansekerta'],
   },
   {
     slug: 'lontar-naskah-kuno-bali',
@@ -54,7 +64,7 @@ const BLOG_POSTS = [
     date: '2026-02-28',
     readTime: '5 menit',
     tags: ['lontar', 'naskah kuno', 'budaya', 'preservasi'],
-    image: '🌿',
+    imageUrl: UNSPLASH['lontar-naskah-kuno-bali'],
   },
   {
     slug: 'perbedaan-aksara-bali-jawa-latin',
@@ -67,7 +77,7 @@ const BLOG_POSTS = [
     date: '2026-02-20',
     readTime: '9 menit',
     tags: ['perbandingan', 'aksara jawa', 'linguistik'],
-    image: '⚖️',
+    imageUrl: UNSPLASH['perbedaan-aksara-bali-jawa-latin'],
   },
   {
     slug: 'upaya-pelestarian-aksara-bali-digital',
@@ -80,7 +90,7 @@ const BLOG_POSTS = [
     date: '2026-02-15',
     readTime: '6 menit',
     tags: ['digital', 'pelestarian', 'teknologi', 'unicode'],
-    image: '💻',
+    imageUrl: UNSPLASH['upaya-pelestarian-aksara-bali-digital'],
   },
 ]
 
@@ -149,8 +159,10 @@ export default function BlogIndex({ locale, setLocale }) {
       headline: post.title,
       description: post.excerpt,
       datePublished: post.date,
-      url: `https://aksarabali.id/blog/${post.slug}`,
+      url: `https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog/${post.slug}`,
       keywords: post.tags.join(', '),
+      image: post.imageUrl,
+      author: { '@type': 'Person', name: 'Doni Wirawan' },
     })),
   }
 
@@ -159,12 +171,21 @@ export default function BlogIndex({ locale, setLocale }) {
       <Head>
         <title>Blog Aksara Bali — Artikel Budaya, Sejarah & Panduan Belajar</title>
         <meta name="description" content="Temukan artikel lengkap tentang aksara Bali: sejarah, cara belajar, hubungan dengan bahasa Sansekerta, naskah lontar, dan upaya pelestarian digital." />
-        <meta name="keywords" content="blog aksara bali, belajar aksara bali, sejarah aksara bali, budaya bali, lontar bali, sansekerta bali, huruf bali" />
+        <meta name="keywords" content="blog aksara bali, belajar aksara bali, sejarah aksara bali, budaya bali, lontar bali, sansekerta bali, huruf bali, cara menulis aksara bali" />
+        <meta name="author" content="Doni Wirawan" />
         <meta property="og:title" content="Blog Aksara Bali — Artikel Budaya & Panduan Belajar" />
         <meta property="og:description" content="Artikel mendalam tentang aksara Bali: sejarah, cara belajar, linguistik, dan pelestarian budaya." />
         <meta property="og:type" content="website" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://aksarabali.id/blog" />
+        <meta property="og:image" content={BLOG_POSTS[0].imageUrl} />
+        <meta property="og:image:width" content="800" />
+        <meta property="og:image:height" content="533" />
+        <meta property="og:url" content="https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Blog Aksara Bali — Artikel Budaya & Panduan Belajar" />
+        <meta name="twitter:description" content="Artikel mendalam tentang aksara Bali: sejarah, cara belajar, linguistik, dan pelestarian budaya." />
+        <meta name="twitter:image" content={BLOG_POSTS[0].imageUrl} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <link rel="canonical" href="https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
@@ -182,9 +203,10 @@ export default function BlogIndex({ locale, setLocale }) {
         <main style={{ maxWidth: 1000, margin: '0 auto', padding: '40px 16px' }}>
           {/* Hero */}
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <div style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '36px', marginBottom: '12px', color: '#0d6efd' }}>
-              ᬩᬮᬶ
-            </div>
+            <a href="/">
+              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
+                style={{ borderRadius: '14px', marginBottom: '12px', display: 'inline-block', boxShadow: '0 2px 12px rgba(13,110,253,0.2)' }} />
+            </a>
             <h1 style={{ fontSize: '32px', fontWeight: '700', margin: '0 0 10px', lineHeight: 1.2 }}>
               {blogUi.blogTitle}
             </h1>
@@ -245,8 +267,13 @@ export default function BlogIndex({ locale, setLocale }) {
                 onMouseEnter={e => e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,0,0,0.12)'}
                 onMouseLeave={e => e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)'}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px', background: darkMode ? '#252535' : '#f8f8f8', borderRadius: '12px' }}>
-                  {filteredPosts[0].image}
+                <div style={{ borderRadius: '12px', overflow: 'hidden', aspectRatio: '4/3', background: darkMode ? '#252535' : '#f8f8f8', minHeight: '160px' }}>
+                  <img
+                    src={filteredPosts[0].imageUrl}
+                    alt={displayPost(filteredPosts[0]).title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    loading="lazy"
+                  />
                 </div>
                 <div>
                   <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
@@ -289,7 +316,14 @@ export default function BlogIndex({ locale, setLocale }) {
                     onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
                     onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 6px rgba(0,0,0,0.04)'; e.currentTarget.style.transform = 'translateY(0)' }}
                   >
-                    <div style={{ fontSize: '36px', marginBottom: '12px' }}>{post.image}</div>
+                    <div style={{ borderRadius: '10px', overflow: 'hidden', marginBottom: '12px', aspectRatio: '16/9', background: darkMode ? '#252535' : '#f8f8f8' }}>
+                      <img
+                        src={post.imageUrl}
+                        alt={d.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        loading="lazy"
+                      />
+                    </div>
                     <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '8px', background: darkMode ? '#252535' : '#f0f0f0', color: mutedColor, marginBottom: '10px', alignSelf: 'flex-start' }}>
                       {d.category}
                     </span>

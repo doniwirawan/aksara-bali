@@ -4,6 +4,16 @@ import { useRouter } from 'next/router'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 
+// Unsplash images: always use for blog posts
+const UNSPLASH_IMAGES = {
+  'mengenal-aksara-bali': 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80',
+  'cara-belajar-aksara-bali': 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1200&q=80',
+  'aksara-bali-dan-bahasa-sansekerta': 'https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=1200&q=80',
+  'lontar-naskah-kuno-bali': 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=1200&q=80',
+  'perbedaan-aksara-bali-jawa-latin': 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80',
+  'upaya-pelestarian-aksara-bali-digital': 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=1200&q=80',
+}
+
 const BLOG_CONTENT = {
   'mengenal-aksara-bali': {
     title: 'Mengenal Aksara Bali: Warisan Budaya yang Perlu Dilestarikan',
@@ -12,7 +22,7 @@ const BLOG_CONTENT = {
     category: 'Sejarah & Budaya',
     readTime: '6 menit',
     tags: ['aksara bali', 'sejarah', 'budaya', 'script'],
-    image: '📜',
+    imageUrl: UNSPLASH_IMAGES['mengenal-aksara-bali'],
     content: `
 ## Apa Itu Aksara Bali?
 
@@ -96,7 +106,7 @@ Aksara Bali bukan sekadar sistem penulisan — ia adalah cerminan identitas buda
     category: 'Panduan Belajar',
     readTime: '8 menit',
     tags: ['belajar', 'pemula', 'hanacaraka', 'tutorial'],
-    image: '📖',
+    imageUrl: UNSPLASH_IMAGES['cara-belajar-aksara-bali'],
     content: `
 ## Mengapa Belajar Aksara Bali?
 
@@ -190,7 +200,7 @@ Kata-kata yang berasal dari bahasa Sansekerta ditulis dengan aksara **murda** �
     category: 'Linguistik',
     readTime: '7 menit',
     tags: ['sansekerta', 'linguistik', 'hindu', 'bali'],
-    image: '🕉️',
+    imageUrl: UNSPLASH_IMAGES['aksara-bali-dan-bahasa-sansekerta'],
     content: `
 ## Bahasa Sansekerta dan Pengaruhnya pada Aksara Bali
 
@@ -276,7 +286,7 @@ Aksara Bali, dengan segala kekayaan pengaruh Sansekertanya, adalah bukti nyata d
     category: 'Naskah Kuno',
     readTime: '5 menit',
     tags: ['lontar', 'naskah kuno', 'budaya', 'preservasi'],
-    image: '🌿',
+    imageUrl: UNSPLASH_IMAGES['lontar-naskah-kuno-bali'],
     content: `
 ## Apa Itu Lontar?
 
@@ -356,7 +366,7 @@ Keunikan lontar Bali terletak pada kesinambungan tradisi penulisannya — tidak 
     category: 'Linguistik',
     readTime: '9 menit',
     tags: ['perbandingan', 'aksara jawa', 'linguistik'],
-    image: '⚖️',
+    imageUrl: UNSPLASH_IMAGES['perbedaan-aksara-bali-jawa-latin'],
     content: `
 ## Tiga Sistem Aksara, Satu Kepulauan
 
@@ -448,7 +458,7 @@ Dengan standardisasi Unicode dan berkembangnya font serta keyboard digital untuk
     category: 'Teknologi & Budaya',
     readTime: '6 menit',
     tags: ['digital', 'pelestarian', 'teknologi', 'unicode'],
-    image: '💻',
+    imageUrl: UNSPLASH_IMAGES['upaya-pelestarian-aksara-bali-digital'],
     content: `
 ## Era Digital: Ancaman dan Peluang bagi Aksara Bali
 
@@ -642,6 +652,7 @@ export default function BlogPost({ post, slug, locale, setLocale }) {
   const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
   const mutedColor = darkMode ? '#888' : '#666'
 
+  const BASE = 'https://transliterasi-latin-ke-bahasa-bali.vercel.app'
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -649,11 +660,26 @@ export default function BlogPost({ post, slug, locale, setLocale }) {
     description: post.description,
     datePublished: post.date,
     dateModified: post.date,
-    author: { '@type': 'Person', name: 'Doni Wirawan' },
-    publisher: { '@type': 'Organization', name: 'Aksara Bali Converter', url: 'https://aksarabali.id' },
+    author: { '@type': 'Person', name: 'Doni Wirawan', url: `${BASE}/` },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Aksara Bali Converter',
+      url: BASE,
+      logo: { '@type': 'ImageObject', url: `${BASE}/icons/android-chrome-512x512.png` },
+    },
+    image: { '@type': 'ImageObject', url: post.imageUrl, width: 1200, height: 800 },
     keywords: post.tags.join(', '),
-    url: `https://aksarabali.id/blog/${slug}`,
+    url: `${BASE}/blog/${slug}`,
     inLanguage: 'id',
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE}/blog/${slug}` },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Beranda', item: `${BASE}/` },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${BASE}/blog` },
+        { '@type': 'ListItem', position: 3, name: post.title, item: `${BASE}/blog/${slug}` },
+      ],
+    },
   }
 
   return (
@@ -665,10 +691,19 @@ export default function BlogPost({ post, slug, locale, setLocale }) {
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.description} />
         <meta property="og:type" content="article" />
+        <meta property="og:image" content={post.imageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="800" />
+        <meta property="og:url" content={`https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog/${slug}`} />
         <meta property="article:published_time" content={post.date} />
+        <meta property="article:author" content="Doni Wirawan" />
         <meta property="article:tag" content={post.tags.join(',')} />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href={`https://aksarabali.id/blog/${slug}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.description} />
+        <meta name="twitter:image" content={post.imageUrl} />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <link rel="canonical" href={`https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog/${slug}`} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       </Head>
 
@@ -694,7 +729,13 @@ export default function BlogPost({ post, slug, locale, setLocale }) {
               ))}
             </div>
 
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>{post.image}</div>
+            <div style={{ borderRadius: '16px', overflow: 'hidden', marginBottom: '24px', aspectRatio: '16/9', background: darkMode ? '#252535' : '#f0f0f0' }}>
+              <img
+                src={post.imageUrl}
+                alt={post.title}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </div>
 
             <h1 style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 16px', lineHeight: 1.3, fontFamily: 'system-ui, sans-serif' }}>
               {displayTitle}
