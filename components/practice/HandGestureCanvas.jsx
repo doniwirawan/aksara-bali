@@ -16,25 +16,38 @@ function loadScript(src) {
   })
 }
 
-function isFingerExtended(landmarks, tipIdx, pipIdx) {
-  return landmarks[tipIdx].y < landmarks[pipIdx].y
+// Require tip to be above PIP by at least 30% of the PIP-MCP segment length
+// This prevents barely-lifted fingers from registering as extended
+function isFingerExtended(landmarks, tipIdx, pipIdx, mcpIdx) {
+  const tip = landmarks[tipIdx]
+  const pip = landmarks[pipIdx]
+  const mcp = landmarks[mcpIdx]
+  const pipMcpDist = Math.hypot(pip.x - mcp.x, pip.y - mcp.y)
+  return (pip.y - tip.y) > pipMcpDist * 0.3
 }
 
-function detectGesture(landmarks) {
-  const indexUp = isFingerExtended(landmarks, 8, 6)
-  const middleUp = isFingerExtended(landmarks, 12, 10)
-  const ringUp = isFingerExtended(landmarks, 16, 14)
-  const pinkyUp = isFingerExtended(landmarks, 20, 18)
+// Raw gesture detection from a single frame
+function detectRawGesture(landmarks, pinching) {
+  const indexUp  = isFingerExtended(landmarks,  8,  6,  5)
+  const middleUp = isFingerExtended(landmarks, 12, 10,  9)
+  const ringUp   = isFingerExtended(landmarks, 16, 14, 13)
+  const pinkyUp  = isFingerExtended(landmarks, 20, 18, 17)
 
-  const thumbTip = landmarks[4]
-  const indexTip = landmarks[8]
-  const pinchDist = Math.hypot(thumbTip.x - indexTip.x, thumbTip.y - indexTip.y)
-  const isPinching = pinchDist < 0.06
-
-  if (isPinching) return 'pinch'
+  if (pinching) return 'pinch'
+  // Point: only index finger clearly extended
   if (indexUp && !middleUp && !ringUp && !pinkyUp) return 'point'
+  // Palm: all four fingers extended
   if (indexUp && middleUp && ringUp && pinkyUp) return 'palm'
   return 'none'
+}
+
+// Stable pinch state (hysteresis: enter at <0.055, exit at >0.085)
+let _pinching = false
+function updatePinch(landmarks) {
+  const dist = Math.hypot(landmarks[4].x - landmarks[8].x, landmarks[4].y - landmarks[8].y)
+  if (!_pinching && dist < 0.055) _pinching = true
+  else if (_pinching && dist > 0.085) _pinching = false
+  return _pinching
 }
 
 export default function HandGestureCanvas({ darkMode, referenceText, referenceBalinese, locale }) {
@@ -78,6 +91,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const handsRef = useRef(null)
   const rafIdRef = useRef(null)
   const strokesRef = useRef([]) // array of paths for undo
+  const gestureBufferRef = useRef([]) // last N raw gestures for stability
+  const stableGestureRef = useRef('none') // confirmed stable gesture
+  const GESTURE_BUFFER = 4 // frames required before gesture change is accepted
 
   const [mode, setMode] = useState('mouse') // 'mouse' | 'gesture'
   const [status, setStatus] = useState('idle') // 'idle' | 'loading' | 'ready' | 'error'
@@ -395,12 +411,27 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         if (!results.multiHandLandmarks?.length) {
           drawingRef.current = false
           lastPosRef.current = null
+          gestureBufferRef.current = []
+          stableGestureRef.current = 'none'
+          _pinching = false
           setGesture('none')
           return
         }
 
         const landmarks = results.multiHandLandmarks[0]
-        const g = detectGesture(landmarks)
+        const pinching = updatePinch(landmarks)
+        const raw = detectRawGesture(landmarks, pinching)
+
+        // Stability buffer: only commit to a new gesture once it appears
+        // consistently across GESTURE_BUFFER consecutive frames
+        const buf = gestureBufferRef.current
+        buf.push(raw)
+        if (buf.length > GESTURE_BUFFER) buf.shift()
+        const counts = {}
+        buf.forEach(x => { counts[x] = (counts[x] || 0) + 1 })
+        const dominant = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0]
+        const g = counts[dominant] >= GESTURE_BUFFER - 1 ? dominant : stableGestureRef.current
+        stableGestureRef.current = g
         setGesture(g)
 
         // Draw landmarks on overlay
