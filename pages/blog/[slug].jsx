@@ -797,27 +797,35 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
               </div>
-              {post.imageUrl && post.imageUrl.includes('images.unsplash.com') && (
-                <p style={{ fontSize: '11px', color: mutedColor, margin: '6px 0 0', textAlign: 'right', fontFamily: 'system-ui, sans-serif' }}>
-                  {post.imageCredit ? (
-                    <>
-                      Photo by{' '}
-                      <a href={post.imageCreditUrl} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor }}>
-                        {post.imageCredit}
-                      </a>
-                      {' '}on{' '}
-                    </>
-                  ) : 'Photo on '}
-                  <a
-                    href={`https://unsplash.com?utm_source=aksara_bali&utm_medium=referral`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: mutedColor }}
-                  >
-                    Unsplash
-                  </a>
-                </p>
-              )}
+              {post.imageUrl && post.imageUrl.includes('images.unsplash.com') && (() => {
+                const photoIdMatch = post.imageUrl.match(/photo-\d+-([a-z0-9]+)/i)
+                const photoPageUrl = photoIdMatch
+                  ? `https://unsplash.com/photos/${photoIdMatch[1]}?utm_source=aksara_bali&utm_medium=referral`
+                  : `https://unsplash.com?utm_source=aksara_bali&utm_medium=referral`
+                return (
+                  <p style={{ fontSize: '12px', color: mutedColor, margin: '6px 0 0', textAlign: 'right', fontFamily: 'system-ui, sans-serif' }}>
+                    {post.imageCredit ? (
+                      <>
+                        Photo by{' '}
+                        <a href={post.imageCreditUrl} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor, textDecoration: 'underline' }}>
+                          {post.imageCredit}
+                        </a>
+                        {' '}on{' '}
+                        <a href={photoPageUrl} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor, textDecoration: 'underline' }}>
+                          Unsplash
+                        </a>
+                      </>
+                    ) : (
+                      <>
+                        Photo on{' '}
+                        <a href={photoPageUrl} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor, textDecoration: 'underline' }}>
+                          Unsplash
+                        </a>
+                      </>
+                    )}
+                  </p>
+                )
+              })()}
             </div>
 
             <h1 style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 16px', lineHeight: 1.3, fontFamily: 'system-ui, sans-serif' }}>
