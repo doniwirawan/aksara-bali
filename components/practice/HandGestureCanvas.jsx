@@ -109,21 +109,27 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
 
   const getCtx = () => canvasRef.current?.getContext('2d')
 
+  const drawStroke = (ctx, stroke) => {
+    if (stroke.length < 2) return
+    ctx.beginPath()
+    ctx.strokeStyle = stroke[0].color
+    ctx.lineWidth = stroke[0].width
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
+    ctx.moveTo(stroke[0].x, stroke[0].y)
+    for (let i = 1; i < stroke.length - 1; i++) {
+      const mid = { x: (stroke[i].x + stroke[i + 1].x) / 2, y: (stroke[i].y + stroke[i + 1].y) / 2 }
+      ctx.quadraticCurveTo(stroke[i].x, stroke[i].y, mid.x, mid.y)
+    }
+    ctx.lineTo(stroke[stroke.length - 1].x, stroke[stroke.length - 1].y)
+    ctx.stroke()
+  }
+
   const redrawAll = useCallback(() => {
     const ctx = getCtx()
     if (!ctx) return
     ctx.clearRect(0, 0, CANVAS_W, CANVAS_H)
-    strokesRef.current.forEach(stroke => {
-      if (stroke.length < 2) return
-      ctx.beginPath()
-      ctx.strokeStyle = stroke[0].color
-      ctx.lineWidth = stroke[0].width
-      ctx.lineCap = 'round'
-      ctx.lineJoin = 'round'
-      ctx.moveTo(stroke[0].x, stroke[0].y)
-      stroke.forEach(p => ctx.lineTo(p.x, p.y))
-      ctx.stroke()
-    })
+    strokesRef.current.forEach(stroke => drawStroke(ctx, stroke))
   }, [])
 
   const clearCanvas = useCallback(() => {
@@ -359,13 +365,20 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
     if (mode !== 'mouse' || !isDrawingMouse) return
     e.preventDefault()
     const pos = getCanvasPos(e)
-    currentPathRef.current.push({ ...pos, t: Date.now(), color: strokeColor, width: strokeWidth })
+    const path = currentPathRef.current
+    path.push({ ...pos, t: Date.now(), color: strokeColor, width: strokeWidth })
     const ctx = getCtx()
-    ctx.lineTo(pos.x, pos.y)
     ctx.strokeStyle = strokeColor
     ctx.lineWidth = strokeWidth
     ctx.lineCap = 'round'
     ctx.lineJoin = 'round'
+    if (path.length >= 3) {
+      const prev = path[path.length - 2]
+      const mid = { x: (prev.x + pos.x) / 2, y: (prev.y + pos.y) / 2 }
+      ctx.quadraticCurveTo(prev.x, prev.y, mid.x, mid.y)
+    } else {
+      ctx.lineTo(pos.x, pos.y)
+    }
     ctx.stroke()
   }, [mode, isDrawingMouse, strokeColor, strokeWidth])
 
@@ -399,21 +412,23 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       })
 
       hands.onResults((results) => {
-        // Draw video feed mirrored on overlay canvas
         const oc = overlayRef.current
         if (!oc) return
         const octx = oc.getContext('2d')
-        octx.save()
-        octx.scale(-1, 1)
-        octx.drawImage(results.image, -oc.width, 0, oc.width, oc.height)
-        octx.restore()
 
         if (!results.multiHandLandmarks?.length) {
+          // Save any in-progress stroke
+          if (drawingRef.current && currentPathRef.current.length > 1) {
+            strokesRef.current.push([...currentPathRef.current])
+            currentPathRef.current = []
+          }
           drawingRef.current = false
           lastPosRef.current = null
           gestureBufferRef.current = []
           stableGestureRef.current = 'none'
           _pinching = false
+          // Clear overlay when hand leaves
+          octx.clearRect(0, 0, oc.width, oc.height)
           setGesture('none')
           return
         }
@@ -434,13 +449,18 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         stableGestureRef.current = g
         setGesture(g)
 
-        // Draw landmarks on overlay
+        // Clear overlay each frame and redraw landmarks MIRRORED to match video
+        octx.clearRect(0, 0, oc.width, oc.height)
         if (window.drawConnectors && window.drawLandmarks) {
-          window.drawConnectors(octx, landmarks, window.HAND_CONNECTIONS, { color: 'rgba(0,255,150,0.6)', lineWidth: 2 })
-          window.drawLandmarks(octx, landmarks, { color: 'rgba(255,50,50,0.8)', lineWidth: 1, radius: 4 })
+          octx.save()
+          octx.translate(oc.width, 0)
+          octx.scale(-1, 1)
+          window.drawConnectors(octx, landmarks, window.HAND_CONNECTIONS, { color: 'rgba(0,255,150,0.85)', lineWidth: 3 })
+          window.drawLandmarks(octx, landmarks, { color: 'rgba(255,50,50,0.95)', lineWidth: 1, radius: 5 })
+          octx.restore()
         }
 
-        // Flip x for mirror effect
+        // Mirror x to match webcam display
         const indexTip = landmarks[8]
         const x = (1 - indexTip.x) * CANVAS_W
         const y = indexTip.y * CANVAS_H
@@ -449,31 +469,41 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         if (!ctx) return
 
         if (g === 'point') {
+          const path = currentPathRef.current
           if (!drawingRef.current) {
             drawingRef.current = true
-            currentPathRef.current = [{ x, y, t: Date.now(), color: strokeColor, width: strokeWidth }]
+            path.length = 0
+            path.push({ x, y, t: Date.now(), color: strokeColor, width: strokeWidth })
             ctx.beginPath()
             ctx.moveTo(x, y)
           } else {
-            currentPathRef.current.push({ x, y, t: Date.now(), color: strokeColor, width: strokeWidth })
-            ctx.lineTo(x, y)
+            path.push({ x, y, t: Date.now(), color: strokeColor, width: strokeWidth })
             ctx.strokeStyle = strokeColor
             ctx.lineWidth = strokeWidth
             ctx.lineCap = 'round'
             ctx.lineJoin = 'round'
+            if (path.length >= 3) {
+              const prev = path[path.length - 2]
+              const mid = { x: (prev.x + x) / 2, y: (prev.y + y) / 2 }
+              ctx.quadraticCurveTo(prev.x, prev.y, mid.x, mid.y)
+            } else {
+              ctx.lineTo(x, y)
+            }
             ctx.stroke()
           }
           lastPosRef.current = { x, y }
         } else if (g === 'palm') {
-          // Erase circle around finger
-          ctx.save()
-          ctx.globalCompositeOperation = 'destination-out'
-          ctx.beginPath()
-          ctx.arc(x, y, 30, 0, Math.PI * 2)
-          ctx.fill()
-          ctx.restore()
+          // Palm = clear all (reliable; destination-out doesn't persist through redrawAll)
+          if (drawingRef.current && currentPathRef.current.length > 0) {
+            currentPathRef.current = []
+          }
+          strokesRef.current = []
+          redrawAll()
+          setCheckResult(null)
+          setHwrResult(null)
           drawingRef.current = false
         } else {
+          // Lift pen — commit current stroke
           if (drawingRef.current && currentPathRef.current.length > 1) {
             strokesRef.current.push([...currentPathRef.current])
           }
@@ -651,12 +681,25 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         background: '#fff',
         cursor: mode === 'mouse' ? (isDrawingMouse ? 'crosshair' : 'crosshair') : 'none',
       }}>
-        {/* Drawing canvas (always present) */}
+        {/* Layer 1 (bottom): webcam feed — mirrored via CSS */}
+        <video
+          ref={videoRef}
+          muted
+          playsInline
+          style={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            zIndex: 2, objectFit: 'cover',
+            transform: 'scaleX(-1)',
+            display: mode === 'gesture' && status === 'ready' ? 'block' : 'none',
+          }}
+        />
+
+        {/* Layer 2: drawing canvas */}
         <canvas
           ref={canvasRef}
           width={CANVAS_W}
           height={CANVAS_H}
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 10, touchAction: 'none' }}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 5, touchAction: 'none' }}
           onMouseDown={startDraw}
           onMouseMove={draw}
           onMouseUp={endDraw}
@@ -665,15 +708,19 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           onTouchMove={draw}
           onTouchEnd={endDraw}
         />
-        {/* Overlay canvas for video + hand landmarks */}
+
+        {/* Layer 3 (top): hand landmark overlay — transparent, pointer-events disabled */}
         <canvas
           ref={overlayRef}
           width={CANVAS_W}
           height={CANVAS_H}
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 5, opacity: mode === 'gesture' ? 1 : 0 }}
+          style={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            zIndex: 10,
+            opacity: mode === 'gesture' && status === 'ready' ? 1 : 0,
+            pointerEvents: 'none',
+          }}
         />
-        {/* Hidden video element */}
-        <video ref={videoRef} style={{ display: 'none' }} muted playsInline />
 
         {/* Placeholder / watermark guide */}
         {mode === 'mouse' && (
