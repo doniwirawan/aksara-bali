@@ -41,7 +41,9 @@ export default async function handler(req, res) {
         .order('accuracy', { ascending: false })
         .limit(100)
 
-      if (!stats) return res.status(200).json({ stats: [] })
+      if (!stats || stats.length === 0) {
+        return res.status(200).json({ totalSessions: 0, avgAccuracy: 0, bestStreak: 0, recentSessions: [] })
+      }
 
       const avgAccuracy = stats.reduce((s, r) => s + r.accuracy, 0) / stats.length
       const bestStreak = Math.max(...stats.map(r => r.max_streak))
