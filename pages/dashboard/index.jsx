@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../../context/AuthContext'
 import Navbar from '../../components/Navbar'
@@ -22,13 +22,20 @@ export default function UserDashboard({ locale, setLocale }) {
     if (!loading && !user) router.push('/auth/login')
   }, [user, loading, router])
 
-  useEffect(() => {
+  const fetchStats = useCallback(async () => {
     if (!user) return
-    Promise.all([fetch('/api/conversions'), fetch('/api/quiz-results')]).then(async ([c, q]) => {
-      if (c.ok) setStats(await c.json())
-      if (q.ok) setQuizStats(await q.json())
-    }).catch(() => {})
+    const [c, q] = await Promise.all([fetch('/api/conversions'), fetch('/api/quiz-results')]).catch(() => [])
+    if (c?.ok) setStats(await c.json())
+    if (q?.ok) setQuizStats(await q.json())
   }, [user])
+
+  // Fetch on mount and whenever the tab regains focus
+  useEffect(() => { fetchStats() }, [fetchStats])
+  useEffect(() => {
+    const onVisible = () => { if (document.visibilityState === 'visible') fetchStats() }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [fetchStats])
 
   const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
   const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
@@ -98,6 +105,39 @@ export default function UserDashboard({ locale, setLocale }) {
               </button>
             </div>
           </div>
+
+          {/* Admin section */}
+          {isAdmin && (
+            <div style={{ background: cardBg, borderRadius: '16px', border: '2px solid #0d6efd40', padding: '24px', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <h2 style={{ fontSize: '16px', fontWeight: '700', margin: 0, color: '#0d6efd' }}>🛠️ Admin Dashboard</h2>
+                <a href="/admin" style={{ fontSize: '12px', color: '#0d6efd', textDecoration: 'none' }}>Buka lengkap →</a>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '10px' }}>
+                {[
+                  { href: '/admin?tab=stats', icon: '📊', label: 'Statistik', desc: 'Konversi & kuis', color: '#0d6efd' },
+                  { href: '/admin?tab=blog', icon: '✍️', label: 'Blog', desc: 'Kelola artikel', color: '#6f42c1' },
+                  { href: '/admin?tab=faq', icon: '❓', label: 'FAQ', desc: 'Kelola pertanyaan', color: '#fd7e14' },
+                  { href: '/admin?tab=users', icon: '👥', label: 'Pengguna', desc: 'Kelola akun', color: '#198754' },
+                ].map(item => (
+                  <a key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
+                    <div style={{
+                      background: darkMode ? '#252535' : '#f8f9ff',
+                      borderRadius: '12px', border: `1px solid ${darkMode ? '#2a2a3e' : '#dde5ff'}`,
+                      padding: '16px 14px', cursor: 'pointer',
+                    }}
+                      onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 12px rgba(13,110,253,0.15)'}
+                      onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+                    >
+                      <div style={{ fontSize: '24px', marginBottom: '8px' }}>{item.icon}</div>
+                      <div style={{ fontWeight: '600', fontSize: '13px', color: item.color, marginBottom: '3px' }}>{item.label}</div>
+                      <div style={{ fontSize: '11px', color: mutedColor }}>{item.desc}</div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Community stats */}
           <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 14px' }}>📈 Statistik Komunitas</h2>
