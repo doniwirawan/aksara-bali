@@ -222,8 +222,8 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       }
     }
 
-    // Dilate refGrid by 2 cells for spatial tolerance (tighter — shape must be followed closely)
-    const DIL = 2
+    // Dilate refGrid by 3 cells for spatial tolerance (moderate — shape must be followed, small offsets ok)
+    const DIL = 3
     const dilRef = new Uint8Array(GRID_W * GRID_H)
     for (let gy = 0; gy < GRID_H; gy++) {
       for (let gx = 0; gx < GRID_W; gx++) {
@@ -267,10 +267,10 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       : 0
 
     let resultStatus, message
-    if (score >= 72) {
+    if (score >= 62) {
       resultStatus = 'correct'
       message = ct.correct
-    } else if (score >= 45) {
+    } else if (score >= 38) {
       resultStatus = 'partial'
       message = ct.partial
     } else {
