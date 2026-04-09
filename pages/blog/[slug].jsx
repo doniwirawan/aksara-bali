@@ -550,26 +550,62 @@ export async function getServerSideProps({ params }) {
     .eq('published', true)
     .single()
 
+  const normalizePost = (d) => ({
+    title: d.title,
+    titleEn: d.title_en || d.title,
+    description: d.excerpt || '',
+    descriptionEn: d.excerpt_en || d.excerpt || '',
+    date: d.created_at ? d.created_at.split('T')[0] : '',
+    category: d.category,
+    readTime: d.read_time || '5 menit',
+    tags: Array.isArray(d.tags) ? d.tags : [],
+    imageUrl: d.image_url || 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80',
+    imageCredit: d.image_credit || '',
+    imageCreditUrl: d.image_credit_url || '',
+    content: d.content || '',
+    contentEn: d.content_en || '',
+  })
+
   if (data) {
-    const post = {
-      title: data.title,
-      titleEn: data.title_en || data.title,
-      description: data.excerpt || '',
-      descriptionEn: data.excerpt_en || data.excerpt || '',
-      date: data.created_at ? data.created_at.split('T')[0] : '',
-      category: data.category,
-      readTime: data.read_time || '5 menit',
-      tags: Array.isArray(data.tags) ? data.tags : [],
-      imageUrl: data.image_url || 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80',
-      content: data.content || '',
-      contentEn: data.content_en || '',
+    const post = normalizePost(data)
+
+    // Fetch 3 related posts: same category first, then any, excluding current slug
+    let { data: related } = await supabase
+      .from('blog_posts')
+      .select('slug, title, title_en, excerpt, excerpt_en, image_url, category, read_time, created_at')
+      .eq('published', true)
+      .eq('category', data.category)
+      .neq('slug', params.slug)
+      .limit(3)
+
+    if (!related || related.length < 3) {
+      const { data: more } = await supabase
+        .from('blog_posts')
+        .select('slug, title, title_en, excerpt, excerpt_en, image_url, category, read_time, created_at')
+        .eq('published', true)
+        .neq('slug', params.slug)
+        .neq('category', data.category)
+        .limit(3 - (related?.length || 0))
+      related = [...(related || []), ...(more || [])]
     }
-    return { props: { post, slug: params.slug } }
+
+    const relatedPosts = (related || []).map(r => ({
+      slug: r.slug,
+      title: r.title,
+      titleEn: r.title_en || r.title,
+      excerpt: r.excerpt || '',
+      excerptEn: r.excerpt_en || r.excerpt || '',
+      imageUrl: r.image_url || 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&q=80',
+      category: r.category,
+      readTime: r.read_time || '5 menit',
+    }))
+
+    return { props: { post, slug: params.slug, relatedPosts } }
   }
 
   // Fallback to hardcoded content
   const hardcoded = BLOG_CONTENT[params.slug]
-  if (hardcoded) return { props: { post: hardcoded, slug: params.slug } }
+  if (hardcoded) return { props: { post: hardcoded, slug: params.slug, relatedPosts: [] } }
 
   return { notFound: true }
 }
@@ -657,7 +693,7 @@ function renderMarkdown(content) {
   return elements
 }
 
-export default function BlogPost({ post, slug, locale, setLocale }) {
+export default function BlogPost({ post, slug, locale, setLocale, relatedPosts = [] }) {
   const [darkMode, setDarkMode] = useState(false)
   const lang = locale === 'en' ? 'en' : 'id'
 
@@ -753,12 +789,35 @@ export default function BlogPost({ post, slug, locale, setLocale }) {
               ))}
             </div>
 
-            <div style={{ borderRadius: '16px', overflow: 'hidden', marginBottom: '24px', aspectRatio: '16/9', background: darkMode ? '#252535' : '#f0f0f0' }}>
-              <img
-                src={post.imageUrl}
-                alt={post.title}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              />
+            <div style={{ marginBottom: '24px' }}>
+              <div style={{ borderRadius: '16px', overflow: 'hidden', aspectRatio: '16/9', background: darkMode ? '#252535' : '#f0f0f0' }}>
+                <img
+                  src={post.imageUrl}
+                  alt={post.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              {post.imageUrl && post.imageUrl.includes('images.unsplash.com') && (
+                <p style={{ fontSize: '11px', color: mutedColor, margin: '6px 0 0', textAlign: 'right', fontFamily: 'system-ui, sans-serif' }}>
+                  {post.imageCredit ? (
+                    <>
+                      Photo by{' '}
+                      <a href={post.imageCreditUrl} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor }}>
+                        {post.imageCredit}
+                      </a>
+                      {' '}on{' '}
+                    </>
+                  ) : 'Photo on '}
+                  <a
+                    href={`https://unsplash.com?utm_source=aksara_bali&utm_medium=referral`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: mutedColor }}
+                  >
+                    Unsplash
+                  </a>
+                </p>
+              )}
             </div>
 
             <h1 style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 16px', lineHeight: 1.3, fontFamily: 'system-ui, sans-serif' }}>
@@ -783,6 +842,46 @@ export default function BlogPost({ post, slug, locale, setLocale }) {
               {renderMarkdown(displayContent)}
             </ul>
           </div>
+
+          {/* Related articles */}
+          {relatedPosts.length > 0 && (
+            <div style={{ marginTop: '40px', fontFamily: 'system-ui, sans-serif' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: '700', margin: '0 0 20px', color: textColor }}>
+                {lang === 'en' ? 'Related Articles' : 'Artikel Terkait'}
+              </h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '16px' }}>
+                {relatedPosts.map(r => (
+                  <a key={r.slug} href={`/blog/${r.slug}`} style={{ textDecoration: 'none' }}>
+                    <div
+                      style={{ background: cardBg, borderRadius: '14px', border: `1px solid ${borderColor}`, overflow: 'hidden', height: '100%' }}
+                      onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.1)'}
+                      onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+                    >
+                      <div style={{ height: '140px', overflow: 'hidden' }}>
+                        <img
+                          src={r.imageUrl}
+                          alt={r.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        />
+                      </div>
+                      <div style={{ padding: '14px' }}>
+                        <span style={{ fontSize: '11px', background: '#0d6efd15', color: '#0d6efd', padding: '2px 8px', borderRadius: '8px', fontWeight: '600' }}>
+                          {r.category}
+                        </span>
+                        <div style={{ fontWeight: '600', fontSize: '14px', color: textColor, margin: '8px 0 4px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                          {lang === 'en' ? r.titleEn : r.title}
+                        </div>
+                        <div style={{ fontSize: '12px', color: mutedColor, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.5 }}>
+                          {lang === 'en' ? r.excerptEn : r.excerpt}
+                        </div>
+                        <div style={{ fontSize: '11px', color: mutedColor, marginTop: '8px' }}>⏱ {r.readTime}</div>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Navigation */}
           <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'space-between', fontFamily: 'system-ui, sans-serif' }}>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { supabase } from '../../utils/supabase'
 
 const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ''
@@ -11,10 +12,11 @@ function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim()
 }
 
-const EMPTY_POST = { slug: '', title: '', title_en: '', excerpt: '', excerpt_en: '', content: '', content_en: '', category: 'Umum', tags: '', image_url: '', published: false, read_time: '5 menit' }
+const EMPTY_POST = { slug: '', title: '', title_en: '', excerpt: '', excerpt_en: '', content: '', content_en: '', category: 'Umum', tags: '', image_url: '', image_credit: '', image_credit_url: '', published: false, read_time: '5 menit' }
 const EMPTY_FAQ = { category: 'Umum', question: '', answer: '', sort_order: 0, published: true }
 
 export default function AdminDashboard() {
+  const router = useRouter()
   const [authenticated, setAuthenticated] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -47,6 +49,9 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState([])
   const [usersLoading, setUsersLoading] = useState(false)
 
+  // Delete modal
+  const [deleteModal, setDeleteModal] = useState(null) // { type, id, label, onConfirm }
+
   // Unsplash picker
   const [showPicker, setShowPicker] = useState(false)
   const [pickerQuery, setPickerQuery] = useState('')
@@ -65,6 +70,14 @@ export default function AdminDashboard() {
       }
     })
   }, [])
+
+  // Read ?tab= query param and apply once authenticated
+  useEffect(() => {
+    if (!authenticated) return
+    const tab = router.query.tab
+    const valid = ['stats', 'blog', 'faq', 'users']
+    if (tab && valid.includes(tab)) setActiveTab(tab)
+  }, [authenticated, router.query.tab])
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -130,10 +143,14 @@ export default function AdminDashboard() {
     setShowBlogForm(true)
   }
 
-  const deleteBlog = async (id) => {
-    if (!confirm('Hapus artikel ini?')) return
-    await fetch('/api/blog-posts', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
-    fetchBlog()
+  const deleteBlog = (id, title) => {
+    setDeleteModal({
+      label: `Hapus artikel "${title}"?`,
+      onConfirm: async () => {
+        await fetch('/api/blog-posts', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
+        fetchBlog()
+      },
+    })
   }
 
   const toggleBlogPublish = async (post) => {
@@ -174,10 +191,14 @@ export default function AdminDashboard() {
     fetchFaq()
   }
 
-  const deleteFaq = async (id) => {
-    if (!confirm('Hapus FAQ ini?')) return
-    await fetch('/api/faq-items', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
-    fetchFaq()
+  const deleteFaq = (id, question) => {
+    setDeleteModal({
+      label: `Hapus FAQ "${question}"?`,
+      onConfirm: async () => {
+        await fetch('/api/faq-items', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
+        fetchFaq()
+      },
+    })
   }
 
   // ─── Unsplash Picker ──────────────────────────────────────
@@ -203,9 +224,22 @@ export default function AdminDashboard() {
     searchUnsplash(pickerQuery || 'bali', pickerPage.current)
   }
 
-  const selectPhoto = (photo) => {
-    setBlogForm(f => ({ ...f, image_url: photo.url }))
+  const selectPhoto = async (photo) => {
+    setBlogForm(f => ({
+      ...f,
+      image_url: photo.url,
+      image_credit: photo.author,
+      image_credit_url: photo.authorUrl,
+    }))
     setShowPicker(false)
+    // Trigger download event as required by Unsplash API guidelines
+    if (photo.downloadLocation) {
+      fetch('/api/unsplash-download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ downloadLocation: photo.downloadLocation }),
+      }).catch(() => {})
+    }
   }
 
   useEffect(() => {
@@ -220,10 +254,14 @@ export default function AdminDashboard() {
     setUsersLoading(false)
   }, [])
 
-  const deleteUser = async (id, email) => {
-    if (!confirm(`Hapus akun ${email}?`)) return
-    await fetch('/api/admin-users', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
-    fetchUsers()
+  const deleteUser = (id, userEmail) => {
+    setDeleteModal({
+      label: `Hapus akun "${userEmail}"?`,
+      onConfirm: async () => {
+        await fetch('/api/admin-users', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
+        fetchUsers()
+      },
+    })
   }
 
   useEffect(() => {
@@ -426,7 +464,17 @@ export default function AdminDashboard() {
                       </button>
                     </div>
                     {blogForm.image_url && (
-                      <img src={blogForm.image_url} alt="preview" style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '10px', marginTop: '8px' }} onError={e => e.target.style.display = 'none'} />
+                      <div>
+                        <img src={blogForm.image_url} alt="preview" style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '10px', marginTop: '8px' }} onError={e => e.target.style.display = 'none'} />
+                        {blogForm.image_credit && (
+                          <p style={{ fontSize: '11px', color: '#888', margin: '4px 0 0' }}>
+                            Photo by{' '}
+                            <a href={blogForm.image_credit_url} target="_blank" rel="noopener noreferrer" style={{ color: '#0d6efd' }}>{blogForm.image_credit}</a>
+                            {' '}on{' '}
+                            <a href="https://unsplash.com?utm_source=aksara_bali&utm_medium=referral" target="_blank" rel="noopener noreferrer" style={{ color: '#0d6efd' }}>Unsplash</a>
+                          </p>
+                        )}
+                      </div>
                     )}
 
                     {/* Unsplash Picker Modal */}
@@ -528,7 +576,7 @@ export default function AdminDashboard() {
                         <button onClick={() => toggleBlogPublish(post)} style={{ ...s.btnOutline, fontSize: '12px' }}>{post.published ? 'Sembunyikan' : 'Publikasikan'}</button>
                         <a href={`/blog/${post.slug}`} target="_blank" rel="noreferrer" style={{ ...s.btn('#198754'), padding: '6px 12px', textDecoration: 'none' }}>Lihat</a>
                         <button onClick={() => editBlog(post)} style={{ ...s.btn('#fd7e14'), padding: '6px 12px' }}>Edit</button>
-                        <button onClick={() => deleteBlog(post.id)} style={{ ...s.btn('#dc3545'), padding: '6px 12px' }}>Hapus</button>
+                        <button onClick={() => deleteBlog(post.id, post.title)} style={{ ...s.btn('#dc3545'), padding: '6px 12px' }}>Hapus</button>
                       </div>
                     </div>
                   ))}
@@ -607,7 +655,7 @@ export default function AdminDashboard() {
                         <button onClick={() => saveFaqToggle(item)} style={{ ...s.btnOutline, fontSize: '12px' }}>{item.published ? 'Sembunyikan' : 'Tampilkan'}</button>
                         <a href="/faq" target="_blank" rel="noreferrer" style={{ ...s.btn('#198754'), padding: '6px 12px', textDecoration: 'none' }}>Lihat</a>
                         <button onClick={() => editFaq(item)} style={{ ...s.btn('#fd7e14'), padding: '6px 12px' }}>Edit</button>
-                        <button onClick={() => deleteFaq(item.id)} style={{ ...s.btn('#dc3545'), padding: '6px 12px' }}>Hapus</button>
+                        <button onClick={() => deleteFaq(item.id, item.question)} style={{ ...s.btn('#dc3545'), padding: '6px 12px' }}>Hapus</button>
                       </div>
                     </div>
                   ))}
@@ -627,7 +675,7 @@ export default function AdminDashboard() {
                 <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Memuat data pengguna...</div>
               ) : (
                 <div style={s.card}>
-                  <div style={{ marginBottom: '12px', fontSize: '13px', color: '#666' }}>Total: <strong>{users.length}</strong> akun</div>
+                  <div style={{ marginBottom: '12px', fontSize: '13px', color: '#666' }}>Total: <strong>{users.filter(u => u.email !== ADMIN_EMAIL).length}</strong> pengguna</div>
                   <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                       <thead>
@@ -636,11 +684,10 @@ export default function AdminDashboard() {
                         ))}</tr>
                       </thead>
                       <tbody>
-                        {users.map(u => (
+                        {users.filter(u => u.email !== ADMIN_EMAIL).map(u => (
                           <tr key={u.id}>
-                            <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', fontWeight: u.email === ADMIN_EMAIL ? '700' : '400' }}>
+                            <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8' }}>
                               {u.email}
-                              {u.email === ADMIN_EMAIL && <span style={{ marginLeft: '6px', fontSize: '10px', background: '#0d6efd20', color: '#0d6efd', padding: '1px 6px', borderRadius: '8px', fontWeight: '700' }}>ADMIN</span>}
                             </td>
                             <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8' }}>
                               <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '8px', fontWeight: '600', background: u.email_confirmed_at ? '#19875420' : '#88888820', color: u.email_confirmed_at ? '#198754' : '#888' }}>
@@ -654,9 +701,7 @@ export default function AdminDashboard() {
                               {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Belum pernah'}
                             </td>
                             <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8' }}>
-                              {u.email !== ADMIN_EMAIL && (
-                                <button onClick={() => deleteUser(u.id, u.email)} style={{ ...s.btn('#dc3545'), padding: '4px 10px', fontSize: '12px' }}>Hapus</button>
-                              )}
+                              <button onClick={() => deleteUser(u.id, u.email)} style={{ ...s.btn('#dc3545'), padding: '4px 10px', fontSize: '12px' }}>Hapus Akun</button>
                             </td>
                           </tr>
                         ))}
@@ -669,6 +714,32 @@ export default function AdminDashboard() {
           )}
 
         </main>
+
+        {/* Delete Confirmation Modal */}
+        {deleteModal && (
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+            <div style={{ background: '#fff', borderRadius: '16px', padding: '28px', maxWidth: '400px', width: '100%', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
+              <div style={{ fontSize: '36px', textAlign: 'center', marginBottom: '12px' }}>🗑️</div>
+              <h3 style={{ margin: '0 0 8px', fontSize: '16px', fontWeight: '700', textAlign: 'center' }}>Konfirmasi Hapus</h3>
+              <p style={{ margin: '0 0 24px', color: '#555', fontSize: '14px', textAlign: 'center', lineHeight: 1.5 }}>{deleteModal.label}</p>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
+                  onClick={() => setDeleteModal(null)}
+                  style={{ flex: 1, padding: '10px', borderRadius: '10px', border: '1px solid #ddd', background: '#f8f8f8', cursor: 'pointer', fontSize: '14px', fontWeight: '500' }}
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={async () => { await deleteModal.onConfirm(); setDeleteModal(null) }}
+                  style={{ flex: 1, padding: '10px', borderRadius: '10px', border: 'none', background: '#dc3545', color: '#fff', cursor: 'pointer', fontSize: '14px', fontWeight: '600' }}
+                >
+                  Ya, Hapus
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </>
   )
