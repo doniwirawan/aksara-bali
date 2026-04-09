@@ -78,6 +78,8 @@ export default function QuizMode({ darkMode, locale }) {
   const [resultHistory, setResultHistory] = useState([])
   const [shuffledWords, setShuffledWords] = useState([])
 
+  const SESSION_SIZE = 10 // questions per session
+
   // Shuffle words on mount and on filter change
   const baseWords = useMemo(() => {
     if (filter === 'all') return QUIZ_WORDS
@@ -85,7 +87,7 @@ export default function QuizMode({ darkMode, locale }) {
   }, [filter])
 
   useEffect(() => {
-    setShuffledWords(shuffle(baseWords))
+    setShuffledWords(shuffle(baseWords).slice(0, SESSION_SIZE))
     setCurrentIdx(0)
     setUserInput('')
     setAnswered(false)
@@ -94,10 +96,10 @@ export default function QuizMode({ darkMode, locale }) {
 
   // Initialize on first render
   useEffect(() => {
-    setShuffledWords(shuffle(QUIZ_WORDS))
+    setShuffledWords(shuffle(QUIZ_WORDS).slice(0, SESSION_SIZE))
   }, [])
 
-  const filteredWords = shuffledWords.length > 0 ? shuffledWords : baseWords
+  const filteredWords = shuffledWords.length > 0 ? shuffledWords : baseWords.slice(0, SESSION_SIZE)
 
   const currentWord = filteredWords[currentIdx % filteredWords.length]
   const expectedBalinese = useMemo(() => convertLatinToBalinese(currentWord.latin), [currentWord])
@@ -153,7 +155,6 @@ export default function QuizMode({ darkMode, locale }) {
     if (nextIdx >= filteredWords.length) {
       setQuizComplete(true)
       // Log quiz result to Supabase (fire-and-forget)
-      const finalScore = score + (answered && !wrongWords.includes(currentWord) ? 0 : 0) // score already updated
       const finalAccuracy = questionsAnswered > 0 ? Math.round((score / questionsAnswered) * 100) : 0
       fetch('/api/quiz-results', {
         method: 'POST',
@@ -172,10 +173,10 @@ export default function QuizMode({ darkMode, locale }) {
     setUserInput('')
     setAnswered(false)
     setShowAnswer(false)
-  }, [currentIdx, filteredWords.length])
+  }, [currentIdx, filteredWords.length, score, questionsAnswered, maxStreak, filter])
 
   const restartQuiz = () => {
-    setShuffledWords(shuffle(baseWords))
+    setShuffledWords(shuffle(baseWords).slice(0, SESSION_SIZE))
     setCurrentIdx(0)
     setUserInput('')
     setScore(0)
