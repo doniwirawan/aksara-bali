@@ -206,8 +206,8 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       }
     }
 
-    // Dilate refGrid by 4 cells for spatial tolerance (handwriting naturally shifts)
-    const DIL = 4
+    // Dilate refGrid by 2 cells for spatial tolerance (tighter — shape must be followed closely)
+    const DIL = 2
     const dilRef = new Uint8Array(GRID_W * GRID_H)
     for (let gy = 0; gy < GRID_H; gy++) {
       for (let gx = 0; gx < GRID_W; gx++) {
@@ -251,10 +251,10 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       : 0
 
     let resultStatus, message
-    if (score >= 50) {
+    if (score >= 72) {
       resultStatus = 'correct'
       message = ct.correct
-    } else if (score >= 30) {
+    } else if (score >= 45) {
       resultStatus = 'partial'
       message = ct.partial
     } else {
