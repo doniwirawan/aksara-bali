@@ -365,6 +365,82 @@ export default function Home({ locale, setLocale }) {
 
                 <main className="pb-4">
                     <LatinBalineseConverter locale={locale} darkMode={darkMode} />
+
+                    {/* Feature Discovery Section */}
+                    <div style={{ maxWidth: 900, margin: '0 auto', padding: '40px 16px 16px', fontFamily: 'system-ui, sans-serif' }}>
+                        <h2 style={{ fontSize: '18px', fontWeight: '700', color: darkMode ? '#e8e8e8' : '#1a1a1a', marginBottom: '8px', textAlign: 'center' }}>
+                            {locale === 'id' ? 'Semua Fitur' : 'All Features'}
+                        </h2>
+                        <p style={{ fontSize: '13px', color: darkMode ? '#888' : '#666', textAlign: 'center', marginBottom: '24px' }}>
+                            {locale === 'id' ? 'Klik untuk menjelajahi lebih lanjut' : 'Click to explore each feature'}
+                        </p>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '14px' }}>
+                            {[
+                                {
+                                    href: '/practice',
+                                    icon: '🎯',
+                                    title: locale === 'id' ? 'Latihan Kuis' : 'Quiz Practice',
+                                    desc: locale === 'id' ? 'Uji pengetahuan aksara Bali dengan kuis interaktif bergambar.' : 'Test your Balinese script knowledge with image-based interactive quizzes.',
+                                    color: '#0d6efd',
+                                },
+                                {
+                                    href: '/practice',
+                                    icon: '✍️',
+                                    title: locale === 'id' ? 'Latihan Menulis' : 'Writing Practice',
+                                    desc: locale === 'id' ? 'Gambar aksara Bali di kanvas dengan mouse, sentuh, atau gerakan tangan.' : 'Draw Balinese script on a canvas with mouse, touch, or hand gestures.',
+                                    color: '#198754',
+                                },
+                                {
+                                    href: '/blog',
+                                    icon: '📝',
+                                    title: locale === 'id' ? 'Blog Aksara' : 'Script Blog',
+                                    desc: locale === 'id' ? 'Artikel tentang sejarah, struktur, dan pelestarian aksara Bali.' : 'Articles on the history, structure, and preservation of Balinese script.',
+                                    color: '#dc3545',
+                                },
+                                {
+                                    href: '/dashboard',
+                                    icon: '📊',
+                                    title: locale === 'id' ? 'Dasbor Belajar' : 'Learning Dashboard',
+                                    desc: locale === 'id' ? 'Pantau progres belajar, nilai kuis, dan statistik latihan menulismu.' : 'Track your learning progress, quiz scores, and writing practice stats.',
+                                    color: '#fd7e14',
+                                },
+                                {
+                                    href: '/faq',
+                                    icon: '❓',
+                                    title: 'FAQ',
+                                    desc: locale === 'id' ? 'Pertanyaan umum tentang aksara Bali, cara penggunaan, dan fitur teknis.' : 'Common questions about Balinese script, usage guide, and technical features.',
+                                    color: '#6f42c1',
+                                },
+                                {
+                                    href: '/',
+                                    icon: '⚡',
+                                    title: locale === 'id' ? 'Konverter Latin' : 'Latin Converter',
+                                    desc: locale === 'id' ? 'Konversi teks Latin ke aksara Bali secara real-time dengan dukungan Sansekerta.' : 'Convert Latin text to Balinese script in real-time with full Sanskrit support.',
+                                    color: '#20c997',
+                                },
+                            ].map(f => (
+                                <a key={f.href + f.icon} href={f.href} style={{ textDecoration: 'none' }}>
+                                    <div
+                                        style={{
+                                            background: darkMode ? '#1a1a2e' : '#ffffff',
+                                            border: `1px solid ${darkMode ? '#2a2a3e' : '#e8e8e0'}`,
+                                            borderRadius: '14px',
+                                            padding: '20px 16px',
+                                            height: '100%',
+                                            transition: 'box-shadow 0.15s, transform 0.15s',
+                                            cursor: 'pointer',
+                                        }}
+                                        onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 4px 16px ${f.color}30`; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                                        onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}
+                                    >
+                                        <div style={{ fontSize: '28px', marginBottom: '10px' }}>{f.icon}</div>
+                                        <div style={{ fontSize: '14px', fontWeight: '700', color: f.color, marginBottom: '6px' }}>{f.title}</div>
+                                        <div style={{ fontSize: '12px', color: darkMode ? '#aaa' : '#666', lineHeight: 1.5 }}>{f.desc}</div>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
                 </main>
 
                 <Footer darkMode={darkMode} locale={locale} />
