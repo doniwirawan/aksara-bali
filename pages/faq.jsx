@@ -169,7 +169,37 @@ const FAQ_DATA_EN = [
   },
 ]
 
-export default function FAQPage({ locale, setLocale }) {
+export async function getServerSideProps() {
+  try {
+    const { createClient } = require('@supabase/supabase-js')
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    )
+    const { data } = await supabase
+      .from('faq_items')
+      .select('*')
+      .eq('published', true)
+      .order('category')
+      .order('sort_order')
+
+    if (data && data.length > 0) {
+      const grouped = []
+      const seen = {}
+      for (const item of data) {
+        if (!seen[item.category]) {
+          seen[item.category] = true
+          grouped.push({ category: item.category, questions: [] })
+        }
+        grouped.find(g => g.category === item.category).questions.push({ q: item.question, a: item.answer })
+      }
+      return { props: { faqDataFromDB: grouped } }
+    }
+  } catch {}
+  return { props: { faqDataFromDB: null } }
+}
+
+export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
   const [darkMode, setDarkMode] = useState(false)
   const [openItems, setOpenItems] = useState({})
   const [searchQuery, setSearchQuery] = useState('')
@@ -185,7 +215,7 @@ export default function FAQPage({ locale, setLocale }) {
     setOpenItems(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
-  const activeData = lang === 'en' ? FAQ_DATA_EN : FAQ_DATA
+  const activeData = lang === 'en' ? FAQ_DATA_EN : (faqDataFromDB || FAQ_DATA)
   const allQuestions = activeData.flatMap(cat => cat.questions)
   const filtered = searchQuery
     ? allQuestions.filter(item =>
