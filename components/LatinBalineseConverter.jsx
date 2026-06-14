@@ -1159,8 +1159,13 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                         <div className="d-flex justify-content-between align-items-start mb-3">
                             <div></div>
                             <div className="text-center flex-grow-1">
-                                <h1 className="display-6 fw-bold text-primary mb-3">
-                                    <Languages className="me-3" size={48} />
+                                <h1 className="fw-bold mb-3" style={{
+                                    fontFamily: "'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif",
+                                    fontSize: '2.1rem',
+                                    color: darkMode ? '#ece7df' : '#26211c',
+                                    display: 'inline-flex', alignItems: 'center', gap: '14px',
+                                }}>
+                                    <Languages size={30} strokeWidth={1.6} style={{ color: darkMode ? '#d99873' : '#9c4221' }} />
                                     {t.title}
                                 </h1>
                             </div>
