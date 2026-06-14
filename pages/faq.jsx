@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { Search, Target } from 'lucide-react'
 
 const FAQ_DATA = [
   {
@@ -297,7 +298,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
                 outline: 'none', boxSizing: 'border-box',
               }}
             />
-            <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px' }}>🔍</span>
+            <Search size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: mutedColor }} />
           </div>
 
           {/* Search results */}
@@ -369,7 +370,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
 
           {/* CTA */}
           <div style={{ textAlign: 'center', padding: '32px', borderRadius: '16px', background: darkMode ? '#1a2840' : '#f0f4ff', border: `1px solid ${darkMode ? '#2d5a9e' : '#c5d8fc'}`, marginTop: '40px' }}>
-            <div style={{ fontSize: '32px', marginBottom: '12px' }}>🎯</div>
+            <Target size={32} style={{ color: '#0d6efd', marginBottom: '12px' }} />
             <h2 style={{ fontSize: '18px', fontWeight: '600', margin: '0 0 8px' }}>Siap untuk mencoba?</h2>
             <p style={{ color: mutedColor, fontSize: '14px', margin: '0 0 20px' }}>
               Gunakan konverter aksara Bali, latih kemampuan Anda, atau baca artikel di blog kami.

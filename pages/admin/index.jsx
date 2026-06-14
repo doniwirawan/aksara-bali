@@ -2,6 +2,10 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { supabase } from '../../utils/supabase'
+import {
+  BarChart3, PenLine, HelpCircle, Users, RefreshCw, Zap, Target, Flame,
+  CheckCircle, ClipboardList, X, Image as ImageIcon, Clock, Trash2,
+} from 'lucide-react'
 
 const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ''
 
@@ -310,10 +314,10 @@ export default function AdminDashboard() {
   }
 
   const TABS = [
-    { key: 'stats', label: '📊 Statistik' },
-    { key: 'blog', label: '✍️ Blog' },
-    { key: 'faq', label: '❓ FAQ' },
-    { key: 'users', label: '👥 Pengguna' },
+    { key: 'stats', icon: BarChart3, label: 'Statistik' },
+    { key: 'blog', icon: PenLine, label: 'Blog' },
+    { key: 'faq', icon: HelpCircle, label: 'FAQ' },
+    { key: 'users', icon: Users, label: 'Pengguna' },
   ]
 
   return (
@@ -342,7 +346,8 @@ export default function AdminDashboard() {
               fontSize: '14px', fontWeight: activeTab === tab.key ? '600' : '400',
               color: activeTab === tab.key ? '#0d6efd' : '#666',
               borderBottom: activeTab === tab.key ? '2px solid #0d6efd' : '2px solid transparent',
-            }}>{tab.label}</button>
+              display: 'inline-flex', alignItems: 'center', gap: '7px',
+            }}><tab.icon size={16} /> {tab.label}</button>
           ))}
         </div>
 
@@ -353,19 +358,19 @@ export default function AdminDashboard() {
             <>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h2 style={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>Statistik Penggunaan</h2>
-                <button onClick={fetchStats} disabled={statsLoading} style={s.btnOutline}>{statsLoading ? '⏳ Memuat...' : '🔄 Perbarui'}</button>
+                <button onClick={fetchStats} disabled={statsLoading} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><RefreshCw size={14} /> {statsLoading ? 'Memuat...' : 'Perbarui'}</button>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '14px', marginBottom: '24px' }}>
                 {[
-                  { label: 'Total Konversi', value: stats?.total ?? '—', icon: '⚡', color: '#0d6efd' },
-                  { label: 'Sesi Kuis', value: quizStats?.totalSessions ?? '—', icon: '🎯', color: '#198754' },
-                  { label: 'Akurasi Kuis', value: quizStats?.avgAccuracy != null ? `${quizStats.avgAccuracy}%` : '—', icon: '📊', color: '#fd7e14' },
-                  { label: 'Streak Terbaik', value: quizStats?.bestStreak ?? '—', icon: '🔥', color: '#dc3545' },
-                  { label: 'Cek Tulisan', value: writingStats?.total ?? '—', icon: '✍️', color: '#6f42c1' },
-                  { label: 'Lulus Tulis', value: writingStats?.passed != null ? `${writingStats.passed}/${writingStats.total}` : '—', icon: '✅', color: '#20c997' },
+                  { label: 'Total Konversi', value: stats?.total ?? '—', icon: Zap, color: '#0d6efd' },
+                  { label: 'Sesi Kuis', value: quizStats?.totalSessions ?? '—', icon: Target, color: '#198754' },
+                  { label: 'Akurasi Kuis', value: quizStats?.avgAccuracy != null ? `${quizStats.avgAccuracy}%` : '—', icon: BarChart3, color: '#fd7e14' },
+                  { label: 'Streak Terbaik', value: quizStats?.bestStreak ?? '—', icon: Flame, color: '#dc3545' },
+                  { label: 'Cek Tulisan', value: writingStats?.total ?? '—', icon: PenLine, color: '#6f42c1' },
+                  { label: 'Lulus Tulis', value: writingStats?.passed != null ? `${writingStats.passed}/${writingStats.total}` : '—', icon: CheckCircle, color: '#20c997' },
                 ].map(card => (
                   <div key={card.label} style={s.card}>
-                    <div style={{ fontSize: '24px', marginBottom: '6px' }}>{card.icon}</div>
+                    <card.icon size={24} color={card.color} style={{ marginBottom: '6px' }} />
                     <div style={{ fontSize: '24px', fontWeight: '700', color: card.color }}>{card.value}</div>
                     <div style={{ fontSize: '12px', color: '#888', marginTop: '2px' }}>{card.label}</div>
                   </div>
@@ -387,7 +392,7 @@ export default function AdminDashboard() {
                             <td style={{ padding: '8px 12px', borderBottom: '1px solid #f8f8f8', color: '#0d6efd', fontWeight: '600' }}>{s2.score}</td>
                             <td style={{ padding: '8px 12px', borderBottom: '1px solid #f8f8f8' }}>{s2.total}</td>
                             <td style={{ padding: '8px 12px', borderBottom: '1px solid #f8f8f8' }}><span style={{ color: s2.accuracy >= 80 ? '#22c55e' : s2.accuracy >= 60 ? '#f59e0b' : '#ef4444', fontWeight: '600' }}>{s2.accuracy}%</span></td>
-                            <td style={{ padding: '8px 12px', borderBottom: '1px solid #f8f8f8' }}>{s2.max_streak} 🔥</td>
+                            <td style={{ padding: '8px 12px', borderBottom: '1px solid #f8f8f8' }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>{s2.max_streak} <Flame size={13} color="#dc3545" /></span></td>
                             <td style={{ padding: '8px 12px', borderBottom: '1px solid #f8f8f8', textTransform: 'capitalize' }}>{s2.difficulty}</td>
                           </tr>
                         ))}
@@ -397,7 +402,7 @@ export default function AdminDashboard() {
                 </div>
               )}
               <div style={{ ...s.card, background: '#f0f4ff', border: '1px solid #c5d8fc' }}>
-                <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 10px', color: '#1e40af' }}>📋 Setup Supabase</h3>
+                <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 10px', color: '#1e40af', display: 'flex', alignItems: 'center', gap: '6px' }}><ClipboardList size={15} /> Setup Supabase</h3>
                 <p style={{ fontSize: '13px', color: '#374151', margin: '0 0 8px' }}>Jalankan <code>supabase-schema.sql</code> di Supabase SQL Editor untuk membuat semua tabel (termasuk blog_posts dan faq_items).</p>
                 <p style={{ fontSize: '13px', color: '#374151', margin: 0 }}>Set env vars: <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>NEXT_PUBLIC_ADMIN_EMAIL</code>, <code>NEXT_PUBLIC_ADMIN_PASSWORD</code></p>
               </div>
@@ -416,7 +421,7 @@ export default function AdminDashboard() {
                 <div style={{ ...s.card, border: '1px solid #0d6efd40' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                     <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '700' }}>{editingBlog ? 'Edit Artikel' : 'Artikel Baru'}</h3>
-                    <button onClick={() => { setShowBlogForm(false); setEditingBlog(null) }} style={s.btnOutline}>✕ Tutup</button>
+                    <button onClick={() => { setShowBlogForm(false); setEditingBlog(null) }} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><X size={14} /> Tutup</button>
                   </div>
                   <form onSubmit={saveBlog}>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
@@ -459,8 +464,8 @@ export default function AdminDashboard() {
                     <label style={s.label}>Foto Artikel (Unsplash)</label>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <input style={{ ...s.input, flex: 1 }} value={blogForm.image_url} onChange={e => setBlogForm(f => ({ ...f, image_url: e.target.value }))} placeholder="Pilih foto di bawah atau paste URL..." />
-                      <button type="button" onClick={openPicker} style={{ ...s.btn('#198754'), whiteSpace: 'nowrap', padding: '10px 14px' }}>
-                        🏝 Cari Foto Bali
+                      <button type="button" onClick={openPicker} style={{ ...s.btn('#198754'), whiteSpace: 'nowrap', padding: '10px 14px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        <ImageIcon size={15} /> Cari Foto Bali
                       </button>
                     </div>
                     {blogForm.image_url && (
@@ -482,7 +487,7 @@ export default function AdminDashboard() {
                       <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
                         <div style={{ background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '760px', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                           <div style={{ padding: '16px 20px', borderBottom: '1px solid #e0e0d8', display: 'flex', gap: '10px', alignItems: 'center' }}>
-                            <span style={{ fontWeight: '700', fontSize: '15px', flexShrink: 0 }}>🏝 Foto Bali</span>
+                            <span style={{ fontWeight: '700', fontSize: '15px', flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><ImageIcon size={16} /> Foto Bali</span>
                             <input
                               style={{ ...s.input, flex: 1 }}
                               placeholder="Cari: temple, rice terrace, lontar, ceremony..."
@@ -491,7 +496,7 @@ export default function AdminDashboard() {
                               onKeyDown={e => { if (e.key === 'Enter') { pickerPage.current = 1; searchUnsplash(e.target.value, 1) } }}
                             />
                             <button type="button" onClick={() => { pickerPage.current = 1; searchUnsplash(pickerQuery, 1) }} style={s.btn()}>Cari</button>
-                            <button type="button" onClick={() => setShowPicker(false)} style={{ ...s.btnOutline, flexShrink: 0 }}>✕</button>
+                            <button type="button" onClick={() => setShowPicker(false)} style={{ ...s.btnOutline, flexShrink: 0, display: 'inline-flex', alignItems: 'center' }}><X size={15} /></button>
                           </div>
                           <div style={{ overflowY: 'auto', padding: '16px' }}>
                             {pickerLoading && pickerPhotos.length === 0 ? (
@@ -551,7 +556,7 @@ export default function AdminDashboard() {
                 <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Memuat...</div>
               ) : blogPosts.length === 0 ? (
                 <div style={{ ...s.card, textAlign: 'center', padding: '48px 20px', color: '#888' }}>
-                  <div style={{ fontSize: '36px', marginBottom: '10px' }}>✍️</div>
+                  <PenLine size={36} style={{ marginBottom: '10px', opacity: 0.6 }} />
                   <p style={{ margin: 0 }}>Belum ada artikel. Klik <b>+ Artikel Baru</b> untuk mulai menulis.</p>
                 </div>
               ) : (
@@ -566,7 +571,7 @@ export default function AdminDashboard() {
                           <span style={s.badge(post.published ? '#198754' : '#888')}>{post.published ? 'Dipublikasikan' : 'Draft'}</span>
                           <span style={s.badge('#0d6efd')}>{post.category}</span>
                           {post.updated_at && (Date.now() - new Date(post.updated_at)) < 86400000 && (
-                            <span style={s.badge('#fd7e14')}>🕐 Baru Diupdate</span>
+                            <span style={{ ...s.badge('#fd7e14'), display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Clock size={11} /> Baru Diupdate</span>
                           )}
                         </div>
                         <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{post.title}</div>
@@ -597,7 +602,7 @@ export default function AdminDashboard() {
                 <div style={{ ...s.card, border: '1px solid #0d6efd40', marginBottom: '20px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                     <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '700' }}>{editingFaq ? 'Edit FAQ' : 'FAQ Baru'}</h3>
-                    <button onClick={() => { setShowFaqForm(false); setEditingFaq(null) }} style={s.btnOutline}>✕ Tutup</button>
+                    <button onClick={() => { setShowFaqForm(false); setEditingFaq(null) }} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><X size={14} /> Tutup</button>
                   </div>
                   <form onSubmit={saveFaq}>
                     <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '12px' }}>
@@ -634,7 +639,7 @@ export default function AdminDashboard() {
                 <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Memuat...</div>
               ) : faqItems.length === 0 ? (
                 <div style={{ ...s.card, textAlign: 'center', padding: '48px 20px', color: '#888' }}>
-                  <div style={{ fontSize: '36px', marginBottom: '10px' }}>❓</div>
+                  <HelpCircle size={36} style={{ marginBottom: '10px', opacity: 0.6 }} />
                   <p style={{ margin: 0 }}>Belum ada FAQ dari database. Klik <b>+ Pertanyaan Baru</b> untuk menambah.</p>
                   <p style={{ fontSize: '13px', margin: '8px 0 0', color: '#aaa' }}>FAQ statis dari halaman /faq tetap tampil.</p>
                 </div>
@@ -669,7 +674,7 @@ export default function AdminDashboard() {
             <>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h2 style={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>Pengguna Terdaftar</h2>
-                <button onClick={fetchUsers} disabled={usersLoading} style={s.btnOutline}>{usersLoading ? '⏳ Memuat...' : '🔄 Perbarui'}</button>
+                <button onClick={fetchUsers} disabled={usersLoading} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><RefreshCw size={14} /> {usersLoading ? 'Memuat...' : 'Perbarui'}</button>
               </div>
               {usersLoading ? (
                 <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Memuat data pengguna...</div>
@@ -719,7 +724,7 @@ export default function AdminDashboard() {
         {deleteModal && (
           <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
             <div style={{ background: '#fff', borderRadius: '16px', padding: '28px', maxWidth: '400px', width: '100%', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
-              <div style={{ fontSize: '36px', textAlign: 'center', marginBottom: '12px' }}>🗑️</div>
+              <div style={{ textAlign: 'center', marginBottom: '12px' }}><Trash2 size={36} color="#dc3545" /></div>
               <h3 style={{ margin: '0 0 8px', fontSize: '16px', fontWeight: '700', textAlign: 'center' }}>Konfirmasi Hapus</h3>
               <p style={{ margin: '0 0 24px', color: '#555', fontSize: '14px', textAlign: 'center', lineHeight: 1.5 }}>{deleteModal.label}</p>
               <div style={{ display: 'flex', gap: '10px' }}>

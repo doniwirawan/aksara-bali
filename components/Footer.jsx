@@ -1,3 +1,5 @@
+import { Github, Bug, Linkedin, Heart } from 'lucide-react'
+
 export default function Footer({ darkMode, locale }) {
   const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
   const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
@@ -95,7 +97,7 @@ export default function Footer({ darkMode, locale }) {
                   onMouseEnter={e => e.currentTarget.style.color = linkColor}
                   onMouseLeave={e => e.currentTarget.style.color = mutedColor}
                 >
-                  <span>⌨️</span> {id ? 'Kode Sumber' : 'Source Code'}
+                  <Github size={15} /> {id ? 'Kode Sumber' : 'Source Code'}
                 </a>
               </li>
               <li style={{ marginBottom: '8px' }}>
@@ -104,7 +106,7 @@ export default function Footer({ darkMode, locale }) {
                   onMouseEnter={e => e.currentTarget.style.color = linkColor}
                   onMouseLeave={e => e.currentTarget.style.color = mutedColor}
                 >
-                  <span>🐛</span> {id ? 'Laporkan Bug' : 'Report Bug'}
+                  <Bug size={15} /> {id ? 'Laporkan Bug' : 'Report Bug'}
                 </a>
               </li>
               <li>
@@ -113,7 +115,7 @@ export default function Footer({ darkMode, locale }) {
                   onMouseEnter={e => e.currentTarget.style.color = linkColor}
                   onMouseLeave={e => e.currentTarget.style.color = mutedColor}
                 >
-                  <span>💼</span> {id ? 'Developer' : 'Developer'}
+                  <Linkedin size={15} /> {id ? 'Developer' : 'Developer'}
                 </a>
               </li>
             </ul>
@@ -130,8 +132,8 @@ export default function Footer({ darkMode, locale }) {
             </a>
             {id ? ' oleh bennylin' : ' by bennylin'}
           </small>
-          <small style={{ color: mutedColor, fontSize: '13px' }}>
-            {id ? 'Dibuat dengan ❤️ untuk Bali' : 'Made with ❤️ for Bali'}
+          <small style={{ color: mutedColor, fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            {id ? 'Dibuat dengan' : 'Made with'} <Heart size={13} fill="#e11d48" color="#e11d48" /> {id ? 'untuk Bali' : 'for Bali'}
           </small>
         </div>
       </div>

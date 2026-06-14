@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import { convertLatinToBalinese, QUIZ_WORDS } from '../../utils/balineseConverter'
 import { authedFetch } from '../../utils/supabase'
+import { Check, Eye, EyeOff, Flag, BookOpen, RotateCcw, Trophy, ThumbsUp, CheckCircle, Target, Flame, XCircle } from 'lucide-react'
 import BalineseKeyboard from './BalineseKeyboard'
 
 function shuffle(arr) {
@@ -32,17 +33,17 @@ export default function QuizMode({ darkMode, locale }) {
       prompt: 'Tulis kata ini dalam Aksara Bali:',
       correctAnswer: 'Jawaban yang benar:', answer: 'Jawaban:',
       inputPlaceholder: 'Ketik menggunakan papan ketik di bawah...',
-      checkBtn: '✓ Periksa Jawaban',
-      showHint: '💡 Tampilkan', hideHint: '🙈 Sembunyikan',
-      finishBtn: '🏁 Lihat Hasil', nextBtn: 'Lanjut →',
+      checkBtn: 'Periksa Jawaban',
+      showHint: 'Tampilkan', hideHint: 'Sembunyikan',
+      finishBtn: 'Lihat Hasil', nextBtn: 'Lanjut →',
       restartTitle: 'Mulai ulang',
       doneTitle: 'Kuis Selesai!',
       msgPerfect: 'Bagus sekali! Kamu sudah mahir.',
       msgGood: 'Bagus! Terus berlatih.',
       msgKeepGoing: 'Terus berlatih untuk menjadi lebih baik.',
       score: 'Skor', accuracy: 'Akurasi', bestStreak: 'Streak Terbaik',
-      weakWords: '📖 Kata yang perlu dilatih lagi:',
-      restartBtn: '🔄 Mulai Lagi',
+      weakWords: 'Kata yang perlu dilatih lagi:',
+      restartBtn: 'Mulai Lagi',
       diffEasy: 'Mudah', diffMedium: 'Sedang', diffHard: 'Sulit',
     },
     en: {
@@ -50,17 +51,17 @@ export default function QuizMode({ darkMode, locale }) {
       prompt: 'Write this word in Balinese Script:',
       correctAnswer: 'Correct answer:', answer: 'Answer:',
       inputPlaceholder: 'Type using the keyboard below...',
-      checkBtn: '✓ Check Answer',
-      showHint: '💡 Show hint', hideHint: '🙈 Hide hint',
-      finishBtn: '🏁 See Results', nextBtn: 'Next →',
+      checkBtn: 'Check Answer',
+      showHint: 'Show hint', hideHint: 'Hide hint',
+      finishBtn: 'See Results', nextBtn: 'Next →',
       restartTitle: 'Restart quiz',
       doneTitle: 'Quiz Complete!',
       msgPerfect: 'Excellent! You\'ve mastered these.',
       msgGood: 'Good job! Keep practising.',
       msgKeepGoing: 'Keep practising to improve.',
       score: 'Score', accuracy: 'Accuracy', bestStreak: 'Best Streak',
-      weakWords: '📖 Words that need more practice:',
-      restartBtn: '🔄 Restart',
+      weakWords: 'Words that need more practice:',
+      restartBtn: 'Restart',
       diffEasy: 'Easy', diffMedium: 'Medium', diffHard: 'Hard',
     },
   }
@@ -207,8 +208,10 @@ export default function QuizMode({ darkMode, locale }) {
       <div style={{ color: textColor, maxWidth: 600, margin: '0 auto' }}>
         {/* Results card */}
         <div style={{ textAlign: 'center', padding: '40px 20px', borderRadius: '16px', background: cardBg, border: `1px solid ${borderColor}`, marginBottom: '24px' }}>
-          <div style={{ fontSize: '64px', marginBottom: '16px' }}>
-            {accuracy >= 80 ? '🎉' : accuracy >= 60 ? '👏' : '📚'}
+          <div style={{ marginBottom: '16px' }}>
+            {accuracy >= 80
+              ? <Trophy size={56} color="#f59e0b" />
+              : accuracy >= 60 ? <ThumbsUp size={56} color="#0d6efd" /> : <BookOpen size={56} color={mutedColor} />}
           </div>
           <h2 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px' }}>
             {t.doneTitle}
@@ -219,12 +222,12 @@ export default function QuizMode({ darkMode, locale }) {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '28px' }}>
             {[
-              { label: t.score, value: `${score}/${questionsAnswered}`, icon: '✅' },
-              { label: t.accuracy, value: `${accuracy}%`, icon: '🎯' },
-              { label: t.bestStreak, value: maxStreak, icon: '🔥' },
+              { label: t.score, value: `${score}/${questionsAnswered}`, icon: CheckCircle, color: '#16a34a' },
+              { label: t.accuracy, value: `${accuracy}%`, icon: Target, color: '#0d6efd' },
+              { label: t.bestStreak, value: maxStreak, icon: Flame, color: '#e65100' },
             ].map(stat => (
               <div key={stat.label} style={{ padding: '16px', borderRadius: '10px', background: darkMode ? '#252535' : '#f8f9fa', border: `1px solid ${borderColor}` }}>
-                <div style={{ fontSize: '24px' }}>{stat.icon}</div>
+                <stat.icon size={24} color={stat.color} />
                 <div style={{ fontSize: '22px', fontWeight: '700', color: '#0d6efd' }}>{stat.value}</div>
                 <div style={{ fontSize: '12px', color: mutedColor }}>{stat.label}</div>
               </div>
@@ -233,8 +236,8 @@ export default function QuizMode({ darkMode, locale }) {
 
           {wrongWords.length > 0 && (
             <div style={{ textAlign: 'left', padding: '16px', borderRadius: '10px', background: darkMode ? '#2d1010' : '#fff5f5', border: `1px solid ${darkMode ? '#5a1a1a' : '#fecaca'}`, marginBottom: '20px' }}>
-              <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '10px', color: '#dc3545' }}>
-                {t.weakWords}
+              <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '10px', color: '#dc3545', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <BookOpen size={15} /> {t.weakWords}
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {[...new Set(wrongWords.map(w => w.latin))].map(latin => {
@@ -259,9 +262,10 @@ export default function QuizMode({ darkMode, locale }) {
               padding: '12px 32px', borderRadius: '10px',
               background: '#0d6efd', color: '#fff', border: 'none',
               cursor: 'pointer', fontSize: '16px', fontWeight: '600',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             }}
           >
-            {t.restartBtn}
+            <RotateCcw size={18} /> {t.restartBtn}
           </button>
         </div>
       </div>
@@ -274,12 +278,12 @@ export default function QuizMode({ darkMode, locale }) {
       <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
         {/* Score */}
         <div style={{ display: 'flex', gap: '8px' }}>
-          <span style={{ padding: '4px 12px', borderRadius: '12px', background: darkMode ? '#1e3a1e' : '#d1fae5', color: '#065f46', fontSize: '13px', fontWeight: '600' }}>
-            ✅ {score}
+          <span style={{ padding: '4px 12px', borderRadius: '12px', background: darkMode ? '#1e3a1e' : '#d1fae5', color: '#065f46', fontSize: '13px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+            <CheckCircle size={14} /> {score}
           </span>
           {streak > 1 && (
-            <span style={{ padding: '4px 12px', borderRadius: '12px', background: darkMode ? '#2d1500' : '#fff3e0', color: '#e65100', fontSize: '13px', fontWeight: '600' }}>
-              🔥 {streak}x
+            <span style={{ padding: '4px 12px', borderRadius: '12px', background: darkMode ? '#2d1500' : '#fff3e0', color: '#e65100', fontSize: '13px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+              <Flame size={14} /> {streak}x
             </span>
           )}
           <span style={{ padding: '4px 12px', borderRadius: '12px', background: darkMode ? '#252535' : '#f0f0f0', color: mutedColor, fontSize: '13px' }}>
@@ -357,10 +361,10 @@ export default function QuizMode({ darkMode, locale }) {
         <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '28px', color: answered === 'correct' ? '#22c55e' : answered === 'wrong' ? '#ef4444' : textColor }}>
           {userInput || <span style={{ color: mutedColor, fontSize: '16px', fontFamily: 'system-ui' }}>{t.inputPlaceholder}</span>}
         </span>
-        {answered === 'correct' && <span style={{ fontSize: '24px' }}>✅</span>}
+        {answered === 'correct' && <CheckCircle size={24} color="#22c55e" />}
         {answered === 'wrong' && (
           <div style={{ textAlign: 'right' }}>
-            <span style={{ fontSize: '20px' }}>❌</span>
+            <XCircle size={20} color="#ef4444" />
             <div style={{ fontSize: '11px', color: '#ef4444', marginTop: '4px' }}>{t.answer} <span style={{ fontFamily: '"Noto Sans Balinese", serif' }}>{expectedBalinese}</span></div>
           </div>
         )}
@@ -380,9 +384,10 @@ export default function QuizMode({ darkMode, locale }) {
                 border: 'none', cursor: userInput ? 'pointer' : 'default',
                 fontSize: '15px', fontWeight: '600', minWidth: '140px',
                 transition: 'all 0.15s',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
               }}
             >
-              {t.checkBtn}
+              <Check size={16} /> {t.checkBtn}
             </button>
             <button
               onClick={() => setShowAnswer(!showAnswer)}
@@ -391,9 +396,10 @@ export default function QuizMode({ darkMode, locale }) {
                 background: 'transparent', color: mutedColor,
                 border: `1px solid ${borderColor}`,
                 cursor: 'pointer', fontSize: '14px', minWidth: '100px',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
               }}
             >
-              {showAnswer ? t.hideHint : t.showHint}
+              {showAnswer ? <EyeOff size={15} /> : <Eye size={15} />} {showAnswer ? t.hideHint : t.showHint}
             </button>
           </>
         ) : (
@@ -404,9 +410,12 @@ export default function QuizMode({ darkMode, locale }) {
               background: '#0d6efd', color: '#fff',
               border: 'none', cursor: 'pointer',
               fontSize: '15px', fontWeight: '600',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
             }}
           >
-            {currentIdx + 1 >= filteredWords.length ? t.finishBtn : t.nextBtn}
+            {currentIdx + 1 >= filteredWords.length
+              ? <><Flag size={15} /> {t.finishBtn}</>
+              : t.nextBtn}
           </button>
         )}
 
@@ -416,11 +425,11 @@ export default function QuizMode({ darkMode, locale }) {
             padding: '12px 16px', borderRadius: '10px',
             background: 'transparent', color: mutedColor,
             border: `1px solid ${borderColor}`,
-            cursor: 'pointer', fontSize: '14px',
+            cursor: 'pointer', fontSize: '14px', display: 'inline-flex', alignItems: 'center',
           }}
           title={t.restartTitle}
         >
-          🔄
+          <RotateCcw size={16} />
         </button>
       </div>
 

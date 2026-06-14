@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { authedFetch } from '../../utils/supabase'
+import { Eye, EyeOff, MousePointer2, Hand, Undo2, Trash2, Check, Camera, AlertTriangle, Pointer, Grab } from 'lucide-react'
 
 const CANVAS_W = 640
 const CANVAS_H = 400
@@ -55,32 +56,32 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const lang = locale === 'en' ? 'en' : 'id'
   const tr = {
     id: {
-      writeThis: 'Tulis aksara ini:', hide: '🙈 Sembunyikan', show: '👁 Tampilkan', hidden: '— tersembunyi —',
-      modeMouse: '🖱 Mouse / Sentuh', modeGesture: '✋ Gerakan Tangan', loadingMp: '⏳ Memuat MediaPipe...',
-      gesturePoint: '✍️ Menggambar', gesturePalm: '🖐 Menghapus', gesturePinch: '✌️ Mengangkat pena', gestureNone: '👋 Tidak ada gesture',
+      writeThis: 'Tulis aksara ini:', hide: 'Sembunyikan', show: 'Tampilkan', hidden: '— tersembunyi —',
+      modeMouse: 'Mouse / Sentuh', modeGesture: 'Gerakan Tangan', loadingMp: 'Memuat MediaPipe...',
+      gesturePoint: 'Menggambar', gesturePalm: 'Menghapus', gesturePinch: 'Mengangkat pena', gestureNone: 'Tidak ada gesture',
       placeholder: 'Gambar aksara Bali di sini', startGesture: 'Klik "Gerakan Tangan" untuk mulai',
-      undo: '↩ Urung', clear: '🗑 Bersihkan', check: '✓ Cek Tulisan',
-      precision: 'Presisi:', coverage: 'Cakupan:', tryAgain: 'Coba lagi ↺',
-      guide1: '☝️ Tunjuk → menggambar', guide2: '🖐 Telapak terbuka → menghapus', guide3: '🤌 Cubit → angkat pena',
-      errEmpty: '✏️ Tulis dulu aksaranya!', errCamera: 'Gagal memuat kamera. Pastikan izin kamera diberikan dan coba lagi.',
-      errFont: '⚠️ Font referensi belum siap. Pastikan koneksi internet aktif dan coba lagi.',
-      correct: '✅ Bagus sekali! Tulisanmu cocok dengan aksara yang benar.',
-      partial: '⚠️ Hampir benar! Perhatikan bentuk dan posisi aksaranya.',
-      wrong: '❌ Belum tepat. Lihat referensi di latar kanvas dan coba lagi!',
+      undo: 'Urung', clear: 'Bersihkan', check: 'Cek Tulisan',
+      precision: 'Presisi:', coverage: 'Cakupan:', tryAgain: 'Coba lagi',
+      guide1: 'Tunjuk → menggambar', guide2: 'Telapak terbuka → menghapus', guide3: 'Cubit → angkat pena',
+      errEmpty: 'Tulis dulu aksaranya!', errCamera: 'Gagal memuat kamera. Pastikan izin kamera diberikan dan coba lagi.',
+      errFont: 'Font referensi belum siap. Pastikan koneksi internet aktif dan coba lagi.',
+      correct: 'Bagus sekali! Tulisanmu cocok dengan aksara yang benar.',
+      partial: 'Hampir benar! Perhatikan bentuk dan posisi aksaranya.',
+      wrong: 'Belum tepat. Lihat referensi di latar kanvas dan coba lagi!',
     },
     en: {
-      writeThis: 'Write this script:', hide: '🙈 Hide', show: '👁 Show', hidden: '— hidden —',
-      modeMouse: '🖱 Mouse / Touch', modeGesture: '✋ Hand Gesture', loadingMp: '⏳ Loading MediaPipe...',
-      gesturePoint: '✍️ Drawing', gesturePalm: '🖐 Erasing', gesturePinch: '✌️ Lifting pen', gestureNone: '👋 No gesture',
+      writeThis: 'Write this script:', hide: 'Hide', show: 'Show', hidden: '— hidden —',
+      modeMouse: 'Mouse / Touch', modeGesture: 'Hand Gesture', loadingMp: 'Loading MediaPipe...',
+      gesturePoint: 'Drawing', gesturePalm: 'Erasing', gesturePinch: 'Lifting pen', gestureNone: 'No gesture',
       placeholder: 'Draw Balinese script here', startGesture: 'Click "Hand Gesture" to start',
-      undo: '↩ Undo', clear: '🗑 Clear', check: '✓ Check Writing',
-      precision: 'Precision:', coverage: 'Coverage:', tryAgain: 'Try again ↺',
-      guide1: '☝️ Point → draw', guide2: '🖐 Open palm → erase', guide3: '🤌 Pinch → lift pen',
-      errEmpty: '✏️ Write the script first!', errCamera: 'Failed to load camera. Make sure camera permission is granted.',
-      errFont: '⚠️ Reference font not ready. Check your internet connection and try again.',
-      correct: '✅ Excellent! Your writing matches the correct script.',
-      partial: '⚠️ Almost right! Pay attention to the shape and position.',
-      wrong: '❌ Not quite. Look at the reference watermark on the canvas and try again!',
+      undo: 'Undo', clear: 'Clear', check: 'Check Writing',
+      precision: 'Precision:', coverage: 'Coverage:', tryAgain: 'Try again',
+      guide1: 'Point → draw', guide2: 'Open palm → erase', guide3: 'Pinch → lift pen',
+      errEmpty: 'Write the script first!', errCamera: 'Failed to load camera. Make sure camera permission is granted.',
+      errFont: 'Reference font not ready. Check your internet connection and try again.',
+      correct: 'Excellent! Your writing matches the correct script.',
+      partial: 'Almost right! Pay attention to the shape and position.',
+      wrong: 'Not quite. Look at the reference watermark on the canvas and try again!',
     },
   }
   const ct = tr[lang]
@@ -599,9 +600,10 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
               border: `1px solid ${darkMode ? '#2d5a9e' : '#c5d8fc'}`,
               background: 'transparent', cursor: 'pointer',
               color: darkMode ? '#8aabdc' : '#4a6fa5',
+              display: 'inline-flex', alignItems: 'center', gap: '5px',
             }}
           >
-            {showRef ? ct.hide : ct.show}
+            {showRef ? <EyeOff size={12} /> : <Eye size={12} />} {showRef ? ct.hide : ct.show}
           </button>
           <div style={{ fontSize: '13px', opacity: 0.7, marginBottom: '4px' }}>{ct.writeThis}</div>
           {showRef ? (
@@ -619,7 +621,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
 
       {/* Mode switcher */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '14px', flexWrap: 'wrap' }}>
-        {[{ key: 'mouse', label: ct.modeMouse }, { key: 'gesture', label: ct.modeGesture }].map(m => (
+        {[{ key: 'mouse', label: ct.modeMouse, icon: MousePointer2 }, { key: 'gesture', label: ct.modeGesture, icon: Hand }].map(m => (
           <button
             key={m.key}
             onClick={() => setMode(m.key)}
@@ -633,9 +635,10 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
               fontWeight: '500',
               fontSize: '14px',
               transition: 'all 0.15s',
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
             }}
           >
-            {m.label}
+            <m.icon size={15} /> {m.label}
           </button>
         ))}
         {mode === 'gesture' && status === 'loading' && (
@@ -665,8 +668,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           background: '#fff3cd',
           color: '#856404',
           fontSize: '13px',
+          display: 'flex', alignItems: 'center', gap: '8px',
         }}>
-          ⚠️ {errorMsg || ct.errCamera}
+          <AlertTriangle size={15} style={{ flexShrink: 0 }} /> {errorMsg || ct.errCamera}
         </div>
       )}
 
@@ -745,7 +749,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             background: darkMode ? '#1a1a2e' : '#f5f5f5',
             zIndex: 2, gap: '12px',
           }}>
-            <span style={{ fontSize: '48px' }}>📷</span>
+            <Camera size={48} style={{ opacity: 0.6 }} />
             <span style={{ fontSize: '14px', opacity: 0.6 }}>{ct.startGesture}</span>
           </div>
         )}
@@ -795,9 +799,10 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             padding: '7px 16px', borderRadius: '8px',
             border: `1px solid ${border}`, background: 'transparent',
             cursor: 'pointer', fontSize: '13px', color: textColor,
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
           }}
         >
-          {ct.undo}
+          <Undo2 size={15} /> {ct.undo}
         </button>
 
         {/* Clear */}
@@ -807,9 +812,10 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             padding: '7px 16px', borderRadius: '8px',
             border: '1px solid #dc3545', background: 'transparent',
             cursor: 'pointer', fontSize: '13px', color: '#dc3545',
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
           }}
         >
-          {ct.clear}
+          <Trash2 size={15} /> {ct.clear}
         </button>
 
         {/* Check button — only shown when a reference word is set */}
@@ -821,9 +827,10 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
               border: 'none', background: '#0d6efd',
               cursor: 'pointer', fontSize: '13px', color: '#fff',
               fontWeight: '600', boxShadow: '0 2px 6px rgba(13,110,253,0.3)',
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
             }}
           >
-            {ct.check}
+            <Check size={15} /> {ct.check}
           </button>
         )}
       </div>
@@ -905,8 +912,8 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             </span>
           </span>
           {hwrResult.matched && (
-            <span style={{ color: '#22c55e', fontWeight: '600', marginLeft: 'auto' }}>
-              {lang === 'en' ? '✓ Matches!' : '✓ Cocok!'}
+            <span style={{ color: '#22c55e', fontWeight: '600', marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <Check size={14} /> {lang === 'en' ? 'Matches!' : 'Cocok!'}
             </span>
           )}
         </div>
@@ -925,9 +932,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
           gap: '6px',
         }}>
-          <span>{ct.guide1}</span>
-          <span>{ct.guide2}</span>
-          <span>{ct.guide3}</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Pointer size={14} style={{ flexShrink: 0 }} /> {ct.guide1}</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Hand size={14} style={{ flexShrink: 0 }} /> {ct.guide2}</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Grab size={14} style={{ flexShrink: 0 }} /> {ct.guide3}</span>
         </div>
       )}
     </div>

@@ -14,7 +14,8 @@ import {
     ExternalLink,
     Globe,
     ArrowLeftRight,
-    RefreshCw
+    RefreshCw,
+    Zap
 } from 'lucide-react'
 import { authedFetch } from '../utils/supabase'
 
@@ -52,8 +53,8 @@ const translations = {
         placeholder: 'Type your text in Latin script here... (converts in real-time with Sanskrit detection and V=W support)',
         balineseplaceholder: 'Paste or type Balinese script here... (ᬅᬓ᭄ᬱᬭ ᬩᬮᬶ)',
         reset: 'Reset',
-        realtimeConversion: '⚡ Real-time conversion with Sanskrit detection & V=W support',
-        realtimeReverse: '⚡ Real-time reverse conversion from Balinese script',
+        realtimeConversion: 'Real-time conversion with Sanskrit detection & V=W support',
+        realtimeReverse: 'Real-time reverse conversion from Balinese script',
 
         balineseOutput: 'Balinese Script Output',
         latinOutput: 'Latin Text Output',
@@ -118,8 +119,8 @@ const translations = {
         placeholder: 'Ketik teks Anda dalam aksara Latin di sini... (dikonversi secara real-time dengan deteksi Sansekerta dan dukungan V=W)',
         balineseplaceholder: 'Tempel atau ketik aksara Bali di sini... (ᬅᬓ᭄ᬱᬭ ᬩᬮᬶ)',
         reset: 'Atur Ulang',
-        realtimeConversion: '⚡ Konversi real-time dengan deteksi Sansekerta & dukungan V=W',
-        realtimeReverse: '⚡ Konversi terbalik real-time dari aksara Bali',
+        realtimeConversion: 'Konversi real-time dengan deteksi Sansekerta & dukungan V=W',
+        realtimeReverse: 'Konversi terbalik real-time dari aksara Bali',
 
         balineseOutput: 'Output Aksara Bali',
         latinOutput: 'Output Teks Latin',
@@ -1159,13 +1160,8 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                         <div className="d-flex justify-content-between align-items-start mb-3">
                             <div></div>
                             <div className="text-center flex-grow-1">
-                                <h1 className="fw-bold mb-3" style={{
-                                    fontFamily: "'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif",
-                                    fontSize: '2.1rem',
-                                    color: darkMode ? '#ece7df' : '#26211c',
-                                    display: 'inline-flex', alignItems: 'center', gap: '14px',
-                                }}>
-                                    <Languages size={30} strokeWidth={1.6} style={{ color: darkMode ? '#d99873' : '#9c4221' }} />
+                                <h1 className="display-6 fw-bold text-primary mb-3">
+                                    <Languages className="me-3" size={48} />
                                     {t.title}
                                 </h1>
                             </div>
@@ -1253,7 +1249,8 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                                     <ArrowLeftRight size={16} className="me-2" />
                                     {isReverseMode ? t.switchToNormal : t.switchToReverse}
                                 </button>
-                                <div className="alert alert-info py-2 px-3 mb-0">
+                                <div className="alert alert-info py-2 px-3 mb-0 d-flex align-items-center gap-2">
+                                    <Zap size={14} className="flex-shrink-0" />
                                     <small>
                                         {isReverseMode ? t.realtimeReverse : t.realtimeConversion}
                                     </small>

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import { Search, Star, Calendar, Clock } from 'lucide-react'
 
 export async function getServerSideProps() {
   try {
@@ -169,7 +170,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                 boxSizing: 'border-box',
               }}
             />
-            <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '18px' }}>🔍</span>
+            <Search size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: mutedColor }} />
           </div>
 
           {/* Category filter */}
@@ -216,8 +217,8 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                 </div>
                 <div>
                   <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '10px', background: '#0d6efd20', color: '#0d6efd', fontWeight: '600' }}>
-                      ⭐ {lang === 'en' ? 'Featured' : 'Unggulan'}
+                    <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '10px', background: '#0d6efd20', color: '#0d6efd', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Star size={11} fill="currentColor" /> {lang === 'en' ? 'Featured' : 'Unggulan'}
                     </span>
                     <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '10px', background: darkMode ? '#252535' : '#f0f0f0', color: mutedColor }}>
                       {displayPost(filteredPosts[0]).category}
@@ -230,8 +231,8 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                     {displayPost(filteredPosts[0]).excerpt}
                   </p>
                   <div style={{ display: 'flex', gap: '12px', fontSize: '12px', color: mutedColor }}>
-                    <span>📅 {filteredPosts[0].date}</span>
-                    <span>⏱ {filteredPosts[0].readTime}</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Calendar size={12} /> {filteredPosts[0].date}</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Clock size={12} /> {filteredPosts[0].readTime}</span>
                   </div>
                 </div>
               </article>
@@ -273,8 +274,8 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                       {d.excerpt}
                     </p>
                     <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: mutedColor }}>
-                      <span>📅 {post.date}</span>
-                      <span>⏱ {post.readTime}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Calendar size={11} /> {post.date}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Clock size={11} /> {post.readTime}</span>
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '10px' }}>
                       {post.tags.slice(0, 3).map(tag => (
@@ -291,7 +292,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
 
           {filteredPosts.length === 0 && (
             <div style={{ textAlign: 'center', padding: '60px 20px', color: mutedColor }}>
-              <div style={{ fontSize: '48px', marginBottom: '12px' }}>🔍</div>
+              <Search size={48} style={{ marginBottom: '12px', opacity: 0.6 }} />
               <p>{lang === 'en' ? 'No articles match your search.' : 'Tidak ada artikel yang cocok dengan pencarian Anda.'}</p>
             </div>
           )}

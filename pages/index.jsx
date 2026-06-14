@@ -307,7 +307,7 @@ export default function Home({ locale, setLocale }) {
 
             <div className={`min-vh-100 ${darkMode ? 'bg-dark text-light' : 'bg-light text-dark'}`}>
                 {showInstallPrompt && !isInstalled && (
-                    <div className="alert alert-success m-0 rounded-0 py-3 border-0 shadow-sm" style={{ background: '#2b2723' }}>
+                    <div className="alert alert-success m-0 rounded-0 py-3 border-0 shadow-sm" style={{ background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)' }}>
                         <div className="container-fluid px-3">
                             <div className="d-flex align-items-center justify-content-between">
                                 <div className="d-flex align-items-center">
@@ -373,72 +373,80 @@ export default function Home({ locale, setLocale }) {
                     <LatinBalineseConverter locale={locale} darkMode={darkMode} />
 
                     {/* Feature Discovery Section */}
-                    {(() => {
-                        const serif = "'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif"
-                        const accent = darkMode ? '#d99873' : '#9c4221'
-                        const ink = darkMode ? '#ece7df' : '#26211c'
-                        const muted = darkMode ? '#9a948a' : '#6b6258'
-                        const cardBorder = darkMode ? '#2c2922' : '#e3dccf'
-                        const cardBg = darkMode ? '#17150f' : '#fbf8f2'
-                        const features = [
-                            {
-                                href: '/practice', icon: Target,
-                                title: locale === 'id' ? 'Latihan Kuis' : 'Quiz Practice',
-                                desc: locale === 'id' ? 'Uji pengetahuan aksara Bali dengan kuis interaktif bergambar.' : 'Test your Balinese script knowledge with image-based interactive quizzes.',
-                            },
-                            {
-                                href: '/practice', icon: PenLine,
-                                title: locale === 'id' ? 'Latihan Menulis' : 'Writing Practice',
-                                desc: locale === 'id' ? 'Gambar aksara Bali di kanvas dengan mouse, sentuh, atau gerakan tangan.' : 'Draw Balinese script on a canvas with mouse, touch, or hand gestures.',
-                            },
-                            {
-                                href: '/blog', icon: FileText,
-                                title: locale === 'id' ? 'Blog Aksara' : 'Script Blog',
-                                desc: locale === 'id' ? 'Artikel tentang sejarah, struktur, dan pelestarian aksara Bali.' : 'Articles on the history, structure, and preservation of Balinese script.',
-                            },
-                            {
-                                href: '/dashboard', icon: LayoutDashboard,
-                                title: locale === 'id' ? 'Dasbor Belajar' : 'Learning Dashboard',
-                                desc: locale === 'id' ? 'Pantau progres belajar, nilai kuis, dan statistik latihan menulismu.' : 'Track your learning progress, quiz scores, and writing practice stats.',
-                            },
-                            {
-                                href: '/faq', icon: HelpCircle,
-                                title: 'FAQ',
-                                desc: locale === 'id' ? 'Pertanyaan umum tentang aksara Bali, cara penggunaan, dan fitur teknis.' : 'Common questions about Balinese script, usage guide, and technical features.',
-                            },
-                            {
-                                href: '/', icon: Zap,
-                                title: locale === 'id' ? 'Konverter Latin' : 'Latin Converter',
-                                desc: locale === 'id' ? 'Konversi teks Latin ke aksara Bali secara real-time dengan dukungan Sansekerta.' : 'Convert Latin text to Balinese script in real-time with full Sanskrit support.',
-                            },
-                        ]
-                        return (
-                            <div style={{ maxWidth: 920, margin: '0 auto', padding: '56px 16px 16px' }}>
-                                <div style={{ marginBottom: '32px' }}>
-                                    <span style={{ display: 'block', fontSize: '12px', letterSpacing: '0.18em', textTransform: 'uppercase', color: accent, marginBottom: '10px', fontWeight: 600 }}>
-                                        {locale === 'id' ? 'Jelajahi' : 'Explore'}
-                                    </span>
-                                    <h2 style={{ fontFamily: serif, fontSize: '30px', fontWeight: 600, color: ink, margin: 0, lineHeight: 1.15 }}>
-                                        {locale === 'id' ? 'Belajar & melestarikan aksara Bali' : 'Learn & preserve the Balinese script'}
-                                    </h2>
-                                    <div style={{ width: '48px', height: '2px', background: accent, marginTop: '18px' }} />
-                                </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(248px, 1fr))', gap: '1px', background: cardBorder, border: `1px solid ${cardBorder}` }}>
-                                    {features.map(f => (
-                                        <a key={f.href + f.title} href={f.href}
-                                            style={{ textDecoration: 'none', background: cardBg, padding: '28px 24px', display: 'block', transition: 'background 0.15s' }}
-                                            onMouseEnter={e => { e.currentTarget.style.background = darkMode ? '#1f1c15' : '#f4efe5' }}
-                                            onMouseLeave={e => { e.currentTarget.style.background = cardBg }}
-                                        >
-                                            <f.icon size={22} color={accent} strokeWidth={1.6} style={{ marginBottom: '16px' }} />
-                                            <div style={{ fontFamily: serif, fontSize: '18px', fontWeight: 600, color: ink, marginBottom: '8px' }}>{f.title}</div>
-                                            <div style={{ fontSize: '13.5px', color: muted, lineHeight: 1.6 }}>{f.desc}</div>
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        )
-                    })()}
+                    <div style={{ maxWidth: 900, margin: '0 auto', padding: '40px 16px 16px', fontFamily: 'system-ui, sans-serif' }}>
+                        <h2 style={{ fontSize: '18px', fontWeight: '700', color: darkMode ? '#e8e8e8' : '#1a1a1a', marginBottom: '8px', textAlign: 'center' }}>
+                            {locale === 'id' ? 'Semua Fitur' : 'All Features'}
+                        </h2>
+                        <p style={{ fontSize: '13px', color: darkMode ? '#888' : '#666', textAlign: 'center', marginBottom: '24px' }}>
+                            {locale === 'id' ? 'Klik untuk menjelajahi lebih lanjut' : 'Click to explore each feature'}
+                        </p>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '14px' }}>
+                            {[
+                                {
+                                    href: '/practice',
+                                    icon: Target,
+                                    title: locale === 'id' ? 'Latihan Kuis' : 'Quiz Practice',
+                                    desc: locale === 'id' ? 'Uji pengetahuan aksara Bali dengan kuis interaktif bergambar.' : 'Test your Balinese script knowledge with image-based interactive quizzes.',
+                                    color: '#0d6efd',
+                                },
+                                {
+                                    href: '/practice',
+                                    icon: PenLine,
+                                    title: locale === 'id' ? 'Latihan Menulis' : 'Writing Practice',
+                                    desc: locale === 'id' ? 'Gambar aksara Bali di kanvas dengan mouse, sentuh, atau gerakan tangan.' : 'Draw Balinese script on a canvas with mouse, touch, or hand gestures.',
+                                    color: '#198754',
+                                },
+                                {
+                                    href: '/blog',
+                                    icon: FileText,
+                                    title: locale === 'id' ? 'Blog Aksara' : 'Script Blog',
+                                    desc: locale === 'id' ? 'Artikel tentang sejarah, struktur, dan pelestarian aksara Bali.' : 'Articles on the history, structure, and preservation of Balinese script.',
+                                    color: '#dc3545',
+                                },
+                                {
+                                    href: '/dashboard',
+                                    icon: LayoutDashboard,
+                                    title: locale === 'id' ? 'Dasbor Belajar' : 'Learning Dashboard',
+                                    desc: locale === 'id' ? 'Pantau progres belajar, nilai kuis, dan statistik latihan menulismu.' : 'Track your learning progress, quiz scores, and writing practice stats.',
+                                    color: '#fd7e14',
+                                },
+                                {
+                                    href: '/faq',
+                                    icon: HelpCircle,
+                                    title: 'FAQ',
+                                    desc: locale === 'id' ? 'Pertanyaan umum tentang aksara Bali, cara penggunaan, dan fitur teknis.' : 'Common questions about Balinese script, usage guide, and technical features.',
+                                    color: '#6f42c1',
+                                },
+                                {
+                                    href: '/',
+                                    icon: Zap,
+                                    title: locale === 'id' ? 'Konverter Latin' : 'Latin Converter',
+                                    desc: locale === 'id' ? 'Konversi teks Latin ke aksara Bali secara real-time dengan dukungan Sansekerta.' : 'Convert Latin text to Balinese script in real-time with full Sanskrit support.',
+                                    color: '#20c997',
+                                },
+                            ].map(f => (
+                                <a key={f.href + f.title} href={f.href} style={{ textDecoration: 'none' }}>
+                                    <div
+                                        style={{
+                                            background: darkMode ? '#1a1a2e' : '#ffffff',
+                                            border: `1px solid ${darkMode ? '#2a2a3e' : '#e8e8e0'}`,
+                                            borderRadius: '14px',
+                                            padding: '20px 16px',
+                                            height: '100%',
+                                            transition: 'box-shadow 0.15s, transform 0.15s',
+                                            cursor: 'pointer',
+                                        }}
+                                        onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 4px 16px ${f.color}30`; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                                        onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}
+                                    >
+                                        <f.icon size={28} color={f.color} style={{ marginBottom: '10px' }} />
+                                        <div style={{ fontSize: '14px', fontWeight: '700', color: f.color, marginBottom: '6px' }}>{f.title}</div>
+                                        <div style={{ fontSize: '12px', color: darkMode ? '#aaa' : '#666', lineHeight: 1.5 }}>{f.desc}</div>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
                 </main>
 
                 <Footer darkMode={darkMode} locale={locale} />
@@ -564,12 +572,6 @@ export default function Home({ locale, setLocale }) {
                     [data-cultural-context="indonesian"] .navbar-brand {
                         border-left: 3px solid #ff0000;
                         padding-left: 0.75rem;
-                    }
-                    
-                    [data-cultural-context="indonesian"] .navbar-brand::after {
-                        content: " 🇮🇩";
-                        opacity: 0.7;
-                        font-size: 0.8rem;
                     }
                 }
 

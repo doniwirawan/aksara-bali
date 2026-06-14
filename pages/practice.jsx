@@ -6,6 +6,7 @@ import QuizMode from '../components/practice/QuizMode'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { convertLatinToBalinese, QUIZ_WORDS } from '../utils/balineseConverter'
+import { Target, PenLine, Keyboard, Shuffle, ClipboardList, Copy, Lightbulb } from 'lucide-react'
 
 // HandGestureCanvas uses webcam + MediaPipe (browser-only)
 const HandGestureCanvas = dynamic(
@@ -14,14 +15,14 @@ const HandGestureCanvas = dynamic(
 )
 
 const TABS_ID = [
-  { key: 'quiz', label: '🎯 Kuis' },
-  { key: 'write', label: '✍️ Tulis' },
-  { key: 'keyboard', label: '⌨️ Papan Ketik' },
+  { key: 'quiz', icon: Target, label: 'Kuis' },
+  { key: 'write', icon: PenLine, label: 'Tulis' },
+  { key: 'keyboard', icon: Keyboard, label: 'Papan Ketik' },
 ]
 const TABS_EN = [
-  { key: 'quiz', label: '🎯 Quiz' },
-  { key: 'write', label: '✍️ Write' },
-  { key: 'keyboard', label: '⌨️ Keyboard' },
+  { key: 'quiz', icon: Target, label: 'Quiz' },
+  { key: 'write', icon: PenLine, label: 'Write' },
+  { key: 'keyboard', icon: Keyboard, label: 'Keyboard' },
 ]
 
 // Pick a random practice word for the writing canvas
@@ -51,18 +52,18 @@ export default function PracticePage({ locale, setLocale }) {
     id: {
       title: 'Latihan Aksara Bali', subtitle: 'Kuis interaktif, kanvas menulis, dan papan ketik aksara Bali',
       canvasTitle: 'Kanvas Menulis', canvasSub: 'Gambar aksara Bali dengan mouse, sentuhan, atau gerakan tangan',
-      practiceLabel: 'Kata latihan:', changeWord: 'Ganti kata 🔀', refSheet: '📋 Daftar aksara referensi',
+      practiceLabel: 'Kata latihan:', changeWord: 'Ganti kata', refSheet: 'Daftar aksara referensi',
       kbTitle: 'Papan Ketik Aksara Bali', kbSub: 'Ketik bebas menggunakan papan ketik aksara Bali',
-      kbPlaceholder: 'Mulai mengetik...', copyBtn: '📋 Salin',
-      kbTip: '💡 Tips: Konsonan + tanda vokal = suku kata. Gunakan Adeg-adeg (᭄) untuk mengakhiri konsonan tanpa vokal. Buka tab Pangangge untuk tanda baca.',
+      kbPlaceholder: 'Mulai mengetik...', copyBtn: 'Salin',
+      kbTip: 'Tips: Konsonan + tanda vokal = suku kata. Gunakan Adeg-adeg (᭄) untuk mengakhiri konsonan tanpa vokal. Buka tab Pangangge untuk tanda baca.',
     },
     en: {
       title: 'Balinese Script Practice', subtitle: 'Interactive quiz, writing canvas, and Balinese keyboard',
       canvasTitle: 'Writing Canvas', canvasSub: 'Draw Balinese script with mouse, touch, or hand gestures',
-      practiceLabel: 'Practice word:', changeWord: 'Change word 🔀', refSheet: '📋 Reference sheet',
+      practiceLabel: 'Practice word:', changeWord: 'Change word', refSheet: 'Reference sheet',
       kbTitle: 'Balinese Script Keyboard', kbSub: 'Type freely using the Balinese script keyboard',
-      kbPlaceholder: 'Start typing...', copyBtn: '📋 Copy',
-      kbTip: '💡 Tip: Consonant + vowel mark = syllable. Use Adeg-adeg (᭄) to end a consonant without a vowel. Open the Pangangge tab for diacritical marks.',
+      kbPlaceholder: 'Start typing...', copyBtn: 'Copy',
+      kbTip: 'Tip: Consonant + vowel mark = syllable. Use Adeg-adeg (᭄) to end a consonant without a vowel. Open the Pangangge tab for diacritical marks.',
     },
   }[lang]
 
@@ -129,7 +130,7 @@ export default function PracticePage({ locale, setLocale }) {
                   gap: '6px',
                 }}
               >
-                {tab.label}
+                <tab.icon size={16} /> {tab.label}
               </button>
             ))}
           </div>
@@ -160,9 +161,10 @@ export default function PracticePage({ locale, setLocale }) {
                         padding: '6px 14px', borderRadius: '20px',
                         border: `1px solid ${borderColor}`, background: 'transparent',
                         cursor: 'pointer', fontSize: '13px', color: textColor,
+                        display: 'inline-flex', alignItems: 'center', gap: '6px',
                       }}
                     >
-                      {pt.changeWord}
+                      <Shuffle size={14} /> {pt.changeWord}
                     </button>
                   </div>
                 </div>
@@ -176,8 +178,8 @@ export default function PracticePage({ locale, setLocale }) {
 
                 {/* Reference sheet */}
                 <details style={{ marginTop: '20px' }}>
-                  <summary style={{ cursor: 'pointer', fontSize: '13px', color: '#0d6efd', fontWeight: '500', padding: '8px 0' }}>
-                    {pt.refSheet}
+                  <summary style={{ cursor: 'pointer', fontSize: '13px', color: '#0d6efd', fontWeight: '500', padding: '8px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <ClipboardList size={15} /> {pt.refSheet}
                   </summary>
                   <div style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(70px, 1fr))', gap: '8px' }}>
                     {[
@@ -236,10 +238,11 @@ export default function PracticePage({ locale, setLocale }) {
                         position: 'absolute', top: '12px', right: '12px',
                         padding: '4px 10px', borderRadius: '6px', border: `1px solid ${borderColor}`,
                         background: 'transparent', cursor: 'pointer', fontSize: '12px', color: mutedColor,
+                        display: 'inline-flex', alignItems: 'center', gap: '5px',
                       }}
                       title={pt.copyBtn}
                     >
-                      {pt.copyBtn}
+                      <Copy size={12} /> {pt.copyBtn}
                     </button>
                   )}
                 </div>
@@ -254,8 +257,8 @@ export default function PracticePage({ locale, setLocale }) {
                 />
 
                 {/* Tip */}
-                <div style={{ marginTop: '16px', padding: '12px', borderRadius: '8px', background: darkMode ? '#1a2840' : '#f0f4ff', fontSize: '13px', color: darkMode ? '#8aabdc' : '#4a6fa5' }}>
-                  {pt.kbTip}
+                <div style={{ marginTop: '16px', padding: '12px', borderRadius: '8px', background: darkMode ? '#1a2840' : '#f0f4ff', fontSize: '13px', color: darkMode ? '#8aabdc' : '#4a6fa5', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                  <Lightbulb size={16} style={{ flexShrink: 0, marginTop: '1px' }} /> <span>{pt.kbTip}</span>
                 </div>
               </div>
             )}

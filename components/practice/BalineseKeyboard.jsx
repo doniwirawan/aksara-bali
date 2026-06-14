@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Space, Delete, Trash2, Info } from 'lucide-react'
 
 const KEYBOARD_LAYOUT = {
   consonants: [
@@ -78,17 +79,17 @@ const TAB_SUBTITLES = ['Consonants', 'Vowels', 'Diacritical Marks', 'Numbers']
 export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onClear, darkMode, locale }) {
   const lang = locale === 'en' ? 'en' : 'id'
   const kbLabels = {
-    id: { space: '⎵ Spasi', del: '⌫ Hapus', clear: '✕ Bersihkan',
-      l0: '🔤 Klik aksara untuk mengetik. Konsonan diikuti vokal membentuk suku kata.',
-      l1: '🔡 Huruf suara mandiri — digunakan di awal kata atau setelah vokal.',
-      l2: '◌ Tanda baca yang ditambahkan setelah konsonan untuk mengubah bunyinya.',
-      l3: '🔢 Angka Bali — klik untuk memasukkan angka dalam aksara Bali.',
+    id: { space: 'Spasi', del: 'Hapus', clear: 'Bersihkan',
+      l0: 'Klik aksara untuk mengetik. Konsonan diikuti vokal membentuk suku kata.',
+      l1: 'Huruf suara mandiri — digunakan di awal kata atau setelah vokal.',
+      l2: 'Tanda baca yang ditambahkan setelah konsonan untuk mengubah bunyinya.',
+      l3: 'Angka Bali — klik untuk memasukkan angka dalam aksara Bali.',
     },
-    en: { space: '⎵ Space', del: '⌫ Delete', clear: '✕ Clear',
-      l0: '🔤 Click a character to type. Consonant + vowel mark forms a syllable.',
-      l1: '🔡 Independent vowels — used at the start of a word or after a vowel.',
-      l2: '◌ Diacritical marks added after consonants to change their sound.',
-      l3: '🔢 Balinese numerals — click to insert numbers in Balinese script.',
+    en: { space: 'Space', del: 'Delete', clear: 'Clear',
+      l0: 'Click a character to type. Consonant + vowel mark forms a syllable.',
+      l1: 'Independent vowels — used at the start of a word or after a vowel.',
+      l2: 'Diacritical marks added after consonants to change their sound.',
+      l3: 'Balinese numerals — click to insert numbers in Balinese script.',
     },
   }
   const kb = kbLabels[lang]
@@ -201,7 +202,7 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
           onMouseEnter={e => e.currentTarget.style.background = keyHover}
           onMouseLeave={e => e.currentTarget.style.background = keyBg}
         >
-          {kb.space}
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Space size={15} /> {kb.space}</span>
         </button>
         <button
           onClick={() => onBackspace?.()}
@@ -219,7 +220,7 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
           onMouseEnter={e => e.currentTarget.style.background = keyHover}
           onMouseLeave={e => e.currentTarget.style.background = keyBg}
         >
-          {kb.del}
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Delete size={15} /> {kb.del}</span>
         </button>
         <button
           onClick={() => onClear?.()}
@@ -237,7 +238,7 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
           onMouseEnter={e => { e.currentTarget.style.background = '#dc3545'; e.currentTarget.style.color = '#fff' }}
           onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#dc3545' }}
         >
-          {kb.clear}
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Trash2 size={15} /> {kb.clear}</span>
         </button>
       </div>
 
@@ -249,11 +250,15 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
         background: darkMode ? '#1a2840' : '#f0f4ff',
         fontSize: '12px',
         color: darkMode ? '#8aabdc' : '#4a6fa5',
+        display: 'flex', alignItems: 'flex-start', gap: '8px',
       }}>
-        {activeTab === 0 && kb.l0}
-        {activeTab === 1 && kb.l1}
-        {activeTab === 2 && kb.l2}
-        {activeTab === 3 && kb.l3}
+        <Info size={15} style={{ flexShrink: 0, marginTop: '1px' }} />
+        <span>
+          {activeTab === 0 && kb.l0}
+          {activeTab === 1 && kb.l1}
+          {activeTab === 2 && kb.l2}
+          {activeTab === 3 && kb.l3}
+        </span>
       </div>
     </div>
   )
