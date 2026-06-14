@@ -3,6 +3,7 @@
 -- Table: conversions (log all Latin→Balinese conversions)
 create table if not exists public.conversions (
   id          bigserial primary key,
+  user_id     uuid references auth.users(id),
   input_length  integer not null,
   output_length integer not null default 0,
   mode        text not null default 'latin_to_bali',
@@ -13,6 +14,7 @@ create table if not exists public.conversions (
 -- Table: quiz_results (store quiz session results)
 create table if not exists public.quiz_results (
   id           bigserial primary key,
+  user_id      uuid references auth.users(id),
   score        integer not null,
   total        integer not null,
   accuracy     integer not null,
@@ -25,6 +27,7 @@ create table if not exists public.quiz_results (
 -- Table: writing_checks (log handwriting check results)
 create table if not exists public.writing_checks (
   id            bigserial primary key,
+  user_id       uuid references auth.users(id),
   word_latin    text not null,
   score         integer not null,
   precision_pct integer,

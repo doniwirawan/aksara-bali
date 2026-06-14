@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
+import { authedFetch } from '../../utils/supabase'
 
 const CANVAS_W = 640
 const CANVAS_H = 400
@@ -298,7 +299,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
 
     // Log to Supabase (fire-and-forget)
     if (referenceText) {
-      fetch('/api/writing-checks', {
+      authedFetch('/api/writing-checks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

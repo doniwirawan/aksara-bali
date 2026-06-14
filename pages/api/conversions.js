@@ -1,7 +1,7 @@
 // POST /api/conversions — log a conversion event
 // GET  /api/conversions — return usage stats
 
-import { createServerClient } from '../../utils/supabase'
+import { createServerClient, getUserFromRequest } from '../../utils/supabase'
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -12,8 +12,10 @@ export default async function handler(req, res) {
     }
 
     try {
+      const user = await getUserFromRequest(req)
       const supabase = createServerClient()
       const { error } = await supabase.from('conversions').insert({
+        user_id: user?.id ?? null,
         input_length: inputText.length,
         output_length: outputLength || 0,
         mode: mode || 'latin_to_bali',
@@ -31,10 +33,15 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
+      // scope=me → only this user's conversions; default → community total
+      const scopeMe = req.query.scope === 'me'
+      const user = scopeMe ? await getUserFromRequest(req) : null
+      if (scopeMe && !user) return res.status(401).json({ error: 'Auth required' })
+
       const supabase = createServerClient()
-      const { count, error } = await supabase
-        .from('conversions')
-        .select('*', { count: 'exact', head: true })
+      let query = supabase.from('conversions').select('*', { count: 'exact', head: true })
+      if (scopeMe) query = query.eq('user_id', user.id)
+      const { count, error } = await query
 
       if (error) throw error
       return res.status(200).json({ total: count ?? 0 })

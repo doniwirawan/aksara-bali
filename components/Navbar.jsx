@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../context/AuthContext'
+import { Zap, Target, FileText, HelpCircle, Globe, Moon, Sun, User, BarChart3, Menu, X } from 'lucide-react'
 
 const NAV_LINKS = [
-  { href: '/', label: 'Konverter', labelEn: 'Converter', icon: '⚡' },
-  { href: '/practice', label: 'Latihan', labelEn: 'Practice', icon: '🎯' },
-  { href: '/blog', label: 'Blog', labelEn: 'Blog', icon: '📝' },
-  { href: '/faq', label: 'FAQ', labelEn: 'FAQ', icon: '❓' },
+  { href: '/', label: 'Konverter', labelEn: 'Converter', icon: Zap },
+  { href: '/practice', label: 'Latihan', labelEn: 'Practice', icon: Target },
+  { href: '/blog', label: 'Blog', labelEn: 'Blog', icon: FileText },
+  { href: '/faq', label: 'FAQ', labelEn: 'FAQ', icon: HelpCircle },
 ]
 
 export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLocale }) {
@@ -89,7 +90,7 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
               onMouseEnter={e => { if (!isActive(link.href)) e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5' }}
               onMouseLeave={e => { if (!isActive(link.href)) e.currentTarget.style.background = 'transparent' }}
             >
-              <span style={{ fontSize: '14px' }}>{link.icon}</span>
+              <link.icon size={15} style={{ flexShrink: 0 }} />
               <span className="nav-label">{locale === 'en' ? link.labelEn : link.label}</span>
             </a>
           ))}
@@ -108,11 +109,12 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
                 border: `1px solid ${borderColor}`, background: 'transparent',
                 cursor: 'pointer', fontSize: '12px', fontWeight: '600',
                 color: mutedColor, transition: 'all 0.15s',
+                display: 'flex', alignItems: 'center', gap: '5px',
               }}
               title="Switch language"
               aria-label="Toggle language"
             >
-              {locale === 'id' ? '🇬🇧 EN' : '🇮🇩 ID'}
+              <Globe size={13} /> {locale === 'id' ? 'EN' : 'ID'}
             </button>
           )}
 
@@ -122,13 +124,14 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
             style={{
               padding: '6px 10px', borderRadius: '16px',
               border: `1px solid ${borderColor}`, background: 'transparent',
-              cursor: 'pointer', fontSize: '16px', lineHeight: 1,
+              cursor: 'pointer', lineHeight: 1, color: mutedColor,
+              display: 'flex', alignItems: 'center',
               transition: 'all 0.15s',
             }}
             title={darkMode ? 'Light mode' : 'Dark mode'}
             aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            {darkMode ? '☀️' : '🌙'}
+            {darkMode ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
           {/* Profile / Login */}
@@ -160,16 +163,16 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
                     <div style={{ fontSize: '12px', fontWeight: '600', color: textColor, wordBreak: 'break-all' }}>{user.email}</div>
                     {isAdmin && <div style={{ fontSize: '11px', color: '#0d6efd', marginTop: '2px' }}>Admin</div>}
                   </div>
-                  <a href="/dashboard" style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', fontSize: '13px', color: textColor, textDecoration: 'none' }}
+                  <a href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', borderRadius: '8px', fontSize: '13px', color: textColor, textDecoration: 'none' }}
                     onMouseEnter={e => e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5'}
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                    👤 Dashboard Saya
+                    <User size={15} /> Dashboard Saya
                   </a>
                   {isAdmin && (
-                    <a href="/admin" style={{ display: 'block', padding: '8px 12px', borderRadius: '8px', fontSize: '13px', color: textColor, textDecoration: 'none' }}
+                    <a href="/admin" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', borderRadius: '8px', fontSize: '13px', color: textColor, textDecoration: 'none' }}
                       onMouseEnter={e => e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5'}
                       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                      📊 Dashboard Admin
+                      <BarChart3 size={15} /> Dashboard Admin
                     </a>
                   )}
                   <button
@@ -209,13 +212,14 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
               display: 'none',
               padding: '6px 8px', borderRadius: '8px',
               border: `1px solid ${borderColor}`, background: 'transparent',
-              cursor: 'pointer', fontSize: '18px', lineHeight: 1,
+              cursor: 'pointer', lineHeight: 1, color: textColor,
+              alignItems: 'center',
             }}
             className="mobile-menu-btn"
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
           >
-            {menuOpen ? '✕' : '☰'}
+            {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </div>
@@ -243,7 +247,7 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
                 marginBottom: '4px',
               }}
             >
-              <span>{link.icon}</span>
+              <link.icon size={18} style={{ flexShrink: 0 }} />
               <span>{locale === 'en' ? link.labelEn : link.label}</span>
             </a>
           ))}
@@ -251,7 +255,7 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
             {user ? (
               <div>
                 <div style={{ fontSize: '12px', color: mutedColor, padding: '4px 8px', marginBottom: '4px' }}>{user.email}</div>
-                {isAdmin && <a href="/admin" style={{ display: 'block', padding: '10px 8px', color: '#0d6efd', textDecoration: 'none', fontSize: '14px' }}>📊 Dashboard Admin</a>}
+                {isAdmin && <a href="/admin" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 8px', color: '#0d6efd', textDecoration: 'none', fontSize: '14px' }}><BarChart3 size={16} /> Dashboard Admin</a>}
                 <button onClick={handleSignOut} style={{ width: '100%', padding: '10px 8px', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '14px', color: '#ef4444', textAlign: 'left' }}>
                   Keluar
                 </button>

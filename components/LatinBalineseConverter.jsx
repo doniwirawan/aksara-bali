@@ -16,6 +16,7 @@ import {
     ArrowLeftRight,
     RefreshCw
 } from 'lucide-react'
+import { authedFetch } from '../utils/supabase'
 
 const translations = {
     en: {
@@ -1073,7 +1074,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
         const outputText = isReverseMode ? latinText : balineseText
         if (!inputText || inputText.length < 3) return
         const timer = setTimeout(() => {
-            fetch('/api/conversions', {
+            authedFetch('/api/conversions', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

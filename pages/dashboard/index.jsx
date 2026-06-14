@@ -2,6 +2,11 @@ import Head from 'next/head'
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../../context/AuthContext'
+import { authedFetch } from '../../utils/supabase'
+import {
+  Zap, Target, FileText, HelpCircle, BarChart3, Wrench, PenLine, Users,
+  TrendingUp, Trophy, Flame, Ruler, Rocket, Lightbulb, CalendarDays, BookOpen,
+} from 'lucide-react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 
@@ -11,6 +16,7 @@ export default function UserDashboard({ locale, setLocale }) {
   const [darkMode, setDarkMode] = useState(false)
   const [stats, setStats] = useState(null)
   const [quizStats, setQuizStats] = useState(null)
+  const [writingStats, setWritingStats] = useState(null)
 
   useEffect(() => {
     const saved = localStorage.getItem('aksara-dark-mode')
@@ -24,9 +30,15 @@ export default function UserDashboard({ locale, setLocale }) {
 
   const fetchStats = useCallback(async () => {
     if (!user) return
-    const [c, q] = await Promise.all([fetch('/api/conversions'), fetch('/api/quiz-results')]).catch(() => [])
+    // scope=me → stats for the logged-in user only
+    const [c, q, w] = await Promise.all([
+      authedFetch('/api/conversions?scope=me'),
+      authedFetch('/api/quiz-results?scope=me'),
+      authedFetch('/api/writing-checks?scope=me'),
+    ]).catch(() => [])
     if (c?.ok) setStats(await c.json())
     if (q?.ok) setQuizStats(await q.json())
+    if (w?.ok) setWritingStats(await w.json())
   }, [user])
 
   // Fetch on mount and whenever the tab regains focus
@@ -53,10 +65,10 @@ export default function UserDashboard({ locale, setLocale }) {
   const avatarLetter = user.email?.[0]?.toUpperCase() ?? '?'
 
   const QUICK_LINKS = [
-    { href: '/', icon: '⚡', label: 'Konverter', desc: 'Latin → Aksara Bali', color: '#0d6efd' },
-    { href: '/practice', icon: '🎯', label: 'Latihan', desc: 'Kuis & menulis', color: '#198754' },
-    { href: '/blog', icon: '📝', label: 'Blog', desc: 'Artikel budaya Bali', color: '#6f42c1' },
-    { href: '/faq', icon: '❓', label: 'FAQ', desc: 'Pertanyaan umum', color: '#fd7e14' },
+    { href: '/', icon: Zap, label: 'Konverter', desc: 'Latin → Aksara Bali', color: '#0d6efd' },
+    { href: '/practice', icon: Target, label: 'Latihan', desc: 'Kuis & menulis', color: '#198754' },
+    { href: '/blog', icon: FileText, label: 'Blog', desc: 'Artikel budaya Bali', color: '#6f42c1' },
+    { href: '/faq', icon: HelpCircle, label: 'FAQ', desc: 'Pertanyaan umum', color: '#fd7e14' },
   ]
 
   return (
@@ -96,8 +108,8 @@ export default function UserDashboard({ locale, setLocale }) {
             </div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {isAdmin && (
-                <a href="/admin" style={{ padding: '8px 16px', borderRadius: '10px', background: '#0d6efd', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600' }}>
-                  📊 Admin Dashboard
+                <a href="/admin" style={{ padding: '8px 16px', borderRadius: '10px', background: '#0d6efd', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <BarChart3 size={15} /> Admin Dashboard
                 </a>
               )}
               <button onClick={async () => { await signOut(); router.push('/') }} style={{ padding: '8px 16px', borderRadius: '10px', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', fontSize: '13px', color: mutedColor }}>
@@ -110,15 +122,15 @@ export default function UserDashboard({ locale, setLocale }) {
           {isAdmin && (
             <div style={{ background: cardBg, borderRadius: '16px', border: '2px solid #0d6efd40', padding: '24px', marginBottom: '24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <h2 style={{ fontSize: '16px', fontWeight: '700', margin: 0, color: '#0d6efd' }}>🛠️ Admin Dashboard</h2>
+                <h2 style={{ fontSize: '16px', fontWeight: '700', margin: 0, color: '#0d6efd', display: 'flex', alignItems: 'center', gap: '8px' }}><Wrench size={18} /> Admin Dashboard</h2>
                 <a href="/admin" style={{ fontSize: '12px', color: '#0d6efd', textDecoration: 'none' }}>Buka lengkap →</a>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '10px' }}>
                 {[
-                  { href: '/admin?tab=stats', icon: '📊', label: 'Statistik', desc: 'Konversi & kuis', color: '#0d6efd' },
-                  { href: '/admin?tab=blog', icon: '✍️', label: 'Blog', desc: 'Kelola artikel', color: '#6f42c1' },
-                  { href: '/admin?tab=faq', icon: '❓', label: 'FAQ', desc: 'Kelola pertanyaan', color: '#fd7e14' },
-                  { href: '/admin?tab=users', icon: '👥', label: 'Pengguna', desc: 'Kelola akun', color: '#198754' },
+                  { href: '/admin?tab=stats', icon: BarChart3, label: 'Statistik', desc: 'Konversi & kuis', color: '#0d6efd' },
+                  { href: '/admin?tab=blog', icon: PenLine, label: 'Blog', desc: 'Kelola artikel', color: '#6f42c1' },
+                  { href: '/admin?tab=faq', icon: HelpCircle, label: 'FAQ', desc: 'Kelola pertanyaan', color: '#fd7e14' },
+                  { href: '/admin?tab=users', icon: Users, label: 'Pengguna', desc: 'Kelola akun', color: '#198754' },
                 ].map(item => (
                   <a key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
                     <div style={{
@@ -129,7 +141,7 @@ export default function UserDashboard({ locale, setLocale }) {
                       onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 12px rgba(13,110,253,0.15)'}
                       onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
                     >
-                      <div style={{ fontSize: '24px', marginBottom: '8px' }}>{item.icon}</div>
+                      <item.icon size={24} color={item.color} style={{ marginBottom: '8px' }} />
                       <div style={{ fontWeight: '600', fontSize: '13px', color: item.color, marginBottom: '3px' }}>{item.label}</div>
                       <div style={{ fontSize: '11px', color: mutedColor }}>{item.desc}</div>
                     </div>
@@ -139,17 +151,19 @@ export default function UserDashboard({ locale, setLocale }) {
             </div>
           )}
 
-          {/* Community stats */}
-          <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 14px' }}>📈 Statistik Komunitas</h2>
+          {/* Personal stats */}
+          <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px' }}><TrendingUp size={18} /> Statistik Anda</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', marginBottom: '28px' }}>
             {[
-              { label: 'Total Konversi', value: stats?.total ?? '—', icon: '⚡', color: '#0d6efd' },
-              { label: 'Sesi Kuis', value: quizStats?.totalSessions ?? '—', icon: '🎯', color: '#198754' },
-              { label: 'Akurasi Rata-rata', value: quizStats?.avgAccuracy != null ? `${quizStats.avgAccuracy}%` : '—', icon: '🏆', color: '#fd7e14' },
-              { label: 'Streak Terbaik', value: quizStats?.bestStreak ?? '—', icon: '🔥', color: '#dc3545' },
+              { label: 'Total Konversi', value: stats?.total ?? '—', icon: Zap, color: '#0d6efd' },
+              { label: 'Sesi Kuis', value: quizStats?.totalSessions ?? '—', icon: Target, color: '#198754' },
+              { label: 'Akurasi Kuis', value: quizStats?.avgAccuracy != null ? `${quizStats.avgAccuracy}%` : '—', icon: Trophy, color: '#fd7e14' },
+              { label: 'Streak Terbaik', value: quizStats?.bestStreak ?? '—', icon: Flame, color: '#dc3545' },
+              { label: 'Latihan Tulis', value: writingStats?.total ?? '—', icon: PenLine, color: '#6f42c1' },
+              { label: 'Skor Tulis', value: writingStats?.avgScore != null ? `${writingStats.avgScore}%` : '—', icon: Ruler, color: '#20c997' },
             ].map(c => (
               <div key={c.label} style={{ background: cardBg, borderRadius: '12px', border: `1px solid ${borderColor}`, padding: '16px' }}>
-                <div style={{ fontSize: '22px', marginBottom: '4px' }}>{c.icon}</div>
+                <c.icon size={22} color={c.color} style={{ marginBottom: '6px' }} />
                 <div style={{ fontSize: '22px', fontWeight: '700', color: c.color }}>{c.value}</div>
                 <div style={{ fontSize: '11px', color: mutedColor, marginTop: '2px' }}>{c.label}</div>
               </div>
@@ -157,7 +171,7 @@ export default function UserDashboard({ locale, setLocale }) {
           </div>
 
           {/* Quick links */}
-          <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 14px' }}>🚀 Fitur</h2>
+          <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px' }}><Rocket size={18} /> Fitur</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '12px', marginBottom: '28px' }}>
             {QUICK_LINKS.map(link => (
               <a key={link.href} href={link.href} style={{ textDecoration: 'none' }}>
@@ -168,7 +182,7 @@ export default function UserDashboard({ locale, setLocale }) {
                   onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.1)'}
                   onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
                 >
-                  <div style={{ fontSize: '28px', marginBottom: '10px' }}>{link.icon}</div>
+                  <link.icon size={28} color={link.color} style={{ marginBottom: '10px' }} />
                   <div style={{ fontWeight: '600', fontSize: '15px', color: link.color, marginBottom: '4px' }}>{link.label}</div>
                   <div style={{ fontSize: '12px', color: mutedColor }}>{link.desc}</div>
                 </div>
@@ -178,16 +192,16 @@ export default function UserDashboard({ locale, setLocale }) {
 
           {/* Learning tips */}
           <div style={{ background: cardBg, borderRadius: '14px', border: `1px solid ${borderColor}`, padding: '24px' }}>
-            <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 14px' }}>💡 Tips Belajar Aksara Bali</h2>
+            <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px' }}><Lightbulb size={18} /> Tips Belajar Aksara Bali</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
               {[
-                { icon: '📅', tip: 'Belajar 15–20 menit setiap hari lebih efektif daripada belajar panjang sekaligus.' },
-                { icon: '🎯', tip: 'Mulai dengan kuis mode Mudah, lalu naikkan kesulitan secara bertahap.' },
-                { icon: '✍️', tip: 'Gunakan fitur Tulis untuk melatih memori motorik aksara Bali.' },
-                { icon: '📖', tip: 'Baca blog untuk memahami konteks budaya dan sejarah di balik aksara Bali.' },
+                { icon: CalendarDays, color: '#0d6efd', tip: 'Belajar 15–20 menit setiap hari lebih efektif daripada belajar panjang sekaligus.' },
+                { icon: Target, color: '#198754', tip: 'Mulai dengan kuis mode Mudah, lalu naikkan kesulitan secara bertahap.' },
+                { icon: PenLine, color: '#6f42c1', tip: 'Gunakan fitur Tulis untuk melatih memori motorik aksara Bali.' },
+                { icon: BookOpen, color: '#fd7e14', tip: 'Baca blog untuk memahami konteks budaya dan sejarah di balik aksara Bali.' },
               ].map((t, i) => (
                 <div key={i} style={{ display: 'flex', gap: '10px', padding: '12px', borderRadius: '10px', background: darkMode ? '#252535' : '#f8f8f8' }}>
-                  <span style={{ fontSize: '20px', flexShrink: 0 }}>{t.icon}</span>
+                  <t.icon size={20} color={t.color} style={{ flexShrink: 0, marginTop: '1px' }} />
                   <span style={{ fontSize: '13px', color: mutedColor, lineHeight: 1.5 }}>{t.tip}</span>
                 </div>
               ))}

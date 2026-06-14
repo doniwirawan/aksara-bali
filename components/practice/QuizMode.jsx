@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react'
 import { convertLatinToBalinese, QUIZ_WORDS } from '../../utils/balineseConverter'
+import { authedFetch } from '../../utils/supabase'
 import BalineseKeyboard from './BalineseKeyboard'
 
 function shuffle(arr) {
@@ -156,7 +157,7 @@ export default function QuizMode({ darkMode, locale }) {
       setQuizComplete(true)
       // Log quiz result to Supabase (fire-and-forget)
       const finalAccuracy = questionsAnswered > 0 ? Math.round((score / questionsAnswered) * 100) : 0
-      fetch('/api/quiz-results', {
+      authedFetch('/api/quiz-results', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

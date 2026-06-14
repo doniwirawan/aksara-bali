@@ -1,7 +1,7 @@
 // POST /api/quiz-results — save a quiz session result
 // GET  /api/quiz-results — get leaderboard / aggregate stats
 
-import { createServerClient } from '../../utils/supabase'
+import { createServerClient, getUserFromRequest } from '../../utils/supabase'
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -12,8 +12,10 @@ export default async function handler(req, res) {
     }
 
     try {
+      const user = await getUserFromRequest(req)
       const supabase = createServerClient()
       const { error } = await supabase.from('quiz_results').insert({
+        user_id: user?.id ?? null,
         score,
         total,
         accuracy: accuracy || Math.round((score / total) * 100),
@@ -33,13 +35,20 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
+      // scope=me → only this user's sessions; default → community aggregate
+      const scopeMe = req.query.scope === 'me'
+      const user = scopeMe ? await getUserFromRequest(req) : null
+      if (scopeMe && !user) return res.status(401).json({ error: 'Auth required' })
+
       const supabase = createServerClient()
       // Aggregate stats
-      const { data: stats } = await supabase
+      let statsQuery = supabase
         .from('quiz_results')
         .select('score, total, accuracy, max_streak, difficulty')
         .order('accuracy', { ascending: false })
         .limit(100)
+      if (scopeMe) statsQuery = statsQuery.eq('user_id', user.id)
+      const { data: stats } = await statsQuery
 
       if (!stats || stats.length === 0) {
         return res.status(200).json({ totalSessions: 0, avgAccuracy: 0, bestStreak: 0, recentSessions: [] })

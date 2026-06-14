@@ -95,7 +95,12 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: '#666' }}>
+          <p style={{ textAlign: 'center', marginTop: '14px', fontSize: '13px' }}>
+            <a href="/auth/forgot-password" style={{ color: '#0d6efd', textDecoration: 'none' }}>
+              Lupa password?
+            </a>
+          </p>
+          <p style={{ textAlign: 'center', marginTop: '8px', fontSize: '13px', color: '#666' }}>
             Belum punya akun?{' '}
             <a href="/auth/register" style={{ color: '#0d6efd', textDecoration: 'none', fontWeight: '600' }}>
               Daftar

@@ -1,7 +1,7 @@
 // POST /api/writing-checks — log a handwriting check result
 // GET  /api/writing-checks — get aggregate stats
 
-import { createServerClient } from '../../utils/supabase'
+import { createServerClient, getUserFromRequest } from '../../utils/supabase'
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -12,8 +12,10 @@ export default async function handler(req, res) {
     }
 
     try {
+      const user = await getUserFromRequest(req)
       const supabase = createServerClient()
       const { error } = await supabase.from('writing_checks').insert({
+        user_id: user?.id ?? null,
         word_latin: wordLatin,
         score,
         precision_pct: precisionPct ?? null,
@@ -32,12 +34,19 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
+      // scope=me → only this user's checks; default → community aggregate
+      const scopeMe = req.query.scope === 'me'
+      const user = scopeMe ? await getUserFromRequest(req) : null
+      if (scopeMe && !user) return res.status(401).json({ error: 'Auth required' })
+
       const supabase = createServerClient()
-      const { data, error } = await supabase
+      let query = supabase
         .from('writing_checks')
         .select('score, passed, word_latin')
         .order('created_at', { ascending: false })
         .limit(100)
+      if (scopeMe) query = query.eq('user_id', user.id)
+      const { data, error } = await query
 
       if (error) throw error
 
