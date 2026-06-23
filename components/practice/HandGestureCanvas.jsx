@@ -2,8 +2,20 @@ import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { authedFetch } from '../../utils/supabase'
 import { Eye, EyeOff, MousePointer2, Hand, Undo2, Trash2, Check, Camera, AlertTriangle, Pointer, Grab } from 'lucide-react'
 
-const CANVAS_W = 640
-const CANVAS_H = 400
+const CANVAS_W = 800
+const CANVAS_H = 500
+
+// ── Gesture-writing state machine config (easy to tweak) ───────────────────
+const START_CONFIRM_FRAMES = 3          // consecutive write-pose frames before a stroke starts
+const LOST_FRAME_LIMIT = 7              // min consecutive lost frames before a stroke may end
+const STROKE_END_TIMEOUT_MS = 250       // desktop: ms of lost tracking before a stroke ends
+const MOBILE_STROKE_END_TIMEOUT_MS = 350
+const MIN_POINT_DISTANCE_PX = 3         // ignore micro-jitter below this distance
+const MAX_POINT_GAP_PX = 80             // don't connect across jumps larger than this
+const SMOOTHING_ALPHA = 0.35            // EMA factor for fingertip (0..1, higher = snappier)
+
+const IS_MOBILE = typeof navigator !== 'undefined' &&
+  /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '')
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
@@ -88,14 +100,19 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
   const overlayRef = useRef(null)
-  const drawingRef = useRef(false)
-  const lastPosRef = useRef(null)
   const handsRef = useRef(null)
   const rafIdRef = useRef(null)
   const strokesRef = useRef([]) // array of paths for undo
   const gestureBufferRef = useRef([]) // last N raw gestures for stability
   const stableGestureRef = useRef('none') // confirmed stable gesture
-  const GESTURE_BUFFER = 4 // frames required before gesture change is accepted
+  const GESTURE_BUFFER = 3 // frames required before gesture change is accepted
+
+  // Writing state machine: 'idle' | 'writing' | 'pending_end'
+  const writeStateRef = useRef('idle')
+  const lostFramesRef = useRef(0)    // consecutive frames without a valid write pose
+  const lostSinceRef = useRef(0)     // timestamp (ms) when tracking/pose was lost
+  const startConfirmRef = useRef(0)  // consecutive write-pose frames seen while idle
+  const smoothedRef = useRef(null)   // EMA-smoothed fingertip position { x, y }
 
   const [mode, setMode] = useState('mouse') // 'mouse' | 'gesture'
   const [status, setStatus] = useState('idle') // 'idle' | 'loading' | 'ready' | 'error'
@@ -119,11 +136,19 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
     ctx.lineCap = 'round'
     ctx.lineJoin = 'round'
     ctx.moveTo(stroke[0].x, stroke[0].y)
-    for (let i = 1; i < stroke.length - 1; i++) {
-      const mid = { x: (stroke[i].x + stroke[i + 1].x) / 2, y: (stroke[i].y + stroke[i + 1].y) / 2 }
-      ctx.quadraticCurveTo(stroke[i].x, stroke[i].y, mid.x, mid.y)
+    for (let i = 1; i < stroke.length; i++) {
+      const p = stroke[i]
+      // A break point (stroke resumed after a large tracking gap) starts a new
+      // sub-path instead of drawing a line across the gap.
+      if (p.brk) { ctx.moveTo(p.x, p.y); continue }
+      const next = stroke[i + 1]
+      if (next && !next.brk) {
+        const mid = { x: (p.x + next.x) / 2, y: (p.y + next.y) / 2 }
+        ctx.quadraticCurveTo(p.x, p.y, mid.x, mid.y)
+      } else {
+        ctx.lineTo(p.x, p.y)
+      }
     }
-    ctx.lineTo(stroke[stroke.length - 1].x, stroke[stroke.length - 1].y)
     ctx.stroke()
   }
 
@@ -408,34 +433,156 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       })
       hands.setOptions({
         maxNumHands: 1,
-        modelComplexity: 1,
-        minDetectionConfidence: 0.7,
-        minTrackingConfidence: 0.5,
+        // Lighter model + lower tracking threshold on mobile: faster, and keeps
+        // the hand "tracked" through motion blur instead of dropping it.
+        modelComplexity: IS_MOBILE ? 0 : 1,
+        minDetectionConfidence: 0.6,
+        minTrackingConfidence: IS_MOBILE ? 0.4 : 0.5,
       })
+
+      const STROKE_END_TIMEOUT = IS_MOBILE ? MOBILE_STROKE_END_TIMEOUT_MS : STROKE_END_TIMEOUT_MS
+
+      // The video is shown with object-fit: cover, so when the camera frame's
+      // aspect ratio differs from the canvas (common on mobile) it gets cropped.
+      // This maps normalized MediaPipe coords through the SAME cover transform so
+      // the drawn point and the landmark overlay line up with the visible hand.
+      const coverMap = () => {
+        const vw = videoRef.current?.videoWidth || CANVAS_W
+        const vh = videoRef.current?.videoHeight || CANVAS_H
+        const scale = Math.max(CANVAS_W / vw, CANVAS_H / vh)
+        const dispW = vw * scale
+        const dispH = vh * scale
+        return { dispW, dispH, offsetX: (CANVAS_W - dispW) / 2, offsetY: (CANVAS_H - dispH) / 2 }
+      }
+
+      // Exponential moving average to smooth out fingertip jitter
+      const ema = (prev, x, y) => prev
+        ? { x: prev.x + SMOOTHING_ALPHA * (x - prev.x), y: prev.y + SMOOTHING_ALPHA * (y - prev.y) }
+        : { x, y }
+
+      const commitStroke = () => {
+        if (currentPathRef.current.length > 1) strokesRef.current.push([...currentPathRef.current])
+        currentPathRef.current = []
+        smoothedRef.current = null
+      }
+
+      // Reset the whole writing machine to idle (used on erase / stop)
+      const resetWriting = () => {
+        writeStateRef.current = 'idle'
+        currentPathRef.current = []
+        smoothedRef.current = null
+        startConfirmRef.current = 0
+        lostFramesRef.current = 0
+        lostSinceRef.current = 0
+      }
+
+      // Tracking lost OR write pose absent for this frame.
+      // Never ends a stroke immediately — only after BOTH the timeout AND the
+      // lost-frame limit are exceeded, so brief drops don't break the line.
+      const handleLost = (now) => {
+        startConfirmRef.current = 0
+        const state = writeStateRef.current
+        if (state === 'idle') return
+        if (state === 'writing') {
+          writeStateRef.current = 'pending_end'
+          lostSinceRef.current = now
+          lostFramesRef.current = 1
+          return
+        }
+        // pending_end
+        lostFramesRef.current += 1
+        const elapsed = now - lostSinceRef.current
+        if (elapsed >= STROKE_END_TIMEOUT && lostFramesRef.current >= LOST_FRAME_LIMIT) {
+          commitStroke()
+          writeStateRef.current = 'idle'
+        }
+      }
+
+      // Valid write pose (index point) detected this frame at raw canvas coords.
+      const handleWrite = (rawX, rawY, now) => {
+        const ctx = getCtx()
+        if (!ctx) return
+        const state = writeStateRef.current
+
+        if (state === 'idle') {
+          // Require the pose to be stable for a few frames before starting.
+          startConfirmRef.current += 1
+          smoothedRef.current = ema(smoothedRef.current, rawX, rawY)
+          if (startConfirmRef.current < START_CONFIRM_FRAMES) return
+          writeStateRef.current = 'writing'
+          const p = smoothedRef.current
+          currentPathRef.current = [{ x: p.x, y: p.y, t: now, color: strokeColor, width: strokeWidth }]
+          ctx.beginPath()
+          ctx.moveTo(p.x, p.y)
+          return
+        }
+
+        // Resuming after a brief loss: re-anchor smoothing so we don't drag a
+        // line in from the stale position, but keep the SAME stroke.
+        const resumed = state === 'pending_end'
+        if (resumed) smoothedRef.current = { x: rawX, y: rawY }
+        writeStateRef.current = 'writing'
+        lostFramesRef.current = 0
+        lostSinceRef.current = 0
+
+        const sm = ema(smoothedRef.current, rawX, rawY)
+        smoothedRef.current = sm
+        const path = currentPathRef.current
+        const last = path[path.length - 1]
+        const dist = last ? Math.hypot(sm.x - last.x, sm.y - last.y) : Infinity
+
+        // Drop micro-jitter points (but always keep moving after a resume)
+        if (!resumed && dist < MIN_POINT_DISTANCE_PX) return
+
+        // Large jump (glitch or movement during the gap) → break the visual line
+        const brk = resumed && (!last || dist > MAX_POINT_GAP_PX)
+        path.push({ x: sm.x, y: sm.y, t: now, color: strokeColor, width: strokeWidth, brk })
+
+        if (last && !brk) {
+          ctx.strokeStyle = strokeColor
+          ctx.lineWidth = strokeWidth
+          ctx.lineCap = 'round'
+          ctx.lineJoin = 'round'
+          ctx.beginPath()
+          ctx.moveTo(last.x, last.y)
+          ctx.lineTo(sm.x, sm.y)
+          ctx.stroke()
+        }
+      }
 
       hands.onResults((results) => {
         const oc = overlayRef.current
         if (!oc) return
         const octx = oc.getContext('2d')
+        const now = Date.now()
+
+        octx.clearRect(0, 0, oc.width, oc.height)
 
         if (!results.multiHandLandmarks?.length) {
-          // Save any in-progress stroke
-          if (drawingRef.current && currentPathRef.current.length > 1) {
-            strokesRef.current.push([...currentPathRef.current])
-            currentPathRef.current = []
-          }
-          drawingRef.current = false
-          lastPosRef.current = null
+          // Hand not detected this frame — don't break the stroke, just mark lost.
+          handleLost(now)
           gestureBufferRef.current = []
           stableGestureRef.current = 'none'
           _pinching = false
-          // Clear overlay when hand leaves
-          octx.clearRect(0, 0, oc.width, oc.height)
           setGesture('none')
           return
         }
 
         const landmarks = results.multiHandLandmarks[0]
+        const m = coverMap()
+
+        // Redraw landmarks MIRRORED + cover-mapped so they align with the visible video
+        if (window.drawConnectors && window.drawLandmarks) {
+          octx.save()
+          octx.translate(oc.width, 0)
+          octx.scale(-1, 1)
+          octx.translate(m.offsetX, m.offsetY)
+          octx.scale(m.dispW / CANVAS_W, m.dispH / CANVAS_H)
+          window.drawConnectors(octx, landmarks, window.HAND_CONNECTIONS, { color: 'rgba(0,255,150,0.85)', lineWidth: 3 })
+          window.drawLandmarks(octx, landmarks, { color: 'rgba(255,50,50,0.95)', lineWidth: 1, radius: 5 })
+          octx.restore()
+        }
+
         const pinching = updatePinch(landmarks)
         const raw = detectRawGesture(landmarks, pinching)
 
@@ -451,72 +598,41 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         stableGestureRef.current = g
         setGesture(g)
 
-        // Clear overlay each frame and redraw landmarks MIRRORED to match video
-        octx.clearRect(0, 0, oc.width, oc.height)
-        if (window.drawConnectors && window.drawLandmarks) {
-          octx.save()
-          octx.translate(oc.width, 0)
-          octx.scale(-1, 1)
-          window.drawConnectors(octx, landmarks, window.HAND_CONNECTIONS, { color: 'rgba(0,255,150,0.85)', lineWidth: 3 })
-          window.drawLandmarks(octx, landmarks, { color: 'rgba(255,50,50,0.95)', lineWidth: 1, radius: 5 })
-          octx.restore()
+        if (g === 'palm') {
+          // Open palm = clear everything and reset the machine
+          if (strokesRef.current.length || currentPathRef.current.length) {
+            strokesRef.current = []
+            redrawAll()
+            setCheckResult(null)
+            setHwrResult(null)
+          }
+          resetWriting()
+          return
         }
 
-        // Mirror x to match webcam display
-        const indexTip = landmarks[8]
-        const x = (1 - indexTip.x) * CANVAS_W
-        const y = indexTip.y * CANVAS_H
-
-        const ctx = getCtx()
-        if (!ctx) return
-
         if (g === 'point') {
-          const path = currentPathRef.current
-          if (!drawingRef.current) {
-            drawingRef.current = true
-            path.length = 0
-            path.push({ x, y, t: Date.now(), color: strokeColor, width: strokeWidth })
-            ctx.beginPath()
-            ctx.moveTo(x, y)
-          } else {
-            path.push({ x, y, t: Date.now(), color: strokeColor, width: strokeWidth })
-            ctx.strokeStyle = strokeColor
-            ctx.lineWidth = strokeWidth
-            ctx.lineCap = 'round'
-            ctx.lineJoin = 'round'
-            if (path.length >= 3) {
-              const prev = path[path.length - 2]
-              const mid = { x: (prev.x + x) / 2, y: (prev.y + y) / 2 }
-              ctx.quadraticCurveTo(prev.x, prev.y, mid.x, mid.y)
-            } else {
-              ctx.lineTo(x, y)
-            }
-            ctx.stroke()
-          }
-          lastPosRef.current = { x, y }
-        } else if (g === 'palm') {
-          // Palm = clear all (reliable; destination-out doesn't persist through redrawAll)
-          if (drawingRef.current && currentPathRef.current.length > 0) {
-            currentPathRef.current = []
-          }
-          strokesRef.current = []
-          redrawAll()
-          setCheckResult(null)
-          setHwrResult(null)
-          drawingRef.current = false
+          // Map fingertip through the cover transform, then mirror x to match the display
+          const indexTip = landmarks[8]
+          const px = m.offsetX + indexTip.x * m.dispW
+          const py = m.offsetY + indexTip.y * m.dispH
+          handleWrite(CANVAS_W - px, py, now)
         } else {
-          // Lift pen — commit current stroke
-          if (drawingRef.current && currentPathRef.current.length > 1) {
-            strokesRef.current.push([...currentPathRef.current])
-          }
-          drawingRef.current = false
-          currentPathRef.current = []
+          // 'none' / 'pinch' (pen lifted) — treat as lost pose, let the timeout decide
+          handleLost(now)
         }
       })
 
       handsRef.current = hands
 
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { width: CANVAS_W, height: CANVAS_H, facingMode: 'user' } })
+      // Lower resolution on mobile so the model runs faster (higher FPS = better tracking)
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'user',
+          width: { ideal: IS_MOBILE ? 480 : CANVAS_W },
+          height: { ideal: IS_MOBILE ? 360 : CANVAS_H },
+          frameRate: { ideal: IS_MOBILE ? 24 : 30 },
+        },
+      })
       videoRef.current.srcObject = stream
       await videoRef.current.play()
 
@@ -546,6 +662,16 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       videoRef.current.srcObject = null
     }
     handsRef.current = null
+    // Reset writing state machine
+    writeStateRef.current = 'idle'
+    currentPathRef.current = []
+    smoothedRef.current = null
+    startConfirmRef.current = 0
+    lostFramesRef.current = 0
+    lostSinceRef.current = 0
+    gestureBufferRef.current = []
+    stableGestureRef.current = 'none'
+    _pinching = false
     setStatus('idle')
     setGesture('none')
     // Clear overlay
@@ -678,7 +804,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       <div style={{
         position: 'relative',
         width: '100%',
-        maxWidth: CANVAS_W,
+        maxWidth: '100%',
         aspectRatio: `${CANVAS_W}/${CANVAS_H}`,
         borderRadius: '12px',
         overflow: 'hidden',

@@ -1,15 +1,16 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
-
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ''
+import { isAdminEmail } from '../../utils/admin'
 
 export default function LoginPage() {
   const router = useRouter()
   const { signIn } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -23,7 +24,7 @@ export default function LoginPage() {
       setError(err.message)
       return
     }
-    if (data?.user?.email === ADMIN_EMAIL) {
+    if (isAdminEmail(data?.user?.email)) {
       router.push('/admin')
     } else {
       router.push('/')
@@ -68,18 +69,32 @@ export default function LoginPage() {
                 boxSizing: 'border-box', outline: 'none',
               }}
             />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              style={{
-                width: '100%', padding: '12px 14px', borderRadius: '10px',
-                border: `1px solid ${error ? '#ef4444' : '#e0e0d8'}`, fontSize: '15px',
-                marginBottom: '12px', boxSizing: 'border-box', outline: 'none',
-              }}
-            />
+            <div style={{ position: 'relative', marginBottom: '12px' }}>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                style={{
+                  width: '100%', padding: '12px 44px 12px 14px', borderRadius: '10px',
+                  border: `1px solid ${error ? '#ef4444' : '#e0e0d8'}`, fontSize: '15px',
+                  boxSizing: 'border-box', outline: 'none',
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(v => !v)}
+                aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
+                style={{
+                  position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)',
+                  background: 'none', border: 'none', cursor: 'pointer', color: '#888',
+                  display: 'flex', alignItems: 'center', padding: '4px',
+                }}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
             {error && <p style={{ color: '#ef4444', fontSize: '13px', margin: '0 0 10px' }}>{error}</p>}
             <button
               type="submit"

@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../utils/supabase'
-
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ''
+import { isAdminEmail } from '../utils/admin'
 
 const AuthContext = createContext({})
 
@@ -40,7 +39,7 @@ export function AuthProvider({ children }) {
   const updatePassword = (password) =>
     supabase.auth.updateUser({ password })
 
-  const isAdmin = user?.email === ADMIN_EMAIL
+  const isAdmin = isAdminEmail(user?.email)
 
   return (
     <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, resetPassword, updatePassword, isAdmin }}>

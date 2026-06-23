@@ -25,8 +25,8 @@ const TABS_EN = [
   { key: 'keyboard', icon: Keyboard, label: 'Keyboard' },
 ]
 
-// Pick a random practice word for the writing canvas
-const PRACTICE_WORDS = QUIZ_WORDS.filter(w => w.difficulty === 'easy').slice(0, 8)
+// Practice word pool for the writing canvas (easy + medium for variety)
+const PRACTICE_WORDS = QUIZ_WORDS.filter(w => w.difficulty === 'easy' || w.difficulty === 'medium')
 
 export default function PracticePage({ locale, setLocale }) {
   const [darkMode, setDarkMode] = useState(false)
@@ -37,7 +37,17 @@ export default function PracticePage({ locale, setLocale }) {
   useEffect(() => {
     const saved = localStorage.getItem('aksara-dark-mode')
     if (saved !== null) setDarkMode(saved === 'true')
+    // Start on a random practice word (done after mount to avoid hydration mismatch)
+    setPracticeWordIdx(Math.floor(Math.random() * PRACTICE_WORDS.length))
   }, [])
+
+  // Pick a random practice word different from the current one
+  const randomizeWord = () => setPracticeWordIdx(prev => {
+    if (PRACTICE_WORDS.length < 2) return prev
+    let next = prev
+    while (next === prev) next = Math.floor(Math.random() * PRACTICE_WORDS.length)
+    return next
+  })
 
   const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
   const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
@@ -156,7 +166,7 @@ export default function PracticePage({ locale, setLocale }) {
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                     <span style={{ fontSize: '13px', color: mutedColor }}>{pt.practiceLabel}</span>
                     <button
-                      onClick={() => setPracticeWordIdx(prev => (prev + 1) % PRACTICE_WORDS.length)}
+                      onClick={randomizeWord}
                       style={{
                         padding: '6px 14px', borderRadius: '20px',
                         border: `1px solid ${borderColor}`, background: 'transparent',

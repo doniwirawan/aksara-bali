@@ -1,13 +1,12 @@
 import { createServerClient, supabase as anonClient } from '../../utils/supabase'
-
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ''
+import { isAdminEmail } from '../../utils/admin'
 
 async function isAdmin(req) {
   const auth = req.headers.authorization || ''
   const token = auth.replace('Bearer ', '')
   if (!token) return false
   const { data: { user } } = await anonClient.auth.getUser(token)
-  return user?.email === ADMIN_EMAIL
+  return isAdminEmail(user?.email)
 }
 
 export default async function handler(req, res) {

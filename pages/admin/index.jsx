@@ -2,12 +2,11 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { supabase } from '../../utils/supabase'
+import { ADMIN_EMAIL, isAdminEmail } from '../../utils/admin'
 import {
   BarChart3, PenLine, HelpCircle, Users, RefreshCw, Zap, Target, Flame,
-  CheckCircle, ClipboardList, X, Image as ImageIcon, Clock, Trash2,
+  CheckCircle, ClipboardList, X, Image as ImageIcon, Clock, Trash2, Eye, EyeOff,
 } from 'lucide-react'
-
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || ''
 
 const BLOG_CATEGORIES = ['Sejarah & Budaya', 'Panduan Belajar', 'Linguistik', 'Naskah Kuno', 'Teknologi & Budaya', 'Umum']
 const FAQ_CATEGORIES = ['Tentang Aksara Bali', 'Cara Menggunakan Konverter', 'Fitur Latihan', 'Teknis & Kompatibilitas', 'Budaya & Sejarah', 'Umum']
@@ -24,6 +23,7 @@ export default function AdminDashboard() {
   const [authenticated, setAuthenticated] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState('stats')
 
@@ -68,7 +68,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user?.email === ADMIN_EMAIL) {
+      if (isAdminEmail(session?.user?.email)) {
         tokenRef.current = session.access_token
         setAuthenticated(true)
       }
@@ -88,7 +88,7 @@ export default function AdminDashboard() {
     setError('')
     const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
     if (authError) { setError('Email atau password salah'); return }
-    if (data.user?.email !== ADMIN_EMAIL) {
+    if (!isAdminEmail(data.user?.email)) {
       await supabase.auth.signOut()
       setError('Akun ini bukan admin')
       return
@@ -300,7 +300,12 @@ export default function AdminDashboard() {
             </div>
             <form onSubmit={handleLogin}>
               <input type="email" placeholder="Email admin" value={email} onChange={e => setEmail(e.target.value)} autoFocus required style={{ ...s.input, marginBottom: '10px' }} />
-              <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required style={{ ...s.input, border: `1px solid ${error ? '#ef4444' : '#e0e0d8'}`, marginBottom: '12px' }} />
+              <div style={{ position: 'relative', marginBottom: '12px' }}>
+                <input type={showPassword ? 'text' : 'password'} placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required style={{ ...s.input, paddingRight: '44px', border: `1px solid ${error ? '#ef4444' : '#e0e0d8'}` }} />
+                <button type="button" onClick={() => setShowPassword(v => !v)} aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'} style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#888', display: 'flex', alignItems: 'center', padding: '4px' }}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
               {error && <p style={{ color: '#ef4444', fontSize: '13px', margin: '0 0 10px' }}>{error}</p>}
               <button type="submit" style={{ ...s.btn(), width: '100%', padding: '12px', fontSize: '15px' }}>Masuk</button>
             </form>
@@ -680,7 +685,7 @@ export default function AdminDashboard() {
                 <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Memuat data pengguna...</div>
               ) : (
                 <div style={s.card}>
-                  <div style={{ marginBottom: '12px', fontSize: '13px', color: '#666' }}>Total: <strong>{users.filter(u => u.email !== ADMIN_EMAIL).length}</strong> pengguna</div>
+                  <div style={{ marginBottom: '12px', fontSize: '13px', color: '#666' }}>Total: <strong>{users.filter(u => !isAdminEmail(u.email)).length}</strong> pengguna</div>
                   <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                       <thead>
@@ -689,7 +694,7 @@ export default function AdminDashboard() {
                         ))}</tr>
                       </thead>
                       <tbody>
-                        {users.filter(u => u.email !== ADMIN_EMAIL).map(u => (
+                        {users.filter(u => !isAdminEmail(u.email)).map(u => (
                           <tr key={u.id}>
                             <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8' }}>
                               {u.email}
