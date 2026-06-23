@@ -113,7 +113,21 @@ export default function UserDashboard({ locale, setLocale }) {
                 </a>
               )}
               <button onClick={async () => { await signOut(); router.push('/') }} style={{ padding: '8px 16px', borderRadius: '10px', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', fontSize: '13px', color: mutedColor }}>
-                Keluar
+                {locale === 'en' ? 'Sign out' : 'Keluar'}
+              </button>
+              <button
+                onClick={async () => {
+                  const msg = locale === 'en'
+                    ? 'Permanently delete your account? This cannot be undone.'
+                    : 'Hapus akun Anda secara permanen? Tindakan ini tidak dapat dibatalkan.'
+                  if (!window.confirm(msg)) return
+                  const res = await authedFetch('/api/delete-account', { method: 'DELETE' })
+                  if (res.ok) { await signOut(); router.push('/') }
+                  else { alert(locale === 'en' ? 'Failed to delete account.' : 'Gagal menghapus akun.') }
+                }}
+                style={{ padding: '8px 16px', borderRadius: '10px', border: '1px solid #ef4444', background: 'transparent', cursor: 'pointer', fontSize: '13px', color: '#ef4444' }}
+              >
+                {locale === 'en' ? 'Delete account' : 'Hapus Akun'}
               </button>
             </div>
           </div>
