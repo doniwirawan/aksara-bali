@@ -53,11 +53,20 @@ export default async function handler(req, res) {
       const since = Date.now() - 7 * 24 * 60 * 60 * 1000
       const topPages = {}
       const topClicks = {}
+      const topBlog = {}
       let last7d = 0
       for (const e of data || []) {
         if (new Date(e.created_at).getTime() >= since) last7d++
-        if (e.type === 'page_view') topPages[e.name] = (topPages[e.name] || 0) + 1
-        else if (e.type === 'click') topClicks[e.name] = (topClicks[e.name] || 0) + 1
+        if (e.type === 'page_view') {
+          topPages[e.name] = (topPages[e.name] || 0) + 1
+          // A specific blog post (not the /blog/ listing itself)
+          if (e.name && e.name.startsWith('/blog/') && e.name.replace(/\/+$/, '').length > 5) {
+            const slug = e.name.replace(/^\/blog\//, '').replace(/\/+$/, '')
+            topBlog[slug] = (topBlog[slug] || 0) + 1
+          }
+        } else if (e.type === 'click') {
+          topClicks[e.name] = (topClicks[e.name] || 0) + 1
+        }
       }
       const top = (obj) => Object.entries(obj)
         .sort((a, b) => b[1] - a[1])
@@ -70,6 +79,7 @@ export default async function handler(req, res) {
         last7d,
         topPages: top(topPages),
         topClicks: top(topClicks),
+        topBlog: top(topBlog),
       })
     } catch (err) {
       console.error('Event stats error:', err)

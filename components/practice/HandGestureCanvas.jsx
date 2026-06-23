@@ -982,7 +982,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         {/* Aksara guide watermark — toggleable, shown in BOTH mouse and gesture modes.
             zIndex 4 keeps it above the webcam (2) but below the drawing (5). */}
         {referenceBalinese
-          ? (showOverlay && (
+          ? (showOverlay && showRef && (
               <div style={{
                 position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -990,7 +990,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
                 opacity: mode === 'gesture' ? 0.3 : 0.15,
                 transition: 'opacity 0.3s',
               }}>
-                <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 'min(36cqw, 36cqh)', lineHeight: 1, color: mode === 'gesture' ? '#fff' : '#888' }}>{referenceBalinese}</span>
+                <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 'min(11cqw, 26cqh)', lineHeight: 1, whiteSpace: 'nowrap', color: mode === 'gesture' ? '#fff' : '#888' }}>{referenceBalinese}</span>
               </div>
             ))
           : (mode === 'mouse' && (

@@ -286,7 +286,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!authenticated) return
-    if (activeTab === 'blog') fetchBlog()
+    if (activeTab === 'blog' || activeTab === 'analytics') fetchBlog()
     if (activeTab === 'faq') fetchFaq()
     if (activeTab === 'users') fetchUsers()
   }, [activeTab, authenticated])
@@ -488,6 +488,42 @@ export default function AdminDashboard() {
                     </table>
                   ) : <p style={{ fontSize: '13px', color: th.muted, margin: 0 }}>Belum ada data.</p>}
                 </div>
+              </div>
+
+              {/* Blog stats */}
+              <h2 style={{ fontSize: '16px', fontWeight: '700', margin: '24px 0 12px', display: 'flex', alignItems: 'center', gap: '8px' }}><PenLine size={18} /> Statistik Blog</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+                {[
+                  { label: 'Total Artikel', value: blogPosts.length || '—', color: '#6f42c1' },
+                  { label: 'Dipublikasikan', value: blogPosts.filter(p => p.published).length, color: '#198754' },
+                  { label: 'Draft', value: blogPosts.filter(p => !p.published).length, color: '#888' },
+                ].map(c => (
+                  <div key={c.label} style={s.card}>
+                    <div style={{ fontSize: '24px', fontWeight: '700', color: c.color }}>{c.value}</div>
+                    <div style={{ fontSize: '12px', color: th.muted, marginTop: '2px' }}>{c.label}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={s.card}>
+                <h3 style={{ fontSize: '15px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}><Eye size={15} /> Artikel Terpopuler (kunjungan)</h3>
+                {eventStats?.topBlog?.length > 0 ? (
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                    <tbody>
+                      {eventStats.topBlog.map((p, i) => {
+                        const post = blogPosts.find(b => b.slug === p.name)
+                        return (
+                          <tr key={i}>
+                            <td style={{ padding: '7px 8px', borderBottom: `1px solid ${th.rowBorder}`, color: th.text }}>
+                              {post ? post.title : p.name}
+                              <span style={{ color: th.muted, fontFamily: 'monospace', marginLeft: '6px', fontSize: '11px' }}>/{p.name}</span>
+                            </td>
+                            <td style={{ padding: '7px 8px', borderBottom: `1px solid ${th.rowBorder}`, textAlign: 'right', fontWeight: '700', color: '#0ea5e9' }}>{p.count}</td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                ) : <p style={{ fontSize: '13px', color: th.muted, margin: 0 }}>Belum ada kunjungan artikel.</p>}
               </div>
             </>
           )}

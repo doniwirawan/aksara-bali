@@ -769,7 +769,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       </Head>
 
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Georgia, serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, sans-serif' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}
@@ -800,9 +800,10 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
                 />
               </div>
               {(post.imageCredit || (post.imageUrl && post.imageUrl.includes('unsplash.com'))) && (() => {
-                // Prefer the stored photo-page link; fall back to the photographer's
-                // profile, then the Unsplash home — never a broken derived URL.
-                const photoLink = post.imageSourceUrl || post.imageCreditUrl || 'https://unsplash.com?utm_source=aksara_bali&utm_medium=referral'
+                // Per Unsplash attribution guidelines: photographer name → profile,
+                // "Unsplash" → the photo page if we have it, else the Unsplash home.
+                // Never derive a photo URL (those 404) — fall back cleanly instead.
+                const photoLink = post.imageSourceUrl || 'https://unsplash.com/?utm_source=aksara_bali&utm_medium=referral'
                 return (
                   <p style={{ fontSize: '12px', color: mutedColor, margin: '6px 0 0', textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif' }}>
                     {post.imageCredit ? (
