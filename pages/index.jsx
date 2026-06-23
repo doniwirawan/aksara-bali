@@ -372,6 +372,39 @@ export default function Home({ locale, setLocale }) {
                 <main className="pb-4">
                     <LatinBalineseConverter locale={locale} darkMode={darkMode} />
 
+                    {/* Get the Android app */}
+                    <div style={{ maxWidth: 900, margin: '0 auto', padding: '24px 16px 0', fontFamily: 'Inter, system-ui, sans-serif' }}>
+                        <div style={{
+                            display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', justifyContent: 'space-between',
+                            background: darkMode ? 'linear-gradient(135deg,#13213f,#1a1a2e)' : 'linear-gradient(135deg,#e8f0fe,#f5f8ff)',
+                            border: `1px solid ${darkMode ? '#2d5a9e' : '#c5d8fc'}`,
+                            borderRadius: '16px', padding: '20px 24px',
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#0d6efd', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                    <Smartphone size={26} color="#fff" />
+                                </div>
+                                <div>
+                                    <div style={{ fontWeight: '700', fontSize: '16px', color: darkMode ? '#e8e8e8' : '#1a1a1a' }}>
+                                        {locale === 'id' ? 'Dapatkan aplikasi Android' : 'Get the Android app'}
+                                    </div>
+                                    <div style={{ fontSize: '13px', color: darkMode ? '#9aa' : '#666' }}>
+                                        {locale === 'id' ? 'Konversi & latihan aksara Bali di ponsel Anda.' : 'Convert & practice Balinese script on your phone.'}
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="https://github.com/doniwirawan/aksara-bali/releases/latest" target="_blank" rel="noopener noreferrer"
+                                style={{
+                                    display: 'inline-flex', alignItems: 'center', gap: '8px',
+                                    background: '#0d6efd', color: '#fff', textDecoration: 'none',
+                                    padding: '12px 22px', borderRadius: '12px', fontWeight: '600', fontSize: '14px',
+                                    boxShadow: '0 2px 8px rgba(13,110,253,0.3)',
+                                }}>
+                                <Download size={18} /> {locale === 'id' ? 'Unduh APK' : 'Download APK'}
+                            </a>
+                        </div>
+                    </div>
+
                     {/* Feature Discovery Section */}
                     <div style={{ maxWidth: 900, margin: '0 auto', padding: '40px 16px 16px', fontFamily: 'Inter, system-ui, sans-serif' }}>
                         <h2 style={{ fontSize: '18px', fontWeight: '700', color: darkMode ? '#e8e8e8' : '#1a1a1a', marginBottom: '8px', textAlign: 'center' }}>
