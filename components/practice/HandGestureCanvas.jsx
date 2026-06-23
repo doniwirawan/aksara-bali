@@ -199,9 +199,6 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const checkDrawing = useCallback(async () => {
     if (!canvasRef.current || !referenceBalinese) return
 
-    const GRID_W = 80
-    const GRID_H = 50
-
     const userCanvas = canvasRef.current
     const w = userCanvas.width
     const h = userCanvas.height
@@ -252,69 +249,82 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       return
     }
 
-    // Downsample both to GRID_W×GRID_H binary grids
-    const userGrid = new Uint8Array(GRID_W * GRID_H)
-    const refGrid = new Uint8Array(GRID_W * GRID_H)
-    const cellW = w / GRID_W
-    const cellH = h / GRID_H
+    // ── Normalize by bounding box so writing position & size don't matter ──
+    // (a correctly-shaped character drawn smaller / off-centre should still score
+    //  well; only the SHAPE should drive the score.)
+    const NORM = 64
+    const DIL = 3
+    const userTest = (idx) => userData[idx + 3] > 50
+    const refTest = (idx) => refData[idx] < 128
 
-    for (let gy = 0; gy < GRID_H; gy++) {
-      for (let gx = 0; gx < GRID_W; gx++) {
-        let userSum = 0, refSum = 0, total = 0
-        const x0 = Math.floor(gx * cellW)
-        const x1 = Math.min(w - 1, Math.floor((gx + 1) * cellW))
-        const y0 = Math.floor(gy * cellH)
-        const y1 = Math.min(h - 1, Math.floor((gy + 1) * cellH))
-
-        for (let py = y0; py <= y1; py++) {
-          for (let px = x0; px <= x1; px++) {
-            const idx = (py * w + px) * 4
-            if (userData[idx + 3] > 50) userSum++
-            if (refData[idx] < 128) refSum++
-            total++
+    const bbox = (test) => {
+      let minX = w, minY = h, maxX = -1, maxY = -1
+      for (let py = 0; py < h; py++) {
+        for (let px = 0; px < w; px++) {
+          if (test((py * w + px) * 4)) {
+            if (px < minX) minX = px
+            if (px > maxX) maxX = px
+            if (py < minY) minY = py
+            if (py > maxY) maxY = py
           }
         }
-        userGrid[gy * GRID_W + gx] = userSum > total * 0.05 ? 1 : 0
-        refGrid[gy * GRID_W + gx] = refSum > total * 0.04 ? 1 : 0
       }
+      return maxX < 0 ? null : { minX, minY, w: maxX - minX + 1, h: maxY - minY + 1 }
     }
 
-    // Dilate refGrid by 4 cells for spatial tolerance (generous — allows natural handwriting offsets)
-    const DIL = 4
-    const dilRef = new Uint8Array(GRID_W * GRID_H)
-    for (let gy = 0; gy < GRID_H; gy++) {
-      for (let gx = 0; gx < GRID_W; gx++) {
-        if (!refGrid[gy * GRID_W + gx]) continue
-        for (let dy = -DIL; dy <= DIL; dy++) {
-          for (let dx = -DIL; dx <= DIL; dx++) {
-            const ny = gy + dy, nx = gx + dx
-            if (ny >= 0 && ny < GRID_H && nx >= 0 && nx < GRID_W) {
-              dilRef[ny * GRID_W + nx] = 1
+    // Rasterize a source into an NORM×NORM grid, fitting its bbox while
+    // preserving aspect ratio and centring it.
+    const rasterize = (test, bb) => {
+      const grid = new Uint8Array(NORM * NORM)
+      const scale = (NORM - 2) / Math.max(bb.w, bb.h)
+      const offX = (NORM - bb.w * scale) / 2
+      const offY = (NORM - bb.h * scale) / 2
+      for (let py = bb.minY; py < bb.minY + bb.h; py++) {
+        for (let px = bb.minX; px < bb.minX + bb.w; px++) {
+          if (!test((py * w + px) * 4)) continue
+          const gx = Math.floor(offX + (px - bb.minX) * scale)
+          const gy = Math.floor(offY + (py - bb.minY) * scale)
+          if (gx >= 0 && gx < NORM && gy >= 0 && gy < NORM) grid[gy * NORM + gx] = 1
+        }
+      }
+      return grid
+    }
+
+    const ubb = bbox(userTest)
+    const rbb = bbox(refTest)
+    if (!ubb || !rbb) {
+      setCheckResult({ status: 'empty', score: 0, message: ct.errEmpty })
+      return
+    }
+
+    const userGrid = rasterize(userTest, ubb)
+    const refGrid = rasterize(refTest, rbb)
+
+    // Dilate each grid by DIL for stroke-thickness / wobble tolerance
+    const dilate = (grid) => {
+      const out = new Uint8Array(NORM * NORM)
+      for (let gy = 0; gy < NORM; gy++) {
+        for (let gx = 0; gx < NORM; gx++) {
+          if (!grid[gy * NORM + gx]) continue
+          for (let dy = -DIL; dy <= DIL; dy++) {
+            for (let dx = -DIL; dx <= DIL; dx++) {
+              const ny = gy + dy, nx = gx + dx
+              if (ny >= 0 && ny < NORM && nx >= 0 && nx < NORM) out[ny * NORM + nx] = 1
             }
           }
         }
       }
+      return out
     }
+    const dilRef = dilate(refGrid)
+    const dilUser = dilate(userGrid)
 
-    // Compute precision and recall
+    // Precision = how much of the user's ink lands on the reference shape.
+    // Recall = how much of the reference shape the user covered.
     let userCells = 0, userInRef = 0, refCells = 0, refCovered = 0
-    for (let i = 0; i < GRID_W * GRID_H; i++) {
-      if (userGrid[i]) {
-        userCells++
-        if (dilRef[i]) userInRef++
-      }
-      if (refGrid[i]) {
-        refCells++
-        const gy = Math.floor(i / GRID_W), gx = i % GRID_W
-        let cov = false
-        for (let dy = -DIL; dy <= DIL && !cov; dy++) {
-          for (let dx = -DIL; dx <= DIL && !cov; dx++) {
-            const ny = gy + dy, nx = gx + dx
-            if (ny >= 0 && ny < GRID_H && nx >= 0 && nx < GRID_W && userGrid[ny * GRID_W + nx]) cov = true
-          }
-        }
-        if (cov) refCovered++
-      }
+    for (let i = 0; i < NORM * NORM; i++) {
+      if (userGrid[i]) { userCells++; if (dilRef[i]) userInRef++ }
+      if (refGrid[i]) { refCells++; if (dilUser[i]) refCovered++ }
     }
 
     const precision = userCells > 0 ? (userInRef / userCells) * 100 : 0
@@ -698,7 +708,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         },
       })
       videoRef.current.srcObject = stream
-      await videoRef.current.play()
+      // play() can reject if the stream is swapped/stopped before it resolves
+      // (e.g. quickly toggling modes) — that AbortError is benign, so ignore it.
+      try { await videoRef.current.play() } catch (_) { /* interrupted load — ignore */ }
 
       // Manual frame loop — no dependency on camera_utils CDN
       const processFrame = async () => {
@@ -978,7 +990,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
                 opacity: mode === 'gesture' ? 0.3 : 0.15,
                 transition: 'opacity 0.3s',
               }}>
-                <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 'min(60cqw, 60cqh)', lineHeight: 1, color: mode === 'gesture' ? '#fff' : '#888' }}>{referenceBalinese}</span>
+                <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 'min(36cqw, 36cqh)', lineHeight: 1, color: mode === 'gesture' ? '#fff' : '#888' }}>{referenceBalinese}</span>
               </div>
             ))
           : (mode === 'mouse' && (
