@@ -25,9 +25,16 @@ A full-featured web app for learning and converting Balinese script (Aksara Bali
 - Progressive difficulty across all Balinese characters
 
 ### ✍️ Practice — Writing Canvas
-- Draw Aksara Bali with mouse, touch screen, or **hand gestures** (MediaPipe)
-- Shape-matching scoring: checks precision and coverage against a reference render
-- Undo, clear, and check buttons; gesture controls (point = draw, palm = erase, pinch = lift)
+- Draw Aksara Bali with mouse, touch screen, or **hand gestures** (MediaPipe Hands)
+- **Gesture writing** uses an `idle → writing → pending_end` state machine so brief
+  tracking losses don't break strokes; EMA-smoothed, supersampled (crisp) strokes
+- **Gesture controls**: index point = draw, open palm = local eraser (rubs out near
+  the palm, not a full wipe), pinch = lift pen
+- Shape-matching score is **position- and scale-invariant** (both your writing and
+  the reference are normalized to their bounding boxes before comparison)
+- **Fullscreen mode** with an in-canvas toolbar, a toggleable aksara guide overlay,
+  and **hands-free auto-scoring** after you stop writing
+- Loads MediaPipe with a progress bar and caches it (service worker) for instant reloads
 
 ### 🎹 Practice — Balinese Keyboard
 - On-screen keyboard for composing Balinese text directly
@@ -71,6 +78,67 @@ A full-featured web app for learning and converting Balinese script (Aksara Bali
 | Photos | Unsplash API (with proper attribution + download tracking) |
 | Font | Noto Sans Balinese (Google Fonts) |
 | Deployment | Vercel |
+
+---
+
+## Public API
+
+CORS-enabled JSON endpoints — usable from a web, mobile, or **Flutter** client.
+Base URL: `https://transliterasi-latin-ke-bahasa-bali.vercel.app`
+
+> The app uses `trailingSlash: true`, so always call the **trailing-slash** form
+> (`/api/convert/`) to avoid a 308 redirect.
+
+### `GET|POST /api/convert/` — Latin → Aksara Bali
+
+```bash
+# GET
+curl "https://transliterasi-latin-ke-bahasa-bali.vercel.app/api/convert/?text=halo"
+
+# POST
+curl -X POST "https://transliterasi-latin-ke-bahasa-bali.vercel.app/api/convert/" \
+  -H "Content-Type: application/json" -d '{"text":"halo"}'
+```
+
+```json
+{ "latin": "halo", "balinese": "ᬳᬮᭀ" }
+```
+
+Errors: `400` (missing `text`), `413` (over 5000 chars).
+
+### `GET /api/words/` — practice/quiz word list
+
+```bash
+curl "https://transliterasi-latin-ke-bahasa-bali.vercel.app/api/words/?difficulty=easy"
+```
+
+```json
+{ "count": 20, "words": [ { "latin": "...", "difficulty": "easy", "balinese": "..." } ] }
+```
+
+Optional `?difficulty=easy|medium|hard`.
+
+### Flutter / Dart example
+
+```dart
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<String> toBalinese(String text) async {
+  final res = await http.post(
+    Uri.parse('https://transliterasi-latin-ke-bahasa-bali.vercel.app/api/convert/'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'text': text}),
+  );
+  return jsonDecode(res.body)['balinese'] as String;
+}
+```
+
+> **Logging/admin endpoints** (`/api/conversions`, `/api/quiz-results`,
+> `/api/writing-checks`, `/api/events`, `/api/blog-posts`, `/api/faq-items`,
+> `/api/admin-users`) exist for the web app's own analytics/CMS and may require a
+> Supabase auth token. For a mobile app you typically only need `/api/convert/`
+> and `/api/words/`.
 
 ---
 
@@ -124,17 +192,24 @@ All tables are defined in `supabase-schema.sql`. Run it once in the Supabase SQL
 
 | Table | Purpose |
 |---|---|
-| `blog_posts` | Blog articles (title, content, image, credit, published flag) |
+| `blog_posts` | Blog articles (title, content, image + Unsplash attribution, published flag) |
 | `faq_items` | FAQ entries by category |
-| `quiz_results` | Per-user quiz attempt history |
-| `writing_checks` | Per-user writing practice history |
-| `conversions` | Aggregate conversion counter |
+| `quiz_results` | Quiz attempts (per-user via `user_id`, plus anonymous) |
+| `writing_checks` | Writing-practice results (per-user via `user_id`, plus anonymous) |
+| `conversions` | Conversion log (per-user via `user_id`, plus anonymous) |
+| `events` | Generic analytics — page views & click events |
 
-After adding Unsplash attribution support, also run:
+Migrations (also bundled in `supabase-schema.sql`, safe to re-run):
 
 ```sql
+-- per-user ownership (scripts/add-user-id.sql)
+ALTER TABLE conversions    ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES auth.users(id);
+ALTER TABLE quiz_results   ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES auth.users(id);
+ALTER TABLE writing_checks ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES auth.users(id);
+-- Unsplash attribution (scripts/add-unsplash-attribution.sql)
 ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS image_credit TEXT;
 ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS image_credit_url TEXT;
+ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS image_source_url TEXT;
 ```
 
 ---
@@ -167,6 +242,9 @@ aksara-bali/
 │   │   ├── login.jsx
 │   │   └── register.jsx
 │   └── api/
+│       ├── convert.js               # Public: Latin → Balinese (CORS)
+│       ├── words.js                 # Public: practice word list (CORS)
+│       ├── events.js                # Analytics: page views / clicks
 │       ├── blog-posts.js
 │       ├── faq-items.js
 │       ├── quiz-results.js
@@ -178,6 +256,8 @@ aksara-bali/
 ├── utils/
 │   ├── balineseConverter.js         # Transliteration engine
 │   ├── supabase.js                  # Supabase client helpers
+│   ├── admin.js                     # Admin-email check (env-based)
+│   ├── analytics.js                 # Client page-view / click tracking
 │   └── practiceTranslations.js
 ├── public/
 │   └── data/sanskrit-database.json  # 100+ Sanskrit terms
