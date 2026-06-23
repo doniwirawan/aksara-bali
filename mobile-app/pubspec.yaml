@@ -56,9 +56,9 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/icon/logo.png"
+  image_path: "assets/icon/icon_web.png"
   adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/icon/logo.png"
+  adaptive_icon_foreground: "assets/icon/icon_web.png"
   remove_alpha_ios: true
 
 # Splash screen (run: dart run flutter_native_splash:create)

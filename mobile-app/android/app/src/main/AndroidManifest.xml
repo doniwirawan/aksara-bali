@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Required for API calls (release builds don't get this from the debug manifest) -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="aksara_bali_mobile"
+        android:label="Aksara Bali"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

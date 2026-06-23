@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../api.dart';
+import '../converter.dart';
+import '../words_data.dart';
 import '../theme.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -11,10 +12,8 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   final _rng = Random();
-  bool _loading = true;
-  String? _error;
-  List<Map<String, dynamic>> _pool = [];
-  List<Map<String, dynamic>> _queue = [];
+  late List<Map<String, String?>> _pool;
+  List<Map<String, String?>> _queue = [];
   int _index = 0;
   int _score = 0;
   List<String> _options = [];
@@ -23,20 +22,8 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    setState(() { _loading = true; _error = null; });
-    try {
-      final w = await Api.words();
-      _pool = w.where((e) => (e['balinese'] ?? '').toString().isNotEmpty).toList();
-      _restart();
-    } catch (_) {
-      if (mounted) setState(() => _error = 'Network error — check your connection.');
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
+    _pool = kWords.where((e) => (e['latin'] ?? '').isNotEmpty).toList();
+    _restart();
   }
 
   void _restart() {
@@ -50,8 +37,8 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _buildOptions() {
     if (_index >= _queue.length) return;
-    final correct = _queue[_index]['latin'] as String;
-    final others = (_pool.map((e) => e['latin'] as String).toSet()..remove(correct)).toList()..shuffle(_rng);
+    final correct = _queue[_index]['latin']!;
+    final others = (_pool.map((e) => e['latin']!).toSet()..remove(correct)).toList()..shuffle(_rng);
     _options = [correct, ...others.take(3)]..shuffle(_rng);
   }
 
@@ -63,30 +50,13 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
-  void _next() {
-    setState(() {
-      _index++;
-      _selected = null;
-      _buildOptions();
-    });
-  }
+  void _next() => setState(() { _index++; _selected = null; _buildOptions(); });
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) return const Center(child: CircularProgressIndicator());
-    if (_error != null) {
-      return Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Text(_error!, style: const TextStyle(color: Colors.red)),
-        const SizedBox(height: 12),
-        OutlinedButton.icon(onPressed: _load, icon: const Icon(Icons.refresh), label: const Text('Retry')),
-      ]));
-    }
-    if (_pool.length < 4) {
-      return const Center(child: Text('Not enough words to start a quiz.'));
-    }
+    if (_pool.length < 4) return const Center(child: Text('Not enough words for a quiz.'));
 
-    final done = _index >= _queue.length;
-    if (done) {
+    if (_index >= _queue.length) {
       return Center(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           const Icon(Icons.emoji_events, size: 56, color: kBlue),
@@ -121,11 +91,11 @@ class _QuizScreenState extends State<QuizScreen> {
             decoration: cardDecoration(),
             padding: const EdgeInsets.symmetric(vertical: 28),
             alignment: Alignment.center,
-            child: Text('${q['balinese']}',
+            child: Text(latinToBalinese(q['latin'] ?? ''),
                 style: const TextStyle(fontFamily: kBaliFont, fontSize: 56, color: kInk)),
           ),
           const SizedBox(height: 20),
-          for (final opt in _options) _optionButton(opt, q['latin'] as String),
+          for (final opt in _options) _optionButton(opt, q['latin']!),
           if (_selected != null) ...[
             const SizedBox(height: 8),
             FilledButton(
