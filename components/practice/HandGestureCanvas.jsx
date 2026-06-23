@@ -14,6 +14,7 @@ const MIN_POINT_DISTANCE_PX = 3         // ignore micro-jitter below this distan
 const MAX_POINT_GAP_PX = 220            // only break the line across truly large jumps (glitches)
 const SMOOTHING_ALPHA = 0.35            // EMA factor for fingertip (0..1, higher = snappier)
 const ERASER_RADIUS_PX = 40             // open-palm eraser radius (logical px)
+const AUTOCHECK_MS = 2500               // idle time after writing before auto-scoring
 
 const IS_MOBILE = typeof navigator !== 'undefined' &&
   /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '')
@@ -146,6 +147,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const canvasAreaRef = useRef(null)
   const liveMidRef = useRef(null) // last midpoint, for smooth live curves
   const readyRef = useRef(false) // first processed frame = model ready
+  const lastActivityRef = useRef(0) // timestamp of last drawing activity (for auto-check)
+  const autoCheckedRef = useRef(false) // guard so we auto-score only once per drawing
+  const checkDrawingRef = useRef(null) // latest checkDrawing for the rAF loop
 
   const getCtx = () => canvasRef.current?.getContext('2d')
 
@@ -402,6 +406,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
     }
   }, [referenceBalinese, referenceText])
 
+  // Keep a ref to the latest checkDrawing so the gesture loop can auto-score
+  useEffect(() => { checkDrawingRef.current = checkDrawing }, [checkDrawing])
+
   // Mouse / touch drawing
   const getCanvasPos = (e) => {
     const rect = canvasRef.current.getBoundingClientRect()
@@ -534,6 +541,8 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         if (changed) {
           strokesRef.current = out
           redrawAll()
+          lastActivityRef.current = performance.now()
+          autoCheckedRef.current = false
         }
       }
 
@@ -575,12 +584,17 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         if (!ctx) return
         const state = writeStateRef.current
 
+        lastActivityRef.current = performance.now()
+        autoCheckedRef.current = false // user is writing again → allow a fresh auto-score
+
         if (state === 'idle') {
           // Require the pose to be stable for a few frames before starting.
           startConfirmRef.current += 1
           smoothedRef.current = ema(smoothedRef.current, rawX, rawY)
           if (startConfirmRef.current < START_CONFIRM_FRAMES) return
           writeStateRef.current = 'writing'
+          setCheckResult(null) // starting a new stroke clears the previous score
+          setHwrResult(null)
           const p = smoothedRef.current
           currentPathRef.current = [{ x: p.x, y: p.y, t: now, color: strokeColor, width: strokeWidth }]
           liveMidRef.current = { x: p.x, y: p.y }
@@ -726,16 +740,28 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       setLoadProgress(88)
 
       // Manual frame loop — no dependency on camera_utils CDN.
-      // The first successful send means the model is loaded → mark ready.
+      // Throttle inference to a target FPS: MediaPipe runs on the main thread, so
+      // running it every animation frame starves the compositor and makes the
+      // webcam feed stutter. Capping it leaves time to paint the video smoothly.
+      const MIN_FRAME_MS = 1000 / (IS_MOBILE ? 20 : 26)
+      let lastSend = 0
       const processFrame = async () => {
         if (!handsRef.current || !videoRef.current) return
-        if (videoRef.current.readyState >= 2) {
+        const t = performance.now()
+        if (videoRef.current.readyState >= 2 && t - lastSend >= MIN_FRAME_MS) {
+          lastSend = t
           await handsRef.current.send({ image: videoRef.current })
           if (!readyRef.current) {
             readyRef.current = true
             setLoadProgress(100)
             setStatus('ready')
           }
+        }
+        // Hands-free scoring: once the user stops writing for a moment, auto-check.
+        if (referenceBalinese && writeStateRef.current === 'idle' && strokesRef.current.length > 0
+          && !autoCheckedRef.current && performance.now() - lastActivityRef.current > AUTOCHECK_MS) {
+          autoCheckedRef.current = true
+          checkDrawingRef.current?.()
         }
         rafIdRef.current = requestAnimationFrame(processFrame)
       }
@@ -1049,6 +1075,25 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
               <div style={{ height: '100%', width: `${loadProgress}%`, background: '#0d6efd', borderRadius: '3px', transition: 'width 0.3s ease' }} />
             </div>
             <style>{`@keyframes aksara-spin { to { transform: rotate(360deg) } }`}</style>
+          </div>
+        )}
+
+        {/* Score result shown inside fullscreen (auto-scored or via the Cek button) */}
+        {isFullscreen && checkResult && (
+          <div style={{
+            position: 'absolute', top: '14px', left: '50%', transform: 'translateX(-50%)',
+            zIndex: 14, maxWidth: '92%',
+            padding: '12px 20px', borderRadius: '14px',
+            background: 'rgba(20,20,30,0.88)', color: '#fff',
+            border: `2px solid ${checkResult.status === 'correct' ? '#22c55e' : checkResult.status === 'partial' ? '#f59e0b' : checkResult.status === 'empty' ? '#94a3b8' : '#ef4444'}`,
+            display: 'flex', alignItems: 'center', gap: '14px',
+          }}>
+            <span style={{ fontSize: '14px', fontWeight: 500 }}>{checkResult.message}</span>
+            {checkResult.status !== 'empty' && (
+              <span style={{ fontSize: '22px', fontWeight: 800, color: checkResult.status === 'correct' ? '#22c55e' : checkResult.status === 'partial' ? '#f59e0b' : '#ef4444' }}>
+                {checkResult.score}%
+              </span>
+            )}
           </div>
         )}
 
