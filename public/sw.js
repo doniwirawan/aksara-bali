@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aksara-bali-v2.1.0';
+const CACHE_NAME = 'aksara-bali-v2.2.0';
 const urlsToCache = [
     '/',
     '/practice',
@@ -60,6 +60,24 @@ self.addEventListener('fetch', (event) => {
     // Never cache API calls — always hit the network so stats and admin data
     // stay fresh (cache-first here would freeze the dashboard on stale data).
     if (event.request.url.includes('/api/')) {
+        return;
+    }
+
+    // Cache MediaPipe CDN assets (immutable, versioned) so the hand-gesture
+    // model loads instantly on repeat visits and works offline.
+    if (event.request.url.includes('cdn.jsdelivr.net/npm/@mediapipe')) {
+        event.respondWith(
+            caches.open(CACHE_NAME).then((cache) =>
+                cache.match(event.request).then((hit) =>
+                    hit || fetch(event.request).then((resp) => {
+                        if (resp && (resp.status === 200 || resp.type === 'opaque')) {
+                            cache.put(event.request, resp.clone());
+                        }
+                        return resp;
+                    })
+                )
+            )
+        );
         return;
     }
 

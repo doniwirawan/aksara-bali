@@ -139,9 +139,11 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const [showRef, setShowRef] = useState(true)
   const [showOverlay, setShowOverlay] = useState(true) // faint aksara guide on the canvas
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [loadProgress, setLoadProgress] = useState(0) // MediaPipe init progress 0..100
   const currentPathRef = useRef([])
   const canvasAreaRef = useRef(null)
   const liveMidRef = useRef(null) // last midpoint, for smooth live curves
+  const readyRef = useRef(false) // first processed frame = model ready
 
   const getCtx = () => canvasRef.current?.getContext('2d')
 
@@ -456,15 +458,20 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const initGestureMode = useCallback(async () => {
     setStatus('loading')
     setErrorMsg('')
+    readyRef.current = false
+    setLoadProgress(8)
     try {
       await loadScript(MP_DRAWING_SCRIPT)
+      setLoadProgress(25)
       await loadScript(MP_HANDS_SCRIPT)
+      setLoadProgress(45)
 
       if (!window.Hands) throw new Error('MediaPipe Hands failed to load')
 
       const hands = new window.Hands({
         locateFile: (file) => `${MP_BASE}/${file}`
       })
+      setLoadProgress(60)
       hands.setOptions({
         maxNumHands: 1,
         // Lighter model + lower tracking threshold on mobile: faster, and keeps
@@ -707,22 +714,28 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           frameRate: { ideal: IS_MOBILE ? 24 : 30 },
         },
       })
+      setLoadProgress(78)
       videoRef.current.srcObject = stream
       // play() can reject if the stream is swapped/stopped before it resolves
       // (e.g. quickly toggling modes) — that AbortError is benign, so ignore it.
       try { await videoRef.current.play() } catch (_) { /* interrupted load — ignore */ }
+      setLoadProgress(88)
 
-      // Manual frame loop — no dependency on camera_utils CDN
+      // Manual frame loop — no dependency on camera_utils CDN.
+      // The first successful send means the model is loaded → mark ready.
       const processFrame = async () => {
         if (!handsRef.current || !videoRef.current) return
         if (videoRef.current.readyState >= 2) {
           await handsRef.current.send({ image: videoRef.current })
+          if (!readyRef.current) {
+            readyRef.current = true
+            setLoadProgress(100)
+            setStatus('ready')
+          }
         }
         rafIdRef.current = requestAnimationFrame(processFrame)
       }
       rafIdRef.current = requestAnimationFrame(processFrame)
-
-      setStatus('ready')
     } catch (err) {
       console.error(err)
       setErrorMsg(err.message || 'Failed to initialize gesture detection')
@@ -748,6 +761,8 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
     gestureBufferRef.current = []
     stableGestureRef.current = 'none'
     _pinching = false
+    readyRef.current = false
+    setLoadProgress(0)
     setStatus('idle')
     setGesture('none')
     // Clear overlay
@@ -1022,10 +1037,13 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             background: darkMode ? '#1a1a2e' : '#f5f5f5',
-            zIndex: 12, gap: '14px',
+            zIndex: 12, gap: '14px', padding: '0 24px',
           }}>
             <Loader size={40} style={{ opacity: 0.7, animation: 'aksara-spin 1s linear infinite' }} />
-            <span style={{ fontSize: '14px', opacity: 0.7 }}>{ct.loadingMp}</span>
+            <span style={{ fontSize: '14px', opacity: 0.7 }}>{ct.loadingMp} {loadProgress}%</span>
+            <div style={{ width: '100%', maxWidth: '260px', height: '6px', borderRadius: '3px', background: darkMode ? '#333' : '#e0e0e0', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${loadProgress}%`, background: '#0d6efd', borderRadius: '3px', transition: 'width 0.3s ease' }} />
+            </div>
             <style>{`@keyframes aksara-spin { to { transform: rotate(360deg) } }`}</style>
           </div>
         )}

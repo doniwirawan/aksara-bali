@@ -25,8 +25,8 @@ const TABS_EN = [
   { key: 'keyboard', icon: Keyboard, label: 'Keyboard' },
 ]
 
-// Practice word pool for the writing canvas (easy + medium for variety)
-const PRACTICE_WORDS = QUIZ_WORDS.filter(w => w.difficulty === 'easy' || w.difficulty === 'medium')
+// Practice word pool for the writing canvas — use the full quiz word list
+const PRACTICE_WORDS = QUIZ_WORDS
 
 export default function PracticePage({ locale, setLocale }) {
   const [darkMode, setDarkMode] = useState(false)
