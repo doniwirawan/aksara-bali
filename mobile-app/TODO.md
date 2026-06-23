@@ -27,14 +27,19 @@ This doc is the single source of truth to **continue in a fresh session**.
 - [x] Bottom nav: **Convert** (input → output card, Copy + Share) and **Learn**
       (word list from `/api/words/` with easy/medium/hard chips)
 - [x] Copy (clipboard) + Share (share_plus); logo asset bundled
+- [x] **All core pages**: Convert, Quiz (multiple-choice via `/api/words/`),
+      Learn (word reference w/ difficulty filter), About (links to web/blog/faq/
+      privacy/terms via url_launcher). 4-tab bottom nav.
+- [x] **App launcher icon + splash** generated (flutter_launcher_icons + native_splash)
+- [x] Code split into `lib/api.dart`, `lib/theme.dart`, `lib/screens/*`
 
 ## 🟡 Next up (priority order)
-- [ ] **App launcher icon + splash** from `assets/icon/logo.png`
-      (`flutter_launcher_icons` + `flutter_native_splash`)
 - [ ] Build a signed **release APK** and add a **Download** button on the web landing page
 - [ ] Recent-conversions history (`shared_preferences`)
-- [ ] Better offline UX: detect no-connection, retry button, cache last result
-- [ ] Link Privacy (`/privacy`) and Terms (`/terms`) inside the app (needed for Play Store)
+- [ ] Replace the wordmark launcher icon with a dedicated **square** icon (the
+      wordmark gets cropped in the adaptive/circle mask)
+- [ ] Better offline UX: cache last conversion / words list
+- [ ] Optional: on-device writing canvas (gesture/touch) to mirror the web
 
 ## 🔵 Practice features (mirror the web app)
 - [ ] Quiz mode using `/api/words/` (multiple choice: show Balinese, pick Latin)
