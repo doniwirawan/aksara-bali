@@ -6,7 +6,7 @@ import { ADMIN_EMAIL, isAdminEmail } from '../../utils/admin'
 import {
   BarChart3, PenLine, HelpCircle, Users, RefreshCw, Zap, Target, Flame,
   CheckCircle, ClipboardList, X, Image as ImageIcon, Clock, Trash2, Eye, EyeOff,
-  MousePointerClick, Activity,
+  MousePointerClick, Activity, Moon, Sun,
 } from 'lucide-react'
 
 const BLOG_CATEGORIES = ['Sejarah & Budaya', 'Panduan Belajar', 'Linguistik', 'Naskah Kuno', 'Teknologi & Budaya', 'Umum']
@@ -27,6 +27,18 @@ export default function AdminDashboard() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState('stats')
+  const [darkMode, setDarkMode] = useState(false)
+
+  useEffect(() => {
+    const saved = localStorage.getItem('aksara-dark-mode')
+    if (saved !== null) setDarkMode(saved === 'true')
+  }, [])
+  const toggleDark = () => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', String(n)) }
+
+  // Theme palette
+  const th = darkMode
+    ? { pageBg: '#0f0f1a', cardBg: '#1a1a2e', text: '#e8e8e8', muted: '#9aa', border: '#2a2a3e', inputBg: '#12121f', headerBg: '#14141f', rowBorder: '#23233a' }
+    : { pageBg: '#f5f5f0', cardBg: '#ffffff', text: '#1a1a1a', muted: '#888', border: '#e0e0d8', inputBg: '#ffffff', headerBg: '#ffffff', rowBorder: '#f0f0f0' }
 
   // Stats
   const [stats, setStats] = useState(null)
@@ -81,7 +93,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!authenticated) return
     const tab = router.query.tab
-    const valid = ['stats', 'blog', 'faq', 'users']
+    const valid = ['stats', 'analytics', 'blog', 'faq', 'users']
     if (tab && valid.includes(tab)) setActiveTab(tab)
   }, [authenticated, router.query.tab])
 
@@ -280,12 +292,12 @@ export default function AdminDashboard() {
 
   // ─── Styles ───────────────────────────────────────────────
   const s = {
-    card: { background: '#fff', borderRadius: '14px', border: '1px solid #e0e0d8', padding: '20px', marginBottom: '16px' },
-    input: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e0e0d8', fontSize: '14px', boxSizing: 'border-box', outline: 'none', fontFamily: 'Inter, system-ui, sans-serif' },
-    textarea: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e0e0d8', fontSize: '13px', boxSizing: 'border-box', outline: 'none', fontFamily: 'monospace', resize: 'vertical' },
-    label: { display: 'block', fontSize: '12px', fontWeight: '600', color: '#555', marginBottom: '4px', marginTop: '12px' },
+    card: { background: th.cardBg, borderRadius: '14px', border: `1px solid ${th.border}`, padding: '20px', marginBottom: '16px', color: th.text },
+    input: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: `1px solid ${th.border}`, fontSize: '14px', boxSizing: 'border-box', outline: 'none', fontFamily: 'Inter, system-ui, sans-serif', background: th.inputBg, color: th.text },
+    textarea: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: `1px solid ${th.border}`, fontSize: '13px', boxSizing: 'border-box', outline: 'none', fontFamily: 'monospace', resize: 'vertical', background: th.inputBg, color: th.text },
+    label: { display: 'block', fontSize: '12px', fontWeight: '600', color: th.muted, marginBottom: '4px', marginTop: '12px' },
     btn: (color = '#0d6efd') => ({ padding: '8px 16px', borderRadius: '8px', background: color, color: '#fff', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }),
-    btnOutline: { padding: '6px 12px', borderRadius: '8px', background: 'transparent', border: '1px solid #e0e0d8', cursor: 'pointer', fontSize: '13px' },
+    btnOutline: { padding: '6px 12px', borderRadius: '8px', background: 'transparent', border: `1px solid ${th.border}`, color: th.text, cursor: 'pointer', fontSize: '13px' },
     badge: (color) => ({ padding: '2px 8px', borderRadius: '10px', fontSize: '11px', fontWeight: '600', background: color + '20', color }),
   }
 
@@ -294,12 +306,12 @@ export default function AdminDashboard() {
     return (
       <>
         <Head><title>Admin — Aksara Bali</title></Head>
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f0', fontFamily: 'Inter, system-ui, sans-serif' }}>
-          <div style={{ padding: '40px', borderRadius: '16px', background: '#fff', border: '1px solid #e0e0d8', width: '360px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: th.pageBg, color: th.text, fontFamily: 'Inter, system-ui, sans-serif' }}>
+          <div style={{ padding: '40px', borderRadius: '16px', background: th.cardBg, border: `1px solid ${th.border}`, width: '360px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
             <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56" style={{ borderRadius: '12px', marginBottom: '12px', display: 'inline-block' }} />
+              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56" style={{ borderRadius: '12px', marginBottom: '12px', display: 'inline-block', background: '#fff', padding: '4px', boxSizing: 'border-box' }} />
               <h1 style={{ fontSize: '20px', fontWeight: '700', margin: '0 0 4px' }}>Admin Dashboard</h1>
-              <p style={{ color: '#888', fontSize: '13px', margin: 0 }}>Aksara Bali Converter</p>
+              <p style={{ color: th.muted, fontSize: '13px', margin: 0 }}>Aksara Bali Converter</p>
             </div>
             <form onSubmit={handleLogin}>
               <input type="email" placeholder="Email admin" value={email} onChange={e => setEmail(e.target.value)} autoFocus required style={{ ...s.input, marginBottom: '10px' }} />
@@ -323,6 +335,7 @@ export default function AdminDashboard() {
 
   const TABS = [
     { key: 'stats', icon: BarChart3, label: 'Statistik' },
+    { key: 'analytics', icon: Activity, label: 'Analytics' },
     { key: 'blog', icon: PenLine, label: 'Blog' },
     { key: 'faq', icon: HelpCircle, label: 'FAQ' },
     { key: 'users', icon: Users, label: 'Pengguna' },
@@ -331,28 +344,31 @@ export default function AdminDashboard() {
   return (
     <>
       <Head><title>Admin Dashboard — Aksara Bali</title></Head>
-      <div style={{ minHeight: '100vh', background: '#f5f5f0', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: th.pageBg, color: th.text, fontFamily: 'Inter, system-ui, sans-serif' }}>
 
         {/* Header */}
-        <header style={{ background: '#fff', borderBottom: '1px solid #e0e0d8', padding: '0 24px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <header style={{ background: th.headerBg, borderBottom: `1px solid ${th.border}`, padding: '0 24px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="32" height="32" style={{ borderRadius: '8px' }} />
+            <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="32" height="32" style={{ borderRadius: '8px', background: '#fff', padding: '2px', boxSizing: 'border-box' }} />
             <span style={{ fontWeight: '700', fontSize: '15px' }}>Aksara Bali — Admin</span>
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <span style={{ fontSize: '12px', color: '#888' }}>{ADMIN_EMAIL}</span>
+            <span style={{ fontSize: '12px', color: th.muted }}>{ADMIN_EMAIL}</span>
+            <button onClick={toggleDark} aria-label="Mode gelap" style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', padding: '6px 10px' }}>
+              {darkMode ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
             <a href="/" style={{ color: '#0d6efd', fontSize: '13px', textDecoration: 'none' }}>← Ke Aplikasi</a>
             <button onClick={() => { sessionStorage.removeItem('admin-auth'); setAuthenticated(false) }} style={s.btnOutline}>Keluar</button>
           </div>
         </header>
 
         {/* Tabs */}
-        <div style={{ background: '#fff', borderBottom: '1px solid #e0e0d8', padding: '0 24px', display: 'flex', gap: '4px' }}>
+        <div style={{ background: th.headerBg, borderBottom: `1px solid ${th.border}`, padding: '0 24px', display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
           {TABS.map(tab => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
               padding: '14px 18px', background: 'transparent', border: 'none', cursor: 'pointer',
               fontSize: '14px', fontWeight: activeTab === tab.key ? '600' : '400',
-              color: activeTab === tab.key ? '#0d6efd' : '#666',
+              color: activeTab === tab.key ? '#0d6efd' : th.muted,
               borderBottom: activeTab === tab.key ? '2px solid #0d6efd' : '2px solid transparent',
               display: 'inline-flex', alignItems: 'center', gap: '7px',
             }}><tab.icon size={16} /> {tab.label}</button>
@@ -376,9 +392,6 @@ export default function AdminDashboard() {
                   { label: 'Streak Terbaik', value: quizStats?.bestStreak ?? '—', icon: Flame, color: '#dc3545' },
                   { label: 'Cek Tulisan', value: writingStats?.total ?? '—', icon: PenLine, color: '#6f42c1' },
                   { label: 'Lulus Tulis', value: writingStats?.passed != null ? `${writingStats.passed}/${writingStats.total}` : '—', icon: CheckCircle, color: '#20c997' },
-                  { label: 'Kunjungan Halaman', value: eventStats?.pageViews ?? '—', icon: Eye, color: '#0ea5e9' },
-                  { label: 'Total Klik', value: eventStats?.clicks ?? '—', icon: MousePointerClick, color: '#f43f5e' },
-                  { label: 'Aktivitas 7 Hari', value: eventStats?.last7d ?? '—', icon: Activity, color: '#8b5cf6' },
                 ].map(card => (
                   <div key={card.label} style={s.card}>
                     <card.icon size={24} color={card.color} style={{ marginBottom: '6px' }} />
@@ -413,46 +426,67 @@ export default function AdminDashboard() {
                 </div>
               )}
 
-              {/* Analytics: most-visited pages & most-clicked elements */}
-              {(eventStats?.topPages?.length > 0 || eventStats?.topClicks?.length > 0) && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '16px' }}>
-                  <div style={s.card}>
-                    <h3 style={{ fontSize: '15px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}><Eye size={15} /> Halaman Populer</h3>
-                    {eventStats?.topPages?.length > 0 ? (
-                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                        <tbody>
-                          {eventStats.topPages.map((p, i) => (
-                            <tr key={i}>
-                              <td style={{ padding: '7px 8px', borderBottom: '1px solid #f8f8f8', fontFamily: 'monospace', color: '#374151' }}>{p.name || '/'}</td>
-                              <td style={{ padding: '7px 8px', borderBottom: '1px solid #f8f8f8', textAlign: 'right', fontWeight: '700', color: '#0ea5e9' }}>{p.count}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    ) : <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>Belum ada data.</p>}
-                  </div>
-                  <div style={s.card}>
-                    <h3 style={{ fontSize: '15px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}><MousePointerClick size={15} /> Klik Terbanyak</h3>
-                    {eventStats?.topClicks?.length > 0 ? (
-                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                        <tbody>
-                          {eventStats.topClicks.map((p, i) => (
-                            <tr key={i}>
-                              <td style={{ padding: '7px 8px', borderBottom: '1px solid #f8f8f8', color: '#374151' }}>{p.name}</td>
-                              <td style={{ padding: '7px 8px', borderBottom: '1px solid #f8f8f8', textAlign: 'right', fontWeight: '700', color: '#f43f5e' }}>{p.count}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    ) : <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>Belum ada data.</p>}
-                  </div>
-                </div>
-              )}
+              <div style={{ ...s.card, background: darkMode ? '#101a2e' : '#f0f4ff', border: `1px solid ${darkMode ? '#24406e' : '#c5d8fc'}` }}>
+                <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 10px', color: darkMode ? '#8ab4f8' : '#1e40af', display: 'flex', alignItems: 'center', gap: '6px' }}><ClipboardList size={15} /> Setup Supabase</h3>
+                <p style={{ fontSize: '13px', color: darkMode ? '#c7d2e5' : '#374151', margin: '0 0 8px' }}>Jalankan <code>supabase-schema.sql</code> di Supabase SQL Editor untuk membuat semua tabel (termasuk blog_posts dan faq_items).</p>
+                <p style={{ fontSize: '13px', color: darkMode ? '#c7d2e5' : '#374151', margin: 0 }}>Set env vars: <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>NEXT_PUBLIC_ADMIN_EMAIL</code>, <code>NEXT_PUBLIC_ADMIN_PASSWORD</code></p>
+              </div>
+            </>
+          )}
 
-              <div style={{ ...s.card, background: '#f0f4ff', border: '1px solid #c5d8fc' }}>
-                <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 10px', color: '#1e40af', display: 'flex', alignItems: 'center', gap: '6px' }}><ClipboardList size={15} /> Setup Supabase</h3>
-                <p style={{ fontSize: '13px', color: '#374151', margin: '0 0 8px' }}>Jalankan <code>supabase-schema.sql</code> di Supabase SQL Editor untuk membuat semua tabel (termasuk blog_posts dan faq_items).</p>
-                <p style={{ fontSize: '13px', color: '#374151', margin: 0 }}>Set env vars: <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>NEXT_PUBLIC_ADMIN_EMAIL</code>, <code>NEXT_PUBLIC_ADMIN_PASSWORD</code></p>
+          {/* ── ANALYTICS TAB ── */}
+          {activeTab === 'analytics' && (
+            <>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>Analytics</h2>
+                <button onClick={fetchStats} disabled={statsLoading} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><RefreshCw size={14} /> {statsLoading ? 'Memuat...' : 'Perbarui'}</button>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+                {[
+                  { label: 'Kunjungan Halaman', value: eventStats?.pageViews ?? '—', icon: Eye, color: '#0ea5e9' },
+                  { label: 'Total Klik', value: eventStats?.clicks ?? '—', icon: MousePointerClick, color: '#f43f5e' },
+                  { label: 'Aktivitas 7 Hari', value: eventStats?.last7d ?? '—', icon: Activity, color: '#8b5cf6' },
+                ].map(card => (
+                  <div key={card.label} style={s.card}>
+                    <card.icon size={24} color={card.color} style={{ marginBottom: '6px' }} />
+                    <div style={{ fontSize: '24px', fontWeight: '700', color: card.color }}>{card.value}</div>
+                    <div style={{ fontSize: '12px', color: th.muted, marginTop: '2px' }}>{card.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+                <div style={s.card}>
+                  <h3 style={{ fontSize: '15px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}><Eye size={15} /> Halaman Populer</h3>
+                  {eventStats?.topPages?.length > 0 ? (
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                      <tbody>
+                        {eventStats.topPages.map((p, i) => (
+                          <tr key={i}>
+                            <td style={{ padding: '7px 8px', borderBottom: `1px solid ${th.rowBorder}`, fontFamily: 'monospace', color: th.text }}>{p.name || '/'}</td>
+                            <td style={{ padding: '7px 8px', borderBottom: `1px solid ${th.rowBorder}`, textAlign: 'right', fontWeight: '700', color: '#0ea5e9' }}>{p.count}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : <p style={{ fontSize: '13px', color: th.muted, margin: 0 }}>Belum ada data.</p>}
+                </div>
+                <div style={s.card}>
+                  <h3 style={{ fontSize: '15px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}><MousePointerClick size={15} /> Klik Terbanyak</h3>
+                  {eventStats?.topClicks?.length > 0 ? (
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                      <tbody>
+                        {eventStats.topClicks.map((p, i) => (
+                          <tr key={i}>
+                            <td style={{ padding: '7px 8px', borderBottom: `1px solid ${th.rowBorder}`, color: th.text }}>{p.name}</td>
+                            <td style={{ padding: '7px 8px', borderBottom: `1px solid ${th.rowBorder}`, textAlign: 'right', fontWeight: '700', color: '#f43f5e' }}>{p.count}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : <p style={{ fontSize: '13px', color: th.muted, margin: 0 }}>Belum ada data.</p>}
+                </div>
               </div>
             </>
           )}
