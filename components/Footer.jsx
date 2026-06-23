@@ -132,8 +132,15 @@ export default function Footer({ darkMode, locale }) {
             </a>
             {id ? ' oleh bennylin' : ' by bennylin'}
           </small>
-          <small style={{ color: mutedColor, fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-            {id ? 'Dibuat dengan' : 'Made with'} <Heart size={13} fill="#e11d48" color="#e11d48" /> {id ? 'untuk Bali' : 'for Bali'}
+          <small style={{ color: mutedColor, fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            <a href="/privacy" style={{ color: mutedColor, textDecoration: 'none' }}
+              onMouseEnter={e => e.currentTarget.style.color = linkColor}
+              onMouseLeave={e => e.currentTarget.style.color = mutedColor}>{id ? 'Privasi' : 'Privacy'}</a>
+            <a href="/terms" style={{ color: mutedColor, textDecoration: 'none' }}
+              onMouseEnter={e => e.currentTarget.style.color = linkColor}
+              onMouseLeave={e => e.currentTarget.style.color = mutedColor}>{id ? 'Ketentuan' : 'Terms'}</a>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            {id ? 'Dibuat dengan' : 'Made with'} <Heart size={13} fill="#e11d48" color="#e11d48" /> {id ? 'untuk Bali' : 'for Bali'}</span>
             <span style={{ marginLeft: '8px', opacity: 0.7, fontFamily: 'monospace' }}>
               v{process.env.NEXT_PUBLIC_APP_VERSION} · {process.env.NEXT_PUBLIC_BUILD_REF}
             </span>
