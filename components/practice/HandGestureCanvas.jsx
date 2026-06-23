@@ -12,8 +12,8 @@ const STROKE_END_TIMEOUT_MS = 350       // desktop: ms of lost tracking before a
 const MOBILE_STROKE_END_TIMEOUT_MS = 500
 const MIN_POINT_DISTANCE_PX = 3         // ignore micro-jitter below this distance
 const MAX_POINT_GAP_PX = 220            // only break the line across truly large jumps (glitches)
-const SMOOTHING_ALPHA = 0.35            // EMA factor for fingertip (0..1, higher = snappier)
-const ERASER_RADIUS_PX = 40             // open-palm eraser radius (logical px)
+const SMOOTHING_ALPHA = 0.5             // EMA factor for fingertip (0..1, higher = snappier/less lag)
+const ERASER_RADIUS_PX = 75             // open-palm eraser radius (logical px)
 const AUTOCHECK_MS = 2500               // idle time after writing before auto-scoring
 
 const IS_MOBILE = typeof navigator !== 'undefined' &&
@@ -743,7 +743,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       // Throttle inference to a target FPS: MediaPipe runs on the main thread, so
       // running it every animation frame starves the compositor and makes the
       // webcam feed stutter. Capping it leaves time to paint the video smoothly.
-      const MIN_FRAME_MS = 1000 / (IS_MOBILE ? 20 : 26)
+      const MIN_FRAME_MS = 1000 / (IS_MOBILE ? 24 : 30)
       let lastSend = 0
       const processFrame = async () => {
         if (!handsRef.current || !videoRef.current) return
