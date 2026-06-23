@@ -8,10 +8,10 @@ const CANVAS_H = 500
 // ── Gesture-writing state machine config (easy to tweak) ───────────────────
 const START_CONFIRM_FRAMES = 3          // consecutive write-pose frames before a stroke starts
 const LOST_FRAME_LIMIT = 7              // min consecutive lost frames before a stroke may end
-const STROKE_END_TIMEOUT_MS = 250       // desktop: ms of lost tracking before a stroke ends
-const MOBILE_STROKE_END_TIMEOUT_MS = 350
+const STROKE_END_TIMEOUT_MS = 350       // desktop: ms of lost tracking before a stroke ends
+const MOBILE_STROKE_END_TIMEOUT_MS = 500
 const MIN_POINT_DISTANCE_PX = 3         // ignore micro-jitter below this distance
-const MAX_POINT_GAP_PX = 80             // don't connect across jumps larger than this
+const MAX_POINT_GAP_PX = 220            // only break the line across truly large jumps (glitches)
 const SMOOTHING_ALPHA = 0.35            // EMA factor for fingertip (0..1, higher = snappier)
 const ERASER_RADIUS_PX = 40             // open-palm eraser radius (logical px)
 
@@ -59,10 +59,12 @@ function detectRawGesture(landmarks, pinching) {
   const pinkyUp  = isFingerExtended(landmarks, 20, 18, 17)
 
   if (pinching) return 'pinch'
-  // Point: only index finger clearly extended
-  if (indexUp && !middleUp && !ringUp && !pinkyUp) return 'point'
-  // Palm: all four fingers extended
-  if (indexUp && middleUp && ringUp && pinkyUp) return 'palm'
+  // Palm: at least 3 of 4 fingers extended (erase)
+  const upCount = (indexUp ? 1 : 0) + (middleUp ? 1 : 0) + (ringUp ? 1 : 0) + (pinkyUp ? 1 : 0)
+  if (upCount >= 3) return 'palm'
+  // Point: index extended and middle not — ring/pinky are ignored so the pose
+  // doesn't flicker out during fast strokes (a common cause of broken lines).
+  if (indexUp && !middleUp) return 'point'
   return 'none'
 }
 
@@ -478,7 +480,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         // the hand "tracked" through motion blur instead of dropping it.
         modelComplexity: IS_MOBILE ? 0 : 1,
         minDetectionConfidence: 0.6,
-        minTrackingConfidence: IS_MOBILE ? 0.4 : 0.5,
+        // Lower tracking threshold keeps the hand locked through motion blur
+        // (higher values drop tracking mid-stroke → broken lines).
+        minTrackingConfidence: IS_MOBILE ? 0.35 : 0.4,
       })
 
       const STROKE_END_TIMEOUT = IS_MOBILE ? MOBILE_STROKE_END_TIMEOUT_MS : STROKE_END_TIMEOUT_MS
