@@ -13,9 +13,16 @@ const MOBILE_STROKE_END_TIMEOUT_MS = 350
 const MIN_POINT_DISTANCE_PX = 3         // ignore micro-jitter below this distance
 const MAX_POINT_GAP_PX = 80             // don't connect across jumps larger than this
 const SMOOTHING_ALPHA = 0.35            // EMA factor for fingertip (0..1, higher = snappier)
+const ERASER_RADIUS_PX = 40             // open-palm eraser radius (logical px)
 
 const IS_MOBILE = typeof navigator !== 'undefined' &&
   /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '')
+
+// Supersample the drawing canvas to the device pixel ratio (min 2x) so strokes
+// stay crisp when the canvas is displayed larger than its logical size.
+const DRAW_SCALE = typeof window !== 'undefined'
+  ? Math.min(Math.max(window.devicePixelRatio || 1, 2), 3)
+  : 2
 
 const MP_BASE = 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915'
 const MP_DRAWING_SCRIPT = 'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1620248257/drawing_utils.js'
@@ -134,8 +141,15 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const [isFullscreen, setIsFullscreen] = useState(false)
   const currentPathRef = useRef([])
   const canvasAreaRef = useRef(null)
+  const liveMidRef = useRef(null) // last midpoint, for smooth live curves
 
   const getCtx = () => canvasRef.current?.getContext('2d')
+
+  // Map logical (CANVAS_W×CANVAS_H) coords to the supersampled backing store
+  const applyDrawTransform = (ctx) => {
+    ctx.setTransform(DRAW_SCALE, 0, 0, DRAW_SCALE, 0, 0)
+    ctx.imageSmoothingEnabled = true
+  }
 
   const drawStroke = (ctx, stroke) => {
     if (stroke.length < 2) return
@@ -164,6 +178,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const redrawAll = useCallback(() => {
     const ctx = getCtx()
     if (!ctx) return
+    applyDrawTransform(ctx)
     ctx.clearRect(0, 0, CANVAS_W, CANVAS_H)
     strokesRef.current.forEach(stroke => drawStroke(ctx, stroke))
   }, [])
@@ -475,6 +490,32 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         smoothedRef.current = null
       }
 
+      // Open-palm eraser: remove stroke points within the eraser circle, splitting
+      // strokes around the erased area (vector erase, survives redraw + undo).
+      const eraseAt = (ex, ey) => {
+        const r2 = ERASER_RADIUS_PX * ERASER_RADIUS_PX
+        let changed = false
+        const out = []
+        for (const stroke of strokesRef.current) {
+          let seg = []
+          for (const p of stroke) {
+            const dx = p.x - ex, dy = p.y - ey
+            if (dx * dx + dy * dy <= r2) {
+              changed = true
+              if (seg.length > 1) out.push(seg)
+              seg = []
+            } else {
+              seg.push(p)
+            }
+          }
+          if (seg.length > 1) out.push(seg)
+        }
+        if (changed) {
+          strokesRef.current = out
+          redrawAll()
+        }
+      }
+
       // Reset the whole writing machine to idle (used on erase / stop)
       const resetWriting = () => {
         writeStateRef.current = 'idle'
@@ -521,6 +562,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           writeStateRef.current = 'writing'
           const p = smoothedRef.current
           currentPathRef.current = [{ x: p.x, y: p.y, t: now, color: strokeColor, width: strokeWidth }]
+          liveMidRef.current = { x: p.x, y: p.y }
           ctx.beginPath()
           ctx.moveTo(p.x, p.y)
           return
@@ -547,15 +589,22 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         const brk = resumed && (!last || dist > MAX_POINT_GAP_PX)
         path.push({ x: sm.x, y: sm.y, t: now, color: strokeColor, width: strokeWidth, brk })
 
-        if (last && !brk) {
+        if (brk || !last) {
+          liveMidRef.current = { x: sm.x, y: sm.y }
+        } else {
+          // Smooth live curve: draw from the previous midpoint through the last
+          // point to the new midpoint (quadratic), matching the committed render.
+          const newMid = { x: (last.x + sm.x) / 2, y: (last.y + sm.y) / 2 }
+          const prevMid = liveMidRef.current || { x: last.x, y: last.y }
           ctx.strokeStyle = strokeColor
           ctx.lineWidth = strokeWidth
           ctx.lineCap = 'round'
           ctx.lineJoin = 'round'
           ctx.beginPath()
-          ctx.moveTo(last.x, last.y)
-          ctx.lineTo(sm.x, sm.y)
+          ctx.moveTo(prevMid.x, prevMid.y)
+          ctx.quadraticCurveTo(last.x, last.y, newMid.x, newMid.y)
           ctx.stroke()
+          liveMidRef.current = newMid
         }
       }
 
@@ -608,13 +657,19 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         setGesture(g)
 
         if (g === 'palm') {
-          // Open palm = clear everything and reset the machine
-          if (strokesRef.current.length || currentPathRef.current.length) {
-            strokesRef.current = []
-            redrawAll()
-            setCheckResult(null)
-            setHwrResult(null)
-          }
+          // Open palm = eraser: rub out strokes around the palm centre (landmark 9)
+          const c = landmarks[9]
+          const ex = CANVAS_W - (m.offsetX + c.x * m.dispW)
+          const ey = m.offsetY + c.y * m.dispH
+          eraseAt(ex, ey)
+          // Eraser ring indicator on the overlay (same coord space as the canvas)
+          octx.beginPath()
+          octx.arc(ex, ey, ERASER_RADIUS_PX, 0, Math.PI * 2)
+          octx.fillStyle = 'rgba(255,80,80,0.18)'
+          octx.fill()
+          octx.lineWidth = 2
+          octx.strokeStyle = 'rgba(255,80,80,0.9)'
+          octx.stroke()
           resetWriting()
           return
         }
@@ -711,6 +766,12 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   useEffect(() => {
     loadScript(MP_DRAWING_SCRIPT).catch(() => {})
     loadScript(MP_HANDS_SCRIPT).catch(() => {})
+  }, [])
+
+  // Establish the supersample transform on the drawing context once mounted
+  useEffect(() => {
+    const ctx = getCtx()
+    if (ctx) applyDrawTransform(ctx)
   }, [])
 
   // Track fullscreen state for the canvas area
@@ -863,6 +924,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         border: isFullscreen ? 'none' : `2px solid ${border}`,
         background: '#fff',
         cursor: mode === 'mouse' ? 'crosshair' : 'none',
+        containerType: 'size',
       }}>
         {/* Layer 1 (bottom): webcam feed — mirrored via CSS */}
         <video
@@ -877,11 +939,11 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           }}
         />
 
-        {/* Layer 2: drawing canvas */}
+        {/* Layer 2: drawing canvas (supersampled for crisp, smooth strokes) */}
         <canvas
           ref={canvasRef}
-          width={CANVAS_W}
-          height={CANVAS_H}
+          width={CANVAS_W * DRAW_SCALE}
+          height={CANVAS_H * DRAW_SCALE}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 5, touchAction: 'none' }}
           onMouseDown={startDraw}
           onMouseMove={draw}
@@ -916,7 +978,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
                 opacity: mode === 'gesture' ? 0.3 : 0.15,
                 transition: 'opacity 0.3s',
               }}>
-                <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '120px', color: mode === 'gesture' ? '#fff' : '#888' }}>{referenceBalinese}</span>
+                <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 'min(60cqw, 60cqh)', lineHeight: 1, color: mode === 'gesture' ? '#fff' : '#888' }}>{referenceBalinese}</span>
               </div>
             ))
           : (mode === 'mouse' && (
