@@ -587,15 +587,32 @@ export default function AdminDashboard() {
                         <ImageIcon size={15} /> Cari Foto Bali
                       </button>
                     </div>
+
+                    {/* Attribution (auto-filled by the picker; editable for posts that used a raw URL) */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginTop: '8px' }}>
+                      <div>
+                        <label style={s.label}>Fotografer</label>
+                        <input style={s.input} value={blogForm.image_credit} onChange={e => setBlogForm(f => ({ ...f, image_credit: e.target.value }))} placeholder="Nama fotografer" />
+                      </div>
+                      <div>
+                        <label style={s.label}>Profil fotografer (URL)</label>
+                        <input style={s.input} value={blogForm.image_credit_url} onChange={e => setBlogForm(f => ({ ...f, image_credit_url: e.target.value }))} placeholder="https://unsplash.com/@user" />
+                      </div>
+                      <div>
+                        <label style={s.label}>Link foto Unsplash (URL)</label>
+                        <input style={s.input} value={blogForm.image_source_url} onChange={e => setBlogForm(f => ({ ...f, image_source_url: e.target.value }))} placeholder="https://unsplash.com/photos/..." />
+                      </div>
+                    </div>
+
                     {blogForm.image_url && (
                       <div>
                         <img src={blogForm.image_url} alt="preview" style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '10px', marginTop: '8px' }} onError={e => e.target.style.display = 'none'} />
                         {blogForm.image_credit && (
-                          <p style={{ fontSize: '11px', color: '#888', margin: '4px 0 0' }}>
+                          <p style={{ fontSize: '11px', color: th.muted, margin: '4px 0 0' }}>
                             Photo by{' '}
-                            <a href={blogForm.image_credit_url} target="_blank" rel="noopener noreferrer" style={{ color: '#0d6efd' }}>{blogForm.image_credit}</a>
+                            <a href={blogForm.image_credit_url || '#'} target="_blank" rel="noopener noreferrer" style={{ color: '#0d6efd' }}>{blogForm.image_credit}</a>
                             {' '}on{' '}
-                            <a href="https://unsplash.com?utm_source=aksara_bali&utm_medium=referral" target="_blank" rel="noopener noreferrer" style={{ color: '#0d6efd' }}>Unsplash</a>
+                            <a href={blogForm.image_source_url || 'https://unsplash.com/?utm_source=aksara_bali&utm_medium=referral'} target="_blank" rel="noopener noreferrer" style={{ color: '#0d6efd' }}>Unsplash</a>
                           </p>
                         )}
                       </div>
