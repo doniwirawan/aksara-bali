@@ -45,7 +45,7 @@ export default function ResetPasswordPage() {
       </Head>
       <div style={{
         minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: '#f5f5f0', fontFamily: 'system-ui, sans-serif',
+        background: '#f5f5f0', fontFamily: 'Inter, system-ui, sans-serif',
       }}>
         <div style={{
           padding: '40px', borderRadius: '16px', background: '#fff',

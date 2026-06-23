@@ -77,7 +77,7 @@ export default function UserDashboard({ locale, setLocale }) {
         <title>Dashboard — Aksara Bali</title>
         <meta name="robots" content="noindex" />
       </Head>
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}

@@ -56,7 +56,7 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
       }}>
         {/* Logo */}
         <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-          <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="36" height="36" style={{ borderRadius: '8px', display: 'block' }} />
+          <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="36" height="36" style={{ borderRadius: '8px', display: 'block', background: '#fff', padding: '2px', boxSizing: 'border-box' }} />
           <div>
             <span style={{ fontWeight: '700', fontSize: '15px', color: textColor, display: 'block', lineHeight: 1.1 }}>
               Aksara Bali

@@ -779,7 +779,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
         <main style={{ maxWidth: 760, margin: '0 auto', padding: '40px 16px 80px' }}>
           {/* Article header */}
           <div style={{ marginBottom: '32px' }}>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap', fontFamily: 'system-ui, sans-serif' }}>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap', fontFamily: 'Inter, system-ui, sans-serif' }}>
               <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '10px', background: darkMode ? '#252535' : '#f0f0f0', color: mutedColor }}>
                 {post.category}
               </span>
@@ -804,7 +804,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
                   ? `https://unsplash.com/photos/${photoIdMatch[1]}?utm_source=aksara_bali&utm_medium=referral`
                   : `https://unsplash.com?utm_source=aksara_bali&utm_medium=referral`
                 return (
-                  <p style={{ fontSize: '12px', color: mutedColor, margin: '6px 0 0', textAlign: 'right', fontFamily: 'system-ui, sans-serif' }}>
+                  <p style={{ fontSize: '12px', color: mutedColor, margin: '6px 0 0', textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif' }}>
                     {post.imageCredit ? (
                       <>
                         Photo by{' '}
@@ -829,11 +829,11 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
               })()}
             </div>
 
-            <h1 style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 16px', lineHeight: 1.3, fontFamily: 'system-ui, sans-serif' }}>
+            <h1 style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 16px', lineHeight: 1.3, fontFamily: 'Inter, system-ui, sans-serif' }}>
               {displayTitle}
             </h1>
 
-            <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: mutedColor, fontFamily: 'system-ui, sans-serif' }}>
+            <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: mutedColor, fontFamily: 'Inter, system-ui, sans-serif' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><PenLine size={14} /> Doni Wirawan</span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><Calendar size={14} /> {post.date}</span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><Clock size={14} /> {post.readTime}</span>
@@ -854,7 +854,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
 
           {/* Related articles */}
           {relatedPosts.length > 0 && (
-            <div style={{ marginTop: '40px', fontFamily: 'system-ui, sans-serif' }}>
+            <div style={{ marginTop: '40px', fontFamily: 'Inter, system-ui, sans-serif' }}>
               <h2 style={{ fontSize: '18px', fontWeight: '700', margin: '0 0 20px', color: textColor }}>
                 {lang === 'en' ? 'Related Articles' : 'Artikel Terkait'}
               </h2>
@@ -893,7 +893,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
           )}
 
           {/* Navigation */}
-          <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'space-between', fontFamily: 'system-ui, sans-serif' }}>
+          <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'space-between', fontFamily: 'Inter, system-ui, sans-serif' }}>
             <a href="/blog" style={{ color: '#0d6efd', textDecoration: 'none', fontSize: '14px' }}>
               ← {lang === 'en' ? 'All Articles' : 'Semua Artikel'}
             </a>

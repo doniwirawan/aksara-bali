@@ -373,7 +373,7 @@ export default function Home({ locale, setLocale }) {
                     <LatinBalineseConverter locale={locale} darkMode={darkMode} />
 
                     {/* Feature Discovery Section */}
-                    <div style={{ maxWidth: 900, margin: '0 auto', padding: '40px 16px 16px', fontFamily: 'system-ui, sans-serif' }}>
+                    <div style={{ maxWidth: 900, margin: '0 auto', padding: '40px 16px 16px', fontFamily: 'Inter, system-ui, sans-serif' }}>
                         <h2 style={{ fontSize: '18px', fontWeight: '700', color: darkMode ? '#e8e8e8' : '#1a1a1a', marginBottom: '8px', textAlign: 'center' }}>
                             {locale === 'id' ? 'Semua Fitur' : 'All Features'}
                         </h2>
@@ -556,11 +556,11 @@ export default function Home({ locale, setLocale }) {
                 }
 
                 [lang="id-ID"] {
-                    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                    font-family: 'Inter', Inter, system-ui, -apple-system, sans-serif;
                 }
 
                 [lang="en-US"] {
-                    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                    font-family: 'Inter', Inter, system-ui, -apple-system, sans-serif;
                 }
 
                 [data-cultural-context="indonesian"] .navbar-brand {

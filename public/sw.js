@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aksara-bali-v2.0.0';
+const CACHE_NAME = 'aksara-bali-v2.1.0';
 const urlsToCache = [
     '/',
     '/practice',
@@ -54,6 +54,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     // Only handle GET requests
     if (event.request.method !== 'GET') {
+        return;
+    }
+
+    // Never cache API calls — always hit the network so stats and admin data
+    // stay fresh (cache-first here would freeze the dashboard on stale data).
+    if (event.request.url.includes('/api/')) {
         return;
     }
 

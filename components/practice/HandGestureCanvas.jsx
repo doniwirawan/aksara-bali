@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { authedFetch } from '../../utils/supabase'
-import { Eye, EyeOff, MousePointer2, Hand, Undo2, Trash2, Check, Camera, AlertTriangle, Pointer, Grab } from 'lucide-react'
+import { Eye, EyeOff, MousePointer2, Hand, Undo2, Trash2, Check, Camera, AlertTriangle, Pointer, Grab, Maximize, Minimize, Loader } from 'lucide-react'
 
 const CANVAS_W = 800
 const CANVAS_H = 500
@@ -16,6 +16,10 @@ const SMOOTHING_ALPHA = 0.35            // EMA factor for fingertip (0..1, highe
 
 const IS_MOBILE = typeof navigator !== 'undefined' &&
   /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '')
+
+const MP_BASE = 'https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915'
+const MP_DRAWING_SCRIPT = 'https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1620248257/drawing_utils.js'
+const MP_HANDS_SCRIPT = `${MP_BASE}/hands.js`
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
@@ -124,7 +128,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const [checkResult, setCheckResult] = useState(null) // null | { status, score, precision, recall, message }
   const [hwrResult, setHwrResult] = useState(null) // null | { recognized, matched }
   const [showRef, setShowRef] = useState(true)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const currentPathRef = useRef([])
+  const canvasAreaRef = useRef(null)
 
   const getCtx = () => canvasRef.current?.getContext('2d')
 
@@ -423,13 +429,13 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
     setStatus('loading')
     setErrorMsg('')
     try {
-      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1620248257/drawing_utils.js')
-      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js')
+      await loadScript(MP_DRAWING_SCRIPT)
+      await loadScript(MP_HANDS_SCRIPT)
 
       if (!window.Hands) throw new Error('MediaPipe Hands failed to load')
 
       const hands = new window.Hands({
-        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/${file}`
+        locateFile: (file) => `${MP_BASE}/${file}`
       })
       hands.setOptions({
         maxNumHands: 1,
@@ -680,6 +686,13 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   }, [])
 
   useEffect(() => {
+    // Switching modes starts a fresh canvas — mouse drawing shouldn't carry over
+    // into gesture mode (and vice versa).
+    strokesRef.current = []
+    currentPathRef.current = []
+    redrawAll()
+    setCheckResult(null)
+    setHwrResult(null)
     if (mode === 'gesture' && status === 'idle') {
       initGestureMode()
     } else if (mode === 'mouse') {
@@ -689,6 +702,26 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
 
   useEffect(() => {
     return () => stopGestureMode()
+  }, [])
+
+  // Warm up MediaPipe as soon as the canvas mounts, so entering gesture mode is fast
+  useEffect(() => {
+    loadScript(MP_DRAWING_SCRIPT).catch(() => {})
+    loadScript(MP_HANDS_SCRIPT).catch(() => {})
+  }, [])
+
+  // Track fullscreen state for the canvas area
+  useEffect(() => {
+    const onFs = () => setIsFullscreen(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange', onFs)
+    return () => document.removeEventListener('fullscreenchange', onFs)
+  }, [])
+
+  const toggleFullscreen = useCallback(() => {
+    const el = canvasAreaRef.current
+    if (!el) return
+    if (!document.fullscreenElement) el.requestFullscreen?.().catch(() => {})
+    else document.exitFullscreen?.()
   }, [])
 
   const bg = darkMode ? '#1a1a2e' : '#fafafa'
@@ -800,17 +833,24 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         </div>
       )}
 
-      {/* Canvas area */}
+      {/* Canvas area (wrapper is the fullscreen target) */}
+      <div
+        ref={canvasAreaRef}
+        style={isFullscreen
+          ? { background: '#000', width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }
+          : {}}
+      >
       <div style={{
         position: 'relative',
-        width: '100%',
+        width: isFullscreen ? 'auto' : '100%',
+        height: isFullscreen ? '100%' : 'auto',
         maxWidth: '100%',
         aspectRatio: `${CANVAS_W}/${CANVAS_H}`,
-        borderRadius: '12px',
+        borderRadius: isFullscreen ? 0 : '12px',
         overflow: 'hidden',
-        border: `2px solid ${border}`,
+        border: isFullscreen ? 'none' : `2px solid ${border}`,
         background: '#fff',
-        cursor: mode === 'mouse' ? (isDrawingMouse ? 'crosshair' : 'crosshair') : 'none',
+        cursor: mode === 'mouse' ? 'crosshair' : 'none',
       }}>
         {/* Layer 1 (bottom): webcam feed — mirrored via CSS */}
         <video
@@ -879,6 +919,35 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             <span style={{ fontSize: '14px', opacity: 0.6 }}>{ct.startGesture}</span>
           </div>
         )}
+
+        {/* Loading overlay while MediaPipe / camera initializes */}
+        {mode === 'gesture' && status === 'loading' && (
+          <div style={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            background: darkMode ? '#1a1a2e' : '#f5f5f5',
+            zIndex: 12, gap: '14px',
+          }}>
+            <Loader size={40} style={{ opacity: 0.7, animation: 'aksara-spin 1s linear infinite' }} />
+            <span style={{ fontSize: '14px', opacity: 0.7 }}>{ct.loadingMp}</span>
+            <style>{`@keyframes aksara-spin { to { transform: rotate(360deg) } }`}</style>
+          </div>
+        )}
+
+        {/* Fullscreen toggle */}
+        <button
+          onClick={toggleFullscreen}
+          aria-label={isFullscreen ? 'Keluar layar penuh' : 'Layar penuh'}
+          style={{
+            position: 'absolute', top: '10px', right: '10px', zIndex: 13,
+            width: '36px', height: '36px', borderRadius: '8px',
+            border: 'none', background: 'rgba(0,0,0,0.45)', color: '#fff',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+        >
+          {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
+        </button>
+      </div>
       </div>
 
       {/* Tools row */}

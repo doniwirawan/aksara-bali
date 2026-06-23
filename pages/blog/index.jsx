@@ -132,7 +132,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
         />
       </Head>
 
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}

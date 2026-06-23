@@ -102,7 +102,7 @@ export default function AdminDashboard() {
     setStatsLoading(true)
     try {
       const [c, q, w] = await Promise.all([
-        fetch('/api/conversions'), fetch('/api/quiz-results'), fetch('/api/writing-checks'),
+        fetch('/api/conversions/'), fetch('/api/quiz-results/'), fetch('/api/writing-checks/'),
       ])
       if (c.ok) setStats(await c.json())
       if (q.ok) setQuizStats(await q.json())
@@ -114,7 +114,7 @@ export default function AdminDashboard() {
   // ─── Blog ─────────────────────────────────────────────────
   const fetchBlog = useCallback(async () => {
     setBlogLoading(true)
-    const res = await fetch('/api/blog-posts', { headers: getHeaders() })
+    const res = await fetch('/api/blog-posts/', { headers: getHeaders() })
     if (res.ok) setBlogPosts(await res.json())
     setBlogLoading(false)
   }, [])
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
     }
     const method = editingBlog ? 'PUT' : 'POST'
     if (editingBlog) payload.id = editingBlog
-    const res = await fetch('/api/blog-posts', { method, headers: getHeaders(), body: JSON.stringify(payload) })
+    const res = await fetch('/api/blog-posts/', { method, headers: getHeaders(), body: JSON.stringify(payload) })
     if (res.ok) {
       setShowBlogForm(false)
       setEditingBlog(null)
@@ -151,21 +151,21 @@ export default function AdminDashboard() {
     setDeleteModal({
       label: `Hapus artikel "${title}"?`,
       onConfirm: async () => {
-        await fetch('/api/blog-posts', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
+        await fetch('/api/blog-posts/', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
         fetchBlog()
       },
     })
   }
 
   const toggleBlogPublish = async (post) => {
-    await fetch('/api/blog-posts', { method: 'PUT', headers: getHeaders(), body: JSON.stringify({ id: post.id, published: !post.published }) })
+    await fetch('/api/blog-posts/', { method: 'PUT', headers: getHeaders(), body: JSON.stringify({ id: post.id, published: !post.published }) })
     fetchBlog()
   }
 
   // ─── FAQ ──────────────────────────────────────────────────
   const fetchFaq = useCallback(async () => {
     setFaqLoading(true)
-    const res = await fetch('/api/faq-items', { headers: getHeaders() })
+    const res = await fetch('/api/faq-items/', { headers: getHeaders() })
     if (res.ok) setFaqItems(await res.json())
     setFaqLoading(false)
   }, [])
@@ -175,7 +175,7 @@ export default function AdminDashboard() {
     setFaqSaving(true)
     const method = editingFaq ? 'PUT' : 'POST'
     const payload = editingFaq ? { ...faqForm, id: editingFaq } : faqForm
-    const res = await fetch('/api/faq-items', { method, headers: getHeaders(), body: JSON.stringify(payload) })
+    const res = await fetch('/api/faq-items/', { method, headers: getHeaders(), body: JSON.stringify(payload) })
     if (res.ok) {
       setShowFaqForm(false)
       setEditingFaq(null)
@@ -191,7 +191,7 @@ export default function AdminDashboard() {
   const editFaq = (item) => { setFaqForm(item); setEditingFaq(item.id); setShowFaqForm(true) }
 
   const saveFaqToggle = async (item) => {
-    await fetch('/api/faq-items', { method: 'PUT', headers: getHeaders(), body: JSON.stringify({ id: item.id, published: !item.published }) })
+    await fetch('/api/faq-items/', { method: 'PUT', headers: getHeaders(), body: JSON.stringify({ id: item.id, published: !item.published }) })
     fetchFaq()
   }
 
@@ -199,7 +199,7 @@ export default function AdminDashboard() {
     setDeleteModal({
       label: `Hapus FAQ "${question}"?`,
       onConfirm: async () => {
-        await fetch('/api/faq-items', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
+        await fetch('/api/faq-items/', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
         fetchFaq()
       },
     })
@@ -209,7 +209,7 @@ export default function AdminDashboard() {
   const searchUnsplash = useCallback(async (q = '', page = 1) => {
     setPickerLoading(true)
     const query = q || pickerQuery || 'bali temple culture'
-    const res = await fetch(`/api/unsplash-search?query=${encodeURIComponent(query)}&page=${page}&per_page=12`)
+    const res = await fetch(`/api/unsplash-search/?query=${encodeURIComponent(query)}&page=${page}&per_page=12`)
     if (res.ok) {
       const data = await res.json()
       setPickerPhotos(prev => page === 1 ? data.photos : [...prev, ...data.photos])
@@ -238,7 +238,7 @@ export default function AdminDashboard() {
     setShowPicker(false)
     // Trigger download event as required by Unsplash API guidelines
     if (photo.downloadLocation) {
-      fetch('/api/unsplash-download', {
+      fetch('/api/unsplash-download/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ downloadLocation: photo.downloadLocation }),
@@ -253,7 +253,7 @@ export default function AdminDashboard() {
 
   const fetchUsers = useCallback(async () => {
     setUsersLoading(true)
-    const res = await fetch('/api/admin-users', { headers: getHeaders() })
+    const res = await fetch('/api/admin-users/', { headers: getHeaders() })
     if (res.ok) setUsers(await res.json())
     setUsersLoading(false)
   }, [])
@@ -262,7 +262,7 @@ export default function AdminDashboard() {
     setDeleteModal({
       label: `Hapus akun "${userEmail}"?`,
       onConfirm: async () => {
-        await fetch('/api/admin-users', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
+        await fetch('/api/admin-users/', { method: 'DELETE', headers: getHeaders(), body: JSON.stringify({ id }) })
         fetchUsers()
       },
     })
@@ -278,7 +278,7 @@ export default function AdminDashboard() {
   // ─── Styles ───────────────────────────────────────────────
   const s = {
     card: { background: '#fff', borderRadius: '14px', border: '1px solid #e0e0d8', padding: '20px', marginBottom: '16px' },
-    input: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e0e0d8', fontSize: '14px', boxSizing: 'border-box', outline: 'none', fontFamily: 'system-ui, sans-serif' },
+    input: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e0e0d8', fontSize: '14px', boxSizing: 'border-box', outline: 'none', fontFamily: 'Inter, system-ui, sans-serif' },
     textarea: { width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e0e0d8', fontSize: '13px', boxSizing: 'border-box', outline: 'none', fontFamily: 'monospace', resize: 'vertical' },
     label: { display: 'block', fontSize: '12px', fontWeight: '600', color: '#555', marginBottom: '4px', marginTop: '12px' },
     btn: (color = '#0d6efd') => ({ padding: '8px 16px', borderRadius: '8px', background: color, color: '#fff', border: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }),
@@ -291,7 +291,7 @@ export default function AdminDashboard() {
     return (
       <>
         <Head><title>Admin — Aksara Bali</title></Head>
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f0', fontFamily: 'system-ui, sans-serif' }}>
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f0', fontFamily: 'Inter, system-ui, sans-serif' }}>
           <div style={{ padding: '40px', borderRadius: '16px', background: '#fff', border: '1px solid #e0e0d8', width: '360px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
             <div style={{ textAlign: 'center', marginBottom: '28px' }}>
               <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56" style={{ borderRadius: '12px', marginBottom: '12px', display: 'inline-block' }} />
@@ -328,7 +328,7 @@ export default function AdminDashboard() {
   return (
     <>
       <Head><title>Admin Dashboard — Aksara Bali</title></Head>
-      <div style={{ minHeight: '100vh', background: '#f5f5f0', fontFamily: 'system-ui, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: '#f5f5f0', fontFamily: 'Inter, system-ui, sans-serif' }}>
 
         {/* Header */}
         <header style={{ background: '#fff', borderBottom: '1px solid #e0e0d8', padding: '0 24px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -689,7 +689,7 @@ export default function AdminDashboard() {
                   <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                       <thead>
-                        <tr>{['Email', 'Status', 'Bergabung', 'Login Terakhir', 'Aksi'].map(h => (
+                        <tr>{['Email', 'Status', 'Konversi', 'Kuis', 'Tulis', 'Bergabung', 'Login Terakhir', 'Aksi'].map(h => (
                           <th key={h} style={{ textAlign: 'left', padding: '8px 12px', borderBottom: '2px solid #f0f0f0', color: '#555', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
                         ))}</tr>
                       </thead>
@@ -704,6 +704,9 @@ export default function AdminDashboard() {
                                 {u.email_confirmed_at ? 'Terverifikasi' : 'Belum verifikasi'}
                               </span>
                             </td>
+                            <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', color: '#0d6efd', fontWeight: '600' }}>{u.conversions ?? 0}</td>
+                            <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', color: '#198754', fontWeight: '600' }}>{u.quizzes ?? 0}</td>
+                            <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', color: '#6f42c1', fontWeight: '600' }}>{u.writings ?? 0}</td>
                             <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', color: '#666', whiteSpace: 'nowrap' }}>
                               {u.created_at ? new Date(u.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
                             </td>

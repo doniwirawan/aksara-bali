@@ -96,7 +96,7 @@ export default function PracticePage({ locale, setLocale }) {
         <link rel="canonical" href="https://aksarabali.id/practice" />
       </Head>
 
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}

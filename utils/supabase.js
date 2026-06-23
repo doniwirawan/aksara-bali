@@ -21,13 +21,22 @@ export function createServerClient() {
   })
 }
 
+// The app uses trailingSlash: true, so /api/x 308-redirects to /api/x/. Some
+// mobile browsers drop the Authorization header / POST body across that
+// redirect, so we request the trailing-slash URL directly.
+function withTrailingSlash(url) {
+  const [path, query] = url.split('?')
+  const p = path.endsWith('/') ? path : `${path}/`
+  return query ? `${p}?${query}` : p
+}
+
 // Client-side fetch that attaches the logged-in user's access token (if any).
 // Used so API routes can record which user an action belongs to.
 export async function authedFetch(url, options = {}) {
   const { data: { session } } = await supabase.auth.getSession()
   const headers = { ...(options.headers || {}) }
   if (session?.access_token) headers.Authorization = `Bearer ${session.access_token}`
-  return fetch(url, { ...options, headers })
+  return fetch(withTrailingSlash(url), { ...options, headers })
 }
 
 // Server-side: resolve the user from a request's bearer token. Returns null if

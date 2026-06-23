@@ -29,7 +29,7 @@ export default function Footer({ darkMode, locale }) {
     <footer style={{
       borderTop: `1px solid ${borderColor}`,
       background: bg,
-      fontFamily: 'system-ui, sans-serif',
+      fontFamily: 'Inter, system-ui, sans-serif',
       marginTop: '48px',
     }}>
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 20px 24px' }}>
@@ -38,7 +38,7 @@ export default function Footer({ darkMode, locale }) {
           {/* Brand */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="40" height="40" style={{ borderRadius: '8px' }} />
+              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="40" height="40" style={{ borderRadius: '8px', background: '#fff', padding: '2px', boxSizing: 'border-box' }} />
               <div>
                 <div style={{ fontWeight: '700', fontSize: '15px', color: textColor }}>Aksara Bali</div>
                 <div style={{ fontSize: '11px', color: mutedColor, letterSpacing: '0.5px' }}>CONVERTER</div>

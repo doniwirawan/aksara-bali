@@ -16,12 +16,31 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     const { data: { users }, error } = await supabase.auth.admin.listUsers({ perPage: 200 })
     if (error) return res.status(500).json({ error: error.message })
+
+    // Per-user activity counts (user_id is null for anonymous activity)
+    const [conv, quiz, writ] = await Promise.all([
+      supabase.from('conversions').select('user_id'),
+      supabase.from('quiz_results').select('user_id'),
+      supabase.from('writing_checks').select('user_id'),
+    ])
+    const countBy = (rows) => {
+      const m = {}
+      for (const r of rows || []) if (r.user_id) m[r.user_id] = (m[r.user_id] || 0) + 1
+      return m
+    }
+    const convCount = countBy(conv.data)
+    const quizCount = countBy(quiz.data)
+    const writCount = countBy(writ.data)
+
     const safe = users.map(u => ({
       id: u.id,
       email: u.email,
       created_at: u.created_at,
       last_sign_in_at: u.last_sign_in_at,
       email_confirmed_at: u.email_confirmed_at,
+      conversions: convCount[u.id] || 0,
+      quizzes: quizCount[u.id] || 0,
+      writings: writCount[u.id] || 0,
     }))
     return res.status(200).json(safe)
   }

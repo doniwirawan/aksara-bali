@@ -103,7 +103,7 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
   const tabActiveBg = '#0d6efd'
 
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif' }}>
+    <div style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
       {/* Tab bar */}
       <div style={{ display: 'flex', gap: '4px', marginBottom: '12px', flexWrap: 'wrap' }}>
         {TAB_LABELS.map((label, idx) => (
