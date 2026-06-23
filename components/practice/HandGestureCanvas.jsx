@@ -77,6 +77,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       gesturePoint: 'Menggambar', gesturePalm: 'Menghapus', gesturePinch: 'Mengangkat pena', gestureNone: 'Tidak ada gesture',
       placeholder: 'Gambar aksara Bali di sini', startGesture: 'Klik "Gerakan Tangan" untuk mulai',
       undo: 'Urung', clear: 'Bersihkan', check: 'Cek Tulisan',
+      showGuide: 'Tampilkan pola', hideGuide: 'Sembunyikan pola',
       precision: 'Presisi:', coverage: 'Cakupan:', tryAgain: 'Coba lagi',
       guide1: 'Tunjuk → menggambar', guide2: 'Telapak terbuka → menghapus', guide3: 'Cubit → angkat pena',
       errEmpty: 'Tulis dulu aksaranya!', errCamera: 'Gagal memuat kamera. Pastikan izin kamera diberikan dan coba lagi.',
@@ -91,6 +92,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       gesturePoint: 'Drawing', gesturePalm: 'Erasing', gesturePinch: 'Lifting pen', gestureNone: 'No gesture',
       placeholder: 'Draw Balinese script here', startGesture: 'Click "Hand Gesture" to start',
       undo: 'Undo', clear: 'Clear', check: 'Check Writing',
+      showGuide: 'Show guide', hideGuide: 'Hide guide',
       precision: 'Precision:', coverage: 'Coverage:', tryAgain: 'Try again',
       guide1: 'Point → draw', guide2: 'Open palm → erase', guide3: 'Pinch → lift pen',
       errEmpty: 'Write the script first!', errCamera: 'Failed to load camera. Make sure camera permission is granted.',
@@ -128,6 +130,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const [checkResult, setCheckResult] = useState(null) // null | { status, score, precision, recall, message }
   const [hwrResult, setHwrResult] = useState(null) // null | { recognized, matched }
   const [showRef, setShowRef] = useState(true)
+  const [showOverlay, setShowOverlay] = useState(true) // faint aksara guide on the canvas
   const [isFullscreen, setIsFullscreen] = useState(false)
   const currentPathRef = useRef([])
   const canvasAreaRef = useRef(null)
@@ -731,6 +734,14 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const COLORS = ['#0d6efd', '#dc3545', '#198754', '#6f42c1', '#fd7e14', '#000000']
   const WIDTHS = [2, 4, 7, 12]
 
+  // Icon-button style for the fullscreen floating toolbar
+  const fsToolBtn = {
+    height: '32px', minWidth: '32px', borderRadius: '8px',
+    border: '1px solid rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.08)',
+    color: '#fff', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
+    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+  }
+
   const gestureLabel = {
     point: ct.gesturePoint,
     palm: ct.gesturePalm,
@@ -894,20 +905,30 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           }}
         />
 
-        {/* Placeholder / watermark guide */}
-        {mode === 'mouse' && (
-          <div style={{
-            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            pointerEvents: 'none', zIndex: 1,
-            opacity: showRef ? 0.15 : 0, fontSize: '14px', color: '#888',
-            transition: 'opacity 0.3s',
-          }}>
-            {referenceBalinese
-              ? <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '80px' }}>{referenceBalinese}</span>
-              : ct.placeholder}
-          </div>
-        )}
+        {/* Aksara guide watermark — toggleable, shown in BOTH mouse and gesture modes.
+            zIndex 4 keeps it above the webcam (2) but below the drawing (5). */}
+        {referenceBalinese
+          ? (showOverlay && (
+              <div style={{
+                position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                pointerEvents: 'none', zIndex: 4,
+                opacity: mode === 'gesture' ? 0.3 : 0.15,
+                transition: 'opacity 0.3s',
+              }}>
+                <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '120px', color: mode === 'gesture' ? '#fff' : '#888' }}>{referenceBalinese}</span>
+              </div>
+            ))
+          : (mode === 'mouse' && (
+              <div style={{
+                position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                pointerEvents: 'none', zIndex: 1,
+                opacity: 0.5, fontSize: '14px', color: '#888',
+              }}>
+                {ct.placeholder}
+              </div>
+            ))}
 
         {mode === 'gesture' && status === 'idle' && (
           <div style={{
@@ -948,6 +969,48 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         >
           {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
         </button>
+
+        {/* Fullscreen floating toolbar — mirrors the main tools so they're usable in fullscreen (both modes) */}
+        {isFullscreen && (
+          <div style={{
+            position: 'absolute', bottom: '16px', left: '50%', transform: 'translateX(-50%)',
+            zIndex: 13, display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap',
+            justifyContent: 'center', maxWidth: '94%',
+            background: 'rgba(20,20,30,0.82)', padding: '10px 14px', borderRadius: '14px',
+          }}>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              {COLORS.map(c => (
+                <button key={c} onClick={() => setStrokeColor(c)} aria-label={`Warna ${c}`} style={{
+                  width: '24px', height: '24px', borderRadius: '50%', background: c, cursor: 'pointer',
+                  border: strokeColor === c ? '3px solid #fff' : '2px solid rgba(255,255,255,0.35)',
+                }} />
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              {WIDTHS.map(w => (
+                <button key={w} onClick={() => setStrokeWidth(w)} aria-label={`Tebal ${w}`} style={{
+                  width: '28px', height: '28px', borderRadius: '6px', background: 'transparent', cursor: 'pointer',
+                  border: strokeWidth === w ? '2px solid #fff' : '2px solid rgba(255,255,255,0.35)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <div style={{ width: Math.min(w * 2, 18), height: w, background: '#fff', borderRadius: '2px' }} />
+                </button>
+              ))}
+            </div>
+            {referenceBalinese && (
+              <button onClick={() => setShowOverlay(v => !v)} aria-label={showOverlay ? ct.hideGuide : ct.showGuide} style={fsToolBtn}>
+                {showOverlay ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            )}
+            <button onClick={undoLast} aria-label={ct.undo} style={fsToolBtn}><Undo2 size={16} /></button>
+            <button onClick={() => { clearCanvas(); setCheckResult(null); setHwrResult(null) }} aria-label={ct.clear} style={{ ...fsToolBtn, color: '#ff7a7a' }}><Trash2 size={16} /></button>
+            {referenceBalinese && (
+              <button onClick={checkDrawing} style={{ ...fsToolBtn, background: '#0d6efd', color: '#fff', width: 'auto', padding: '0 14px', gap: '6px' }}>
+                <Check size={16} /> {ct.check}
+              </button>
+            )}
+          </div>
+        )}
       </div>
       </div>
 
@@ -985,6 +1048,22 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             </button>
           ))}
         </div>
+
+        {/* Toggle aksara guide overlay (works in mouse + gesture mode) */}
+        {referenceBalinese && (
+          <button
+            data-track="write-toggle-guide"
+            onClick={() => setShowOverlay(v => !v)}
+            style={{
+              padding: '7px 16px', borderRadius: '8px',
+              border: `1px solid ${border}`, background: showOverlay ? (darkMode ? '#1e3a5f' : '#e8f0fe') : 'transparent',
+              cursor: 'pointer', fontSize: '13px', color: textColor,
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+            }}
+          >
+            {showOverlay ? <EyeOff size={15} /> : <Eye size={15} />} {showOverlay ? ct.hideGuide : ct.showGuide}
+          </button>
+        )}
 
         <div style={{ flex: 1 }} />
 

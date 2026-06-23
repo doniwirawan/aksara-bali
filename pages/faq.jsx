@@ -274,7 +274,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
           <div style={{ textAlign: 'center', marginBottom: '36px' }}>
             <a href="/">
               <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
-                style={{ borderRadius: '14px', marginBottom: '12px', display: 'inline-block', boxShadow: '0 2px 12px rgba(13,110,253,0.2)' }} />
+                style={{ borderRadius: '14px', marginBottom: '12px', display: 'inline-block', boxShadow: '0 2px 12px rgba(13,110,253,0.2)', background: '#fff', padding: '6px', boxSizing: 'border-box' }} />
             </a>
             <h1 style={{ fontSize: '30px', fontWeight: '700', margin: '0 0 10px' }}>
               {ui.title}

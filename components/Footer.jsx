@@ -125,7 +125,7 @@ export default function Footer({ darkMode, locale }) {
         {/* Bottom bar */}
         <div style={{ borderTop: `1px solid ${borderColor}`, paddingTop: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
           <small style={{ color: mutedColor, fontSize: '13px' }}>
-            © 2025 Doni Wirawan · MIT License ·{' '}
+            © {new Date().getFullYear()} Doni Wirawan · MIT License ·{' '}
             {id ? 'Terinspirasi dari ' : 'Inspired by '}
             <a href="https://github.com/bennylin/transliterasijawa" target="_blank" rel="noopener noreferrer" style={{ color: linkColor, textDecoration: 'none' }}>
               transliterasijawa
@@ -134,6 +134,9 @@ export default function Footer({ darkMode, locale }) {
           </small>
           <small style={{ color: mutedColor, fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
             {id ? 'Dibuat dengan' : 'Made with'} <Heart size={13} fill="#e11d48" color="#e11d48" /> {id ? 'untuk Bali' : 'for Bali'}
+            <span style={{ marginLeft: '8px', opacity: 0.7, fontFamily: 'monospace' }}>
+              v{process.env.NEXT_PUBLIC_APP_VERSION} · {process.env.NEXT_PUBLIC_BUILD_REF}
+            </span>
           </small>
         </div>
       </div>

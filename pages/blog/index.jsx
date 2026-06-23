@@ -145,7 +145,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <a href="/">
               <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
-                style={{ borderRadius: '14px', marginBottom: '12px', display: 'inline-block', boxShadow: '0 2px 12px rgba(13,110,253,0.2)' }} />
+                style={{ borderRadius: '14px', marginBottom: '12px', display: 'inline-block', boxShadow: '0 2px 12px rgba(13,110,253,0.2)', background: '#fff', padding: '6px', boxSizing: 'border-box' }} />
             </a>
             <h1 style={{ fontSize: '32px', fontWeight: '700', margin: '0 0 10px', lineHeight: 1.2 }}>
               {blogUi.blogTitle}
