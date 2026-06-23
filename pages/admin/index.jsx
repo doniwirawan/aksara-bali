@@ -6,6 +6,7 @@ import { ADMIN_EMAIL, isAdminEmail } from '../../utils/admin'
 import {
   BarChart3, PenLine, HelpCircle, Users, RefreshCw, Zap, Target, Flame,
   CheckCircle, ClipboardList, X, Image as ImageIcon, Clock, Trash2, Eye, EyeOff,
+  MousePointerClick, Activity,
 } from 'lucide-react'
 
 const BLOG_CATEGORIES = ['Sejarah & Budaya', 'Panduan Belajar', 'Linguistik', 'Naskah Kuno', 'Teknologi & Budaya', 'Umum']
@@ -31,6 +32,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState(null)
   const [quizStats, setQuizStats] = useState(null)
   const [writingStats, setWritingStats] = useState(null)
+  const [eventStats, setEventStats] = useState(null)
   const [statsLoading, setStatsLoading] = useState(false)
 
   // Blog
@@ -101,12 +103,13 @@ export default function AdminDashboard() {
   const fetchStats = useCallback(async () => {
     setStatsLoading(true)
     try {
-      const [c, q, w] = await Promise.all([
-        fetch('/api/conversions/'), fetch('/api/quiz-results/'), fetch('/api/writing-checks/'),
+      const [c, q, w, ev] = await Promise.all([
+        fetch('/api/conversions/'), fetch('/api/quiz-results/'), fetch('/api/writing-checks/'), fetch('/api/events/'),
       ])
       if (c.ok) setStats(await c.json())
       if (q.ok) setQuizStats(await q.json())
       if (w.ok) setWritingStats(await w.json())
+      if (ev.ok) setEventStats(await ev.json())
     } catch (e) { console.error(e) }
     setStatsLoading(false)
   }, [])
@@ -373,6 +376,9 @@ export default function AdminDashboard() {
                   { label: 'Streak Terbaik', value: quizStats?.bestStreak ?? '—', icon: Flame, color: '#dc3545' },
                   { label: 'Cek Tulisan', value: writingStats?.total ?? '—', icon: PenLine, color: '#6f42c1' },
                   { label: 'Lulus Tulis', value: writingStats?.passed != null ? `${writingStats.passed}/${writingStats.total}` : '—', icon: CheckCircle, color: '#20c997' },
+                  { label: 'Kunjungan Halaman', value: eventStats?.pageViews ?? '—', icon: Eye, color: '#0ea5e9' },
+                  { label: 'Total Klik', value: eventStats?.clicks ?? '—', icon: MousePointerClick, color: '#f43f5e' },
+                  { label: 'Aktivitas 7 Hari', value: eventStats?.last7d ?? '—', icon: Activity, color: '#8b5cf6' },
                 ].map(card => (
                   <div key={card.label} style={s.card}>
                     <card.icon size={24} color={card.color} style={{ marginBottom: '6px' }} />
@@ -406,6 +412,43 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               )}
+
+              {/* Analytics: most-visited pages & most-clicked elements */}
+              {(eventStats?.topPages?.length > 0 || eventStats?.topClicks?.length > 0) && (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                  <div style={s.card}>
+                    <h3 style={{ fontSize: '15px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}><Eye size={15} /> Halaman Populer</h3>
+                    {eventStats?.topPages?.length > 0 ? (
+                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                        <tbody>
+                          {eventStats.topPages.map((p, i) => (
+                            <tr key={i}>
+                              <td style={{ padding: '7px 8px', borderBottom: '1px solid #f8f8f8', fontFamily: 'monospace', color: '#374151' }}>{p.name || '/'}</td>
+                              <td style={{ padding: '7px 8px', borderBottom: '1px solid #f8f8f8', textAlign: 'right', fontWeight: '700', color: '#0ea5e9' }}>{p.count}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>Belum ada data.</p>}
+                  </div>
+                  <div style={s.card}>
+                    <h3 style={{ fontSize: '15px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '6px' }}><MousePointerClick size={15} /> Klik Terbanyak</h3>
+                    {eventStats?.topClicks?.length > 0 ? (
+                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                        <tbody>
+                          {eventStats.topClicks.map((p, i) => (
+                            <tr key={i}>
+                              <td style={{ padding: '7px 8px', borderBottom: '1px solid #f8f8f8', color: '#374151' }}>{p.name}</td>
+                              <td style={{ padding: '7px 8px', borderBottom: '1px solid #f8f8f8', textAlign: 'right', fontWeight: '700', color: '#f43f5e' }}>{p.count}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>Belum ada data.</p>}
+                  </div>
+                </div>
+              )}
+
               <div style={{ ...s.card, background: '#f0f4ff', border: '1px solid #c5d8fc' }}>
                 <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 10px', color: '#1e40af', display: 'flex', alignItems: 'center', gap: '6px' }}><ClipboardList size={15} /> Setup Supabase</h3>
                 <p style={{ fontSize: '13px', color: '#374151', margin: '0 0 8px' }}>Jalankan <code>supabase-schema.sql</code> di Supabase SQL Editor untuk membuat semua tabel (termasuk blog_posts dan faq_items).</p>

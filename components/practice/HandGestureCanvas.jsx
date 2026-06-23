@@ -783,6 +783,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         {[{ key: 'mouse', label: ct.modeMouse, icon: MousePointer2 }, { key: 'gesture', label: ct.modeGesture, icon: Hand }].map(m => (
           <button
             key={m.key}
+            data-track={`write-mode-${m.key}`}
             onClick={() => setMode(m.key)}
             style={{
               padding: '8px 18px',
@@ -1016,6 +1017,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         {/* Check button — only shown when a reference word is set */}
         {referenceBalinese && (
           <button
+            data-track="write-check"
             onClick={checkDrawing}
             style={{
               padding: '7px 20px', borderRadius: '8px',

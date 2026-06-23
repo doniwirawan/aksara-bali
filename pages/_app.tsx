@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../styles/globals.css'
 import { AuthProvider } from '../context/AuthContext'
+import { trackPageView, trackEvent } from '../utils/analytics'
 
 // Enhanced SEO Content in multiple languages
 const seoContent = {
@@ -389,6 +390,24 @@ function MyApp({ Component, pageProps }) {
             }
         }
     }, [locale, mounted])
+
+    // Analytics: track page views on every route change + delegated clicks on [data-track]
+    useEffect(() => {
+        if (!mounted) return
+        trackPageView(router.asPath.split('?')[0])
+        const onRoute = (url) => trackPageView(url.split('?')[0])
+        router.events.on('routeChangeComplete', onRoute)
+        const onClick = (e) => {
+            const el = e.target?.closest?.('[data-track]')
+            if (el) trackEvent(el.getAttribute('data-track'))
+        }
+        document.addEventListener('click', onClick)
+        return () => {
+            router.events.off('routeChangeComplete', onRoute)
+            document.removeEventListener('click', onClick)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mounted])
 
     // Get current content based on locale
     const currentContent = seoContent[locale] || seoContent.en

@@ -73,6 +73,7 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
             <a
               key={link.href}
               href={link.href}
+              data-track={`nav-${link.label}`}
               style={{
                 padding: '6px 14px',
                 borderRadius: '20px',
@@ -235,6 +236,7 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
             <a
               key={link.href}
               href={link.href}
+              data-track={`nav-${link.label}`}
               style={{
                 display: 'flex', alignItems: 'center', gap: '10px',
                 padding: '12px 8px',

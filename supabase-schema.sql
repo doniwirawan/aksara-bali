@@ -121,3 +121,26 @@ create or replace view public.quiz_stats as
     max(max_streak) as best_streak,
     round(avg(score::float / total * 100)) as avg_score_pct
   from public.quiz_results;
+
+-- Table: events (generic analytics — page views, clicks, etc.)
+create table if not exists public.events (
+  id         bigserial primary key,
+  user_id    uuid references auth.users(id),
+  type       text not null,            -- 'page_view' | 'click' | custom
+  name       text not null,            -- path for page_view, identifier for click
+  path       text,                     -- page the event happened on
+  locale     text,
+  created_at timestamptz not null default now()
+);
+
+alter table public.events enable row level security;
+
+create policy "Allow anon insert events"
+  on public.events for insert to anon with check (true);
+
+create policy "Service role can read events"
+  on public.events for select using (auth.role() = 'service_role');
+
+create index if not exists idx_events_type    on public.events(type);
+create index if not exists idx_events_name     on public.events(name);
+create index if not exists idx_events_created  on public.events(created_at desc);

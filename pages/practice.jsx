@@ -124,6 +124,7 @@ export default function PracticePage({ locale, setLocale }) {
             {TABS.map(tab => (
               <button
                 key={tab.key}
+                data-track={`practice-tab-${tab.key}`}
                 onClick={() => setActiveTab(tab.key)}
                 style={{
                   padding: '10px 24px',
@@ -166,6 +167,7 @@ export default function PracticePage({ locale, setLocale }) {
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                     <span style={{ fontSize: '13px', color: mutedColor }}>{pt.practiceLabel}</span>
                     <button
+                      data-track="practice-change-word"
                       onClick={randomizeWord}
                       style={{
                         padding: '6px 14px', borderRadius: '20px',
