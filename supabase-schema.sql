@@ -144,3 +144,25 @@ create policy "Service role can read events"
 create index if not exists idx_events_type    on public.events(type);
 create index if not exists idx_events_name     on public.events(name);
 create index if not exists idx_events_created  on public.events(created_at desc);
+
+-- Table: practice_words (quiz / practice word list — source of truth for /api/words)
+-- Seed from the bundled list with: node scripts/seed-words.mjs
+create table if not exists public.practice_words (
+  id          bigserial primary key,
+  latin       text not null,
+  meaning     text,
+  category    text,
+  difficulty  text not null default 'easy',
+  sort_order  integer not null default 0,
+  created_at  timestamptz not null default now()
+);
+
+alter table public.practice_words enable row level security;
+
+create policy "Anyone can read practice words"
+  on public.practice_words for select using (true);
+
+create policy "Service role manage practice words"
+  on public.practice_words for all using (auth.role() = 'service_role');
+
+create index if not exists idx_practice_words_difficulty on public.practice_words(difficulty);
