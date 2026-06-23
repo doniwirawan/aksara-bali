@@ -18,6 +18,7 @@ import {
     Zap
 } from 'lucide-react'
 import { authedFetch } from '../utils/supabase'
+import { trackEvent } from '../utils/analytics'
 
 const translations = {
     en: {
@@ -1090,6 +1091,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     }, [latinText, balineseText, isReverseMode, locale])
 
     const handleModeSwitch = () => {
+        trackEvent('converter-mode-switch')
         setIsReverseMode(!isReverseMode)
     }
 
@@ -1103,6 +1105,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
 
     const handleCopyLeft = async () => {
         try {
+            trackEvent('converter-copy')
             const textToCopy = isReverseMode ? balineseText : latinText
             await navigator.clipboard.writeText(textToCopy)
             setCopySuccessLeft(true)
@@ -1114,6 +1117,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
 
     const handleCopyRight = async () => {
         try {
+            trackEvent('converter-copy-result')
             const textToCopy = isReverseMode ? latinText : balineseText
             await navigator.clipboard.writeText(textToCopy)
             setCopySuccessRight(true)
@@ -1124,6 +1128,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     }
 
     const handleDownloadLeft = () => {
+        trackEvent('converter-download')
         const element = document.createElement('a')
         const textToDownload = isReverseMode ? balineseText : latinText
         const filename = isReverseMode ? 'balinese_text.txt' : 'latin_text.txt'
@@ -1136,6 +1141,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     }
 
     const handleDownloadRight = () => {
+        trackEvent('converter-download-result')
         const element = document.createElement('a')
         const textToDownload = isReverseMode ? latinText : balineseText
         const filename = isReverseMode ? 'latin_text.txt' : 'balinese_text.txt'
@@ -1148,6 +1154,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     }
 
     const handleReset = () => {
+        trackEvent('converter-reset')
         setLatinText('')
         setBalineseText('')
     }
