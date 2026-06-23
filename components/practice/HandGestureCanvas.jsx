@@ -1161,14 +1161,15 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             data-track="write-check"
             onClick={checkDrawing}
             style={{
-              padding: '7px 20px', borderRadius: '8px',
+              flex: '1 1 100%', minWidth: '200px',
+              padding: '14px 28px', borderRadius: '10px',
               border: 'none', background: '#0d6efd',
-              cursor: 'pointer', fontSize: '13px', color: '#fff',
-              fontWeight: '600', boxShadow: '0 2px 6px rgba(13,110,253,0.3)',
-              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              cursor: 'pointer', fontSize: '16px', color: '#fff',
+              fontWeight: '700', boxShadow: '0 2px 8px rgba(13,110,253,0.3)',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             }}
           >
-            <Check size={15} /> {ct.check}
+            <Check size={18} /> {ct.check}
           </button>
         )}
       </div>
