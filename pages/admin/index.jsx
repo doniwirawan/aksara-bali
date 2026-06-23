@@ -16,7 +16,7 @@ function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim()
 }
 
-const EMPTY_POST = { slug: '', title: '', title_en: '', excerpt: '', excerpt_en: '', content: '', content_en: '', category: 'Umum', tags: '', image_url: '', image_credit: '', image_credit_url: '', published: false, read_time: '5 menit' }
+const EMPTY_POST = { slug: '', title: '', title_en: '', excerpt: '', excerpt_en: '', content: '', content_en: '', category: 'Umum', tags: '', image_url: '', image_credit: '', image_credit_url: '', image_source_url: '', published: false, read_time: '5 menit' }
 const EMPTY_FAQ = { category: 'Umum', question: '', answer: '', sort_order: 0, published: true }
 
 export default function AdminDashboard() {
@@ -249,6 +249,7 @@ export default function AdminDashboard() {
       image_url: photo.url,
       image_credit: photo.author,
       image_credit_url: photo.authorUrl,
+      image_source_url: photo.link,
     }))
     setShowPicker(false)
     // Trigger download event as required by Unsplash API guidelines

@@ -563,6 +563,7 @@ export async function getServerSideProps({ params }) {
     imageUrl: d.image_url || 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80',
     imageCredit: d.image_credit || '',
     imageCreditUrl: d.image_credit_url || '',
+    imageSourceUrl: d.image_source_url || '',
     content: d.content || '',
     contentEn: d.content_en || '',
   })
@@ -798,28 +799,27 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
               </div>
-              {post.imageUrl && post.imageUrl.includes('images.unsplash.com') && (() => {
-                const photoIdMatch = post.imageUrl.match(/photo-\d+-([a-z0-9]+)/i)
-                const photoPageUrl = photoIdMatch
-                  ? `https://unsplash.com/photos/${photoIdMatch[1]}?utm_source=aksara_bali&utm_medium=referral`
-                  : `https://unsplash.com?utm_source=aksara_bali&utm_medium=referral`
+              {(post.imageCredit || (post.imageUrl && post.imageUrl.includes('unsplash.com'))) && (() => {
+                // Prefer the stored photo-page link; fall back to the photographer's
+                // profile, then the Unsplash home — never a broken derived URL.
+                const photoLink = post.imageSourceUrl || post.imageCreditUrl || 'https://unsplash.com?utm_source=aksara_bali&utm_medium=referral'
                 return (
                   <p style={{ fontSize: '12px', color: mutedColor, margin: '6px 0 0', textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif' }}>
                     {post.imageCredit ? (
                       <>
                         Photo by{' '}
-                        <a href={post.imageCreditUrl} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor, textDecoration: 'underline' }}>
+                        <a href={post.imageCreditUrl || photoLink} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor, textDecoration: 'underline' }}>
                           {post.imageCredit}
                         </a>
                         {' '}on{' '}
-                        <a href={photoPageUrl} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor, textDecoration: 'underline' }}>
+                        <a href={photoLink} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor, textDecoration: 'underline' }}>
                           Unsplash
                         </a>
                       </>
                     ) : (
                       <>
                         Photo on{' '}
-                        <a href={photoPageUrl} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor, textDecoration: 'underline' }}>
+                        <a href={photoLink} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor, textDecoration: 'underline' }}>
                           Unsplash
                         </a>
                       </>

@@ -20,6 +20,7 @@ export default async function handler(req, res) {
     alt: p.alt_description || p.description || 'Bali photo',
     author: p.user.name,
     authorUrl: `${p.user.links.html}?utm_source=aksara_bali&utm_medium=referral`,
+    link: `${p.links.html}?utm_source=aksara_bali&utm_medium=referral`,
     downloadLocation: p.links.download_location,
   }))
 

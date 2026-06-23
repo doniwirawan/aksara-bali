@@ -49,6 +49,7 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
       background: bg,
       borderBottom: `1px solid ${borderColor}`,
       boxShadow: '0 1px 8px rgba(0,0,0,0.07)',
+      fontFamily: 'Inter, system-ui, sans-serif',
     }}>
       <div style={{
         maxWidth: 1100, margin: '0 auto', padding: '0 16px',
