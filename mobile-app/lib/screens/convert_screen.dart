@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import '../converter.dart';
 import '../theme.dart';
+import '../balinese_keyboard.dart';
 
 class ConvertScreen extends StatefulWidget {
   const ConvertScreen({super.key});
@@ -78,13 +79,15 @@ class _ConvertScreenState extends State<ConvertScreen> {
             child: TextField(
               controller: _controller,
               onChanged: _convert,
-              autofocus: true,
+              autofocus: !_reverse,
+              readOnly: _reverse,   // use the on-screen Balinese keyboard instead
+              showCursor: true,
               maxLines: 3,
               minLines: 1,
               style: inFont.copyWith(color: kInk),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: _reverse ? 'ᬑᬁᬲ᭄ᬯᬲ᭄ᬢ᭄ᬬᬲ᭄ᬢᬸ' : 'e.g. om swastiastu',
+                hintText: _reverse ? 'Ketik dengan papan aksara di bawah' : 'e.g. om swastiastu',
                 suffixIcon: _controller.text.isEmpty ? null : IconButton(
                   icon: const Icon(Icons.clear, size: 20),
                   onPressed: () { _controller.clear(); _convert(''); },
@@ -92,6 +95,10 @@ class _ConvertScreenState extends State<ConvertScreen> {
               ),
             ),
           ),
+          if (_reverse) ...[
+            const SizedBox(height: 12),
+            BalineseKeyboard(controller: _controller, onChanged: () => _convert(_controller.text)),
+          ],
           const SizedBox(height: 16),
 
           Text(outLabel, style: const TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12)),
