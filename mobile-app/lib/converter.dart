@@ -61,9 +61,24 @@ bool _isStartOfSanskritWord(String text, int position) {
   return false;
 }
 
+// Latin diacritics (from the ā ī ū ě ṇ … input helpers) normalized to the plain
+// sequences the mapping below already understands. Keep in sync with the web app.
+const Map<String, String> _latinDiacritics = {
+  'ā': 'aa', 'â': 'aa', 'ī': 'ii', 'î': 'ii', 'ū': 'uu', 'û': 'uu',
+  'é': 'e', 'è': 'e', 'ě': 'e', 'ĕ': 'e', 'ö': 'e',
+  'ṛ': 're', 'ṝ': 're', 'ṇ': 'nna', 'ṅ': 'ng', 'ñ': 'nya',
+  'ś': 'sa', 'ṣ': 'sa', 'ṭ': 'ta', 'ḍ': 'da', 'ḥ': 'h', 'ṁ': 'ng', 'ṃ': 'ng',
+};
+
+String _normalizeDiacritics(String s) {
+  var r = s;
+  _latinDiacritics.forEach((k, v) => r = r.replaceAll(k, v));
+  return r;
+}
+
 String latinToBalinese(String text) {
   if (text.isEmpty) return '';
-  final s = text.toLowerCase().trim();
+  final s = _normalizeDiacritics(text.toLowerCase().trim());
   final buf = StringBuffer();
   int i = 0;
   while (i < s.length) {

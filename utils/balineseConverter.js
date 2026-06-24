@@ -35,12 +35,27 @@ const isConsonant = (char) => 'bcdfghjklmnpqrstvwxyz'.includes(char?.toLowerCase
 const isPunctuation = (char) => '.,!?;:()[]{}"\'-'.includes(char)
 const normalizeConsonant = (char) => char?.toLowerCase() === 'v' ? 'w' : char?.toLowerCase()
 
+// Latin diacritics (from the ā ī ū ě ṇ … input helpers) normalized to the plain
+// sequences the mapping understands. Keep in sync with the mobile app's converter.
+const LATIN_DIACRITICS = {
+  'ā': 'aa', 'â': 'aa', 'ī': 'ii', 'î': 'ii', 'ū': 'uu', 'û': 'uu',
+  'é': 'e', 'è': 'e', 'ě': 'e', 'ĕ': 'e', 'ö': 'e',
+  'ṛ': 're', 'ṝ': 're', 'ṇ': 'nna', 'ṅ': 'ng', 'ñ': 'nya',
+  'ś': 'sa', 'ṣ': 'sa', 'ṭ': 'ta', 'ḍ': 'da', 'ḥ': 'h', 'ṁ': 'ng', 'ṃ': 'ng',
+}
+
+function normalizeDiacritics(s) {
+  let r = s
+  for (const [k, v] of Object.entries(LATIN_DIACRITICS)) r = r.split(k).join(v)
+  return r
+}
+
 export function convertLatinToBalinese(text) {
   if (!text) return ''
 
   let result = ''
   let i = 0
-  const normalizedText = text.toLowerCase().trim()
+  const normalizedText = normalizeDiacritics(text.toLowerCase().trim())
 
   while (i < normalizedText.length) {
     let matched = false

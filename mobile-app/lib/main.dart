@@ -4,7 +4,6 @@ import 'theme.dart';
 import 'screens/convert_screen.dart';
 import 'screens/write_screen.dart';
 import 'screens/quiz_screen.dart';
-import 'screens/learn_screen.dart';
 import 'screens/about_screen.dart';
 
 void main() => runApp(const AksaraBaliApp());
@@ -36,7 +35,7 @@ class HomeShell extends StatefulWidget {
 
 class _HomeShellState extends State<HomeShell> {
   int _tab = 0;
-  final _screens = const [ConvertScreen(), WriteScreen(), QuizScreen(), LearnScreen(), AboutScreen()];
+  final _screens = const [ConvertScreen(), WriteScreen(), QuizScreen(), AboutScreen()];
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +70,6 @@ class _HomeShellState extends State<HomeShell> {
           NavigationDestination(icon: Icon(Icons.translate_outlined), selectedIcon: Icon(Icons.translate), label: 'Convert'),
           NavigationDestination(icon: Icon(Icons.edit_outlined), selectedIcon: Icon(Icons.edit), label: 'Write'),
           NavigationDestination(icon: Icon(Icons.quiz_outlined), selectedIcon: Icon(Icons.quiz), label: 'Quiz'),
-          NavigationDestination(icon: Icon(Icons.school_outlined), selectedIcon: Icon(Icons.school), label: 'Learn'),
           NavigationDestination(icon: Icon(Icons.info_outline), selectedIcon: Icon(Icons.info), label: 'About'),
         ],
       ),

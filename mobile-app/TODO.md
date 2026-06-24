@@ -12,7 +12,7 @@ continue in a fresh session.
 - **Check**: `flutter analyze` (clean), `flutter test` (passes).
 - **Key files**: `lib/main.dart` (5-tab shell), `lib/converter.dart` (engine),
   `lib/words_data.dart`, `lib/sanskrit_data.dart`, `lib/balinese_keyboard.dart`,
-  `lib/screens/{convert,write,quiz,learn,about}_screen.dart`, `lib/theme.dart`.
+  `lib/screens/{convert,write,quiz,about}_screen.dart`, `lib/theme.dart`.
 - **Regenerate data**: `node scripts/gen_words.py`-style via `python scripts/gen_words.py`
   (pipe `/api/words`) and `node scripts/gen_sanskrit.mjs`.
 
@@ -25,21 +25,42 @@ continue in a fresh session.
 - [x] **Two-way** Convert with swap toggle; **Balinese on-screen keyboard** for reverse input
 - [x] Bundled **word list** (Quiz + Learn read it locally, no API)
 - [x] **Writing practice** (trace canvas): undo / clear / guide toggle / shuffle word
+- [x] **Writing scoring** — pixel-overlap precision/recall F1 ported 1:1 from web
+      (`_score` in `write_screen.dart`); shows score%, bar, precision + coverage
 - [x] Copy + Share (`share_plus`); About links open externally (Android 11+ `<queries>`)
 - [x] **Play signing**: upload keystore + `android/key.properties` (both gitignored);
       release build signed by the upload key (verified)
 - [x] Built signed **AAB** (`build/app/outputs/bundle/release/app-release.aab`) + signed APK
 - [x] Published APK to GitHub Releases **v1.0.0** (landing-page Download button links to it)
+- [x] **App icon** — custom gold-aksara medallion on deep-navy gradient (generated via
+      `scripts`→`assets/icon/icon_app.png` + `icon_fg.png`); adaptive bg `#15172B`
+- [x] **Removed the Learn tab** (mobile) — nav now Convert · Write · Quiz · About;
+      deleted `lib/screens/learn_screen.dart`
+- [x] **Leveled Quiz** — 6 tiers (Pemula→GrandMaster), locked until previous passed (≥70),
+      best scores persisted (`shared_preferences`); **two modes** Membaca (reading, MCQ) +
+      Menulis (typing with on-screen Balinese keyboard + check/feedback); results popup
+      (Benar/Score/Salah · Ulangi/Lihat Detail). All in `lib/screens/quiz_screen.dart`
 
 ## 🟡 Next up
 - [ ] **Dark mode** (`shared_preferences` already added; needs a ThemeExtension +
       toggle + screen color refactor)
-- [ ] **Writing scoring** — compare the drawing to the reference (pixel overlap) and
-      show a score, like the web; currently trace-only
 - [ ] **Recent conversions** history (persist with `shared_preferences`)
 - [ ] In-app **language toggle** (ID/EN) to match the website
-- [ ] Replace the wordmark launcher icon with a dedicated **square** mark (wordmark
-      gets cropped in circular masks)
+- [x] **Converter styling panel (mobile)** — diacritic input buttons `ā ī ū ě ṇ`
+      (normalized in `converter.dart` via `_latinDiacritics`), output font-size slider,
+      alignment, text color + background swatches, **share-as-image** (RepaintBoundary→PNG)
+- [x] **Hide/show on-screen Balinese keyboard** in reverse (Aksara→Latin) mode (toggle)
+- [x] **Write screen landscape/wide support** — `LayoutBuilder`: portrait = column,
+      landscape = controls panel (320px) left + canvas filling height on the right
+- [x] **Web: leveled Quiz** (Pemula→GrandMaster, locked/unlocked, best scores in
+      `localStorage`) + **Membaca/Menulis** modes + **results popup** — rewrote
+      `components/practice/QuizMode.jsx` (dark-mode + id/en preserved)
+- [x] **Web: diacritic input** — normalization mirrored in `utils/balineseConverter.js`
+      (`LATIN_DIACRITICS`); `ā ī ū ě ṇ` buttons added to `LatinBalineseConverter.jsx`
+- [x] **Web: converter styling panel + share-as-image** — added a styled preview card
+      below the output with font-size slider, alignment, text + background swatches, and
+      **Download Image** via native Canvas (no extra deps) in `LatinBalineseConverter.jsx`
+- [ ] (Web reverse mode uses a plain textarea — no on-screen keyboard, so "hide keyboard" N/A)
 
 ## 🟢 Release (Play Store)
 - [ ] **Back up the keystore** (`android/app/upload-keystore.jks`, pass `AksaraBali2026`,

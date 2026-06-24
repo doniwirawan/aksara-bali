@@ -1,8 +1,19 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { convertLatinToBalinese, QUIZ_WORDS } from '../../utils/balineseConverter'
-import { authedFetch } from '../../utils/supabase'
-import { Check, Eye, EyeOff, Flag, BookOpen, RotateCcw, Trophy, ThumbsUp, CheckCircle, Target, Flame, XCircle } from 'lucide-react'
+import { Check, ArrowLeft, Lock, BookOpen, Keyboard, Trophy, RotateCcw, CheckCircle, XCircle } from 'lucide-react'
 import BalineseKeyboard from './BalineseKeyboard'
+
+const PASS = 70
+const STORAGE_KEY = 'aksara_quiz_best'
+
+const LEVELS = [
+  { name: 'Pemula', sub: { id: 'Kenali dasar aksara.', en: 'Learn the basics.' }, diffs: ['easy'], count: 8 },
+  { name: 'Mampu', sub: { id: 'Latih kemampuan lebih dalam.', en: 'Build deeper skill.' }, diffs: ['easy', 'medium'], count: 10 },
+  { name: 'Cakap', sub: { id: 'Uji pemahaman aksara.', en: 'Test your understanding.' }, diffs: ['medium'], count: 10 },
+  { name: 'Ahli', sub: { id: 'Tantangan pertanyaan lanjutan.', en: 'Advanced challenges.' }, diffs: ['medium', 'hard'], count: 10 },
+  { name: 'Master', sub: { id: 'Tes ketajaman pemahaman.', en: 'Sharpen your mastery.' }, diffs: ['hard'], count: 10 },
+  { name: 'GrandMaster', sub: { id: 'Buktikan kamu sang master.', en: 'Prove you are the master.' }, diffs: ['easy', 'medium', 'hard'], count: 12 },
+]
 
 function shuffle(arr) {
   const a = [...arr]
@@ -13,436 +24,326 @@ function shuffle(arr) {
   return a
 }
 
-const DIFFICULTY_COLORS = {
-  easy: { bg: '#d1fae5', text: '#065f46', border: '#6ee7b7' },
-  medium: { bg: '#fef3c7', text: '#92400e', border: '#fcd34d' },
-  hard: { bg: '#fee2e2', text: '#991b1b', border: '#fca5a5' },
-}
-
-const DIFFICULTY_DARK = {
-  easy: { bg: '#0d2d1f', text: '#34d399', border: '#065f46' },
-  medium: { bg: '#2d2000', text: '#fbbf24', border: '#92400e' },
-  hard: { bg: '#2d0a0a', text: '#f87171', border: '#991b1b' },
-}
+const norm = (s) => s.replace(/​/g, '').trim()
 
 export default function QuizMode({ darkMode, locale }) {
   const lang = locale === 'en' ? 'en' : 'id'
   const tr = {
     id: {
-      all: 'Semua', easy: 'Mudah', medium: 'Sedang', hard: 'Sulit',
-      prompt: 'Tulis kata ini dalam Aksara Bali:',
-      correctAnswer: 'Jawaban yang benar:', answer: 'Jawaban:',
-      inputPlaceholder: 'Ketik menggunakan papan ketik di bawah...',
-      checkBtn: 'Periksa Jawaban',
-      showHint: 'Tampilkan', hideHint: 'Sembunyikan',
-      finishBtn: 'Lihat Hasil', nextBtn: 'Lanjut →',
-      restartTitle: 'Mulai ulang',
-      doneTitle: 'Kuis Selesai!',
-      msgPerfect: 'Bagus sekali! Kamu sudah mahir.',
-      msgGood: 'Bagus! Terus berlatih.',
-      msgKeepGoing: 'Terus berlatih untuk menjadi lebih baik.',
-      score: 'Skor', accuracy: 'Akurasi', bestStreak: 'Streak Terbaik',
-      weakWords: 'Kata yang perlu dilatih lagi:',
-      restartBtn: 'Mulai Lagi',
-      diffEasy: 'Mudah', diffMedium: 'Sedang', diffHard: 'Sulit',
+      title: 'Quiz', subtitle: 'Taklukkan tiap level untuk membuka tingkat berikutnya.',
+      reading: 'Membaca', typing: 'Menulis',
+      hintRead: 'Lihat aksara, pilih bacaan Latin yang benar.',
+      hintType: 'Lihat kata Latin, tulis aksaranya dengan papan aksara.',
+      score: 'Score', correct: 'Benar', wrong: 'Salah',
+      question: 'Soal', whichAksara: 'Aksara apa ini?', writeFor: 'Tulis aksara untuk:',
+      typeHint: 'Ketik aksara di sini…', check: 'Periksa', next: 'Lanjut', seeResult: 'Lihat hasil',
+      correctMsg: 'Benar!', notQuite: 'Belum tepat', answer: 'Jawaban:',
+      retry: 'Ulangi', detail: 'Lihat Detail',
+      allDoneTitle: 'Selamat, Kamu Berhasil Menaklukkan Semua Level dengan Luar Biasa!',
+      allDoneBody: 'Kamu telah berhasil menyelesaikan semua level! Tantangan selesai, tapi kamu bisa terus berlatih untuk mengasah kemampuanmu. Terima kasih sudah terus berprestasi!',
+      passTitle: (n) => `Hebat! Level ${n} selesai!`,
+      passBody: (s) => `Skor kamu ${s}. Level berikutnya sudah terbuka — lanjutkan tantanganmu!`,
+      failTitle: 'Belum lulus — coba lagi ya!',
+      failBody: `Kamu butuh skor minimal ${PASS} untuk membuka level berikutnya. Ayo ulangi!`,
     },
     en: {
-      all: 'All', easy: 'Easy', medium: 'Medium', hard: 'Hard',
-      prompt: 'Write this word in Balinese Script:',
-      correctAnswer: 'Correct answer:', answer: 'Answer:',
-      inputPlaceholder: 'Type using the keyboard below...',
-      checkBtn: 'Check Answer',
-      showHint: 'Show hint', hideHint: 'Hide hint',
-      finishBtn: 'See Results', nextBtn: 'Next →',
-      restartTitle: 'Restart quiz',
-      doneTitle: 'Quiz Complete!',
-      msgPerfect: 'Excellent! You\'ve mastered these.',
-      msgGood: 'Good job! Keep practising.',
-      msgKeepGoing: 'Keep practising to improve.',
-      score: 'Score', accuracy: 'Accuracy', bestStreak: 'Best Streak',
-      weakWords: 'Words that need more practice:',
-      restartBtn: 'Restart',
-      diffEasy: 'Easy', diffMedium: 'Medium', diffHard: 'Hard',
+      title: 'Quiz', subtitle: 'Conquer each level to unlock the next.',
+      reading: 'Reading', typing: 'Writing',
+      hintRead: 'See the aksara, pick the correct Latin reading.',
+      hintType: 'See the Latin word, write the aksara with the keyboard.',
+      score: 'Score', correct: 'Correct', wrong: 'Wrong',
+      question: 'Q', whichAksara: 'Which aksara is this?', writeFor: 'Write the aksara for:',
+      typeHint: 'Type the aksara here…', check: 'Check', next: 'Next', seeResult: 'See result',
+      correctMsg: 'Correct!', notQuite: 'Not quite', answer: 'Answer:',
+      retry: 'Retry', detail: 'See Details',
+      allDoneTitle: 'Congratulations, you conquered every level brilliantly!',
+      allDoneBody: 'You finished all levels! The challenge is done, but keep practising to sharpen your skills. Thanks for keeping it up!',
+      passTitle: (n) => `Great! Level ${n} done!`,
+      passBody: (s) => `Your score is ${s}. The next level is unlocked — keep going!`,
+      failTitle: 'Not passed — try again!',
+      failBody: `You need at least ${PASS} to unlock the next level. Give it another go!`,
     },
   }
   const t = tr[lang]
-  const [currentIdx, setCurrentIdx] = useState(0)
-  const [userInput, setUserInput] = useState('')
-  const [score, setScore] = useState(0)
-  const [streak, setStreak] = useState(0)
-  const [maxStreak, setMaxStreak] = useState(0)
-  const [answered, setAnswered] = useState(false)
-  const [showAnswer, setShowAnswer] = useState(false)
-  const [filter, setFilter] = useState('all')
-  const [questionsAnswered, setQuestionsAnswered] = useState(0)
-  const [quizComplete, setQuizComplete] = useState(false)
-  const [wrongWords, setWrongWords] = useState([])
-  const [resultHistory, setResultHistory] = useState([])
-  const [shuffledWords, setShuffledWords] = useState([])
 
-  const SESSION_SIZE = 10 // questions per session
+  const [mode, setMode] = useState('reading')
+  const [best, setBest] = useState({})
+  const [active, setActive] = useState(null)
 
-  // Shuffle words on mount and on filter change
-  const baseWords = useMemo(() => {
-    if (filter === 'all') return QUIZ_WORDS
-    return QUIZ_WORDS.filter(w => w.difficulty === filter)
-  }, [filter])
+  const [queue, setQueue] = useState([])
+  const [idx, setIdx] = useState(0)
+  const [correct, setCorrect] = useState(0)
+
+  const [options, setOptions] = useState([])
+  const [selected, setSelected] = useState(null)
+
+  const [input, setInput] = useState('')
+  const [checked, setChecked] = useState(false)
+  const [lastCorrect, setLastCorrect] = useState(false)
+
+  const [result, setResult] = useState(null) // {correct, score, wrong, passed, allDone, levelName}
 
   useEffect(() => {
-    setShuffledWords(shuffle(baseWords).slice(0, SESSION_SIZE))
-    setCurrentIdx(0)
-    setUserInput('')
-    setAnswered(false)
-    setShowAnswer(false)
-  }, [filter])
-
-  // Initialize on first render
-  useEffect(() => {
-    setShuffledWords(shuffle(QUIZ_WORDS).slice(0, SESSION_SIZE))
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (raw) setBest(JSON.parse(raw))
+    } catch { /* ignore */ }
   }, [])
 
-  const filteredWords = shuffledWords.length > 0 ? shuffledWords : baseWords.slice(0, SESSION_SIZE)
-
-  const currentWord = filteredWords[currentIdx % filteredWords.length]
-  const expectedBalinese = useMemo(() => convertLatinToBalinese(currentWord.latin), [currentWord])
-
-  const handleKeyPress = useCallback((char) => {
-    if (answered) return
-    setUserInput(prev => prev + char)
-  }, [answered])
-
-  const handleBackspace = useCallback(() => {
-    if (answered) return
-    setUserInput(prev => {
-      // Properly handle multi-codepoint chars (Balinese combining chars)
-      const arr = [...prev]
-      arr.pop()
-      return arr.join('')
-    })
-  }, [answered])
-
-  const handleSpace = useCallback(() => {
-    if (answered) return
-    setUserInput(prev => prev + '\u200B')
-  }, [answered])
-
-  const handleClear = useCallback(() => {
-    if (answered) return
-    setUserInput('')
-  }, [answered])
-
-  const checkAnswer = useCallback(() => {
-    if (!userInput || answered) return
-    // Normalize: remove zero-width spaces for comparison
-    const normalize = (s) => s.replace(/\u200B/g, '').trim()
-    const isCorrect = normalize(userInput) === normalize(expectedBalinese)
-
-    setAnswered(isCorrect ? 'correct' : 'wrong')
-    setQuestionsAnswered(prev => prev + 1)
-    setResultHistory(prev => [...prev, { word: currentWord, correct: isCorrect, userAnswer: userInput, expected: expectedBalinese }])
-
-    if (isCorrect) {
-      setScore(prev => prev + 1)
-      const newStreak = streak + 1
-      setStreak(newStreak)
-      setMaxStreak(prev => Math.max(prev, newStreak))
-    } else {
-      setStreak(0)
-      setWrongWords(prev => [...prev, currentWord])
-    }
-  }, [userInput, answered, expectedBalinese, streak, currentWord])
-
-  const nextWord = useCallback(() => {
-    const nextIdx = currentIdx + 1
-    if (nextIdx >= filteredWords.length) {
-      setQuizComplete(true)
-      // Log quiz result to Supabase (fire-and-forget)
-      const finalAccuracy = questionsAnswered > 0 ? Math.round((score / questionsAnswered) * 100) : 0
-      authedFetch('/api/quiz-results', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          score,
-          total: filteredWords.length,
-          accuracy: finalAccuracy,
-          maxStreak,
-          difficulty: filter,
-        }),
-      }).catch(() => {})
-      return
-    }
-    setCurrentIdx(nextIdx)
-    setUserInput('')
-    setAnswered(false)
-    setShowAnswer(false)
-  }, [currentIdx, filteredWords.length, score, questionsAnswered, maxStreak, filter])
-
-  const restartQuiz = () => {
-    setShuffledWords(shuffle(baseWords).slice(0, SESSION_SIZE))
-    setCurrentIdx(0)
-    setUserInput('')
-    setScore(0)
-    setStreak(0)
-    setMaxStreak(0)
-    setAnswered(false)
-    setShowAnswer(false)
-    setQuestionsAnswered(0)
-    setQuizComplete(false)
-    setWrongWords([])
-    setResultHistory([])
+  const saveBest = (next) => {
+    setBest(next)
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)) } catch { /* ignore */ }
   }
 
+  const unlocked = (i) => i === 0 || (best[i - 1] || 0) >= PASS
+
+  const buildOptions = useCallback((q) => {
+    const others = shuffle(QUIZ_WORDS.map(w => w.latin).filter(l => l !== q.latin))
+    setOptions(shuffle([q.latin, ...others.slice(0, 3)]))
+  }, [])
+
+  const startLevel = useCallback((i) => {
+    const pool = shuffle(QUIZ_WORDS.filter(w => LEVELS[i].diffs.includes(w.difficulty)))
+    const q = pool.slice(0, LEVELS[i].count)
+    setActive(i); setQueue(q); setIdx(0); setCorrect(0)
+    setSelected(null); setInput(''); setChecked(false)
+    if (q.length) buildOptions(q[0])
+  }, [buildOptions])
+
+  const answered = mode === 'reading' ? selected !== null : checked
+
+  const answerReading = (latin) => {
+    if (selected !== null) return
+    setSelected(latin)
+    if (latin === queue[idx].latin) setCorrect(c => c + 1)
+  }
+
+  const checkTyping = () => {
+    if (checked) return
+    const ok = norm(input) === norm(convertLatinToBalinese(queue[idx].latin))
+    setChecked(true); setLastCorrect(ok)
+    if (ok) setCorrect(c => c + 1)
+  }
+
+  const finish = () => {
+    const total = queue.length
+    const score = total === 0 ? 0 : Math.round((correct / total) * 100)
+    const next = { ...best }
+    if (score > (next[active] || 0)) next[active] = score
+    saveBest(next)
+    const allDone = LEVELS.every((_, i) => (next[i] || 0) >= PASS)
+    setResult({
+      correct, score, wrong: total - correct,
+      passed: score >= PASS, allDone, levelName: LEVELS[active].name,
+    })
+  }
+
+  const next = () => {
+    if (idx + 1 >= queue.length) { finish(); return }
+    const ni = idx + 1
+    setIdx(ni); setSelected(null); setInput(''); setChecked(false)
+    buildOptions(queue[ni])
+  }
+
+  const closeResult = (replay) => {
+    const lvl = active
+    setResult(null)
+    if (replay) startLevel(lvl)
+    else setActive(null)
+  }
+
+  // ── Theme tokens ──
   const textColor = darkMode ? '#e0e0e0' : '#1a1a1a'
   const cardBg = darkMode ? '#1e1e2e' : '#ffffff'
-  const borderColor = darkMode ? '#333' : '#e0e0e0'
-  const mutedColor = darkMode ? '#888' : '#666'
+  const border = darkMode ? '#333' : '#e0e0e0'
+  const muted = darkMode ? '#888' : '#666'
+  const blue = '#0d6efd'
+  const green = '#16a34a'
+  const red = '#dc2626'
 
-  const diffColors = darkMode ? DIFFICULTY_DARK : DIFFICULTY_COLORS
-  const diff = diffColors[currentWord?.difficulty] || diffColors.easy
-
-  const accuracy = questionsAnswered > 0 ? Math.round((score / questionsAnswered) * 100) : 0
-  const progress = ((currentIdx) / filteredWords.length) * 100
-
-  if (quizComplete) {
+  // ── Level list ──
+  if (active === null) {
     return (
       <div style={{ color: textColor, maxWidth: 600, margin: '0 auto' }}>
-        {/* Results card */}
-        <div style={{ textAlign: 'center', padding: '40px 20px', borderRadius: '16px', background: cardBg, border: `1px solid ${borderColor}`, marginBottom: '24px' }}>
-          <div style={{ marginBottom: '16px' }}>
-            {accuracy >= 80
-              ? <Trophy size={56} color="#f59e0b" />
-              : accuracy >= 60 ? <ThumbsUp size={56} color="#0d6efd" /> : <BookOpen size={56} color={mutedColor} />}
-          </div>
-          <h2 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px' }}>
-            {t.doneTitle}
-          </h2>
-          <p style={{ color: mutedColor, marginBottom: '24px' }}>
-            {accuracy >= 80 ? t.msgPerfect : accuracy >= 60 ? t.msgGood : t.msgKeepGoing}
-          </p>
+        <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 4px' }}>{t.title}</h2>
+        <p style={{ color: muted, fontSize: 14, margin: '0 0 16px' }}>{t.subtitle}</p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '28px' }}>
-            {[
-              { label: t.score, value: `${score}/${questionsAnswered}`, icon: CheckCircle, color: '#16a34a' },
-              { label: t.accuracy, value: `${accuracy}%`, icon: Target, color: '#0d6efd' },
-              { label: t.bestStreak, value: maxStreak, icon: Flame, color: '#e65100' },
-            ].map(stat => (
-              <div key={stat.label} style={{ padding: '16px', borderRadius: '10px', background: darkMode ? '#252535' : '#f8f9fa', border: `1px solid ${borderColor}` }}>
-                <stat.icon size={24} color={stat.color} />
-                <div style={{ fontSize: '22px', fontWeight: '700', color: '#0d6efd' }}>{stat.value}</div>
-                <div style={{ fontSize: '12px', color: mutedColor }}>{stat.label}</div>
-              </div>
-            ))}
-          </div>
-
-          {wrongWords.length > 0 && (
-            <div style={{ textAlign: 'left', padding: '16px', borderRadius: '10px', background: darkMode ? '#2d1010' : '#fff5f5', border: `1px solid ${darkMode ? '#5a1a1a' : '#fecaca'}`, marginBottom: '20px' }}>
-              <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '10px', color: '#dc3545', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <BookOpen size={15} /> {t.weakWords}
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {[...new Set(wrongWords.map(w => w.latin))].map(latin => {
-                  const w = QUIZ_WORDS.find(q => q.latin === latin)
-                  return (
-                    <span key={latin} style={{
-                      padding: '4px 10px', borderRadius: '12px',
-                      background: darkMode ? '#3a1a1a' : '#fee2e2',
-                      fontSize: '13px', color: darkMode ? '#f87171' : '#991b1b',
-                    }}>
-                      {latin} → <span style={{ fontFamily: '"Noto Sans Balinese", serif' }}>{convertLatinToBalinese(latin)}</span>
-                    </span>
-                  )
-                })}
-              </div>
-            </div>
-          )}
-
-          <button
-            onClick={restartQuiz}
-            style={{
-              padding: '12px 32px', borderRadius: '10px',
-              background: '#0d6efd', color: '#fff', border: 'none',
-              cursor: 'pointer', fontSize: '16px', fontWeight: '600',
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-            }}
-          >
-            <RotateCcw size={18} /> {t.restartBtn}
-          </button>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 0, marginBottom: 8 }}>
+          {[['reading', BookOpen, t.reading], ['typing', Keyboard, t.typing]].map(([m, Icon, label], k) => (
+            <button key={m} onClick={() => setMode(m)} style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 18px',
+              border: `1px solid ${mode === m ? blue : border}`,
+              borderRadius: k === 0 ? '10px 0 0 10px' : '0 10px 10px 0',
+              background: mode === m ? blue : cardBg, color: mode === m ? '#fff' : muted,
+              cursor: 'pointer', fontSize: 14, fontWeight: 600,
+            }}>
+              <Icon size={16} /> {label}
+            </button>
+          ))}
         </div>
+        <p style={{ textAlign: 'center', color: muted, fontSize: 12, margin: '0 0 18px' }}>
+          {mode === 'reading' ? t.hintRead : t.hintType}
+        </p>
+
+        {LEVELS.map((lv, i) => {
+          const open = unlocked(i)
+          const b = best[i] || 0
+          return (
+            <button key={lv.name} onClick={() => open && startLevel(i)} disabled={!open} style={{
+              width: '100%', display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
+              padding: 16, marginBottom: 12, borderRadius: 14, background: cardBg,
+              border: `1px solid ${border}`, cursor: open ? 'pointer' : 'default', opacity: open ? 1 : 0.6,
+            }}>
+              <span style={{
+                width: 44, height: 44, flexShrink: 0, borderRadius: 12,
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                background: open ? 'rgba(13,110,253,0.12)' : (darkMode ? '#2a2a3a' : '#ededf0'),
+                color: open ? blue : muted, fontWeight: 800, fontSize: 18,
+              }}>
+                {open ? i + 1 : <Lock size={20} />}
+              </span>
+              <span style={{ flex: 1 }}>
+                <span style={{ display: 'block', fontSize: 16, fontWeight: 700, color: textColor }}>{lv.name}</span>
+                <span style={{ display: 'block', fontSize: 12, color: muted }}>{lv.sub[lang]}</span>
+              </span>
+              <span style={{ textAlign: 'right' }}>
+                <span style={{ display: 'block', fontSize: 11, color: muted }}>{t.score}</span>
+                <span style={{ display: 'block', fontSize: 18, fontWeight: 800, color: b >= PASS ? green : textColor }}>{b}</span>
+              </span>
+            </button>
+          )
+        })}
       </div>
     )
   }
 
+  // ── Playing ──
+  const lv = LEVELS[active]
+  const q = queue[idx]
+  const progress = ((idx + 1) / queue.length) * 100
+
   return (
-    <div style={{ color: textColor }}>
-      {/* Score + filter bar */}
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
-        {/* Score */}
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <span style={{ padding: '4px 12px', borderRadius: '12px', background: darkMode ? '#1e3a1e' : '#d1fae5', color: '#065f46', fontSize: '13px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-            <CheckCircle size={14} /> {score}
-          </span>
-          {streak > 1 && (
-            <span style={{ padding: '4px 12px', borderRadius: '12px', background: darkMode ? '#2d1500' : '#fff3e0', color: '#e65100', fontSize: '13px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-              <Flame size={14} /> {streak}x
+    <div style={{ color: textColor, maxWidth: 600, margin: '0 auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+        <button onClick={() => setActive(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: textColor, padding: 0, display: 'inline-flex' }}>
+          <ArrowLeft size={22} />
+        </button>
+        <span style={{ flex: 1, fontWeight: 800, fontSize: 16 }}>{lv.name}</span>
+        <span style={{ color: blue, fontWeight: 700 }}>{t.correct}: {correct}</span>
+      </div>
+
+      <div style={{ height: 6, borderRadius: 3, background: border, overflow: 'hidden', marginBottom: 14 }}>
+        <div style={{ height: '100%', width: `${progress}%`, background: blue, transition: 'width 0.3s' }} />
+      </div>
+
+      <div style={{ fontSize: 13, color: muted, marginBottom: 12 }}>
+        {t.question} {idx + 1}/{queue.length} · {mode === 'reading' ? t.whichAksara : t.writeFor}
+      </div>
+
+      {mode === 'reading' ? (
+        <>
+          <div style={{ padding: '28px 16px', borderRadius: 16, background: cardBg, border: `1px solid ${border}`, textAlign: 'center', marginBottom: 20 }}>
+            <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 52, color: textColor, whiteSpace: 'nowrap' }}>
+              {convertLatinToBalinese(q.latin)}
             </span>
+          </div>
+          {options.map(opt => {
+            let bg = cardBg, fg = textColor, bd = border
+            if (selected !== null) {
+              if (opt === q.latin) { bg = darkMode ? '#0d2d1f' : '#dcfce7'; fg = green; bd = green }
+              else if (opt === selected) { bg = darkMode ? '#2d0a0a' : '#fee2e2'; fg = red; bd = red }
+            }
+            return (
+              <button key={opt} onClick={() => answerReading(opt)} style={{
+                width: '100%', textAlign: 'left', padding: '16px', marginBottom: 10, borderRadius: 12,
+                background: bg, color: fg, border: `1px solid ${bd}`, cursor: 'pointer', fontSize: 16, fontWeight: 600,
+              }}>{opt}</button>
+            )
+          })}
+        </>
+      ) : (
+        <>
+          <div style={{ padding: '20px 16px', borderRadius: 16, background: cardBg, border: `1px solid ${border}`, textAlign: 'center', marginBottom: 14 }}>
+            <div style={{ fontSize: 28, fontWeight: 800, color: textColor }}>{q.latin}</div>
+            {q.meaning && <div style={{ fontSize: 13, color: muted, marginTop: 4 }}>{q.meaning}</div>}
+          </div>
+          <div style={{ minHeight: 60, padding: '14px 16px', marginBottom: 12, borderRadius: 12, border: `1px solid ${border}`, background: darkMode ? '#1a1a2e' : '#f8f9ff' }}>
+            <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 28, color: textColor }}>
+              {input || <span style={{ color: muted, fontSize: 15, fontFamily: 'system-ui' }}>{t.typeHint}</span>}
+            </span>
+          </div>
+          <div style={{ padding: 14, borderRadius: 12, border: `1px solid ${border}`, background: darkMode ? '#161622' : '#fafafa', marginBottom: 14 }}>
+            <BalineseKeyboard
+              onKeyPress={(c) => !checked && setInput(p => p + c)}
+              onBackspace={() => !checked && setInput(p => { const a = [...p]; a.pop(); return a.join('') })}
+              onSpace={() => !checked && setInput(p => p + '​')}
+              onClear={() => !checked && setInput('')}
+              darkMode={darkMode}
+              locale={locale}
+            />
+          </div>
+          {!checked ? (
+            <button onClick={checkTyping} disabled={!norm(input)} style={{
+              width: '100%', padding: 14, borderRadius: 10, marginBottom: 8,
+              background: norm(input) ? blue : (darkMode ? '#333' : '#e0e0e0'),
+              color: norm(input) ? '#fff' : muted, border: 'none', cursor: norm(input) ? 'pointer' : 'default',
+              fontSize: 15, fontWeight: 600, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            }}><Check size={16} /> {t.check}</button>
+          ) : (
+            <div style={{ padding: 14, borderRadius: 12, marginBottom: 8,
+              background: (lastCorrect ? 'rgba(22,163,74,0.08)' : 'rgba(220,38,38,0.08)'),
+              border: `1px solid ${lastCorrect ? green : red}66`, display: 'flex', gap: 10, alignItems: 'center' }}>
+              {lastCorrect ? <CheckCircle size={22} color={green} /> : <XCircle size={22} color={red} />}
+              <div>
+                <div style={{ fontWeight: 700, color: lastCorrect ? green : red }}>{lastCorrect ? t.correctMsg : t.notQuite}</div>
+                {!lastCorrect && <div style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 22, color: textColor }}>{t.answer} {convertLatinToBalinese(q.latin)}</div>}
+              </div>
+            </div>
           )}
-          <span style={{ padding: '4px 12px', borderRadius: '12px', background: darkMode ? '#252535' : '#f0f0f0', color: mutedColor, fontSize: '13px' }}>
-            {currentIdx + 1} / {filteredWords.length}
-          </span>
-        </div>
+        </>
+      )}
 
-        <div style={{ flex: 1 }} />
+      {answered && (
+        <button onClick={next} style={{
+          width: '100%', padding: 14, borderRadius: 10, background: blue, color: '#fff',
+          border: 'none', cursor: 'pointer', fontSize: 15, fontWeight: 600, marginTop: 4,
+        }}>{idx + 1 >= queue.length ? t.seeResult : t.next}</button>
+      )}
 
-        {/* Difficulty filter */}
-        <div style={{ display: 'flex', gap: '4px' }}>
-          {['all', 'easy', 'medium', 'hard'].map(d => (
-            <button
-              key={d}
-              onClick={() => { setFilter(d); setCurrentIdx(0); setUserInput(''); setAnswered(false); setShowAnswer(false) }}
-              style={{
-                padding: '4px 10px', borderRadius: '12px', border: 'none', cursor: 'pointer',
-                fontSize: '12px', fontWeight: filter === d ? '600' : '400',
-                background: filter === d ? '#0d6efd' : (darkMode ? '#252535' : '#f0f0f0'),
-                color: filter === d ? '#fff' : mutedColor,
-              }}
-            >
-              {d === 'all' ? t.all : d === 'easy' ? t.easy : d === 'medium' ? t.medium : t.hard}
-            </button>
+      {result && (
+        <ResultModal t={t} result={result} darkMode={darkMode} onClose={closeResult} />
+      )}
+    </div>
+  )
+}
+
+function ResultModal({ t, result, darkMode, onClose }) {
+  const { correct, score, wrong, passed, allDone, levelName } = result
+  const textColor = darkMode ? '#e0e0e0' : '#1a1a1a'
+  const cardBg = darkMode ? '#1e1e2e' : '#ffffff'
+  const muted = darkMode ? '#888' : '#666'
+  const title = allDone ? t.allDoneTitle : passed ? t.passTitle(levelName) : t.failTitle
+  const body = allDone ? t.allDoneBody : passed ? t.passBody(score) : t.failBody
+
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, zIndex: 1000 }}>
+      <div style={{ maxWidth: 380, width: '100%', background: cardBg, borderRadius: 20, padding: 24, textAlign: 'center', color: textColor }}>
+        <h3 style={{ fontSize: 17, fontWeight: 800, lineHeight: 1.3, margin: '0 0 16px' }}>{title}</h3>
+        {passed ? <Trophy size={64} color="#f59e0b" /> : <RotateCcw size={64} color={muted} />}
+        <p style={{ fontSize: 13, color: muted, lineHeight: 1.4, margin: '16px 0 20px' }}>{body}</p>
+        <div style={{ display: 'flex', justifyContent: 'space-evenly', marginBottom: 22 }}>
+          {[[CheckCircle, '#16a34a', correct, t.correct], [Trophy, '#f59e0b', score, t.score], [XCircle, '#dc2626', wrong, t.wrong]].map(([Icon, color, val, label], k) => (
+            <div key={k}>
+              <Icon size={22} color={color} />
+              <div style={{ fontSize: 18, fontWeight: 800, color: textColor }}>{val}</div>
+              <div style={{ fontSize: 11, color: muted }}>{label}</div>
+            </div>
           ))}
         </div>
-      </div>
-
-      {/* Progress bar */}
-      <div style={{ height: '4px', borderRadius: '2px', background: darkMode ? '#333' : '#e0e0e0', marginBottom: '20px', overflow: 'hidden' }}>
-        <div style={{ height: '100%', width: `${progress}%`, background: '#0d6efd', borderRadius: '2px', transition: 'width 0.3s' }} />
-      </div>
-
-      {/* Word card */}
-      <div style={{ padding: '28px', borderRadius: '16px', background: cardBg, border: `1px solid ${borderColor}`, marginBottom: '16px', textAlign: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-          <span style={{
-            padding: '3px 10px', borderRadius: '10px', fontSize: '11px', fontWeight: '600',
-            background: diff.bg, color: diff.text, border: `1px solid ${diff.border}`,
-          }}>
-            {currentWord.difficulty === 'easy' ? t.diffEasy : currentWord.difficulty === 'medium' ? t.diffMedium : t.diffHard}
-          </span>
-          <span style={{ fontSize: '11px', color: mutedColor, padding: '3px 10px', borderRadius: '10px', background: darkMode ? '#252535' : '#f0f0f0' }}>
-            {currentWord.category}
-          </span>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button onClick={() => onClose(true)} style={{ flex: 1, padding: 12, borderRadius: 10, background: 'transparent', color: textColor, border: `1px solid ${darkMode ? '#444' : '#ccc'}`, cursor: 'pointer', fontWeight: 600 }}>{t.retry}</button>
+          <button onClick={() => onClose(false)} style={{ flex: 1, padding: 12, borderRadius: 10, background: '#0d6efd', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600 }}>{t.detail}</button>
         </div>
-
-        <div style={{ fontSize: '13px', color: mutedColor, marginBottom: '8px' }}>
-          {t.prompt}
-        </div>
-        <div style={{ fontSize: '42px', fontWeight: '700', letterSpacing: '2px', color: '#0d6efd', marginBottom: '8px' }}>
-          {currentWord.latin}
-        </div>
-        <div style={{ fontSize: '14px', color: mutedColor }}>
-          {currentWord.meaning}
-        </div>
-
-        {showAnswer && (
-          <div style={{ marginTop: '16px', padding: '12px', borderRadius: '10px', background: darkMode ? '#1a3a1a' : '#f0fff4', border: `1px solid ${darkMode ? '#2d5a2d' : '#bbf7d0'}` }}>
-            <div style={{ fontSize: '12px', color: '#16a34a', marginBottom: '6px' }}>{t.correctAnswer}</div>
-            <div style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '30px', color: '#16a34a' }}>
-              {expectedBalinese}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* User input display */}
-      <div style={{
-        minHeight: '70px', padding: '16px 20px', marginBottom: '14px',
-        borderRadius: '12px', border: `2px solid ${answered === 'correct' ? '#22c55e' : answered === 'wrong' ? '#ef4444' : '#0d6efd'}`,
-        background: answered === 'correct' ? (darkMode ? '#0d2d0d' : '#f0fff4') : answered === 'wrong' ? (darkMode ? '#2d0d0d' : '#fff5f5') : (darkMode ? '#1a1a2e' : '#f8f9ff'),
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      }}>
-        <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '28px', color: answered === 'correct' ? '#22c55e' : answered === 'wrong' ? '#ef4444' : textColor }}>
-          {userInput || <span style={{ color: mutedColor, fontSize: '16px', fontFamily: 'system-ui' }}>{t.inputPlaceholder}</span>}
-        </span>
-        {answered === 'correct' && <CheckCircle size={24} color="#22c55e" />}
-        {answered === 'wrong' && (
-          <div style={{ textAlign: 'right' }}>
-            <XCircle size={20} color="#ef4444" />
-            <div style={{ fontSize: '11px', color: '#ef4444', marginTop: '4px' }}>{t.answer} <span style={{ fontFamily: '"Noto Sans Balinese", serif' }}>{expectedBalinese}</span></div>
-          </div>
-        )}
-      </div>
-
-      {/* Action buttons */}
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
-        {!answered ? (
-          <>
-            <button
-              onClick={checkAnswer}
-              disabled={!userInput}
-              style={{
-                flex: 2, padding: '12px', borderRadius: '10px',
-                background: userInput ? '#0d6efd' : (darkMode ? '#333' : '#e0e0e0'),
-                color: userInput ? '#fff' : mutedColor,
-                border: 'none', cursor: userInput ? 'pointer' : 'default',
-                fontSize: '15px', fontWeight: '600', minWidth: '140px',
-                transition: 'all 0.15s',
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-              }}
-            >
-              <Check size={16} /> {t.checkBtn}
-            </button>
-            <button
-              onClick={() => setShowAnswer(!showAnswer)}
-              style={{
-                flex: 1, padding: '12px', borderRadius: '10px',
-                background: 'transparent', color: mutedColor,
-                border: `1px solid ${borderColor}`,
-                cursor: 'pointer', fontSize: '14px', minWidth: '100px',
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-              }}
-            >
-              {showAnswer ? <EyeOff size={15} /> : <Eye size={15} />} {showAnswer ? t.hideHint : t.showHint}
-            </button>
-          </>
-        ) : (
-          <button
-            onClick={nextWord}
-            style={{
-              flex: 1, padding: '12px', borderRadius: '10px',
-              background: '#0d6efd', color: '#fff',
-              border: 'none', cursor: 'pointer',
-              fontSize: '15px', fontWeight: '600',
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-            }}
-          >
-            {currentIdx + 1 >= filteredWords.length
-              ? <><Flag size={15} /> {t.finishBtn}</>
-              : t.nextBtn}
-          </button>
-        )}
-
-        <button
-          onClick={restartQuiz}
-          style={{
-            padding: '12px 16px', borderRadius: '10px',
-            background: 'transparent', color: mutedColor,
-            border: `1px solid ${borderColor}`,
-            cursor: 'pointer', fontSize: '14px', display: 'inline-flex', alignItems: 'center',
-          }}
-          title={t.restartTitle}
-        >
-          <RotateCcw size={16} />
-        </button>
-      </div>
-
-      {/* Keyboard */}
-      <div style={{ padding: '16px', borderRadius: '12px', border: `1px solid ${borderColor}`, background: darkMode ? '#161622' : '#fafafa' }}>
-        <BalineseKeyboard
-          onKeyPress={handleKeyPress}
-          onBackspace={handleBackspace}
-          onSpace={handleSpace}
-          onClear={handleClear}
-          darkMode={darkMode}
-          locale={locale}
-        />
       </div>
     </div>
   )
