@@ -15,7 +15,11 @@ import {
     Globe,
     ArrowLeftRight,
     RefreshCw,
-    Zap
+    Zap,
+    AlignLeft,
+    AlignCenter,
+    AlignRight,
+    Image as ImageIcon
 } from 'lucide-react'
 import { authedFetch } from '../utils/supabase'
 import { trackEvent } from '../utils/analytics'
@@ -178,6 +182,57 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     const [copySuccessRight, setCopySuccessRight] = useState(false)
     const [transliterationMode, setTransliterationMode] = useState('auto')
     const [isReverseMode, setIsReverseMode] = useState(false)
+
+    // Word-art styling + PNG export (Latin → Balinese)
+    const [styleFontSize, setStyleFontSize] = useState(64)
+    const [styleAlign, setStyleAlign] = useState('center')
+    const [styleTextColor, setStyleTextColor] = useState('#1a1a1a')
+    const [styleBgColor, setStyleBgColor] = useState('#ffffff')
+    const [styleTransparent, setStyleTransparent] = useState(false)
+
+    const downloadStyledImage = async () => {
+        const text = balineseText
+        if (!text) return
+        const fs = styleFontSize * 2 // upscale for a crisp export
+        try { await document.fonts.load(`${fs}px "Noto Sans Balinese"`) } catch { /* continue */ }
+        const W = 1080, pad = 80
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        ctx.font = `${fs}px "Noto Sans Balinese", serif`
+        const words = text.split('​')
+        const maxW = W - pad * 2
+        const lines = []
+        let line = ''
+        for (const w of words) {
+            const test = line ? line + '​' + w : w
+            if (line && ctx.measureText(test).width > maxW) { lines.push(line); line = w }
+            else line = test
+        }
+        if (line) lines.push(line)
+        const lineH = fs * 1.6
+        const H = Math.max(Math.round(W * 0.6), pad * 2 + lines.length * lineH)
+        canvas.width = W; canvas.height = H
+        if (!styleTransparent) { ctx.fillStyle = styleBgColor; ctx.fillRect(0, 0, W, H) }
+        ctx.font = `${fs}px "Noto Sans Balinese", serif`
+        ctx.fillStyle = styleTextColor
+        ctx.textBaseline = 'middle'
+        const startY = H / 2 - (lines.length - 1) * lineH / 2
+        lines.forEach((ln, i) => {
+            const y = startY + i * lineH
+            let x = W / 2
+            if (styleAlign === 'left') { ctx.textAlign = 'left'; x = pad }
+            else if (styleAlign === 'right') { ctx.textAlign = 'right'; x = W - pad }
+            else ctx.textAlign = 'center'
+            ctx.fillText(ln, x, y)
+        })
+        canvas.toBlob((blob) => {
+            if (!blob) return
+            const url = URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url; a.download = 'aksara-bali.png'; a.click()
+            setTimeout(() => URL.revokeObjectURL(url), 1000)
+        }, 'image/png')
+    }
 
     const [internalLocale, setInternalLocale] = useState('en')
 
@@ -1331,6 +1386,69 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                             </div>
                         </div>
                     </div>
+
+                    {!isReverseMode && (
+                        <div className="card mb-4">
+                            <div className="card-header">
+                                <h5 className="mb-0">
+                                    <ImageIcon size={20} className="me-2" />
+                                    {locale === 'id' ? 'Gaya Kata & Unduh PNG' : 'Word Art & Download PNG'}
+                                </h5>
+                            </div>
+                            <div className="card-body">
+                                {/* Preview */}
+                                <div style={{
+                                    minHeight: '120px', borderRadius: '12px', marginBottom: '16px', padding: '20px',
+                                    textAlign: styleAlign,
+                                    border: '1px solid #d8d8d8',
+                                    background: styleTransparent
+                                        ? 'repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50% / 20px 20px'
+                                        : styleBgColor,
+                                }}>
+                                    <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: `${styleFontSize}px`, color: styleTextColor, lineHeight: 1.6, wordBreak: 'break-word' }}>
+                                        {balineseText || 'ᬳᬓ᭄ᬱᬭᬩᬮᬶ'}
+                                    </span>
+                                </div>
+                                <div className="d-flex flex-wrap align-items-center gap-3 mb-3">
+                                    <label className="d-flex align-items-center gap-2 mb-0">
+                                        <span style={{ fontSize: '13px', color: '#666' }}>{locale === 'id' ? 'Ukuran' : 'Size'}</span>
+                                        <input type="range" min="24" max="120" value={styleFontSize} onChange={(e) => setStyleFontSize(Number(e.target.value))} />
+                                    </label>
+                                    <div className="btn-group" role="group">
+                                        {[['left', AlignLeft], ['center', AlignCenter], ['right', AlignRight]].map(([a, Icon]) => (
+                                            <button key={a} type="button" className={`btn btn-sm ${styleAlign === a ? 'btn-primary' : 'btn-outline-secondary'}`} onClick={() => setStyleAlign(a)}>
+                                                <Icon size={16} />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                                    <span style={{ fontSize: '13px', color: '#666', width: '80px' }}>{locale === 'id' ? 'Warna teks' : 'Text color'}</span>
+                                    {['#1a1a1a', '#ffffff', '#d8a84e', '#0d6efd', '#dc2626', '#16a34a', '#7c3aed'].map(c => (
+                                        <button key={c} type="button" aria-label={`text ${c}`} onClick={() => setStyleTextColor(c)}
+                                            style={{ width: 26, height: 26, borderRadius: '50%', background: c, cursor: 'pointer', border: `${styleTextColor === c ? 3 : 1}px solid ${styleTextColor === c ? '#0d6efd' : '#ccc'}` }} />
+                                    ))}
+                                </div>
+                                <div className="d-flex align-items-center gap-2 mb-3 flex-wrap">
+                                    <span style={{ fontSize: '13px', color: '#666', width: '80px' }}>{locale === 'id' ? 'Latar' : 'Background'}</span>
+                                    {['#ffffff', '#151411', '#d8a84e', '#0d6efd', '#dc2626', '#f59e0b', '#0f766e'].map(c => (
+                                        <button key={c} type="button" aria-label={`bg ${c}`} disabled={styleTransparent} onClick={() => setStyleBgColor(c)}
+                                            style={{ width: 26, height: 26, borderRadius: '50%', background: c, cursor: styleTransparent ? 'default' : 'pointer', opacity: styleTransparent ? 0.4 : 1, border: `${styleBgColor === c ? 3 : 1}px solid ${styleBgColor === c ? '#0d6efd' : '#ccc'}` }} />
+                                    ))}
+                                </div>
+                                <div className="form-check form-switch mb-3">
+                                    <input className="form-check-input" type="checkbox" id="transparentBg" checked={styleTransparent} onChange={(e) => setStyleTransparent(e.target.checked)} />
+                                    <label className="form-check-label" htmlFor="transparentBg" style={{ fontSize: '14px' }}>
+                                        {locale === 'id' ? 'Latar transparan' : 'Transparent background'}
+                                    </label>
+                                </div>
+                                <button className="btn btn-primary" onClick={downloadStyledImage} disabled={!balineseText}>
+                                    <Download size={16} className="me-2" />
+                                    {locale === 'id' ? 'Unduh PNG' : 'Download PNG'}
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     {!isReverseMode && (
                         <div className="card mb-4">
