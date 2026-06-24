@@ -30,26 +30,15 @@ class AksaraBaliApp extends StatelessWidget {
       valueListenable: darkMode,
       builder: (_, dark, __) => ValueListenableBuilder<AppLang>(
         valueListenable: appLang,
-        builder: (_, lang, ___) {
-          final base = ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: kBlue, brightness: dark ? Brightness.dark : Brightness.light),
-            useMaterial3: true,
-            scaffoldBackgroundColor: kPageBg,
-          );
-          return LangScope(
-            lang: lang,
-            child: MaterialApp(
-              title: 'Aksara Bali',
-              debugShowCheckedModeBanner: false,
-              theme: base.copyWith(
-                textTheme: GoogleFonts.interTextTheme(base.textTheme),
-                appBarTheme: AppBarTheme(
-                  backgroundColor: kCardBg, foregroundColor: kInk, elevation: 0, scrolledUnderElevation: 1),
-              ),
-              home: const HomeShell(),
-            ),
-          );
-        },
+        builder: (_, lang, ___) => LangScope(
+          lang: lang,
+          child: MaterialApp(
+            title: 'Aksara Bali',
+            debugShowCheckedModeBanner: false,
+            theme: buildAppTheme(),
+            home: const HomeShell(),
+          ),
+        ),
       ),
     );
   }
@@ -84,15 +73,16 @@ class _HomeShellState extends State<HomeShell> {
     if (id == null || !mounted) return;
     final a = achievementById(id);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: kInk,
+      backgroundColor: kSurfaceRaised,
+      behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 3),
       content: Row(children: [
-        Icon(a.icon, color: const Color(0xFFF59E0B)),
+        Icon(a.icon, color: kAccent),
         const SizedBox(width: 12),
         Expanded(child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(tr(context, 'Achievement unlocked!', 'Pencapaian terbuka!'),
-              style: const TextStyle(color: Colors.white70, fontSize: 12)),
-          Text(a.title(context), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+              style: TextStyle(color: kTextSecondary, fontSize: 12)),
+          Text(a.title(context), style: TextStyle(color: kTextPrimary, fontWeight: FontWeight.w700)),
         ])),
       ]),
     ));
@@ -174,11 +164,11 @@ class _HomeShellState extends State<HomeShell> {
         selectedIndex: _tab,
         onDestinationSelected: (i) => setState(() => _tab = i),
         destinations: [
-          NavigationDestination(icon: const Icon(Icons.translate_outlined), selectedIcon: const Icon(Icons.translate), label: tr(context, 'Convert', 'Konversi')),
-          NavigationDestination(icon: const Icon(Icons.edit_outlined), selectedIcon: const Icon(Icons.edit), label: tr(context, 'Write', 'Tulis')),
-          NavigationDestination(icon: const Icon(Icons.quiz_outlined), selectedIcon: const Icon(Icons.quiz), label: tr(context, 'Quiz', 'Kuis')),
-          NavigationDestination(icon: const Icon(Icons.table_chart_outlined), selectedIcon: const Icon(Icons.table_chart), label: tr(context, 'Aksara', 'Aksara')),
-          NavigationDestination(icon: const Icon(Icons.info_outline), selectedIcon: const Icon(Icons.info), label: tr(context, 'About', 'Tentang')),
+          NavigationDestination(icon: const Icon(Icons.translate_outlined), label: tr(context, 'Convert', 'Konversi')),
+          NavigationDestination(icon: const Icon(Icons.draw_outlined), label: tr(context, 'Write', 'Tulis')),
+          NavigationDestination(icon: const Icon(Icons.quiz_outlined), label: tr(context, 'Quiz', 'Kuis')),
+          NavigationDestination(icon: const Icon(Icons.menu_book_outlined), label: tr(context, 'Aksara', 'Aksara')),
+          NavigationDestination(icon: const Icon(Icons.info_outline), label: tr(context, 'About', 'Tentang')),
         ],
       ),
     );

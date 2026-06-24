@@ -9,12 +9,12 @@ import '../balinese_keyboard.dart';
 
 const _diacritics = ['ā', 'ī', 'ū', 'ě', 'ṇ'];
 const _textSwatches = [
-  Color(0xFF1A1A1A), kBlue, Color(0xFFDC2626), Color(0xFF16A34A),
-  Color(0xFF7C3AED), Color(0xFFB8860B), Colors.white,
+  Color(0xFFF4EFE5), Color(0xFFD8A84E), Color(0xFFDC2626), Color(0xFF16A34A),
+  Color(0xFF7C3AED), Color(0xFFB8860B), Color(0xFF1A1A1A),
 ];
 const _bgSwatches = [
-  Color(0xFFF8F9FF), Colors.white, kBlue, Color(0xFFEF4444),
-  Color(0xFF1A1A1A), Color(0xFFF59E0B), Color(0xFF0F766E),
+  Color(0xFF201E19), Color(0xFFF8F9FF), Color(0xFFD8A84E), Color(0xFFEF4444),
+  Color(0xFF151411), Color(0xFFF59E0B), Color(0xFF0F766E),
 ];
 
 class ConvertScreen extends StatefulWidget {
@@ -206,7 +206,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
             Expanded(child: FilledButton.icon(
               onPressed: hasOut ? () => SharePlus.instance.share(
                 ShareParams(text: '$_output\n\n(${_controller.text.trim()}) — via Aksara Bali')) : null,
-              style: FilledButton.styleFrom(backgroundColor: kBlue),
+              style: FilledButton.styleFrom(backgroundColor: kAccent),
               icon: const Icon(Icons.share, size: 18),
               label: Text(tr(context, 'Share', 'Bagikan')),
             )),
@@ -246,7 +246,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
     return IconButton(
       onPressed: () => setState(() => _align = value),
       icon: Icon(icon, size: 20),
-      color: selected ? kBlue : kMuted,
+      color: selected ? kAccent : kMuted,
       visualDensity: VisualDensity.compact,
       tooltip: value.name,
     );
@@ -266,7 +266,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
                 color: c,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: c == selected ? kBlue : kBorder,
+                  color: c == selected ? kAccent : kBorder,
                   width: c == selected ? 3 : 1,
                 ),
               ),

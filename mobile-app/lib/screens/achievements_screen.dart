@@ -53,7 +53,7 @@ class AchievementsScreen extends StatelessWidget {
   }
 
   Widget _tile(BuildContext context, Achievement a, bool earned) {
-    final color = earned ? kBlue : kMuted;
+    final color = earned ? kAccent : kMuted;
     return Opacity(
       opacity: earned ? 1 : 0.55,
       child: Container(
@@ -64,7 +64,7 @@ class AchievementsScreen extends StatelessWidget {
           Container(
             width: 48, height: 48, alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: (earned ? kBlue : kMuted).withValues(alpha: 0.12),
+              color: (earned ? kAccent : kMuted).withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(earned ? a.icon : Icons.lock_outline, color: color, size: 24),

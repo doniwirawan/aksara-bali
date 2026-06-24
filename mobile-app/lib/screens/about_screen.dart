@@ -51,7 +51,7 @@ class AboutScreen extends StatelessWidget {
             children: [
               for (int i = 0; i < links.length; i++) ...[
                 ListTile(
-                  leading: Icon(links[i]['icon'] as IconData, color: kBlue),
+                  leading: Icon(links[i]['icon'] as IconData, color: kAccent),
                   title: Text(links[i]['label'] as String),
                   trailing: Icon(Icons.open_in_new, size: 16, color: kMuted),
                   onTap: () => _open(links[i]['url'] as String),
@@ -66,6 +66,22 @@ class AboutScreen extends StatelessWidget {
         const SizedBox(height: 4),
         Center(child: Text(tr(context, 'Free educational tool for preserving Aksara Bali', 'Alat edukasi gratis untuk melestarikan Aksara Bali'),
             textAlign: TextAlign.center, style: TextStyle(color: kMuted, fontSize: 12))),
+        const SizedBox(height: 12),
+        Center(
+          child: InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: () => _open('https://www.linkedin.com/in/doniwirawan/'),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                Icon(Icons.link, size: 14, color: kAccent),
+                const SizedBox(width: 6),
+                Text(tr(context, 'Made by Doni Wirawan', 'Dibuat oleh Doni Wirawan'),
+                    style: TextStyle(fontSize: 12, color: kAccent, fontWeight: FontWeight.w600)),
+              ]),
+            ),
+          ),
+        ),
       ],
     );
   }

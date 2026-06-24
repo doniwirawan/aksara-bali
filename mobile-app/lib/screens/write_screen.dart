@@ -151,7 +151,7 @@ class _WriteScreenState extends State<WriteScreen> {
     );
     final guideBtn = FilledButton.icon(
       onPressed: () => setState(() => _showGuide = !_showGuide),
-      style: FilledButton.styleFrom(backgroundColor: _showGuide ? kBlue : Colors.grey),
+      style: FilledButton.styleFrom(backgroundColor: _showGuide ? kAccent : Colors.grey),
       icon: Icon(_showGuide ? Icons.visibility : Icons.visibility_off, size: 18),
       label: FittedBox(fit: BoxFit.scaleDown, child: Text(tr(context, 'Guide', 'Panduan'), maxLines: 1, softWrap: false)),
     );
@@ -403,7 +403,7 @@ class _StrokePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = kBlue
+      ..color = kAccent
       ..strokeWidth = 6
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
@@ -411,7 +411,7 @@ class _StrokePainter extends CustomPainter {
     for (final stroke in strokes) {
       if (stroke.length < 2) {
         if (stroke.isNotEmpty) {
-          canvas.drawCircle(stroke.first, 3, Paint()..color = kBlue);
+          canvas.drawCircle(stroke.first, 3, Paint()..color = kAccent);
         }
         continue;
       }

@@ -265,11 +265,11 @@ class _QuizScreenState extends State<QuizScreen> {
                 width: 44, height: 44,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: unlocked ? kBlue.withValues(alpha: 0.12) : const Color(0xFFEDEDF0),
+                  color: unlocked ? kAccent.withValues(alpha: 0.12) : const Color(0xFFEDEDF0),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: unlocked
-                    ? Text('${i + 1}', style: const TextStyle(fontWeight: FontWeight.w800, color: kBlue, fontSize: 18))
+                    ? Text('${i + 1}', style: TextStyle(fontWeight: FontWeight.w800, color: kAccent, fontSize: 18))
                     : Icon(Icons.lock_outline, size: 20, color: kMuted),
               ),
               const SizedBox(width: 14),
@@ -310,14 +310,14 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
           const SizedBox(width: 8),
           Expanded(child: Text(lv.name, style: TextStyle(fontWeight: FontWeight.w800, color: kInk, fontSize: 16))),
-          Text('${tr(context, 'Correct', 'Benar')}: $_correct', style: const TextStyle(color: kBlue, fontWeight: FontWeight.w700)),
+          Text('${tr(context, 'Correct', 'Benar')}: $_correct', style: TextStyle(color: kAccent, fontWeight: FontWeight.w700)),
         ]),
         const SizedBox(height: 12),
         ClipRRect(
           borderRadius: BorderRadius.circular(6),
           child: LinearProgressIndicator(
             value: (_index + 1) / _queue.length,
-            minHeight: 6, backgroundColor: kBorder, valueColor: const AlwaysStoppedAnimation(kBlue),
+            minHeight: 6, backgroundColor: kBorder, valueColor: AlwaysStoppedAnimation(kAccent),
           ),
         ),
         const SizedBox(height: 12),
@@ -450,7 +450,7 @@ class _QuizScreenState extends State<QuizScreen> {
       if (!_checked)
         FilledButton.icon(
           onPressed: _norm(_typeController.text).isEmpty ? null : _check,
-          style: FilledButton.styleFrom(backgroundColor: kBlue, minimumSize: const Size.fromHeight(48)),
+          style: FilledButton.styleFrom(backgroundColor: kAccent, minimumSize: const Size.fromHeight(48)),
           icon: const Icon(Icons.check, size: 18),
           label: Text(tr(context, 'Check', 'Periksa')),
         )
@@ -535,7 +535,7 @@ class _ResultDialog extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(child: FilledButton(
               onPressed: () => Navigator.pop(context, false),
-              style: FilledButton.styleFrom(backgroundColor: kBlue),
+              style: FilledButton.styleFrom(backgroundColor: kAccent),
               child: Text(tr(context, 'See Details', 'Lihat Detail')),
             )),
           ]),
