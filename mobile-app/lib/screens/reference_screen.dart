@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../l10n.dart';
+import '../tts.dart';
 
 class _Glyph {
   const _Glyph(this.char, this.latin);
@@ -64,8 +65,8 @@ class ReferenceScreen extends StatelessWidget {
           Text(tr(context, 'Aksara Reference', 'Referensi Aksara'),
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: kTextPrimary)),
           const SizedBox(height: 6),
-          Text(tr(context, 'The full Balinese writing system — tap to learn each letter.',
-                  'Sistem penulisan aksara Bali lengkap — pelajari tiap huruf.'),
+          Text(tr(context, 'The full Balinese writing system — tap a letter to hear it.',
+                  'Sistem penulisan aksara Bali lengkap — ketuk huruf untuk mendengarnya.'),
               style: TextStyle(color: kTextSecondary, fontSize: 14, height: 1.4)),
           const SizedBox(height: 20),
           _howTo(context),
@@ -136,7 +137,7 @@ class ReferenceScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: () {},
+          onTap: () => speakLatin(g.latin),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Column(children: [
