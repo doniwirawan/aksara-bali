@@ -93,17 +93,17 @@ class _WriteScreenState extends State<WriteScreen> {
       padding: const EdgeInsets.all(14),
       child: Row(children: [
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(tr(context, 'Write this:', 'Tulis ini:'), style: const TextStyle(color: kMuted, fontSize: 12)),
+          Text(tr(context, 'Write this:', 'Tulis ini:'), style: TextStyle(color: kMuted, fontSize: 12)),
           const SizedBox(height: 6),
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
             child: Text(balinese, maxLines: 1,
-                style: const TextStyle(fontFamily: kBaliFont, fontSize: 30, color: kInk, height: 1.6)),
+                style: TextStyle(fontFamily: kBaliFont, fontSize: 30, color: kInk, height: 1.6)),
           ),
           const SizedBox(height: 6),
           Text('${_word['latin']}  ·  ${_word['meaning'] ?? ''}',
-              style: const TextStyle(fontSize: 13, color: kMuted)),
+              style: TextStyle(fontSize: 13, color: kMuted)),
         ])),
         TextButton.icon(onPressed: _newWord, icon: const Icon(Icons.shuffle, size: 16), label: Text(tr(context, 'New', 'Baru'))),
       ]),
@@ -176,7 +176,7 @@ class _WriteScreenState extends State<WriteScreen> {
     final hint = Text(
         tr(context, 'Trace the faint aksara, then tap Check to score how close your shape is.',
             'Jiplak aksara samar, lalu ketuk Periksa untuk menilai seberapa mirip bentukmu.'),
-        textAlign: TextAlign.center, style: const TextStyle(color: kMuted, fontSize: 12));
+        textAlign: TextAlign.center, style: TextStyle(color: kMuted, fontSize: 12));
 
     return LayoutBuilder(builder: (context, c) {
       // Landscape / wide: controls on the left, big canvas filling the height on the right.
@@ -374,7 +374,7 @@ class _ScoreCard extends StatelessWidget {
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(big, style: TextStyle(color: r.color, fontWeight: FontWeight.w800, fontSize: 18)),
             const SizedBox(height: 2),
-            Text(sub, style: const TextStyle(color: kMuted, fontSize: 12)),
+            Text(sub, style: TextStyle(color: kMuted, fontSize: 12)),
           ])),
           Text('${r.score}%', style: TextStyle(color: r.color, fontWeight: FontWeight.w900, fontSize: 24)),
         ]),
@@ -390,7 +390,7 @@ class _ScoreCard extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text('${tr(context, 'Precision', 'Presisi')}: ${r.precision}%   ·   ${tr(context, 'Coverage', 'Cakupan')}: ${r.recall}%',
-            style: const TextStyle(color: kMuted, fontSize: 12)),
+            style: TextStyle(color: kMuted, fontSize: 12)),
       ]),
     );
   }

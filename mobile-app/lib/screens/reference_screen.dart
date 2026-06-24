@@ -58,17 +58,17 @@ class ReferenceScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         Text(tr(context, 'Aksara Reference', 'Referensi Aksara'),
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: kInk)),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: kInk)),
         const SizedBox(height: 4),
         Text(tr(context, 'The full Balinese writing system — tap to learn each letter.',
                 'Sistem penulisan aksara Bali lengkap — pelajari tiap huruf.'),
-            style: const TextStyle(color: kMuted, fontSize: 13)),
+            style: TextStyle(color: kMuted, fontSize: 13)),
         const SizedBox(height: 16),
         for (final s in _sections) ...[
           Text(isId ? s.titleId : s.titleEn,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: kInk)),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: kInk)),
           const SizedBox(height: 2),
-          Text(isId ? s.subId : s.subEn, style: const TextStyle(color: kMuted, fontSize: 12)),
+          Text(isId ? s.subId : s.subEn, style: TextStyle(color: kMuted, fontSize: 12)),
           const SizedBox(height: 10),
           Wrap(spacing: 10, runSpacing: 10, children: [
             for (final g in s.glyphs) _cell(g, s.big),
@@ -87,7 +87,7 @@ class ReferenceScreen extends StatelessWidget {
       child: Column(children: [
         Text(g.char, style: TextStyle(fontFamily: kBaliFont, fontSize: big, color: kInk, height: 1.1)),
         const SizedBox(height: 4),
-        Text(g.latin, textAlign: TextAlign.center, style: const TextStyle(fontSize: 11, color: kMuted)),
+        Text(g.latin, textAlign: TextAlign.center, style: TextStyle(fontSize: 11, color: kMuted)),
       ]),
     );
   }

@@ -206,10 +206,10 @@ class _QuizScreenState extends State<QuizScreen> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Text(tr(context, 'Quiz', 'Kuis'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: kInk)),
+        Text(tr(context, 'Quiz', 'Kuis'), style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: kInk)),
         const SizedBox(height: 4),
         Text(tr(context, 'Conquer each level to unlock the next.', 'Taklukkan tiap level untuk membuka tingkat berikutnya.'),
-            style: const TextStyle(color: kMuted, fontSize: 13)),
+            style: TextStyle(color: kMuted, fontSize: 13)),
         const SizedBox(height: 14),
         Center(
           child: SegmentedButton<_QuizMode>(
@@ -232,7 +232,7 @@ class _QuizScreenState extends State<QuizScreen> {
               ? tr(context, 'See the aksara, pick the correct Latin reading.', 'Lihat aksara, pilih bacaan Latin yang benar.')
               : tr(context, 'See the Latin word, write the aksara with the keyboard.', 'Lihat kata Latin, tulis aksaranya dengan papan aksara.'),
           textAlign: TextAlign.center,
-          style: const TextStyle(color: kMuted, fontSize: 12),
+          style: TextStyle(color: kMuted, fontSize: 12),
         ),
         const SizedBox(height: 16),
         for (int i = 0; i < _levels.length; i++) ...[
@@ -270,24 +270,24 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
                 child: unlocked
                     ? Text('${i + 1}', style: const TextStyle(fontWeight: FontWeight.w800, color: kBlue, fontSize: 18))
-                    : const Icon(Icons.lock_outline, size: 20, color: kMuted),
+                    : Icon(Icons.lock_outline, size: 20, color: kMuted),
               ),
               const SizedBox(width: 14),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(lv.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: kInk)),
+                Text(lv.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: kInk)),
                 const SizedBox(height: 2),
-                Text(sub, style: const TextStyle(fontSize: 12, color: kMuted)),
+                Text(sub, style: TextStyle(fontSize: 12, color: kMuted)),
               ])),
               const SizedBox(width: 8),
               Column(crossAxisAlignment: CrossAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: [
                 Row(mainAxisSize: MainAxisSize.min, children: [
-                  Text('${tr(context, 'Best', 'Terbaik')} ', style: const TextStyle(fontSize: 11, color: kMuted)),
+                  Text('${tr(context, 'Best', 'Terbaik')} ', style: TextStyle(fontSize: 11, color: kMuted)),
                   Text('$best', style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.w800,
                       color: best >= kPassScore ? const Color(0xFF16A34A) : kInk)),
                 ]),
                 Text(last < 0 ? tr(context, 'Last —', 'Terakhir —') : '${tr(context, 'Last', 'Terakhir')} $last',
-                    style: const TextStyle(fontSize: 11, color: kMuted)),
+                    style: TextStyle(fontSize: 11, color: kMuted)),
               ]),
             ]),
           ),
@@ -309,7 +309,7 @@ class _QuizScreenState extends State<QuizScreen> {
             constraints: const BoxConstraints(), visualDensity: VisualDensity.compact,
           ),
           const SizedBox(width: 8),
-          Expanded(child: Text(lv.name, style: const TextStyle(fontWeight: FontWeight.w800, color: kInk, fontSize: 16))),
+          Expanded(child: Text(lv.name, style: TextStyle(fontWeight: FontWeight.w800, color: kInk, fontSize: 16))),
           Text('${tr(context, 'Correct', 'Benar')}: $_correct', style: const TextStyle(color: kBlue, fontWeight: FontWeight.w700)),
         ]),
         const SizedBox(height: 12),
@@ -342,7 +342,7 @@ class _QuizScreenState extends State<QuizScreen> {
   List<Widget> _readingQuestion() {
     final q = _queue[_index];
     return [
-      Text('${tr(context, 'Q', 'Soal')} ${_index + 1}/${_queue.length}  ·  ${tr(context, 'Which aksara is this?', 'Aksara apa ini?')}', style: const TextStyle(color: kMuted)),
+      Text('${tr(context, 'Q', 'Soal')} ${_index + 1}/${_queue.length}  ·  ${tr(context, 'Which aksara is this?', 'Aksara apa ini?')}', style: TextStyle(color: kMuted)),
       const SizedBox(height: 12),
       Container(
         decoration: cardDecoration(),
@@ -354,7 +354,7 @@ class _QuizScreenState extends State<QuizScreen> {
             fit: BoxFit.scaleDown,
             child: Text(latinToBalinese(q['latin'] ?? ''),
                 maxLines: 1,
-                style: const TextStyle(fontFamily: kBaliFont, fontSize: 56, color: kInk)),
+                style: TextStyle(fontFamily: kBaliFont, fontSize: 56, color: kInk)),
           ),
         ),
       ),
@@ -407,7 +407,7 @@ class _QuizScreenState extends State<QuizScreen> {
           Text(ok ? _praise() : tr(context, 'Correct answer:', 'Jawaban benar:'),
               style: TextStyle(color: color, fontWeight: FontWeight.w800, fontSize: 17)),
           if (!ok) Text(_queue[_index]['latin'] ?? '',
-              style: const TextStyle(color: kInk, fontSize: 15, fontWeight: FontWeight.w600)),
+              style: TextStyle(color: kInk, fontSize: 15, fontWeight: FontWeight.w600)),
         ])),
       ]),
     );
@@ -418,17 +418,17 @@ class _QuizScreenState extends State<QuizScreen> {
     final q = _queue[_index];
     final answer = latinToBalinese(q['latin'] ?? '');
     return [
-      Text('${tr(context, 'Q', 'Soal')} ${_index + 1}/${_queue.length}  ·  ${tr(context, 'Write the aksara for:', 'Tulis aksara untuk:')}', style: const TextStyle(color: kMuted)),
+      Text('${tr(context, 'Q', 'Soal')} ${_index + 1}/${_queue.length}  ·  ${tr(context, 'Write the aksara for:', 'Tulis aksara untuk:')}', style: TextStyle(color: kMuted)),
       const SizedBox(height: 12),
       Container(
         decoration: cardDecoration(),
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
         alignment: Alignment.center,
         child: Column(children: [
-          Text(q['latin'] ?? '', style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: kInk)),
+          Text(q['latin'] ?? '', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: kInk)),
           if (q['meaning'] != null) ...[
             const SizedBox(height: 4),
-            Text(q['meaning']!, style: const TextStyle(fontSize: 13, color: kMuted)),
+            Text(q['meaning']!, style: TextStyle(fontSize: 13, color: kMuted)),
           ],
         ]),
       ),
@@ -440,7 +440,7 @@ class _QuizScreenState extends State<QuizScreen> {
           controller: _typeController,
           readOnly: true,
           showCursor: true,
-          style: const TextStyle(fontFamily: kBaliFont, fontSize: 28, color: kInk),
+          style: TextStyle(fontFamily: kBaliFont, fontSize: 28, color: kInk),
           decoration: InputDecoration(border: InputBorder.none, hintText: tr(context, 'Type the aksara here…', 'Ketik aksara di sini…')),
         ),
       ),
@@ -471,7 +471,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   style: TextStyle(fontWeight: FontWeight.w700,
                       color: _lastCorrect ? const Color(0xFF166534) : const Color(0xFF991B1B))),
               if (!_lastCorrect) Text('${tr(context, 'Answer:', 'Jawaban:')} $answer',
-                  style: const TextStyle(fontFamily: kBaliFont, fontSize: 22, color: kInk)),
+                  style: TextStyle(fontFamily: kBaliFont, fontSize: 22, color: kInk)),
             ])),
           ]),
         ),
@@ -514,12 +514,12 @@ class _ResultDialog extends StatelessWidget {
         padding: const EdgeInsets.all(22),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Text(title, textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: kInk, height: 1.3)),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: kInk, height: 1.3)),
           const SizedBox(height: 16),
           Icon(passed ? Icons.emoji_events : Icons.refresh,
               size: 64, color: passed ? const Color(0xFFF59E0B) : kMuted),
           const SizedBox(height: 16),
-          Text(body, textAlign: TextAlign.center, style: const TextStyle(fontSize: 13, color: kMuted, height: 1.4)),
+          Text(body, textAlign: TextAlign.center, style: TextStyle(fontSize: 13, color: kMuted, height: 1.4)),
           const SizedBox(height: 20),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             _stat(Icons.check_circle, const Color(0xFF16A34A), '$correct', tr(context, 'Correct', 'Benar')),
@@ -548,8 +548,8 @@ class _ResultDialog extends StatelessWidget {
     return Column(children: [
       Icon(icon, color: color, size: 22),
       const SizedBox(height: 4),
-      Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: kInk)),
-      Text(label, style: const TextStyle(fontSize: 11, color: kMuted)),
+      Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: kInk)),
+      Text(label, style: TextStyle(fontSize: 11, color: kMuted)),
     ]);
   }
 }

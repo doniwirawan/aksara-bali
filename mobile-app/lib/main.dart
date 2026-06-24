@@ -16,6 +16,7 @@ Future<void> main() async {
   // to the bundled/system font). Lets us declare "no data collected" on Play.
   GoogleFonts.config.allowRuntimeFetching = false;
   await loadLang();
+  await loadTheme();
   await loadStats();
   runApp(const AksaraBaliApp());
 }
@@ -25,21 +26,30 @@ class AksaraBaliApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base = ThemeData(colorSchemeSeed: kBlue, useMaterial3: true, scaffoldBackgroundColor: kPageBg);
-    return ValueListenableBuilder<AppLang>(
-      valueListenable: appLang,
-      builder: (_, lang, __) => LangScope(
-        lang: lang,
-        child: MaterialApp(
-          title: 'Aksara Bali',
-          debugShowCheckedModeBanner: false,
-          theme: base.copyWith(
-            textTheme: GoogleFonts.interTextTheme(base.textTheme),
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.white, foregroundColor: kInk, elevation: 0, scrolledUnderElevation: 1),
-          ),
-          home: const HomeShell(),
-        ),
+    return ValueListenableBuilder<bool>(
+      valueListenable: darkMode,
+      builder: (_, dark, __) => ValueListenableBuilder<AppLang>(
+        valueListenable: appLang,
+        builder: (_, lang, ___) {
+          final base = ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: kBlue, brightness: dark ? Brightness.dark : Brightness.light),
+            useMaterial3: true,
+            scaffoldBackgroundColor: kPageBg,
+          );
+          return LangScope(
+            lang: lang,
+            child: MaterialApp(
+              title: 'Aksara Bali',
+              debugShowCheckedModeBanner: false,
+              theme: base.copyWith(
+                textTheme: GoogleFonts.interTextTheme(base.textTheme),
+                appBarTheme: AppBarTheme(
+                  backgroundColor: kCardBg, foregroundColor: kInk, elevation: 0, scrolledUnderElevation: 1),
+              ),
+              home: const HomeShell(),
+            ),
+          );
+        },
       ),
     );
   }
@@ -53,7 +63,9 @@ class HomeShell extends StatefulWidget {
 
 class _HomeShellState extends State<HomeShell> {
   int _tab = 0;
-  final _screens = const [ConvertScreen(), WriteScreen(), QuizScreen(), ReferenceScreen(), AboutScreen()];
+  // Keyed so state (quiz progress, text fields) survives the rebuild triggered
+  // by a dark-mode toggle.
+  final _keys = List.generate(5, (_) => GlobalKey());
 
   @override
   void initState() {
@@ -104,8 +116,8 @@ class _HomeShellState extends State<HomeShell> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text('Aksara Bali', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, height: 1.1)),
+              children: [
+                const Text('Aksara Bali', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, height: 1.1)),
                 Text('CONVERTER', style: TextStyle(fontSize: 10, color: kMuted, letterSpacing: 1.2)),
               ],
             ),
@@ -128,6 +140,14 @@ class _HomeShellState extends State<HomeShell> {
               ),
             ),
           ),
+          ValueListenableBuilder<bool>(
+            valueListenable: darkMode,
+            builder: (context, dark, _) => IconButton(
+              tooltip: tr(context, dark ? 'Light mode' : 'Dark mode', dark ? 'Mode terang' : 'Mode gelap'),
+              icon: Icon(dark ? Icons.light_mode_outlined : Icons.dark_mode_outlined, size: 20),
+              onPressed: () => setDark(!dark),
+            ),
+          ),
           TextButton.icon(
             onPressed: () => setLang(isId ? AppLang.en : AppLang.id),
             icon: const Icon(Icons.language, size: 18),
@@ -135,9 +155,21 @@ class _HomeShellState extends State<HomeShell> {
           ),
           const SizedBox(width: 4),
         ],
-        bottom: const PreferredSize(preferredSize: Size.fromHeight(1), child: Divider(height: 1, color: kBorder)),
+        bottom: PreferredSize(preferredSize: const Size.fromHeight(1), child: Divider(height: 1, color: kBorder)),
       ),
-      body: IndexedStack(index: _tab, children: _screens),
+      body: ValueListenableBuilder<bool>(
+        valueListenable: darkMode,
+        builder: (_, __, ___) => IndexedStack(
+          index: _tab,
+          children: [
+            ConvertScreen(key: _keys[0]),
+            WriteScreen(key: _keys[1]),
+            QuizScreen(key: _keys[2]),
+            ReferenceScreen(key: _keys[3]),
+            AboutScreen(key: _keys[4]),
+          ],
+        ),
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
         onDestinationSelected: (i) => setState(() => _tab = i),

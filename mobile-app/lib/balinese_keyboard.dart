@@ -103,9 +103,9 @@ class BalineseKeyboard extends StatelessWidget {
           const SizedBox(height: 8),
           Row(children: [
             Expanded(child: _ctrl(width: double.infinity, onTap: () => _insert('​'),
-                child: const Text('Spasi', style: TextStyle(color: kMuted, fontSize: 13)))),
+                child: Text('Spasi', style: TextStyle(color: kMuted, fontSize: 13)))),
             const SizedBox(width: 6),
-            _ctrl(onTap: _backspace, child: const Icon(Icons.backspace_outlined, size: 20, color: kInk)),
+            _ctrl(onTap: _backspace, child: Icon(Icons.backspace_outlined, size: 20, color: kInk)),
             const SizedBox(width: 6),
             _ctrl(onTap: () { controller.clear(); onChanged(); }, child: const Icon(Icons.clear, size: 20, color: Color(0xFFEF4444))),
           ]),

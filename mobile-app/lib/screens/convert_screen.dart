@@ -9,7 +9,7 @@ import '../balinese_keyboard.dart';
 
 const _diacritics = ['ā', 'ī', 'ū', 'ě', 'ṇ'];
 const _textSwatches = [
-  kInk, kBlue, Color(0xFFDC2626), Color(0xFF16A34A),
+  Color(0xFF1A1A1A), kBlue, Color(0xFFDC2626), Color(0xFF16A34A),
   Color(0xFF7C3AED), Color(0xFFB8860B), Colors.white,
 ];
 const _bgSwatches = [
@@ -99,10 +99,10 @@ class _ConvertScreenState extends State<ConvertScreen> {
           const SizedBox(height: 4),
           Text(tr(context, 'Runs fully on your device — no internet needed.',
                   'Berjalan penuh di perangkat — tanpa internet.'),
-              style: const TextStyle(color: kMuted, fontSize: 13)),
+              style: TextStyle(color: kMuted, fontSize: 13)),
           const SizedBox(height: 16),
 
-          Text(inLabel, style: const TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12)),
+          Text(inLabel, style: TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12)),
           const SizedBox(height: 6),
           Container(
             decoration: cardDecoration(),
@@ -139,9 +139,9 @@ class _ConvertScreenState extends State<ConvertScreen> {
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(46, 40),
                       padding: EdgeInsets.zero,
-                      side: const BorderSide(color: kBorder),
+                      side: BorderSide(color: kBorder),
                     ),
-                    child: Text(c, style: const TextStyle(fontSize: 18, color: kInk)),
+                    child: Text(c, style: TextStyle(fontSize: 18, color: kInk)),
                   ),
               ]),
             ),
@@ -149,7 +149,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
             const SizedBox(height: 8),
             Row(children: [
               Expanded(child: Text(tr(context, 'Aksara Keyboard', 'Papan Aksara'),
-                  style: const TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12))),
+                  style: TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12))),
               TextButton.icon(
                 onPressed: () => setState(() => _showKeyboard = !_showKeyboard),
                 icon: Icon(_showKeyboard ? Icons.keyboard_hide_outlined : Icons.keyboard_outlined, size: 18),
@@ -161,7 +161,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
           ],
           const SizedBox(height: 16),
 
-          Text(outLabel, style: const TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12)),
+          Text(outLabel, style: TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12)),
           const SizedBox(height: 6),
           Container(
             width: double.infinity,
@@ -222,7 +222,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
       padding: const EdgeInsets.fromLTRB(14, 6, 14, 12),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          const Icon(Icons.format_size, size: 18, color: kMuted),
+          Icon(Icons.format_size, size: 18, color: kMuted),
           Expanded(child: Slider(
             min: 24, max: 80, value: _fontSize,
             onChanged: (v) => setState(() => _fontSize = v),
@@ -254,7 +254,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
 
   Widget _swatchRow(String label, List<Color> colors, Color selected, ValueChanged<Color> onPick) {
     return Row(children: [
-      SizedBox(width: 70, child: Text(label, style: const TextStyle(color: kMuted, fontSize: 12))),
+      SizedBox(width: 70, child: Text(label, style: TextStyle(color: kMuted, fontSize: 12))),
       const SizedBox(width: 4),
       Expanded(child: Wrap(spacing: 10, children: [
         for (final c in colors)
