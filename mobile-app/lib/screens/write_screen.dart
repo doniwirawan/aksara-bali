@@ -119,16 +119,19 @@ class _WriteScreenState extends State<WriteScreen> {
       ),
       child: Stack(children: [
         if (_showGuide)
-          Center(child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(balinese, maxLines: 1, textAlign: TextAlign.center,
-                  textHeightBehavior: const TextHeightBehavior(
-                      applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
-                  style: TextStyle(fontFamily: kBaliFont, fontSize: 120, color: Colors.black.withValues(alpha: 0.10))),
+          Align(
+            alignment: const Alignment(0, -0.28), // nudge the guide a bit higher
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(balinese, maxLines: 1, textAlign: TextAlign.center,
+                    textHeightBehavior: const TextHeightBehavior(
+                        applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
+                    style: TextStyle(fontFamily: kBaliFont, fontSize: 120, color: Colors.black.withValues(alpha: 0.10))),
+              ),
             ),
-          )),
+          ),
         GestureDetector(
           onPanStart: (d) => setState(() { _result = null; _strokes.add([d.localPosition]); }),
           onPanUpdate: (d) => setState(() {
