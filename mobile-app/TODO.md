@@ -32,8 +32,16 @@ continue in a fresh session.
       release build signed by the upload key (verified)
 - [x] Built signed **AAB** (`build/app/outputs/bundle/release/app-release.aab`) + signed APK
 - [x] Published APK to GitHub Releases **v1.0.0** (landing-page Download button links to it)
-- [x] **App icon** — custom gold-aksara medallion on deep-navy gradient (generated via
-      `scripts`→`assets/icon/icon_app.png` + `icon_fg.png`); adaptive bg `#15172B`
+- [x] **App icon** — white aksara on a blue→violet gradient (`assets/icon/icon_app.png`
+      + `icon_fg.png`), adaptive bg `#6A6BF0` (replaced earlier blue-square/gold-medallion)
+- [x] **Language toggle EN/ID** (default **Indonesian**), persisted; all screens + nav
+      translated via `lib/l10n.dart` (`tr(context, en, id)` + `LangScope`)
+- [x] **Quiz: per-mode scores** (reading vs writing tracked separately), each level shows
+      **Best + Last**, levels revisitable
+- [x] **Writing auto-advance** to next word after a good check (mobile + web)
+- [x] **Removed share-as-image** from converter (mobile button + web Download card)
+- [x] **Account (mobile)** — About links to web `/dashboard` for account + delete account
+      (web already has self-service delete; app stays offline-first)
 - [x] **Removed the Learn tab** (mobile) — nav now Convert · Write · Quiz · About;
       deleted `lib/screens/learn_screen.dart`
 - [x] **Leveled Quiz** — 6 tiers (Pemula→GrandMaster), locked until previous passed (≥70),
