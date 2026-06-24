@@ -29,11 +29,12 @@ class _ConvertScreenState extends State<ConvertScreen> {
   bool _reverse = false; // false: Latin → Balinese, true: Balinese → Latin
   bool _showKeyboard = true; // on-screen Balinese keyboard (reverse mode)
 
-  // Output styling
-  double _fontSize = 40;
-  TextAlign _align = TextAlign.center;
-  Color _textColor = kInk;
-  Color _bgColor = const Color(0xFFF8F9FF);
+  // Output styling (null colors follow the current theme)
+  bool _showStyle = false;
+  double _fontSize = 30;
+  TextAlign _align = TextAlign.left;
+  Color? _textColor;
+  Color? _bgColor;
 
   @override
   void dispose() {
@@ -113,14 +114,16 @@ class _ConvertScreenState extends State<ConvertScreen> {
               autofocus: !_reverse,
               readOnly: _reverse,   // use the on-screen Balinese keyboard instead
               showCursor: true,
-              maxLines: 3,
-              minLines: 1,
+              maxLines: 8,
+              minLines: 3,
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
               style: inFont.copyWith(color: kInk),
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: _reverse
                     ? tr(context, 'Type with the aksara keyboard below', 'Ketik dengan papan aksara di bawah')
-                    : tr(context, 'e.g. om swastiastu', 'mis. om swastiastu'),
+                    : tr(context, 'Type a word, sentence, or paragraph…', 'Ketik kata, kalimat, atau paragraf…'),
                 suffixIcon: _controller.text.isEmpty ? null : IconButton(
                   icon: const Icon(Icons.clear, size: 20),
                   onPressed: () { _controller.clear(); _convert(''); },
@@ -167,26 +170,35 @@ class _ConvertScreenState extends State<ConvertScreen> {
             width: double.infinity,
             constraints: const BoxConstraints(minHeight: 140),
             decoration: BoxDecoration(
-              color: _bgColor,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: const Color(0xFFC5D8FC)),
+              color: _bgColor ?? kSurfaceRaised,
+              borderRadius: BorderRadius.circular(16),
             ),
             padding: const EdgeInsets.all(20),
-            child: Text(
+            child: SelectableText(
               hasOut ? _output : (outIsBali ? 'ᬳᬓ᭄ᬱᬭᬩᬮᬶ' : 'aksara bali'),
               textAlign: _align,
               style: TextStyle(
                 fontFamily: outIsBali ? kBaliFont : null,
-                fontSize: outIsBali ? _fontSize : _fontSize * 0.6,
-                height: 1.6,
-                color: hasOut ? _textColor : _textColor.withValues(alpha: 0.25),
+                fontSize: outIsBali ? _fontSize : _fontSize * 0.7,
+                height: 1.7,
+                color: hasOut ? (_textColor ?? kTextPrimary) : (_textColor ?? kTextPrimary).withValues(alpha: 0.3),
               ),
             ),
           ),
           const SizedBox(height: 12),
 
-          // Styling panel
-          if (outIsBali) _stylePanel(),
+          // Collapsible styling panel (optional — keeps the converter clean for text)
+          if (outIsBali) ...[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                onPressed: () => setState(() => _showStyle = !_showStyle),
+                icon: Icon(_showStyle ? Icons.expand_less : Icons.tune, size: 18),
+                label: Text(tr(context, 'Customize style', 'Sesuaikan gaya')),
+              ),
+            ),
+            if (_showStyle) _stylePanel(),
+          ],
           const SizedBox(height: 14),
 
           Row(children: [
@@ -252,7 +264,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
     );
   }
 
-  Widget _swatchRow(String label, List<Color> colors, Color selected, ValueChanged<Color> onPick) {
+  Widget _swatchRow(String label, List<Color> colors, Color? selected, ValueChanged<Color> onPick) {
     return Row(children: [
       SizedBox(width: 70, child: Text(label, style: TextStyle(color: kMuted, fontSize: 12))),
       const SizedBox(width: 4),
