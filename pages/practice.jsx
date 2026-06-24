@@ -186,6 +186,7 @@ export default function PracticePage({ locale, setLocale }) {
                   locale={locale}
                   referenceText={currentPracticeWord?.latin}
                   referenceBalinese={convertLatinToBalinese(currentPracticeWord?.latin || '')}
+                  onSolved={randomizeWord}
                 />
 
                 {/* Reference sheet */}

@@ -1,12 +1,10 @@
-import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import '../converter.dart';
 import '../theme.dart';
+import '../l10n.dart';
 import '../balinese_keyboard.dart';
 
 const _diacritics = ['ā', 'ī', 'ū', 'ě', 'ṇ'];
@@ -27,7 +25,6 @@ class ConvertScreen extends StatefulWidget {
 
 class _ConvertScreenState extends State<ConvertScreen> {
   final _controller = TextEditingController();
-  final _captureKey = GlobalKey();
   String _output = '';
   bool _reverse = false; // false: Latin → Balinese, true: Balinese → Latin
   bool _showKeyboard = true; // on-screen Balinese keyboard (reverse mode)
@@ -72,19 +69,6 @@ class _ConvertScreenState extends State<ConvertScreen> {
     _convert(newText);
   }
 
-  Future<void> _shareImage() async {
-    try {
-      final boundary = _captureKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 3);
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      image.dispose();
-      final bytes = byteData!.buffer.asUint8List();
-      final file = await File('${Directory.systemTemp.path}/aksara_${DateTime.now().millisecondsSinceEpoch}.png')
-          .writeAsBytes(bytes);
-      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], text: 'via Aksara Bali'));
-    } catch (_) {/* user cancelled or render not ready */}
-  }
-
   @override
   Widget build(BuildContext context) {
     final hasOut = _output.isNotEmpty;
@@ -108,13 +92,14 @@ class _ConvertScreenState extends State<ConvertScreen> {
               IconButton.filledTonal(
                 onPressed: _swap,
                 icon: const Icon(Icons.swap_horiz),
-                tooltip: 'Swap direction',
+                tooltip: tr(context, 'Swap direction', 'Tukar arah'),
               ),
             ],
           ),
           const SizedBox(height: 4),
-          const Text('Runs fully on your device — no internet needed.',
-              style: TextStyle(color: kMuted, fontSize: 13)),
+          Text(tr(context, 'Runs fully on your device — no internet needed.',
+                  'Berjalan penuh di perangkat — tanpa internet.'),
+              style: const TextStyle(color: kMuted, fontSize: 13)),
           const SizedBox(height: 16),
 
           Text(inLabel, style: const TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12)),
@@ -133,7 +118,9 @@ class _ConvertScreenState extends State<ConvertScreen> {
               style: inFont.copyWith(color: kInk),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: _reverse ? 'Ketik dengan papan aksara di bawah' : 'e.g. om swastiastu',
+                hintText: _reverse
+                    ? tr(context, 'Type with the aksara keyboard below', 'Ketik dengan papan aksara di bawah')
+                    : tr(context, 'e.g. om swastiastu', 'mis. om swastiastu'),
                 suffixIcon: _controller.text.isEmpty ? null : IconButton(
                   icon: const Icon(Icons.clear, size: 20),
                   onPressed: () { _controller.clear(); _convert(''); },
@@ -161,12 +148,12 @@ class _ConvertScreenState extends State<ConvertScreen> {
           if (_reverse) ...[
             const SizedBox(height: 8),
             Row(children: [
-              const Expanded(child: Text('Papan Aksara',
-                  style: TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12))),
+              Expanded(child: Text(tr(context, 'Aksara Keyboard', 'Papan Aksara'),
+                  style: const TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12))),
               TextButton.icon(
                 onPressed: () => setState(() => _showKeyboard = !_showKeyboard),
                 icon: Icon(_showKeyboard ? Icons.keyboard_hide_outlined : Icons.keyboard_outlined, size: 18),
-                label: Text(_showKeyboard ? 'Sembunyikan' : 'Tampilkan'),
+                label: Text(_showKeyboard ? tr(context, 'Hide', 'Sembunyikan') : tr(context, 'Show', 'Tampilkan')),
               ),
             ]),
             if (_showKeyboard)
@@ -176,26 +163,23 @@ class _ConvertScreenState extends State<ConvertScreen> {
 
           Text(outLabel, style: const TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12)),
           const SizedBox(height: 6),
-          RepaintBoundary(
-            key: _captureKey,
-            child: Container(
-              width: double.infinity,
-              constraints: const BoxConstraints(minHeight: 140),
-              decoration: BoxDecoration(
-                color: _bgColor,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: const Color(0xFFC5D8FC)),
-              ),
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                hasOut ? _output : (outIsBali ? 'ᬳᬓ᭄ᬱᬭᬩᬮᬶ' : 'aksara bali'),
-                textAlign: _align,
-                style: TextStyle(
-                  fontFamily: outIsBali ? kBaliFont : null,
-                  fontSize: outIsBali ? _fontSize : _fontSize * 0.6,
-                  height: 1.6,
-                  color: hasOut ? _textColor : _textColor.withValues(alpha: 0.25),
-                ),
+          Container(
+            width: double.infinity,
+            constraints: const BoxConstraints(minHeight: 140),
+            decoration: BoxDecoration(
+              color: _bgColor,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: const Color(0xFFC5D8FC)),
+            ),
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              hasOut ? _output : (outIsBali ? 'ᬳᬓ᭄ᬱᬭᬩᬮᬶ' : 'aksara bali'),
+              textAlign: _align,
+              style: TextStyle(
+                fontFamily: outIsBali ? kBaliFont : null,
+                fontSize: outIsBali ? _fontSize : _fontSize * 0.6,
+                height: 1.6,
+                color: hasOut ? _textColor : _textColor.withValues(alpha: 0.25),
               ),
             ),
           ),
@@ -211,25 +195,20 @@ class _ConvertScreenState extends State<ConvertScreen> {
                 await Clipboard.setData(ClipboardData(text: _output));
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Copied to clipboard'), duration: Duration(seconds: 1)));
+                    SnackBar(content: Text(tr(context, 'Copied to clipboard', 'Disalin ke papan klip')),
+                        duration: const Duration(seconds: 1)));
                 }
               } : null,
               icon: const Icon(Icons.copy, size: 18),
-              label: const Text('Copy'),
+              label: Text(tr(context, 'Copy', 'Salin')),
             )),
-            const SizedBox(width: 10),
-            Expanded(child: OutlinedButton.icon(
+            const SizedBox(width: 12),
+            Expanded(child: FilledButton.icon(
               onPressed: hasOut ? () => SharePlus.instance.share(
                 ShareParams(text: '$_output\n\n(${_controller.text.trim()}) — via Aksara Bali')) : null,
-              icon: const Icon(Icons.share, size: 18),
-              label: const Text('Share'),
-            )),
-            const SizedBox(width: 10),
-            Expanded(child: FilledButton.icon(
-              onPressed: hasOut ? _shareImage : null,
               style: FilledButton.styleFrom(backgroundColor: kBlue),
-              icon: const Icon(Icons.image, size: 18),
-              label: const Text('Image'),
+              icon: const Icon(Icons.share, size: 18),
+              label: Text(tr(context, 'Share', 'Bagikan')),
             )),
           ]),
         ],
@@ -255,9 +234,9 @@ class _ConvertScreenState extends State<ConvertScreen> {
           ]),
         ]),
         const SizedBox(height: 4),
-        _swatchRow('Teks', _textSwatches, _textColor, (c) => setState(() => _textColor = c)),
+        _swatchRow(tr(context, 'Text', 'Teks'), _textSwatches, _textColor, (c) => setState(() => _textColor = c)),
         const SizedBox(height: 10),
-        _swatchRow('Latar', _bgSwatches, _bgColor, (c) => setState(() => _bgColor = c)),
+        _swatchRow(tr(context, 'Background', 'Latar'), _bgSwatches, _bgColor, (c) => setState(() => _bgColor = c)),
       ]),
     );
   }
@@ -275,7 +254,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
 
   Widget _swatchRow(String label, List<Color> colors, Color selected, ValueChanged<Color> onPick) {
     return Row(children: [
-      SizedBox(width: 44, child: Text(label, style: const TextStyle(color: kMuted, fontSize: 12))),
+      SizedBox(width: 70, child: Text(label, style: const TextStyle(color: kMuted, fontSize: 12))),
       const SizedBox(width: 4),
       Expanded(child: Wrap(spacing: 10, children: [
         for (final c in colors)

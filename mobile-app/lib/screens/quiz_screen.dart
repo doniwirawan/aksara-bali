@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../converter.dart';
 import '../words_data.dart';
 import '../theme.dart';
+import '../l10n.dart';
 import '../balinese_keyboard.dart';
 
 // Pass threshold (out of 100) to unlock the next level.
@@ -12,20 +13,21 @@ const int kPassScore = 70;
 enum _QuizMode { reading, typing }
 
 class _Level {
-  const _Level(this.name, this.subtitle, this.diffs, this.count);
+  const _Level(this.name, this.subEn, this.subId, this.diffs, this.count);
   final String name;
-  final String subtitle;
+  final String subEn;
+  final String subId;
   final List<String> diffs; // difficulty buckets this level draws from
   final int count; // number of questions
 }
 
 const List<_Level> _levels = [
-  _Level('Pemula', 'Kenali dasar aksara.', ['easy'], 8),
-  _Level('Mampu', 'Latih kemampuan lebih dalam.', ['easy', 'medium'], 10),
-  _Level('Cakap', 'Uji pemahaman aksara.', ['medium'], 10),
-  _Level('Ahli', 'Tantangan pertanyaan lanjutan.', ['medium', 'hard'], 10),
-  _Level('Master', 'Tes ketajaman pemahaman.', ['hard'], 10),
-  _Level('GrandMaster', 'Buktikan kamu sang master.', ['easy', 'medium', 'hard'], 12),
+  _Level('Pemula', 'Learn the basics.', 'Kenali dasar aksara.', ['easy'], 8),
+  _Level('Mampu', 'Build deeper skill.', 'Latih kemampuan lebih dalam.', ['easy', 'medium'], 10),
+  _Level('Cakap', 'Test your understanding.', 'Uji pemahaman aksara.', ['medium'], 10),
+  _Level('Ahli', 'Advanced challenges.', 'Tantangan pertanyaan lanjutan.', ['medium', 'hard'], 10),
+  _Level('Master', 'Sharpen your mastery.', 'Tes ketajaman pemahaman.', ['hard'], 10),
+  _Level('GrandMaster', 'Prove you are the master.', 'Buktikan kamu sang master.', ['easy', 'medium', 'hard'], 12),
 ];
 
 class QuizScreen extends StatefulWidget {
@@ -36,9 +38,13 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   final _rng = Random();
-  final Map<int, int> _best = {}; // level index -> best score (0..100)
+  // Scores are tracked separately per mode (reading vs. writing).
+  final Map<_QuizMode, Map<int, int>> _best = {_QuizMode.reading: {}, _QuizMode.typing: {}};
+  final Map<_QuizMode, Map<int, int>> _last = {_QuizMode.reading: {}, _QuizMode.typing: {}};
   bool _loaded = false;
   _QuizMode _mode = _QuizMode.reading;
+
+  String _modeKey(_QuizMode m) => m == _QuizMode.reading ? 'reading' : 'typing';
 
   int? _active; // null = level list; otherwise index of level being played
   List<Map<String, String?>> _queue = [];
@@ -68,13 +74,17 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
-    for (int i = 0; i < _levels.length; i++) {
-      _best[i] = prefs.getInt('quiz_best_$i') ?? 0;
+    for (final m in _QuizMode.values) {
+      final mk = _modeKey(m);
+      for (int i = 0; i < _levels.length; i++) {
+        _best[m]![i] = prefs.getInt('quiz_${mk}_best_$i') ?? 0;
+        _last[m]![i] = prefs.getInt('quiz_${mk}_last_$i') ?? -1; // -1 = not played
+      }
     }
     if (mounted) setState(() => _loaded = true);
   }
 
-  bool _unlocked(int i) => i == 0 || (_best[i - 1] ?? 0) >= kPassScore;
+  bool _unlocked(int i) => i == 0 || (_best[_mode]![i - 1] ?? 0) >= kPassScore;
 
   String _norm(String s) => s.replaceAll('​', '').trim();
 
@@ -133,17 +143,21 @@ class _QuizScreenState extends State<QuizScreen> {
     final total = _queue.length;
     final score = total == 0 ? 0 : (_correct / total * 100).round();
     final level = _active!;
-    if (score > (_best[level] ?? 0)) {
-      _best[level] = score;
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt('quiz_best_$level', score);
+    final mode = _mode;
+    final mk = _modeKey(mode);
+    final prefs = await SharedPreferences.getInstance();
+    _last[mode]![level] = score;
+    await prefs.setInt('quiz_${mk}_last_$level', score);
+    if (score > (_best[mode]![level] ?? 0)) {
+      _best[mode]![level] = score;
+      await prefs.setInt('quiz_${mk}_best_$level', score);
     }
     if (!mounted) return;
 
     final correct = _correct;
     final wrong = total - _correct;
     final passed = score >= kPassScore;
-    final allDone = _levels.asMap().keys.every((i) => (_best[i] ?? 0) >= kPassScore);
+    final allDone = _levels.asMap().keys.every((i) => (_best[mode]![i] ?? 0) >= kPassScore);
 
     final replay = await showDialog<bool>(
       context: context,
@@ -173,16 +187,16 @@ class _QuizScreenState extends State<QuizScreen> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        const Text('Quiz', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: kInk)),
+        Text(tr(context, 'Quiz', 'Kuis'), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, color: kInk)),
         const SizedBox(height: 4),
-        const Text('Taklukkan tiap level untuk membuka tingkat berikutnya.',
-            style: TextStyle(color: kMuted, fontSize: 13)),
+        Text(tr(context, 'Conquer each level to unlock the next.', 'Taklukkan tiap level untuk membuka tingkat berikutnya.'),
+            style: const TextStyle(color: kMuted, fontSize: 13)),
         const SizedBox(height: 14),
         Center(
           child: SegmentedButton<_QuizMode>(
-            segments: const [
-              ButtonSegment(value: _QuizMode.reading, label: Text('Membaca'), icon: Icon(Icons.menu_book_outlined, size: 18)),
-              ButtonSegment(value: _QuizMode.typing, label: Text('Menulis'), icon: Icon(Icons.keyboard_outlined, size: 18)),
+            segments: [
+              ButtonSegment(value: _QuizMode.reading, label: Text(tr(context, 'Reading', 'Membaca')), icon: const Icon(Icons.menu_book_outlined, size: 18)),
+              ButtonSegment(value: _QuizMode.typing, label: Text(tr(context, 'Writing', 'Menulis')), icon: const Icon(Icons.keyboard_outlined, size: 18)),
             ],
             selected: {_mode},
             onSelectionChanged: (s) => setState(() => _mode = s.first),
@@ -191,8 +205,8 @@ class _QuizScreenState extends State<QuizScreen> {
         const SizedBox(height: 6),
         Text(
           _mode == _QuizMode.reading
-              ? 'Lihat aksara, pilih bacaan Latin yang benar.'
-              : 'Lihat kata Latin, tulis aksaranya dengan papan aksara.',
+              ? tr(context, 'See the aksara, pick the correct Latin reading.', 'Lihat aksara, pilih bacaan Latin yang benar.')
+              : tr(context, 'See the Latin word, write the aksara with the keyboard.', 'Lihat kata Latin, tulis aksaranya dengan papan aksara.'),
           textAlign: TextAlign.center,
           style: const TextStyle(color: kMuted, fontSize: 12),
         ),
@@ -208,7 +222,9 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget _levelCard(int i) {
     final lv = _levels[i];
     final unlocked = _unlocked(i);
-    final best = _best[i] ?? 0;
+    final best = _best[_mode]![i] ?? 0;
+    final last = _last[_mode]![i] ?? -1;
+    final sub = LangScope.of(context) == AppLang.id ? lv.subId : lv.subEn;
     return Opacity(
       opacity: unlocked ? 1 : 0.6,
       child: Material(
@@ -236,14 +252,18 @@ class _QuizScreenState extends State<QuizScreen> {
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(lv.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: kInk)),
                 const SizedBox(height: 2),
-                Text(lv.subtitle, style: const TextStyle(fontSize: 12, color: kMuted)),
+                Text(sub, style: const TextStyle(fontSize: 12, color: kMuted)),
               ])),
               const SizedBox(width: 8),
-              Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                const Text('Score', style: TextStyle(fontSize: 11, color: kMuted)),
-                Text('$best', style: TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.w800,
-                    color: best >= kPassScore ? const Color(0xFF16A34A) : kInk)),
+              Column(crossAxisAlignment: CrossAxisAlignment.end, mainAxisSize: MainAxisSize.min, children: [
+                Row(mainAxisSize: MainAxisSize.min, children: [
+                  Text('${tr(context, 'Best', 'Terbaik')} ', style: const TextStyle(fontSize: 11, color: kMuted)),
+                  Text('$best', style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w800,
+                      color: best >= kPassScore ? const Color(0xFF16A34A) : kInk)),
+                ]),
+                Text(last < 0 ? tr(context, 'Last —', 'Terakhir —') : '${tr(context, 'Last', 'Terakhir')} $last',
+                    style: const TextStyle(fontSize: 11, color: kMuted)),
               ]),
             ]),
           ),
@@ -261,12 +281,12 @@ class _QuizScreenState extends State<QuizScreen> {
         Row(children: [
           IconButton(
             onPressed: () => setState(() => _active = null),
-            icon: const Icon(Icons.arrow_back), tooltip: 'Kembali', padding: EdgeInsets.zero,
+            icon: const Icon(Icons.arrow_back), tooltip: tr(context, 'Back', 'Kembali'), padding: EdgeInsets.zero,
             constraints: const BoxConstraints(), visualDensity: VisualDensity.compact,
           ),
           const SizedBox(width: 8),
           Expanded(child: Text(lv.name, style: const TextStyle(fontWeight: FontWeight.w800, color: kInk, fontSize: 16))),
-          Text('Benar: $_correct', style: const TextStyle(color: kBlue, fontWeight: FontWeight.w700)),
+          Text('${tr(context, 'Correct', 'Benar')}: $_correct', style: const TextStyle(color: kBlue, fontWeight: FontWeight.w700)),
         ]),
         const SizedBox(height: 12),
         ClipRRect(
@@ -283,7 +303,7 @@ class _QuizScreenState extends State<QuizScreen> {
           FilledButton(
             onPressed: _next,
             style: FilledButton.styleFrom(backgroundColor: kBlue, minimumSize: const Size.fromHeight(48)),
-            child: Text(_index + 1 >= _queue.length ? 'Lihat hasil' : 'Lanjut'),
+            child: Text(_index + 1 >= _queue.length ? tr(context, 'See result', 'Lihat hasil') : tr(context, 'Next', 'Lanjut')),
           ),
         ],
       ]),
@@ -294,7 +314,7 @@ class _QuizScreenState extends State<QuizScreen> {
   List<Widget> _readingQuestion() {
     final q = _queue[_index];
     return [
-      Text('Soal ${_index + 1}/${_queue.length}  ·  Aksara apa ini?', style: const TextStyle(color: kMuted)),
+      Text('${tr(context, 'Q', 'Soal')} ${_index + 1}/${_queue.length}  ·  ${tr(context, 'Which aksara is this?', 'Aksara apa ini?')}', style: const TextStyle(color: kMuted)),
       const SizedBox(height: 12),
       Container(
         decoration: cardDecoration(),
@@ -345,7 +365,7 @@ class _QuizScreenState extends State<QuizScreen> {
     final q = _queue[_index];
     final answer = latinToBalinese(q['latin'] ?? '');
     return [
-      Text('Soal ${_index + 1}/${_queue.length}  ·  Tulis aksara untuk:', style: const TextStyle(color: kMuted)),
+      Text('${tr(context, 'Q', 'Soal')} ${_index + 1}/${_queue.length}  ·  ${tr(context, 'Write the aksara for:', 'Tulis aksara untuk:')}', style: const TextStyle(color: kMuted)),
       const SizedBox(height: 12),
       Container(
         decoration: cardDecoration(),
@@ -368,7 +388,7 @@ class _QuizScreenState extends State<QuizScreen> {
           readOnly: true,
           showCursor: true,
           style: const TextStyle(fontFamily: kBaliFont, fontSize: 28, color: kInk),
-          decoration: const InputDecoration(border: InputBorder.none, hintText: 'Ketik aksara di sini…'),
+          decoration: InputDecoration(border: InputBorder.none, hintText: tr(context, 'Type the aksara here…', 'Ketik aksara di sini…')),
         ),
       ),
       const SizedBox(height: 12),
@@ -379,7 +399,7 @@ class _QuizScreenState extends State<QuizScreen> {
           onPressed: _norm(_typeController.text).isEmpty ? null : _check,
           style: FilledButton.styleFrom(backgroundColor: kBlue, minimumSize: const Size.fromHeight(48)),
           icon: const Icon(Icons.check, size: 18),
-          label: const Text('Periksa'),
+          label: Text(tr(context, 'Check', 'Periksa')),
         )
       else
         Container(
@@ -394,10 +414,10 @@ class _QuizScreenState extends State<QuizScreen> {
                 color: _lastCorrect ? const Color(0xFF16A34A) : const Color(0xFFDC2626)),
             const SizedBox(width: 10),
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(_lastCorrect ? 'Benar!' : 'Belum tepat',
+              Text(_lastCorrect ? tr(context, 'Correct!', 'Benar!') : tr(context, 'Not quite', 'Belum tepat'),
                   style: TextStyle(fontWeight: FontWeight.w700,
                       color: _lastCorrect ? const Color(0xFF166534) : const Color(0xFF991B1B))),
-              if (!_lastCorrect) Text('Jawaban: $answer',
+              if (!_lastCorrect) Text('${tr(context, 'Answer:', 'Jawaban:')} $answer',
                   style: const TextStyle(fontFamily: kBaliFont, fontSize: 22, color: kInk)),
             ])),
           ]),
@@ -407,7 +427,7 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 }
 
-// ── Result popup (screenshot #3) ────────────────────────────────────────────
+// ── Result popup ────────────────────────────────────────────────────────────
 class _ResultDialog extends StatelessWidget {
   const _ResultDialog({
     required this.correct, required this.score, required this.wrong,
@@ -420,15 +440,19 @@ class _ResultDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = allDone
-        ? 'Selamat, Kamu Berhasil Menaklukkan Semua Level dengan Luar Biasa!'
+        ? tr(context, 'Congratulations, you conquered every level brilliantly!',
+            'Selamat, Kamu Berhasil Menaklukkan Semua Level dengan Luar Biasa!')
         : passed
-            ? 'Hebat! Level $levelName selesai!'
-            : 'Belum lulus — coba lagi ya!';
+            ? tr(context, 'Great! Level $levelName done!', 'Hebat! Level $levelName selesai!')
+            : tr(context, 'Not passed — try again!', 'Belum lulus — coba lagi ya!');
     final body = allDone
-        ? 'Kamu telah berhasil menyelesaikan semua level! Tantangan selesai, tapi kamu bisa terus berlatih untuk mengasah kemampuanmu. Terima kasih sudah terus berprestasi!'
+        ? tr(context, 'You finished all levels! The challenge is done, but keep practising to sharpen your skills. Thanks for keeping it up!',
+            'Kamu telah berhasil menyelesaikan semua level! Tantangan selesai, tapi kamu bisa terus berlatih untuk mengasah kemampuanmu. Terima kasih sudah terus berprestasi!')
         : passed
-            ? 'Skor kamu $score. Level berikutnya sudah terbuka — lanjutkan tantanganmu!'
-            : 'Kamu butuh skor minimal $kPassScore untuk membuka level berikutnya. Ayo ulangi!';
+            ? tr(context, 'Your score is $score. The next level is unlocked — keep going!',
+                'Skor kamu $score. Level berikutnya sudah terbuka — lanjutkan tantanganmu!')
+            : tr(context, 'You need at least $kPassScore to unlock the next level. Give it another go!',
+                'Kamu butuh skor minimal $kPassScore untuk membuka level berikutnya. Ayo ulangi!');
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -445,21 +469,21 @@ class _ResultDialog extends StatelessWidget {
           Text(body, textAlign: TextAlign.center, style: const TextStyle(fontSize: 13, color: kMuted, height: 1.4)),
           const SizedBox(height: 20),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            _stat(Icons.check_circle, const Color(0xFF16A34A), '$correct', 'Benar'),
-            _stat(Icons.emoji_events, const Color(0xFFF59E0B), '$score', 'Score'),
-            _stat(Icons.cancel, const Color(0xFFDC2626), '$wrong', 'Salah'),
+            _stat(Icons.check_circle, const Color(0xFF16A34A), '$correct', tr(context, 'Correct', 'Benar')),
+            _stat(Icons.emoji_events, const Color(0xFFF59E0B), '$score', tr(context, 'Score', 'Skor')),
+            _stat(Icons.cancel, const Color(0xFFDC2626), '$wrong', tr(context, 'Wrong', 'Salah')),
           ]),
           const SizedBox(height: 22),
           Row(children: [
             Expanded(child: OutlinedButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Ulangi'),
+              child: Text(tr(context, 'Retry', 'Ulangi')),
             )),
             const SizedBox(width: 12),
             Expanded(child: FilledButton(
               onPressed: () => Navigator.pop(context, false),
               style: FilledButton.styleFrom(backgroundColor: kBlue),
-              child: const Text('Lihat Detail'),
+              child: Text(tr(context, 'See Details', 'Lihat Detail')),
             )),
           ]),
         ]),

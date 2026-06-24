@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../converter.dart';
 import '../words_data.dart';
 import '../theme.dart';
+import '../l10n.dart';
 
 class WriteScreen extends StatefulWidget {
   const WriteScreen({super.key});
@@ -61,6 +62,13 @@ class _WriteScreenState extends State<WriteScreen> {
 
     final result = _score(userBytes, refBytes, w, h);
     if (mounted) setState(() { _result = result; _checking = false; });
+
+    // If the writing is good, move on to the next word automatically.
+    if (result.isCorrect) {
+      Future.delayed(const Duration(milliseconds: 1300), () {
+        if (mounted && _result != null && _result!.isCorrect) _newWord();
+      });
+    }
   }
 
   // Render [draw] onto an offscreen canvas and return its raw RGBA pixels.
@@ -82,7 +90,7 @@ class _WriteScreenState extends State<WriteScreen> {
       padding: const EdgeInsets.all(14),
       child: Row(children: [
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Write this:', style: TextStyle(color: kMuted, fontSize: 12)),
+          Text(tr(context, 'Write this:', 'Tulis ini:'), style: const TextStyle(color: kMuted, fontSize: 12)),
           const SizedBox(height: 2),
           FittedBox(
             fit: BoxFit.scaleDown,
@@ -93,7 +101,7 @@ class _WriteScreenState extends State<WriteScreen> {
           Text('${_word['latin']}  ·  ${_word['meaning'] ?? ''}',
               style: const TextStyle(fontSize: 13, color: kMuted)),
         ])),
-        TextButton.icon(onPressed: _newWord, icon: const Icon(Icons.shuffle, size: 16), label: const Text('New')),
+        TextButton.icon(onPressed: _newWord, icon: const Icon(Icons.shuffle, size: 16), label: Text(tr(context, 'New', 'Baru'))),
       ]),
     );
 
@@ -127,17 +135,17 @@ class _WriteScreenState extends State<WriteScreen> {
 
     final undoBtn = OutlinedButton.icon(
       onPressed: _strokes.isEmpty ? null : () => setState(() { _strokes.removeLast(); _result = null; }),
-      icon: const Icon(Icons.undo, size: 18), label: const Text('Undo'),
+      icon: const Icon(Icons.undo, size: 18), label: Text(tr(context, 'Undo', 'Urungkan')),
     );
     final clearBtn = OutlinedButton.icon(
       onPressed: _strokes.isEmpty ? null : () => setState(() { _strokes.clear(); _result = null; }),
-      icon: const Icon(Icons.delete_outline, size: 18), label: const Text('Clear'),
+      icon: const Icon(Icons.delete_outline, size: 18), label: Text(tr(context, 'Clear', 'Hapus')),
     );
     final guideBtn = FilledButton.icon(
       onPressed: () => setState(() => _showGuide = !_showGuide),
       style: FilledButton.styleFrom(backgroundColor: _showGuide ? kBlue : Colors.grey),
       icon: Icon(_showGuide ? Icons.visibility : Icons.visibility_off, size: 18),
-      label: const Text('Guide'),
+      label: Text(tr(context, 'Guide', 'Panduan')),
     );
     final controls = Row(children: [
       Expanded(child: undoBtn),
@@ -152,11 +160,15 @@ class _WriteScreenState extends State<WriteScreen> {
       icon: _checking
           ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
           : const Icon(Icons.check_circle_outline, size: 18),
-      label: Text(_checking ? 'Checking…' : 'Check my writing'),
+      label: Text(_checking
+          ? tr(context, 'Checking…', 'Memeriksa…')
+          : tr(context, 'Check my writing', 'Periksa tulisan')),
     );
 
-    const hint = Text('Trace the faint aksara, then tap Check to score how close your shape is.',
-        textAlign: TextAlign.center, style: TextStyle(color: kMuted, fontSize: 12));
+    final hint = Text(
+        tr(context, 'Trace the faint aksara, then tap Check to score how close your shape is.',
+            'Jiplak aksara samar, lalu ketuk Periksa untuk menilai seberapa mirip bentukmu.'),
+        textAlign: TextAlign.center, style: const TextStyle(color: kMuted, fontSize: 12));
 
     return LayoutBuilder(builder: (context, c) {
       // Landscape / wide: controls on the left, big canvas filling the height on the right.
@@ -313,12 +325,6 @@ class _ScoreResult {
   bool get isCorrect => score >= 55;
   bool get isPartial => score >= 30 && score < 55;
 
-  String get message {
-    if (score >= 55) return 'Great — that looks right!';
-    if (score >= 30) return 'Close — keep practicing the shape.';
-    return 'Not quite — trace the guide and try again.';
-  }
-
   Color get color {
     if (score >= 55) return const Color(0xFF16A34A); // green
     if (score >= 30) return const Color(0xFFD97706); // amber
@@ -332,6 +338,11 @@ class _ScoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final msg = r.isCorrect
+        ? tr(context, 'Great — that looks right!', 'Bagus — sudah benar!')
+        : r.isPartial
+            ? tr(context, 'Close — keep practicing the shape.', 'Hampir — terus latih bentuknya.')
+            : tr(context, 'Not quite — trace the guide and try again.', 'Belum tepat — jiplak panduan lalu coba lagi.');
     return Container(
       decoration: cardDecoration().copyWith(border: Border.all(color: r.color.withValues(alpha: 0.4))),
       padding: const EdgeInsets.all(14),
@@ -339,7 +350,7 @@ class _ScoreCard extends StatelessWidget {
         Row(children: [
           Icon(r.isCorrect ? Icons.check_circle : (r.isPartial ? Icons.adjust : Icons.cancel), color: r.color, size: 22),
           const SizedBox(width: 8),
-          Expanded(child: Text(r.message, style: TextStyle(color: r.color, fontWeight: FontWeight.w600))),
+          Expanded(child: Text(msg, style: TextStyle(color: r.color, fontWeight: FontWeight.w600))),
           Text('${r.score}%', style: TextStyle(color: r.color, fontWeight: FontWeight.w800, fontSize: 20)),
         ]),
         const SizedBox(height: 10),
@@ -353,7 +364,7 @@ class _ScoreCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Text('Precision: ${r.precision}%   ·   Coverage: ${r.recall}%',
+        Text('${tr(context, 'Precision', 'Presisi')}: ${r.precision}%   ·   ${tr(context, 'Coverage', 'Cakupan')}: ${r.recall}%',
             style: const TextStyle(color: kMuted, fontSize: 12)),
       ]),
     );

@@ -78,7 +78,7 @@ function updatePinch(landmarks) {
   return _pinching
 }
 
-export default function HandGestureCanvas({ darkMode, referenceText, referenceBalinese, locale }) {
+export default function HandGestureCanvas({ darkMode, referenceText, referenceBalinese, locale, onSolved }) {
   const lang = locale === 'en' ? 'en' : 'id'
   const tr = {
     id: {
@@ -365,6 +365,11 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       message,
     })
 
+    // Good result → automatically move on to the next word.
+    if (resultStatus === 'correct' && onSolved) {
+      setTimeout(() => onSolved(), 1500)
+    }
+
     // Log to Supabase (fire-and-forget)
     if (referenceText) {
       authedFetch('/api/writing-checks', {
@@ -404,7 +409,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         // API not supported or failed — silently ignore
       }
     }
-  }, [referenceBalinese, referenceText])
+  }, [referenceBalinese, referenceText, onSolved])
 
   // Keep a ref to the latest checkDrawing so the gesture loop can auto-score
   useEffect(() => { checkDrawingRef.current = checkDrawing }, [checkDrawing])
@@ -814,6 +819,17 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       stopGestureMode()
     }
   }, [mode])
+
+  // New practice word → start with a fresh canvas.
+  useEffect(() => {
+    strokesRef.current = []
+    currentPathRef.current = []
+    redrawAll()
+    setCheckResult(null)
+    setHwrResult(null)
+    autoCheckedRef.current = false
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [referenceBalinese])
 
   useEffect(() => {
     return () => stopGestureMode()
