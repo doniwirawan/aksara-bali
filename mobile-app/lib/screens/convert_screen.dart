@@ -1,4 +1,7 @@
+import 'dart:io';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
@@ -30,11 +33,26 @@ class _ConvertScreenState extends State<ConvertScreen> {
   bool _showKeyboard = true; // on-screen Balinese keyboard (reverse mode)
 
   // Output styling (null colors follow the current theme)
+  final _captureKey = GlobalKey();
   bool _showStyle = false;
+  bool _transparent = false; // export PNG with a transparent background
   double _fontSize = 30;
   TextAlign _align = TextAlign.left;
   Color? _textColor;
   Color? _bgColor;
+
+  Future<void> _downloadImage() async {
+    try {
+      final boundary = _captureKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      final image = await boundary.toImage(pixelRatio: 3);
+      final data = await image.toByteData(format: ui.ImageByteFormat.png);
+      image.dispose();
+      final bytes = data!.buffer.asUint8List();
+      final file = await File('${Directory.systemTemp.path}/aksara_${DateTime.now().millisecondsSinceEpoch}.png')
+          .writeAsBytes(bytes);
+      await SharePlus.instance.share(ShareParams(files: [XFile(file.path, mimeType: 'image/png')]));
+    } catch (_) {/* render not ready / cancelled */}
+  }
 
   @override
   void dispose() {
@@ -166,22 +184,25 @@ class _ConvertScreenState extends State<ConvertScreen> {
 
           Text(outLabel, style: TextStyle(fontWeight: FontWeight.w600, color: kMuted, fontSize: 12)),
           const SizedBox(height: 6),
-          Container(
-            width: double.infinity,
-            constraints: const BoxConstraints(minHeight: 140),
-            decoration: BoxDecoration(
-              color: _bgColor ?? kSurfaceRaised,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            padding: const EdgeInsets.all(20),
-            child: SelectableText(
-              hasOut ? _output : (outIsBali ? 'ᬳᬓ᭄ᬱᬭᬩᬮᬶ' : 'aksara bali'),
-              textAlign: _align,
-              style: TextStyle(
-                fontFamily: outIsBali ? kBaliFont : null,
-                fontSize: outIsBali ? _fontSize : _fontSize * 0.7,
-                height: 1.7,
-                color: hasOut ? (_textColor ?? kTextPrimary) : (_textColor ?? kTextPrimary).withValues(alpha: 0.3),
+          RepaintBoundary(
+            key: _captureKey,
+            child: Container(
+              width: double.infinity,
+              constraints: const BoxConstraints(minHeight: 140),
+              decoration: BoxDecoration(
+                color: _transparent ? Colors.transparent : (_bgColor ?? kSurfaceRaised),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              padding: const EdgeInsets.all(20),
+              child: SelectableText(
+                hasOut ? _output : (outIsBali ? 'ᬳᬓ᭄ᬱᬭᬩᬮᬶ' : 'aksara bali'),
+                textAlign: _align,
+                style: TextStyle(
+                  fontFamily: outIsBali ? kBaliFont : null,
+                  fontSize: outIsBali ? _fontSize : _fontSize * 0.7,
+                  height: 1.7,
+                  color: hasOut ? (_textColor ?? kTextPrimary) : (_textColor ?? kTextPrimary).withValues(alpha: 0.3),
+                ),
               ),
             ),
           ),
@@ -249,6 +270,24 @@ class _ConvertScreenState extends State<ConvertScreen> {
         _swatchRow(tr(context, 'Text', 'Teks'), _textSwatches, _textColor, (c) => setState(() => _textColor = c)),
         const SizedBox(height: 10),
         _swatchRow(tr(context, 'Background', 'Latar'), _bgSwatches, _bgColor, (c) => setState(() => _bgColor = c)),
+        const SizedBox(height: 6),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          dense: true,
+          title: Text(tr(context, 'Transparent background', 'Latar transparan'),
+              style: TextStyle(fontSize: 13, color: kInk)),
+          value: _transparent,
+          onChanged: (v) => setState(() => _transparent = v),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton.icon(
+            onPressed: _output.isEmpty ? null : _downloadImage,
+            icon: const Icon(Icons.download, size: 18),
+            label: Text(tr(context, 'Download PNG', 'Unduh PNG')),
+          ),
+        ),
       ]),
     );
   }

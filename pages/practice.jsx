@@ -6,7 +6,8 @@ import QuizMode from '../components/practice/QuizMode'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { convertLatinToBalinese, QUIZ_WORDS } from '../utils/balineseConverter'
-import { Target, PenLine, Keyboard, Shuffle, ClipboardList, Copy, Lightbulb, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Target, PenLine, Keyboard, Shuffle, ClipboardList, Copy, Lightbulb, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react'
+import AksaraReference from '../components/practice/AksaraReference'
 
 // HandGestureCanvas uses webcam + MediaPipe (browser-only)
 const HandGestureCanvas = dynamic(
@@ -18,11 +19,13 @@ const TABS_ID = [
   { key: 'quiz', icon: Target, label: 'Kuis' },
   { key: 'write', icon: PenLine, label: 'Tulis' },
   { key: 'keyboard', icon: Keyboard, label: 'Papan Ketik' },
+  { key: 'reference', icon: BookOpen, label: 'Aksara' },
 ]
 const TABS_EN = [
   { key: 'quiz', icon: Target, label: 'Quiz' },
   { key: 'write', icon: PenLine, label: 'Write' },
   { key: 'keyboard', icon: Keyboard, label: 'Keyboard' },
+  { key: 'reference', icon: BookOpen, label: 'Aksara' },
 ]
 
 // Practice word pool for the writing canvas — use the full quiz word list
@@ -154,6 +157,11 @@ export default function PracticePage({ locale, setLocale }) {
             {/* QUIZ TAB */}
             {activeTab === 'quiz' && (
               <QuizMode darkMode={darkMode} locale={locale} />
+            )}
+
+            {/* AKSARA REFERENCE TAB */}
+            {activeTab === 'reference' && (
+              <AksaraReference darkMode={darkMode} locale={locale} />
             )}
 
             {/* WRITING CANVAS TAB */}
