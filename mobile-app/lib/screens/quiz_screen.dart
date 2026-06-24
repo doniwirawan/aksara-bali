@@ -176,6 +176,7 @@ class _QuizScreenState extends State<QuizScreen> {
     await unlock('first_steps');
     if (score == 100) await unlock('perfect');
     if (allDone) await unlock(mode == _QuizMode.reading ? 'reading_pro' : 'writing_pro');
+    await recordQuizDone(score);
 
     if (!mounted) return;
     final replay = await showDialog<bool>(
@@ -212,18 +213,17 @@ class _QuizScreenState extends State<QuizScreen> {
             style: TextStyle(color: kMuted, fontSize: 13)),
         const SizedBox(height: 14),
         Center(
-          child: SegmentedButton<_QuizMode>(
-            showSelectedIcon: false, // the auto checkmark widens the segment and wraps the label
-            segments: [
-              ButtonSegment(value: _QuizMode.reading,
-                  label: Text(tr(context, 'Reading', 'Membaca'), maxLines: 1, softWrap: false),
-                  icon: const Icon(Icons.menu_book_outlined, size: 18)),
-              ButtonSegment(value: _QuizMode.typing,
-                  label: Text(tr(context, 'Writing', 'Menulis'), maxLines: 1, softWrap: false),
-                  icon: const Icon(Icons.keyboard_outlined, size: 18)),
-            ],
-            selected: {_mode},
-            onSelectionChanged: (s) => setState(() => _mode = s.first),
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: kSurface,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: kOutline),
+            ),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              _modeSeg(_QuizMode.reading, Icons.menu_book_outlined, tr(context, 'Reading', 'Membaca')),
+              _modeSeg(_QuizMode.typing, Icons.keyboard_outlined, tr(context, 'Writing', 'Menulis')),
+            ]),
           ),
         ),
         const SizedBox(height: 6),
@@ -240,6 +240,28 @@ class _QuizScreenState extends State<QuizScreen> {
           const SizedBox(height: 12),
         ],
       ],
+    );
+  }
+
+  Widget _modeSeg(_QuizMode m, IconData icon, String label) {
+    final sel = _mode == m;
+    return InkWell(
+      borderRadius: BorderRadius.circular(10),
+      onTap: () => setState(() => _mode = m),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
+        decoration: BoxDecoration(
+          color: sel ? kAccentSoft : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          Icon(icon, size: 18, color: sel ? kAccent : kTextMuted),
+          const SizedBox(width: 8),
+          Text(label, maxLines: 1, style: TextStyle(
+              fontWeight: FontWeight.w600, color: sel ? kTextPrimary : kTextMuted)),
+        ]),
+      ),
     );
   }
 

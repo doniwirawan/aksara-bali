@@ -75,6 +75,13 @@ class _ConvertScreenState extends State<ConvertScreen> {
     });
   }
 
+  // Longer output → smaller text, but never below a minimum (lowest limit).
+  double _autoSize() {
+    final n = _output.replaceAll('​', '').length;
+    if (n <= 14) return _fontSize;
+    return (_fontSize - (n - 14) * 0.4).clamp(16.0, _fontSize);
+  }
+
   void _insertDiacritic(String ch) {
     final sel = _controller.selection;
     final text = _controller.text;
@@ -199,7 +206,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
                 textAlign: _align,
                 style: TextStyle(
                   fontFamily: outIsBali ? kBaliFont : null,
-                  fontSize: outIsBali ? _fontSize : _fontSize * 0.7,
+                  fontSize: outIsBali ? _autoSize() : _fontSize * 0.7,
                   height: 1.7,
                   color: hasOut ? (_textColor ?? kTextPrimary) : (_textColor ?? kTextPrimary).withValues(alpha: 0.3),
                 ),

@@ -31,6 +31,20 @@ const List<Achievement> achievements = [
       'Pass all writing levels', 'Lulus semua level menulis'),
   Achievement('scribe_25', Icons.edit, 'Diligent', 'Rajin',
       'Write 25 aksara correctly', 'Tulis 25 aksara dengan benar'),
+  Achievement('streak_30', Icons.calendar_month, 'Devoted', 'Setia',
+      '30-day streak', 'Beruntun 30 hari'),
+  Achievement('streak_100', Icons.military_tech, 'Centurion', 'Centurion',
+      '100-day streak', 'Beruntun 100 hari'),
+  Achievement('quiz_10', Icons.workspace_premium, 'Quiz Regular', 'Rajin Kuis',
+      'Finish 10 quizzes', 'Selesaikan 10 kuis'),
+  Achievement('quiz_50', Icons.emoji_events, 'Quiz Master', 'Master Kuis',
+      'Finish 50 quizzes', 'Selesaikan 50 kuis'),
+  Achievement('perfect_5', Icons.auto_awesome, 'Flawless', 'Tanpa Cela',
+      'Score 100 on 5 levels', 'Raih skor 100 di 5 level'),
+  Achievement('scribe_100', Icons.history_edu, 'Master Scribe', 'Juru Tulis',
+      'Write 100 aksara correctly', 'Tulis 100 aksara dengan benar'),
+  Achievement('grandmaster', Icons.stars, 'Grandmaster', 'Mahaguru',
+      'Pass every level in both modes', 'Lulus semua level di kedua mode'),
 ];
 
 String _dateStr(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
@@ -63,7 +77,26 @@ Future<int> recordDailyActivity() async {
   streakCount.value = count;
   if (count >= 3) await unlock('streak_3');
   if (count >= 7) await unlock('streak_7');
+  if (count >= 30) await unlock('streak_30');
+  if (count >= 100) await unlock('streak_100');
   return count;
+}
+
+/// Call when a quiz level is finished. [score] is 0..100.
+Future<void> recordQuizDone(int score) async {
+  final prefs = await SharedPreferences.getInstance();
+  final q = (prefs.getInt('quiz_done_count') ?? 0) + 1;
+  await prefs.setInt('quiz_done_count', q);
+  if (q >= 10) await unlock('quiz_10');
+  if (q >= 50) await unlock('quiz_50');
+  if (score >= 100) {
+    final p = (prefs.getInt('perfect_count') ?? 0) + 1;
+    await prefs.setInt('perfect_count', p);
+    if (p >= 5) await unlock('perfect_5');
+  }
+  if (unlocked.value.contains('reading_pro') && unlocked.value.contains('writing_pro')) {
+    await unlock('grandmaster');
+  }
 }
 
 Future<bool> unlock(String id) async {
@@ -81,6 +114,7 @@ Future<void> recordWritingCorrect() async {
   final c = (prefs.getInt('writing_correct_count') ?? 0) + 1;
   await prefs.setInt('writing_correct_count', c);
   if (c >= 25) await unlock('scribe_25');
+  if (c >= 100) await unlock('scribe_100');
 }
 
 Achievement achievementById(String id) => achievements.firstWhere((a) => a.id == id);
