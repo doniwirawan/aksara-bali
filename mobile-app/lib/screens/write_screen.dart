@@ -135,17 +135,19 @@ class _WriteScreenState extends State<WriteScreen> {
 
     final undoBtn = OutlinedButton.icon(
       onPressed: _strokes.isEmpty ? null : () => setState(() { _strokes.removeLast(); _result = null; }),
-      icon: const Icon(Icons.undo, size: 18), label: Text(tr(context, 'Undo', 'Urungkan')),
+      icon: const Icon(Icons.undo, size: 18),
+      label: FittedBox(fit: BoxFit.scaleDown, child: Text(tr(context, 'Undo', 'Urungkan'), maxLines: 1, softWrap: false)),
     );
     final clearBtn = OutlinedButton.icon(
       onPressed: _strokes.isEmpty ? null : () => setState(() { _strokes.clear(); _result = null; }),
-      icon: const Icon(Icons.delete_outline, size: 18), label: Text(tr(context, 'Clear', 'Hapus')),
+      icon: const Icon(Icons.delete_outline, size: 18),
+      label: FittedBox(fit: BoxFit.scaleDown, child: Text(tr(context, 'Clear', 'Hapus'), maxLines: 1, softWrap: false)),
     );
     final guideBtn = FilledButton.icon(
       onPressed: () => setState(() => _showGuide = !_showGuide),
       style: FilledButton.styleFrom(backgroundColor: _showGuide ? kBlue : Colors.grey),
       icon: Icon(_showGuide ? Icons.visibility : Icons.visibility_off, size: 18),
-      label: Text(tr(context, 'Guide', 'Panduan')),
+      label: FittedBox(fit: BoxFit.scaleDown, child: Text(tr(context, 'Guide', 'Panduan'), maxLines: 1, softWrap: false)),
     );
     final controls = Row(children: [
       Expanded(child: undoBtn),

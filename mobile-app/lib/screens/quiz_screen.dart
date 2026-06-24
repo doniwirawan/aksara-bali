@@ -10,6 +10,11 @@ import '../balinese_keyboard.dart';
 // Pass threshold (out of 100) to unlock the next level.
 const int kPassScore = 70;
 
+const _praisesEn = ['Nice!', 'Correct!', 'Great job!', 'Well done!', 'Awesome!'];
+const _praisesId = ['Mantap!', 'Benar!', 'Kerja bagus!', 'Hebat!', 'Keren!'];
+const _green = Color(0xFF16A34A);
+const _red = Color(0xFFDC2626);
+
 enum _QuizMode { reading, typing }
 
 class _Level {
@@ -59,6 +64,12 @@ class _QuizScreenState extends State<QuizScreen> {
   final _typeController = TextEditingController();
   bool _checked = false;
   bool _lastCorrect = false;
+  int _praiseIdx = 0;
+
+  bool get _lastAnswerCorrect =>
+      _mode == _QuizMode.reading ? _selected == _queue[_index]['latin'] : _lastCorrect;
+
+  String _praise() => (LangScope.of(context) == AppLang.id ? _praisesId : _praisesEn)[_praiseIdx % 5];
 
   @override
   void initState() {
@@ -115,6 +126,7 @@ class _QuizScreenState extends State<QuizScreen> {
     if (_selected != null) return;
     setState(() {
       _selected = latin;
+      _praiseIdx = _rng.nextInt(5);
       if (latin == _queue[_index]['latin']) _correct++;
     });
   }
@@ -122,7 +134,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void _check() {
     if (_checked) return;
     final ok = _norm(_typeController.text) == _norm(latinToBalinese(_queue[_index]['latin'] ?? ''));
-    setState(() { _checked = true; _lastCorrect = ok; if (ok) _correct++; });
+    setState(() { _checked = true; _lastCorrect = ok; _praiseIdx = _rng.nextInt(5); if (ok) _correct++; });
   }
 
   Future<void> _next() async {
@@ -305,10 +317,14 @@ class _QuizScreenState extends State<QuizScreen> {
         if (_mode == _QuizMode.reading) ..._readingQuestion() else ..._typingQuestion(),
         if (_answered) ...[
           const SizedBox(height: 8),
+          if (_mode == _QuizMode.reading) ...[_feedbackBanner(), const SizedBox(height: 10)],
           FilledButton(
             onPressed: _next,
-            style: FilledButton.styleFrom(backgroundColor: kBlue, minimumSize: const Size.fromHeight(48)),
-            child: Text(_index + 1 >= _queue.length ? tr(context, 'See result', 'Lihat hasil') : tr(context, 'Next', 'Lanjut')),
+            style: FilledButton.styleFrom(
+              backgroundColor: _lastAnswerCorrect ? _green : _red,
+              minimumSize: const Size.fromHeight(50),
+            ),
+            child: Text(_index + 1 >= _queue.length ? tr(context, 'See result', 'Lihat hasil') : tr(context, 'Continue', 'Lanjut')),
           ),
         ],
       ]),
@@ -362,6 +378,31 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  // Duolingo-style feedback shown after answering a reading question.
+  Widget _feedbackBanner() {
+    final ok = _lastAnswerCorrect;
+    final color = ok ? _green : _red;
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      padding: const EdgeInsets.all(14),
+      child: Row(children: [
+        Icon(ok ? Icons.check_circle : Icons.cancel, color: color, size: 30),
+        const SizedBox(width: 12),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(ok ? _praise() : tr(context, 'Correct answer:', 'Jawaban benar:'),
+              style: TextStyle(color: color, fontWeight: FontWeight.w800, fontSize: 17)),
+          if (!ok) Text(_queue[_index]['latin'] ?? '',
+              style: const TextStyle(color: kInk, fontSize: 15, fontWeight: FontWeight.w600)),
+        ])),
+      ]),
     );
   }
 

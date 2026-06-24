@@ -20,7 +20,6 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final links = <Map<String, dynamic>>[
       {'icon': Icons.public, 'label': tr(context, 'Open web app', 'Buka aplikasi web'), 'url': kWebUrl},
-      {'icon': Icons.account_circle_outlined, 'label': tr(context, 'Account & delete account', 'Akun & hapus akun'), 'url': '$kWebUrl/dashboard'},
       {'icon': Icons.article_outlined, 'label': 'Blog', 'url': '$kWebUrl/blog'},
       {'icon': Icons.help_outline, 'label': 'FAQ', 'url': '$kWebUrl/faq'},
       {'icon': Icons.privacy_tip_outlined, 'label': tr(context, 'Privacy Policy', 'Kebijakan Privasi'), 'url': '$kWebUrl/privacy'},
