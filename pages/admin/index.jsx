@@ -6,7 +6,7 @@ import { ADMIN_EMAIL, isAdminEmail } from '../../utils/admin'
 import {
   BarChart3, PenLine, HelpCircle, Users, RefreshCw, Zap, Target, Flame,
   CheckCircle, ClipboardList, X, Image as ImageIcon, Clock, Trash2, Eye, EyeOff,
-  MousePointerClick, Activity, Moon, Sun,
+  MousePointerClick, Activity, Moon, Sun, Download,
 } from 'lucide-react'
 
 const BLOG_CATEGORIES = ['Sejarah & Budaya', 'Panduan Belajar', 'Linguistik', 'Naskah Kuno', 'Teknologi & Budaya', 'Umum']
@@ -447,6 +447,7 @@ export default function AdminDashboard() {
                 {[
                   { label: 'Kunjungan Halaman', value: eventStats?.pageViews ?? '—', icon: Eye, color: '#0ea5e9' },
                   { label: 'Total Klik', value: eventStats?.clicks ?? '—', icon: MousePointerClick, color: '#f43f5e' },
+                  { label: 'Unduhan APK', value: eventStats?.apkDownloads ?? '—', icon: Download, color: '#22c55e' },
                   { label: 'Aktivitas 7 Hari', value: eventStats?.last7d ?? '—', icon: Activity, color: '#8b5cf6' },
                 ].map(card => (
                   <div key={card.label} style={s.card}>

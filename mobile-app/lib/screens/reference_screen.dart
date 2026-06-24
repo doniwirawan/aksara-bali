@@ -110,9 +110,15 @@ class ReferenceScreen extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 10),
             child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
               Container(
-                width: 52, height: 40, alignment: Alignment.center,
+                width: 60, height: 48, alignment: Alignment.center,
+                clipBehavior: Clip.hardEdge,
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
                 decoration: BoxDecoration(color: kAccent.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(8)),
-                child: Text(t[0], style: TextStyle(fontFamily: kBaliFont, fontSize: 22, color: kInk)),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(t[0], maxLines: 1,
+                      style: TextStyle(fontFamily: kBaliFont, fontSize: 24, color: kInk)),
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(child: Text(t[1], style: TextStyle(fontSize: 13, color: kInk, height: 1.3))),

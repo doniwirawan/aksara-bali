@@ -394,6 +394,7 @@ export default function Home({ locale, setLocale }) {
                                 </div>
                             </div>
                             <a href="https://github.com/doniwirawan/aksara-bali/releases/latest" target="_blank" rel="noopener noreferrer"
+                                data-track="landing-download-apk"
                                 style={{
                                     display: 'inline-flex', alignItems: 'center', gap: '8px',
                                     background: '#0d6efd', color: '#fff', textDecoration: 'none',

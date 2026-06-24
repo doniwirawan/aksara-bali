@@ -37,9 +37,11 @@ export default async function handler(req, res) {
       const supabase = createServerClient()
 
       // Totals by type
-      const [pv, cl] = await Promise.all([
+      const [pv, cl, dl] = await Promise.all([
         supabase.from('events').select('*', { count: 'exact', head: true }).eq('type', 'page_view'),
         supabase.from('events').select('*', { count: 'exact', head: true }).eq('type', 'click'),
+        // APK download-button clicks (landing + footer)
+        supabase.from('events').select('*', { count: 'exact', head: true }).eq('type', 'click').ilike('name', '%download-apk%'),
       ])
 
       // Recent events for breakdowns (aggregated in JS to avoid extra DB functions)
@@ -76,6 +78,7 @@ export default async function handler(req, res) {
       return res.status(200).json({
         pageViews: pv.count ?? 0,
         clicks: cl.count ?? 0,
+        apkDownloads: dl.count ?? 0,
         last7d,
         topPages: top(topPages),
         topClicks: top(topClicks),
