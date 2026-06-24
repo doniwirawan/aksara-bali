@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'theme.dart';
 import 'l10n.dart';
+import 'gamification.dart';
 import 'screens/convert_screen.dart';
 import 'screens/write_screen.dart';
 import 'screens/quiz_screen.dart';
+import 'screens/reference_screen.dart';
 import 'screens/about_screen.dart';
+import 'screens/achievements_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Keep the app fully offline: never fetch fonts over the network (falls back
+  // to the bundled/system font). Lets us declare "no data collected" on Play.
+  GoogleFonts.config.allowRuntimeFetching = false;
   await loadLang();
+  await loadStats();
   runApp(const AksaraBaliApp());
 }
 
@@ -46,7 +53,39 @@ class HomeShell extends StatefulWidget {
 
 class _HomeShellState extends State<HomeShell> {
   int _tab = 0;
-  final _screens = const [ConvertScreen(), WriteScreen(), QuizScreen(), AboutScreen()];
+  final _screens = const [ConvertScreen(), WriteScreen(), QuizScreen(), ReferenceScreen(), AboutScreen()];
+
+  @override
+  void initState() {
+    super.initState();
+    pendingUnlock.addListener(_showUnlock);
+  }
+
+  @override
+  void dispose() {
+    pendingUnlock.removeListener(_showUnlock);
+    super.dispose();
+  }
+
+  void _showUnlock() {
+    final id = pendingUnlock.value;
+    if (id == null || !mounted) return;
+    final a = achievementById(id);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: kInk,
+      duration: const Duration(seconds: 3),
+      content: Row(children: [
+        Icon(a.icon, color: const Color(0xFFF59E0B)),
+        const SizedBox(width: 12),
+        Expanded(child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(tr(context, 'Achievement unlocked!', 'Pencapaian terbuka!'),
+              style: const TextStyle(color: Colors.white70, fontSize: 12)),
+          Text(a.title(context), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+        ])),
+      ]),
+    ));
+    pendingUnlock.value = null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,14 +112,28 @@ class _HomeShellState extends State<HomeShell> {
           ],
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: TextButton.icon(
-              onPressed: () => setLang(isId ? AppLang.en : AppLang.id),
-              icon: const Icon(Icons.language, size: 18),
-              label: Text(isId ? 'ID' : 'EN', style: const TextStyle(fontWeight: FontWeight.w700)),
+          // Daily streak "fire" → opens Achievements
+          ValueListenableBuilder<int>(
+            valueListenable: streakCount,
+            builder: (context, streak, _) => InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AchievementsScreen())),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Row(children: [
+                  Icon(Icons.local_fire_department, size: 22, color: streak > 0 ? const Color(0xFFF59E0B) : kMuted),
+                  const SizedBox(width: 2),
+                  Text('$streak', style: TextStyle(fontWeight: FontWeight.w800, color: streak > 0 ? kInk : kMuted)),
+                ]),
+              ),
             ),
           ),
+          TextButton.icon(
+            onPressed: () => setLang(isId ? AppLang.en : AppLang.id),
+            icon: const Icon(Icons.language, size: 18),
+            label: Text(isId ? 'ID' : 'EN', style: const TextStyle(fontWeight: FontWeight.w700)),
+          ),
+          const SizedBox(width: 4),
         ],
         bottom: const PreferredSize(preferredSize: Size.fromHeight(1), child: Divider(height: 1, color: kBorder)),
       ),
@@ -92,6 +145,7 @@ class _HomeShellState extends State<HomeShell> {
           NavigationDestination(icon: const Icon(Icons.translate_outlined), selectedIcon: const Icon(Icons.translate), label: tr(context, 'Convert', 'Konversi')),
           NavigationDestination(icon: const Icon(Icons.edit_outlined), selectedIcon: const Icon(Icons.edit), label: tr(context, 'Write', 'Tulis')),
           NavigationDestination(icon: const Icon(Icons.quiz_outlined), selectedIcon: const Icon(Icons.quiz), label: tr(context, 'Quiz', 'Kuis')),
+          NavigationDestination(icon: const Icon(Icons.table_chart_outlined), selectedIcon: const Icon(Icons.table_chart), label: tr(context, 'Aksara', 'Aksara')),
           NavigationDestination(icon: const Icon(Icons.info_outline), selectedIcon: const Icon(Icons.info), label: tr(context, 'About', 'Tentang')),
         ],
       ),

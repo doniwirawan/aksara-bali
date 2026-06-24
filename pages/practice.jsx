@@ -6,7 +6,7 @@ import QuizMode from '../components/practice/QuizMode'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { convertLatinToBalinese, QUIZ_WORDS } from '../utils/balineseConverter'
-import { Target, PenLine, Keyboard, Shuffle, ClipboardList, Copy, Lightbulb } from 'lucide-react'
+import { Target, PenLine, Keyboard, Shuffle, ClipboardList, Copy, Lightbulb, ChevronLeft, ChevronRight } from 'lucide-react'
 
 // HandGestureCanvas uses webcam + MediaPipe (browser-only)
 const HandGestureCanvas = dynamic(
@@ -48,6 +48,8 @@ export default function PracticePage({ locale, setLocale }) {
     while (next === prev) next = Math.floor(Math.random() * PRACTICE_WORDS.length)
     return next
   })
+  const nextWord = () => setPracticeWordIdx(prev => (prev + 1) % PRACTICE_WORDS.length)
+  const prevWord = () => setPracticeWordIdx(prev => (prev - 1 + PRACTICE_WORDS.length) % PRACTICE_WORDS.length)
 
   const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
   const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
@@ -166,6 +168,32 @@ export default function PracticePage({ locale, setLocale }) {
                   </div>
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                     <span style={{ fontSize: '13px', color: mutedColor }}>{pt.practiceLabel}</span>
+                    <button
+                      onClick={prevWord}
+                      aria-label={id ? 'Kata sebelumnya' : 'Previous word'}
+                      title={id ? 'Kata sebelumnya' : 'Previous word'}
+                      style={{
+                        width: 34, height: 34, borderRadius: '50%',
+                        border: `1px solid ${borderColor}`, background: 'transparent',
+                        cursor: 'pointer', color: textColor,
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      }}
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+                    <button
+                      onClick={nextWord}
+                      aria-label={id ? 'Kata berikutnya' : 'Next word'}
+                      title={id ? 'Kata berikutnya' : 'Next word'}
+                      style={{
+                        width: 34, height: 34, borderRadius: '50%',
+                        border: `1px solid ${borderColor}`, background: 'transparent',
+                        cursor: 'pointer', color: textColor,
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      }}
+                    >
+                      <ChevronRight size={16} />
+                    </button>
                     <button
                       data-track="practice-change-word"
                       onClick={randomizeWord}

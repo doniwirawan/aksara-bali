@@ -5,6 +5,7 @@ import '../converter.dart';
 import '../words_data.dart';
 import '../theme.dart';
 import '../l10n.dart';
+import '../gamification.dart';
 import '../balinese_keyboard.dart';
 
 // Pass threshold (out of 100) to unlock the next level.
@@ -164,13 +165,19 @@ class _QuizScreenState extends State<QuizScreen> {
       _best[mode]![level] = score;
       await prefs.setInt('quiz_${mk}_best_$level', score);
     }
-    if (!mounted) return;
 
     final correct = _correct;
     final wrong = total - _correct;
     final passed = score >= kPassScore;
     final allDone = _levels.asMap().keys.every((i) => (_best[mode]![i] ?? 0) >= kPassScore);
 
+    // Gamification: daily streak + achievements.
+    await recordDailyActivity();
+    await unlock('first_steps');
+    if (score == 100) await unlock('perfect');
+    if (allDone) await unlock(mode == _QuizMode.reading ? 'reading_pro' : 'writing_pro');
+
+    if (!mounted) return;
     final replay = await showDialog<bool>(
       context: context,
       barrierDismissible: false,

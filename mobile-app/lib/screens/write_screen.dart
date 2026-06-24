@@ -6,6 +6,7 @@ import '../converter.dart';
 import '../words_data.dart';
 import '../theme.dart';
 import '../l10n.dart';
+import '../gamification.dart';
 
 class WriteScreen extends StatefulWidget {
   const WriteScreen({super.key});
@@ -63,8 +64,10 @@ class _WriteScreenState extends State<WriteScreen> {
     final result = _score(userBytes, refBytes, w, h);
     if (mounted) setState(() { _result = result; _checking = false; });
 
-    // If the writing is good, move on to the next word automatically.
+    // If the writing is good: record progress and move to the next word.
     if (result.isCorrect) {
+      recordDailyActivity();
+      recordWritingCorrect();
       Future.delayed(const Duration(milliseconds: 1300), () {
         if (mounted && _result != null && _result!.isCorrect) _newWord();
       });
@@ -91,13 +94,14 @@ class _WriteScreenState extends State<WriteScreen> {
       child: Row(children: [
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(tr(context, 'Write this:', 'Tulis ini:'), style: const TextStyle(color: kMuted, fontSize: 12)),
-          const SizedBox(height: 2),
+          const SizedBox(height: 6),
           FittedBox(
             fit: BoxFit.scaleDown,
             alignment: Alignment.centerLeft,
             child: Text(balinese, maxLines: 1,
-                style: const TextStyle(fontFamily: kBaliFont, fontSize: 30, color: kInk)),
+                style: const TextStyle(fontFamily: kBaliFont, fontSize: 30, color: kInk, height: 1.6)),
           ),
+          const SizedBox(height: 6),
           Text('${_word['latin']}  ·  ${_word['meaning'] ?? ''}',
               style: const TextStyle(fontSize: 13, color: kMuted)),
         ])),
@@ -119,8 +123,10 @@ class _WriteScreenState extends State<WriteScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text(balinese, maxLines: 1,
-                  style: TextStyle(fontFamily: kBaliFont, fontSize: 120, height: 1, color: Colors.black.withValues(alpha: 0.10))),
+              child: Text(balinese, maxLines: 1, textAlign: TextAlign.center,
+                  textHeightBehavior: const TextHeightBehavior(
+                      applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
+                  style: TextStyle(fontFamily: kBaliFont, fontSize: 120, color: Colors.black.withValues(alpha: 0.10))),
             ),
           )),
         GestureDetector(
@@ -340,22 +346,39 @@ class _ScoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final msg = r.isCorrect
-        ? tr(context, 'Great — that looks right!', 'Bagus — sudah benar!')
+    final big = r.isCorrect
+        ? tr(context, 'Great job!', 'Bagus sekali!')
         : r.isPartial
-            ? tr(context, 'Close — keep practicing the shape.', 'Hampir — terus latih bentuknya.')
-            : tr(context, 'Not quite — trace the guide and try again.', 'Belum tepat — jiplak panduan lalu coba lagi.');
+            ? tr(context, 'Almost there!', 'Hampir!')
+            : tr(context, 'Try again', 'Coba lagi');
+    final sub = r.isCorrect
+        ? tr(context, 'Moving to the next word…', 'Lanjut ke kata berikutnya…')
+        : r.isPartial
+            ? tr(context, 'Keep practising the shape.', 'Terus latih bentuknya.')
+            : tr(context, 'Trace the faint guide and retry.', 'Jiplak panduan samar lalu ulangi.');
     return Container(
-      decoration: cardDecoration().copyWith(border: Border.all(color: r.color.withValues(alpha: 0.4))),
-      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: r.color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: r.color.withValues(alpha: 0.4)),
+      ),
+      padding: const EdgeInsets.all(16),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
-          Icon(r.isCorrect ? Icons.check_circle : (r.isPartial ? Icons.adjust : Icons.cancel), color: r.color, size: 22),
-          const SizedBox(width: 8),
-          Expanded(child: Text(msg, style: TextStyle(color: r.color, fontWeight: FontWeight.w600))),
-          Text('${r.score}%', style: TextStyle(color: r.color, fontWeight: FontWeight.w800, fontSize: 20)),
+          Container(
+            width: 48, height: 48, alignment: Alignment.center,
+            decoration: BoxDecoration(color: r.color.withValues(alpha: 0.15), shape: BoxShape.circle),
+            child: Icon(r.isCorrect ? Icons.emoji_events : (r.isPartial ? Icons.adjust : Icons.refresh), color: r.color, size: 28),
+          ),
+          const SizedBox(width: 14),
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(big, style: TextStyle(color: r.color, fontWeight: FontWeight.w800, fontSize: 18)),
+            const SizedBox(height: 2),
+            Text(sub, style: const TextStyle(color: kMuted, fontSize: 12)),
+          ])),
+          Text('${r.score}%', style: TextStyle(color: r.color, fontWeight: FontWeight.w900, fontSize: 24)),
         ]),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         ClipRRect(
           borderRadius: BorderRadius.circular(6),
           child: LinearProgressIndicator(
