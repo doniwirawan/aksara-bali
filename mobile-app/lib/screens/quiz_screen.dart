@@ -194,9 +194,14 @@ class _QuizScreenState extends State<QuizScreen> {
         const SizedBox(height: 14),
         Center(
           child: SegmentedButton<_QuizMode>(
+            showSelectedIcon: false, // the auto checkmark widens the segment and wraps the label
             segments: [
-              ButtonSegment(value: _QuizMode.reading, label: Text(tr(context, 'Reading', 'Membaca')), icon: const Icon(Icons.menu_book_outlined, size: 18)),
-              ButtonSegment(value: _QuizMode.typing, label: Text(tr(context, 'Writing', 'Menulis')), icon: const Icon(Icons.keyboard_outlined, size: 18)),
+              ButtonSegment(value: _QuizMode.reading,
+                  label: Text(tr(context, 'Reading', 'Membaca'), maxLines: 1, softWrap: false),
+                  icon: const Icon(Icons.menu_book_outlined, size: 18)),
+              ButtonSegment(value: _QuizMode.typing,
+                  label: Text(tr(context, 'Writing', 'Menulis'), maxLines: 1, softWrap: false),
+                  icon: const Icon(Icons.keyboard_outlined, size: 18)),
             ],
             selected: {_mode},
             onSelectionChanged: (s) => setState(() => _mode = s.first),
