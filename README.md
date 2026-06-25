@@ -3,11 +3,39 @@
 A full-featured web app for learning and converting Balinese script (Aksara Bali). Built with Next.js and Supabase.
 
 🌐 **Live demo**: [transliterasi-latin-ke-bahasa-bali.vercel.app](https://transliterasi-latin-ke-bahasa-bali.vercel.app)
+📱 **Android app**: [Download the latest APK](https://github.com/doniwirawan/aksara-bali/releases/latest)
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green?style=flat&logo=supabase)
+![Flutter](https://img.shields.io/badge/Flutter-Android-blue?style=flat&logo=flutter)
 ![Vercel](https://img.shields.io/badge/Deployed-Vercel-black?style=flat&logo=vercel)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat)
+![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue?style=flat)
+
+---
+
+## 📱 Android App
+
+A fully **offline** Android companion — convert, practice, and learn Aksara Bali on your phone. Built with Flutter, sharing the same transliteration engine as the web app.
+
+<p align="center">
+  <img src="mobile-app/docs/screenshots/v1.1.0-converter.png" width="280" alt="Aksara Bali Android app — Latin to Balinese script converter">
+</p>
+
+<p align="center">
+  <a href="https://github.com/doniwirawan/aksara-bali/releases/latest"><b>⬇️ Download the latest APK</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/doniwirawan/aksara-bali/releases/tag/v1.1.0">v1.1.0 release notes</a>
+</p>
+
+- **Latin ↔ Aksara Bali** converter, fully on-device — no internet required
+- **Leveled quizzes** with daily streak targets and achievements
+- **Tap a letter to hear** its pronunciation (on-device text-to-speech)
+- **Writing practice** and an on-screen **Balinese keyboard** (reverse input)
+- **Aksara reference** and word-art styling with transparent PNG export
+- Light/dark themes (Material 3) and bundled **Noto Sans Balinese** font
+
+> Sideload: enable **"Install unknown apps"**, then open the downloaded APK. The
+> current build is debug-signed; a future Play Store release will be Play-signed.
 
 ---
 
@@ -263,6 +291,7 @@ aksara-bali/
 │   └── data/sanskrit-database.json  # 100+ Sanskrit terms
 ├── supabase-schema.sql
 ├── scripts/add-unsplash-attribution.sql
+├── mobile-app/                      # Flutter Android app (offline converter, quiz, write)
 └── .env.example
 ```
 
@@ -304,7 +333,8 @@ Please do not commit `.env.local` or any file containing real API keys or creden
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
+PolyForm Noncommercial License 1.0.0 — free to use, modify, and share for
+**noncommercial** purposes. See [LICENSE](LICENSE) for details.
 
 ---
 
