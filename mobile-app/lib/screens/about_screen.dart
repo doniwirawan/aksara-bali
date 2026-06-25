@@ -65,7 +65,7 @@ class AboutScreen extends StatelessWidget {
         const SizedBox(height: 28),
 
         // Footer
-        Center(child: Text('Version 1.0.0', style: TextStyle(color: kTextMuted, fontSize: 12, fontWeight: FontWeight.w600))),
+        Center(child: Text('Version 1.1.0', style: TextStyle(color: kTextMuted, fontSize: 12, fontWeight: FontWeight.w600))),
         const SizedBox(height: 6),
         Center(child: Text(tr(context, 'Free educational tool for preserving Aksara Bali', 'Alat edukasi gratis untuk melestarikan Aksara Bali'),
             textAlign: TextAlign.center, style: TextStyle(color: kTextMuted, fontSize: 12, height: 1.4))),

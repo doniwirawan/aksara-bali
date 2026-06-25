@@ -18,8 +18,13 @@ A full-featured web app for learning and converting Balinese script (Aksara Bali
 A fully **offline** Android companion — convert, practice, and learn Aksara Bali on your phone. Built with Flutter, sharing the same transliteration engine as the web app.
 
 <p align="center">
-  <img src="mobile-app/docs/screenshots/v1.1.0-converter.png" width="280" alt="Aksara Bali Android app — Latin to Balinese script converter">
+  <img src="mobile-app/docs/screenshots/v1.1.0-converter.png" width="170" alt="Latin → Aksara Bali converter">
+  <img src="mobile-app/docs/screenshots/v1.1.0-write.png" width="170" alt="Writing practice">
+  <img src="mobile-app/docs/screenshots/v1.1.0-quiz.png" width="170" alt="Leveled quizzes">
+  <img src="mobile-app/docs/screenshots/v1.1.0-reference.png" width="170" alt="Aksara reference">
+  <img src="mobile-app/docs/screenshots/v1.1.0-about.png" width="170" alt="About">
 </p>
+<p align="center"><sub>Converter · Writing practice · Leveled quizzes · Aksara reference · About</sub></p>
 
 <p align="center">
   <a href="https://github.com/doniwirawan/aksara-bali/releases/latest"><b>⬇️ Download the latest APK</b></a>
