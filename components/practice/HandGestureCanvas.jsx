@@ -262,7 +262,6 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
     // (a correctly-shaped character drawn smaller / off-centre should still score
     //  well; only the SHAPE should drive the score.)
     const NORM = 64
-    const DIL = 3
     const userTest = (idx) => userData[idx + 3] > 50
     const refTest = (idx) => refData[idx] < 128
 
@@ -309,35 +308,50 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
     const userGrid = rasterize(userTest, ubb)
     const refGrid = rasterize(refTest, rbb)
 
-    // Dilate each grid by DIL for stroke-thickness / wobble tolerance
-    const dilate = (grid) => {
-      const out = new Uint8Array(NORM * NORM)
-      for (let gy = 0; gy < NORM; gy++) {
-        for (let gx = 0; gx < NORM; gx++) {
-          if (!grid[gy * NORM + gx]) continue
-          for (let dy = -DIL; dy <= DIL; dy++) {
-            for (let dx = -DIL; dx <= DIL; dx++) {
-              const ny = gy + dy, nx = gx + dx
-              if (ny >= 0 && ny < NORM && nx >= 0 && nx < NORM) out[ny * NORM + nx] = 1
-            }
-          }
+    // ── Chamfer distance matching (shape-aware; a blob or a scribble far from
+    //    the true strokes scores low, unlike plain overlap) ──
+    // Two-pass chamfer distance transform: distance from every cell to the
+    // nearest set ("ink") cell.
+    const distanceTransform = (grid) => {
+      const INF = 1e9
+      const d = new Float32Array(NORM * NORM)
+      for (let i = 0; i < d.length; i++) d[i] = grid[i] ? 0 : INF
+      for (let y = 0; y < NORM; y++) {
+        for (let x = 0; x < NORM; x++) {
+          const i = y * NORM + x
+          if (y > 0) d[i] = Math.min(d[i], d[i - NORM] + 1)
+          if (x > 0) d[i] = Math.min(d[i], d[i - 1] + 1)
+          if (y > 0 && x > 0) d[i] = Math.min(d[i], d[i - NORM - 1] + 1.4142)
+          if (y > 0 && x < NORM - 1) d[i] = Math.min(d[i], d[i - NORM + 1] + 1.4142)
         }
       }
-      return out
+      for (let y = NORM - 1; y >= 0; y--) {
+        for (let x = NORM - 1; x >= 0; x--) {
+          const i = y * NORM + x
+          if (y < NORM - 1) d[i] = Math.min(d[i], d[i + NORM] + 1)
+          if (x < NORM - 1) d[i] = Math.min(d[i], d[i + 1] + 1)
+          if (y < NORM - 1 && x < NORM - 1) d[i] = Math.min(d[i], d[i + NORM + 1] + 1.4142)
+          if (y < NORM - 1 && x > 0) d[i] = Math.min(d[i], d[i + NORM - 1] + 1.4142)
+        }
+      }
+      return d
     }
-    const dilRef = dilate(refGrid)
-    const dilUser = dilate(userGrid)
 
-    // Precision = how much of the user's ink lands on the reference shape.
-    // Recall = how much of the reference shape the user covered.
-    let userCells = 0, userInRef = 0, refCells = 0, refCovered = 0
+    const dtRef = distanceTransform(refGrid)   // distance to nearest reference ink
+    const dtUser = distanceTransform(userGrid) // distance to nearest user ink
+    const TAU = 6 // tolerance (grid cells) covering stroke width + wobble
+
+    // Precision: how close the user's ink sits to the reference shape.
+    // Recall: how well the reference shape is covered by the user's ink.
+    // Each contribution falls off linearly with distance (1 on the stroke,
+    // 0 beyond TAU), so being roughly right counts and being off does not.
+    let pSum = 0, pN = 0, rSum = 0, rN = 0
     for (let i = 0; i < NORM * NORM; i++) {
-      if (userGrid[i]) { userCells++; if (dilRef[i]) userInRef++ }
-      if (refGrid[i]) { refCells++; if (dilUser[i]) refCovered++ }
+      if (userGrid[i]) { pN++; pSum += Math.max(0, 1 - dtRef[i] / TAU) }
+      if (refGrid[i]) { rN++; rSum += Math.max(0, 1 - dtUser[i] / TAU) }
     }
-
-    const precision = userCells > 0 ? (userInRef / userCells) * 100 : 0
-    const recall = refCells > 0 ? (refCovered / refCells) * 100 : 0
+    const precision = pN > 0 ? (pSum / pN) * 100 : 0
+    const recall = rN > 0 ? (rSum / rN) * 100 : 0
     const score = precision > 0 && recall > 0
       ? 2 * precision * recall / (precision + recall)
       : 0
