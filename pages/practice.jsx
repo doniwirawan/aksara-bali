@@ -226,6 +226,13 @@ export default function PracticePage({ locale, setLocale }) {
                         </button>
                       </>
                     )}
+                    <button
+                      onClick={toggleFullscreen}
+                      title={pt.fullscreen}
+                      style={{ padding: '6px 14px', borderRadius: '20px', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', fontSize: '13px', color: textColor, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                    >
+                      <Maximize2 size={14} /> {pt.fullscreen}
+                    </button>
                   </div>
                 </div>
 
@@ -239,13 +246,6 @@ export default function PracticePage({ locale, setLocale }) {
                 )}
 
                 <div ref={canvasWrapRef} className="aksara-canvas-wrap" style={{ position: 'relative' }}>
-                  <button
-                    onClick={toggleFullscreen}
-                    title={pt.fullscreen}
-                    style={{ position: 'absolute', top: 8, left: 8, zIndex: 30, padding: '6px 10px', borderRadius: '8px', border: `1px solid ${borderColor}`, background: cardBg, color: textColor, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}
-                  >
-                    <Maximize2 size={14} /> {pt.fullscreen}
-                  </button>
                   <HandGestureCanvas
                     key={writeMode}
                     darkMode={darkMode}
