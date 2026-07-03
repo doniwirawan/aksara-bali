@@ -78,7 +78,7 @@ function updatePinch(landmarks) {
   return _pinching
 }
 
-export default function HandGestureCanvas({ darkMode, referenceText, referenceBalinese, locale, onSolved }) {
+export default function HandGestureCanvas({ darkMode, referenceText, referenceBalinese, locale, onSolved, quizMode = false }) {
   const lang = locale === 'en' ? 'en' : 'id'
   const tr = {
     id: {
@@ -139,7 +139,8 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const [isDrawingMouse, setIsDrawingMouse] = useState(false)
   const [checkResult, setCheckResult] = useState(null) // null | { status, score, precision, recall, message }
   const [hwrResult, setHwrResult] = useState(null) // null | { recognized, matched }
-  const [showRef, setShowRef] = useState(true)
+  // In a quiz we must NOT reveal the answer, so the reference aksara starts hidden.
+  const [showRef, setShowRef] = useState(!quizMode)
   const [showOverlay, setShowOverlay] = useState(true) // faint aksara guide on the canvas
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [loadProgress, setLoadProgress] = useState(0) // MediaPipe init progress 0..100
@@ -885,8 +886,8 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
 
   return (
     <div style={{ color: textColor }}>
-      {/* Reference word */}
-      {referenceText && (
+      {/* Reference word — hidden in quiz mode (the quiz shows the prompt itself) */}
+      {referenceText && !quizMode && (
         <div style={{
           textAlign: 'center',
           marginBottom: '16px',
