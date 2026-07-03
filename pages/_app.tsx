@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '../styles/globals.css'
 import { AuthProvider } from '../context/AuthContext'
 import { trackPageView, trackEvent } from '../utils/analytics'
+import { playTap } from '../utils/sfx'
 
 // Enhanced SEO Content in multiple languages
 const seoContent = {
@@ -400,6 +401,11 @@ function MyApp({ Component, pageProps }) {
         const onClick = (e) => {
             const el = e.target?.closest?.('[data-track]')
             if (el) trackEvent(el.getAttribute('data-track'))
+            // Subtle UI tap on any interactive element (respects the sfx mute
+            // toggle internally). Covers the keyboard, converter, nav, etc.
+            if (e.target?.closest?.('button, a, [role="button"], summary, input[type="button"], input[type="submit"]')) {
+                playTap()
+            }
         }
         document.addEventListener('click', onClick)
         return () => {
