@@ -1,8 +1,15 @@
 import React, { useState, useCallback, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { convertLatinToBalinese, QUIZ_WORDS } from '../../utils/balineseConverter'
-import { Check, ArrowLeft, Lock, BookOpen, Keyboard, Trophy, RotateCcw, CheckCircle, XCircle, Volume2, VolumeX } from 'lucide-react'
+import { Check, ArrowLeft, Lock, BookOpen, Keyboard, Trophy, RotateCcw, CheckCircle, XCircle, Volume2, VolumeX, PenLine } from 'lucide-react'
 import BalineseKeyboard from './BalineseKeyboard'
 import { playCorrect, playWrong, playComplete, sfxEnabled, setSfxEnabled } from '../../utils/sfx'
+
+// Canvas answer mode for the writing quiz (webcam/MediaPipe → browser-only).
+const HandGestureCanvas = dynamic(() => import('./HandGestureCanvas'), {
+  ssr: false,
+  loading: () => <div style={{ padding: '40px', textAlign: 'center', opacity: 0.5 }}>…</div>,
+})
 
 const PASS = 70
 const STORAGE_KEY = 'aksara_quiz_best'
@@ -81,6 +88,7 @@ export default function QuizMode({ darkMode, locale }) {
   const [input, setInput] = useState('')
   const [checked, setChecked] = useState(false)
   const [lastCorrect, setLastCorrect] = useState(false)
+  const [writeMethod, setWriteMethod] = useState('type') // 'type' | 'draw'
 
   const [result, setResult] = useState(null) // {correct, score, wrong, passed, allDone, levelName}
   const [soundOn, setSoundOn] = useState(true)
@@ -134,6 +142,12 @@ export default function QuizMode({ darkMode, locale }) {
     const ok = norm(input) === norm(convertLatinToBalinese(queue[idx].latin))
     setChecked(true); setLastCorrect(ok)
     if (ok) { setCorrect(c => c + 1); playCorrect() } else playWrong()
+  }
+
+  // The drawing canvas auto-grades and only fires this when the aksara is right.
+  const onDrawSolved = () => {
+    if (checked) return
+    setChecked(true); setLastCorrect(true); setCorrect(c => c + 1); playCorrect()
   }
 
   const finish = () => {
@@ -290,28 +304,57 @@ export default function QuizMode({ darkMode, locale }) {
             <div style={{ fontSize: 28, fontWeight: 800, color: textColor }}>{q.latin}</div>
             {q.meaning && <div style={{ fontSize: 13, color: muted, marginTop: 4 }}>{q.meaning}</div>}
           </div>
-          <div style={{ minHeight: 60, padding: '14px 16px', marginBottom: 12, borderRadius: 12, border: `1px solid ${border}`, background: darkMode ? '#1a1a2e' : '#f8f9ff' }}>
-            <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 28, color: textColor }}>
-              {input || <span style={{ color: muted, fontSize: 15, fontFamily: 'system-ui' }}>{t.typeHint}</span>}
-            </span>
+
+          {/* Answer method: type with the keyboard, or draw the aksara by hand */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
+            {[['type', Keyboard, lang === 'en' ? 'Type' : 'Ketik'], ['draw', PenLine, lang === 'en' ? 'Draw' : 'Gambar']].map(([m, Icon, label], k) => (
+              <button key={m} onClick={() => !checked && setWriteMethod(m)} disabled={checked} style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 18px',
+                border: `1px solid ${writeMethod === m ? blue : border}`,
+                borderRadius: k === 0 ? '10px 0 0 10px' : '0 10px 10px 0',
+                background: writeMethod === m ? blue : cardBg, color: writeMethod === m ? '#fff' : muted,
+                cursor: checked ? 'default' : 'pointer', fontSize: 13, fontWeight: 600,
+              }}><Icon size={15} /> {label}</button>
+            ))}
           </div>
-          <div style={{ padding: 14, borderRadius: 12, border: `1px solid ${border}`, background: darkMode ? '#161622' : '#fafafa', marginBottom: 14 }}>
-            <BalineseKeyboard
-              onKeyPress={(c) => !checked && setInput(p => p + c)}
-              onBackspace={() => !checked && setInput(p => { const a = [...p]; a.pop(); return a.join('') })}
-              onSpace={() => !checked && setInput(p => p + '​')}
-              onClear={() => !checked && setInput('')}
-              darkMode={darkMode}
-              locale={locale}
-            />
-          </div>
-          {!checked && (
-            <button onClick={checkTyping} disabled={!norm(input)} style={{
-              width: '100%', padding: 14, borderRadius: 10, marginBottom: 8,
-              background: norm(input) ? blue : (darkMode ? '#333' : '#e0e0e0'),
-              color: norm(input) ? '#fff' : muted, border: 'none', cursor: norm(input) ? 'pointer' : 'default',
-              fontSize: 15, fontWeight: 600, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-            }}><Check size={16} /> {t.check}</button>
+
+          {writeMethod === 'type' ? (
+            <>
+              <div style={{ minHeight: 60, padding: '14px 16px', marginBottom: 12, borderRadius: 12, border: `1px solid ${border}`, background: darkMode ? '#1a1a2e' : '#f8f9ff' }}>
+                <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 28, color: textColor }}>
+                  {input || <span style={{ color: muted, fontSize: 15, fontFamily: 'system-ui' }}>{t.typeHint}</span>}
+                </span>
+              </div>
+              <div style={{ padding: 14, borderRadius: 12, border: `1px solid ${border}`, background: darkMode ? '#161622' : '#fafafa', marginBottom: 14 }}>
+                <BalineseKeyboard
+                  onKeyPress={(c) => !checked && setInput(p => p + c)}
+                  onBackspace={() => !checked && setInput(p => { const a = [...p]; a.pop(); return a.join('') })}
+                  onSpace={() => !checked && setInput(p => p + '​')}
+                  onClear={() => !checked && setInput('')}
+                  darkMode={darkMode}
+                  locale={locale}
+                />
+              </div>
+              {!checked && (
+                <button onClick={checkTyping} disabled={!norm(input)} style={{
+                  width: '100%', padding: 14, borderRadius: 10, marginBottom: 8,
+                  background: norm(input) ? blue : (darkMode ? '#333' : '#e0e0e0'),
+                  color: norm(input) ? '#fff' : muted, border: 'none', cursor: norm(input) ? 'pointer' : 'default',
+                  fontSize: 15, fontWeight: 600, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                }}><Check size={16} /> {t.check}</button>
+              )}
+            </>
+          ) : (
+            <div key={q.latin} style={{ marginBottom: 8, pointerEvents: checked ? 'none' : 'auto', opacity: checked ? 0.7 : 1 }}>
+              <HandGestureCanvas
+                darkMode={darkMode}
+                locale={locale}
+                quizMode
+                referenceText={q.latin}
+                referenceBalinese={convertLatinToBalinese(q.latin)}
+                onSolved={onDrawSolved}
+              />
+            </div>
           )}
         </>
       )}
