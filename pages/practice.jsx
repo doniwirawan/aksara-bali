@@ -1,12 +1,12 @@
 import Head from 'next/head'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import BalineseKeyboard from '../components/practice/BalineseKeyboard'
 import QuizMode from '../components/practice/QuizMode'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { convertLatinToBalinese, QUIZ_WORDS } from '../utils/balineseConverter'
-import { Target, PenLine, Keyboard, Shuffle, ClipboardList, Copy, Lightbulb, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react'
+import { Target, PenLine, Keyboard, Shuffle, ClipboardList, Copy, Lightbulb, ChevronLeft, ChevronRight, BookOpen, Maximize2 } from 'lucide-react'
 import AksaraReference from '../components/practice/AksaraReference'
 
 // HandGestureCanvas uses webcam + MediaPipe (browser-only)
@@ -36,6 +36,15 @@ export default function PracticePage({ locale, setLocale }) {
   const [activeTab, setActiveTab] = useState('quiz')
   const [freeText, setFreeText] = useState('')
   const [practiceWordIdx, setPracticeWordIdx] = useState(0)
+  const [writeMode, setWriteMode] = useState('words') // 'words' | 'free'
+  const [freeWrite, setFreeWrite] = useState('')
+  const canvasWrapRef = useRef(null)
+  const toggleFullscreen = () => {
+    const el = canvasWrapRef.current
+    if (!el) return
+    if (document.fullscreenElement) document.exitFullscreen?.()
+    else el.requestFullscreen?.()
+  }
 
   useEffect(() => {
     const saved = localStorage.getItem('aksara-dark-mode')
@@ -68,6 +77,7 @@ export default function PracticePage({ locale, setLocale }) {
       title: 'Latihan Aksara Bali', subtitle: 'Kuis interaktif, kanvas menulis, dan papan ketik aksara Bali',
       canvasTitle: 'Kanvas Menulis', canvasSub: 'Gambar aksara Bali dengan mouse, sentuhan, atau gerakan tangan',
       practiceLabel: 'Kata latihan:', changeWord: 'Ganti kata', refSheet: 'Daftar aksara referensi',
+      wordMode: 'Kata latihan', freeMode: 'Bebas', freePlaceholder: 'Ketik teks apa saja untuk ditulis…', fullscreen: 'Layar penuh',
       kbTitle: 'Papan Ketik Aksara Bali', kbSub: 'Ketik bebas menggunakan papan ketik aksara Bali',
       kbPlaceholder: 'Mulai mengetik...', copyBtn: 'Salin',
       kbTip: 'Tips: Konsonan + tanda vokal = suku kata. Gunakan Adeg-adeg (᭄) untuk mengakhiri konsonan tanpa vokal. Buka tab Pangangge untuk tanda baca.',
@@ -76,6 +86,7 @@ export default function PracticePage({ locale, setLocale }) {
       title: 'Balinese Script Practice', subtitle: 'Interactive quiz, writing canvas, and Balinese keyboard',
       canvasTitle: 'Writing Canvas', canvasSub: 'Draw Balinese script with mouse, touch, or hand gestures',
       practiceLabel: 'Practice word:', changeWord: 'Change word', refSheet: 'Reference sheet',
+      wordMode: 'Practice word', freeMode: 'Free', freePlaceholder: 'Type any text to write…', fullscreen: 'Fullscreen',
       kbTitle: 'Balinese Script Keyboard', kbSub: 'Type freely using the Balinese script keyboard',
       kbPlaceholder: 'Start typing...', copyBtn: 'Copy',
       kbTip: 'Tip: Consonant + vowel mark = syllable. Use Adeg-adeg (᭄) to end a consonant without a vowel. Open the Pangangge tab for diacritical marks.',
@@ -175,56 +186,76 @@ export default function PracticePage({ locale, setLocale }) {
                       {pt.canvasSub}
                     </p>
                   </div>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span style={{ fontSize: '13px', color: mutedColor }}>{pt.practiceLabel}</span>
-                    <button
-                      onClick={prevWord}
-                      aria-label={lang === 'id' ? 'Kata sebelumnya' : 'Previous word'}
-                      title={lang === 'id' ? 'Kata sebelumnya' : 'Previous word'}
-                      style={{
-                        width: 34, height: 34, borderRadius: '50%',
-                        border: `1px solid ${borderColor}`, background: 'transparent',
-                        cursor: 'pointer', color: textColor,
-                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      }}
-                    >
-                      <ChevronLeft size={16} />
-                    </button>
-                    <button
-                      onClick={nextWord}
-                      aria-label={lang === 'id' ? 'Kata berikutnya' : 'Next word'}
-                      title={lang === 'id' ? 'Kata berikutnya' : 'Next word'}
-                      style={{
-                        width: 34, height: 34, borderRadius: '50%',
-                        border: `1px solid ${borderColor}`, background: 'transparent',
-                        cursor: 'pointer', color: textColor,
-                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      }}
-                    >
-                      <ChevronRight size={16} />
-                    </button>
-                    <button
-                      data-track="practice-change-word"
-                      onClick={randomizeWord}
-                      style={{
-                        padding: '6px 14px', borderRadius: '20px',
-                        border: `1px solid ${borderColor}`, background: 'transparent',
-                        cursor: 'pointer', fontSize: '13px', color: textColor,
-                        display: 'inline-flex', alignItems: 'center', gap: '6px',
-                      }}
-                    >
-                      <Shuffle size={14} /> {pt.changeWord}
-                    </button>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                    {/* Practice-word vs free-write mode */}
+                    <div style={{ display: 'inline-flex' }}>
+                      {[['words', pt.wordMode], ['free', pt.freeMode]].map(([m, label], k) => (
+                        <button key={m} onClick={() => setWriteMode(m)} style={{
+                          padding: '6px 14px', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+                          border: `1px solid ${writeMode === m ? tabActiveBg : borderColor}`,
+                          borderRadius: k === 0 ? '20px 0 0 20px' : '0 20px 20px 0',
+                          background: writeMode === m ? tabActiveBg : 'transparent',
+                          color: writeMode === m ? '#fff' : textColor,
+                        }}>{label}</button>
+                      ))}
+                    </div>
+                    {writeMode === 'words' && (
+                      <>
+                        <button
+                          onClick={prevWord}
+                          aria-label={lang === 'id' ? 'Kata sebelumnya' : 'Previous word'}
+                          title={lang === 'id' ? 'Kata sebelumnya' : 'Previous word'}
+                          style={{ width: 34, height: 34, borderRadius: '50%', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', color: textColor, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                        >
+                          <ChevronLeft size={16} />
+                        </button>
+                        <button
+                          onClick={nextWord}
+                          aria-label={lang === 'id' ? 'Kata berikutnya' : 'Next word'}
+                          title={lang === 'id' ? 'Kata berikutnya' : 'Next word'}
+                          style={{ width: 34, height: 34, borderRadius: '50%', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', color: textColor, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                        >
+                          <ChevronRight size={16} />
+                        </button>
+                        <button
+                          data-track="practice-change-word"
+                          onClick={randomizeWord}
+                          style={{ padding: '6px 14px', borderRadius: '20px', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', fontSize: '13px', color: textColor, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                        >
+                          <Shuffle size={14} /> {pt.changeWord}
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
 
-                <HandGestureCanvas
-                  darkMode={darkMode}
-                  locale={locale}
-                  referenceText={currentPracticeWord?.latin}
-                  referenceBalinese={convertLatinToBalinese(currentPracticeWord?.latin || '')}
-                  onSolved={randomizeWord}
-                />
+                {writeMode === 'free' && (
+                  <input
+                    value={freeWrite}
+                    onChange={e => setFreeWrite(e.target.value)}
+                    placeholder={pt.freePlaceholder}
+                    style={{ width: '100%', boxSizing: 'border-box', padding: '12px 16px', marginBottom: '12px', borderRadius: '10px', border: `1px solid ${borderColor}`, background: cardBg, color: textColor, fontSize: '15px' }}
+                  />
+                )}
+
+                <div ref={canvasWrapRef} className="aksara-canvas-wrap" style={{ position: 'relative' }}>
+                  <button
+                    onClick={toggleFullscreen}
+                    title={pt.fullscreen}
+                    style={{ position: 'absolute', top: 8, left: 8, zIndex: 30, padding: '6px 10px', borderRadius: '8px', border: `1px solid ${borderColor}`, background: cardBg, color: textColor, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}
+                  >
+                    <Maximize2 size={14} /> {pt.fullscreen}
+                  </button>
+                  <HandGestureCanvas
+                    key={writeMode}
+                    darkMode={darkMode}
+                    locale={locale}
+                    referenceText={writeMode === 'free' ? (freeWrite || undefined) : currentPracticeWord?.latin}
+                    referenceBalinese={convertLatinToBalinese((writeMode === 'free' ? freeWrite : currentPracticeWord?.latin) || '')}
+                    onSolved={writeMode === 'words' ? randomizeWord : undefined}
+                  />
+                  <style>{`.aksara-canvas-wrap:fullscreen{background:${cardBg};display:flex;flex-direction:column;justify-content:center;padding:24px;overflow:auto}`}</style>
+                </div>
 
                 {/* Reference sheet */}
                 <details style={{ marginTop: '20px' }}>
