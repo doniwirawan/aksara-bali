@@ -7,6 +7,7 @@ import '../words_data.dart';
 import '../theme.dart';
 import '../l10n.dart';
 import '../gamification.dart';
+import '../balinese_keyboard.dart';
 
 class WriteScreen extends StatefulWidget {
   const WriteScreen({super.key});
@@ -23,10 +24,21 @@ class _WriteScreenState extends State<WriteScreen> {
   _ScoreResult? _result;
   late Map<String, String?> _word;
 
+  // Type mode: reproduce the aksara with the on-screen Balinese keyboard.
+  bool _typeMode = false;
+  final _typed = TextEditingController();
+  bool? _typeCorrect; // null = not checked yet
+
   @override
   void initState() {
     super.initState();
     _word = kWords[_rng.nextInt(kWords.length)];
+  }
+
+  @override
+  void dispose() {
+    _typed.dispose();
+    super.dispose();
   }
 
   void _newWord() {
@@ -34,7 +46,25 @@ class _WriteScreenState extends State<WriteScreen> {
       _word = kWords[_rng.nextInt(kWords.length)];
       _strokes.clear();
       _result = null;
+      _typed.clear();
+      _typeCorrect = null;
     });
+  }
+
+  // Compare the typed aksara to the target. Single words → exact-match check
+  // (zero-width space from the keyboard's "Spasi" key is ignored).
+  void _checkTyped() {
+    final target = latinToBalinese(_word['latin'] ?? '');
+    final typed = _typed.text.replaceAll('​', '').trim();
+    final ok = typed.isNotEmpty && typed == target;
+    setState(() => _typeCorrect = ok);
+    if (ok) {
+      recordDailyActivity();
+      recordWritingCorrect();
+      Future.delayed(const Duration(milliseconds: 1300), () {
+        if (mounted && _typeCorrect == true) _newWord();
+      });
+    }
   }
 
   Future<void> _check() async {
@@ -181,6 +211,68 @@ class _WriteScreenState extends State<WriteScreen> {
             'Jiplak aksara samar, lalu ketuk Periksa untuk menilai seberapa mirip bentukmu.'),
         textAlign: TextAlign.center, style: TextStyle(color: kMuted, fontSize: 12));
 
+    final modeToggle = Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF3F4F8),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: kBorder),
+      ),
+      child: Row(children: [
+        _modeChip(tr(context, 'Draw', 'Gambar'), Icons.draw_outlined, !_typeMode,
+            () => setState(() { _typeMode = false; _typeCorrect = null; })),
+        _modeChip(tr(context, 'Type', 'Ketik'), Icons.keyboard_outlined, _typeMode,
+            () => setState(() { _typeMode = true; _result = null; })),
+      ]),
+    );
+
+    // Type mode: reproduce the aksara with the on-screen Balinese keyboard.
+    if (_typeMode) {
+      final typedDisplay = Container(
+        width: double.infinity,
+        constraints: const BoxConstraints(minHeight: 84),
+        padding: const EdgeInsets.all(16),
+        alignment: Alignment.centerLeft,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: kBorder),
+        ),
+        child: _typed.text.isEmpty
+            ? Text(tr(context, 'Type the aksara above…', 'Ketik aksara di atas…'),
+                style: TextStyle(color: kMuted, fontSize: 14, fontStyle: FontStyle.italic))
+            : Text(_typed.text,
+                style: TextStyle(fontFamily: kBaliFont, fontSize: 34, color: kInk, height: 1.6)),
+      );
+
+      final typeCheckButton = FilledButton.icon(
+        onPressed: _typed.text.replaceAll('​', '').trim().isEmpty ? null : _checkTyped,
+        icon: const Icon(Icons.check_circle_outline, size: 18),
+        label: Text(tr(context, 'Check my writing', 'Periksa tulisan')),
+      );
+
+      return SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          prompt,
+          const SizedBox(height: 12),
+          modeToggle,
+          const SizedBox(height: 14),
+          typedDisplay,
+          const SizedBox(height: 12),
+          if (_typeCorrect != null) ...[_TypeResultCard(_typeCorrect!), const SizedBox(height: 12)],
+          BalineseKeyboard(controller: _typed, onChanged: () => setState(() => _typeCorrect = null)),
+          const SizedBox(height: 12),
+          typeCheckButton,
+          const SizedBox(height: 10),
+          Text(
+              tr(context, 'Tap the aksara keys to rebuild the word, then Check.',
+                  'Ketuk tombol aksara untuk menyusun kata, lalu Periksa.'),
+              textAlign: TextAlign.center, style: TextStyle(color: kMuted, fontSize: 12)),
+        ]),
+      );
+    }
+
     return LayoutBuilder(builder: (context, c) {
       // Landscape / wide: controls on the left, big canvas filling the height on the right.
       if (c.maxWidth > c.maxHeight) {
@@ -192,6 +284,8 @@ class _WriteScreenState extends State<WriteScreen> {
               child: SingleChildScrollView(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                   prompt,
+                  const SizedBox(height: 12),
+                  modeToggle,
                   const SizedBox(height: 12),
                   if (_result != null) ...[_ScoreCard(_result!), const SizedBox(height: 12)],
                   undoBtn,
@@ -219,6 +313,8 @@ class _WriteScreenState extends State<WriteScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             prompt,
+            const SizedBox(height: 12),
+            modeToggle,
             const SizedBox(height: 14),
             AspectRatio(aspectRatio: 1.5, child: canvas),
             const SizedBox(height: 12),
@@ -232,6 +328,27 @@ class _WriteScreenState extends State<WriteScreen> {
         ),
       );
     });
+  }
+
+  Widget _modeChip(String label, IconData icon, bool selected, VoidCallback onTap) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: selected ? kAccent : Colors.transparent,
+            borderRadius: BorderRadius.circular(9),
+          ),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Icon(icon, size: 16, color: selected ? Colors.white : kMuted),
+            const SizedBox(width: 6),
+            Text(label, style: TextStyle(
+                color: selected ? Colors.white : kMuted, fontWeight: FontWeight.w600, fontSize: 13)),
+          ]),
+        ),
+      ),
+    );
   }
 }
 
@@ -394,6 +511,43 @@ class _ScoreCard extends StatelessWidget {
         const SizedBox(height: 8),
         Text('${tr(context, 'Precision', 'Presisi')}: ${r.precision}%   ·   ${tr(context, 'Coverage', 'Cakupan')}: ${r.recall}%',
             style: TextStyle(color: kMuted, fontSize: 12)),
+      ]),
+    );
+  }
+}
+
+// Feedback banner for Type mode — exact-match check, so it's pass/fail.
+class _TypeResultCard extends StatelessWidget {
+  const _TypeResultCard(this.correct);
+  final bool correct;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = correct ? const Color(0xFF16A34A) : const Color(0xFFDC2626);
+    return Container(
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Row(children: [
+        Container(
+          width: 48, height: 48, alignment: Alignment.center,
+          decoration: BoxDecoration(color: color.withValues(alpha: 0.15), shape: BoxShape.circle),
+          child: Icon(correct ? Icons.emoji_events : Icons.refresh, color: color, size: 28),
+        ),
+        const SizedBox(width: 14),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(correct ? tr(context, 'Great job!', 'Bagus sekali!') : tr(context, 'Not quite', 'Belum tepat'),
+              style: TextStyle(color: color, fontWeight: FontWeight.w800, fontSize: 18)),
+          const SizedBox(height: 2),
+          Text(
+              correct
+                  ? tr(context, 'Moving to the next word…', 'Lanjut ke kata berikutnya…')
+                  : tr(context, 'Compare each aksara and try again.', 'Bandingkan tiap aksara lalu coba lagi.'),
+              style: TextStyle(color: kMuted, fontSize: 12)),
+        ])),
       ]),
     );
   }
