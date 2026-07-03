@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { convertLatinToBalinese, QUIZ_WORDS } from '../../utils/balineseConverter'
-import { Check, ArrowLeft, Lock, BookOpen, Keyboard, Trophy, RotateCcw, CheckCircle, XCircle } from 'lucide-react'
+import { Check, ArrowLeft, Lock, BookOpen, Keyboard, Trophy, RotateCcw, CheckCircle, XCircle, Volume2, VolumeX } from 'lucide-react'
 import BalineseKeyboard from './BalineseKeyboard'
+import { playCorrect, playWrong, playComplete, sfxEnabled, setSfxEnabled } from '../../utils/sfx'
 
 const PASS = 70
 const STORAGE_KEY = 'aksara_quiz_best'
@@ -82,13 +83,21 @@ export default function QuizMode({ darkMode, locale }) {
   const [lastCorrect, setLastCorrect] = useState(false)
 
   const [result, setResult] = useState(null) // {correct, score, wrong, passed, allDone, levelName}
+  const [soundOn, setSoundOn] = useState(true)
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) setBest(JSON.parse(raw))
     } catch { /* ignore */ }
+    setSoundOn(sfxEnabled())
   }, [])
+
+  const toggleSound = () => {
+    const next = !soundOn
+    setSoundOn(next)
+    setSfxEnabled(next)
+  }
 
   const saveBest = (next) => {
     setBest(next)
@@ -115,14 +124,16 @@ export default function QuizMode({ darkMode, locale }) {
   const answerReading = (latin) => {
     if (selected !== null) return
     setSelected(latin)
-    if (latin === queue[idx].latin) setCorrect(c => c + 1)
+    const ok = latin === queue[idx].latin
+    setLastCorrect(ok)
+    if (ok) { setCorrect(c => c + 1); playCorrect() } else playWrong()
   }
 
   const checkTyping = () => {
     if (checked) return
     const ok = norm(input) === norm(convertLatinToBalinese(queue[idx].latin))
     setChecked(true); setLastCorrect(ok)
-    if (ok) setCorrect(c => c + 1)
+    if (ok) { setCorrect(c => c + 1); playCorrect() } else playWrong()
   }
 
   const finish = () => {
@@ -132,9 +143,11 @@ export default function QuizMode({ darkMode, locale }) {
     if (score > (next[active] || 0)) next[active] = score
     saveBest(next)
     const allDone = LEVELS.every((_, i) => (next[i] || 0) >= PASS)
+    const passed = score >= PASS
+    if (passed) playComplete(); else playWrong()
     setResult({
       correct, score, wrong: total - correct,
-      passed: score >= PASS, allDone, levelName: LEVELS[active].name,
+      passed, allDone, levelName: LEVELS[active].name,
     })
   }
 
@@ -165,7 +178,13 @@ export default function QuizMode({ darkMode, locale }) {
   if (active === null) {
     return (
       <div style={{ color: textColor, maxWidth: 600, margin: '0 auto' }}>
-        <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 4px' }}>{t.title}</h2>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+          <h2 style={{ flex: 1, fontSize: 24, fontWeight: 800, margin: '0 0 4px' }}>{t.title}</h2>
+          <button onClick={toggleSound} title={soundOn ? 'Mute' : 'Unmute'} aria-label="Toggle sounds"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: muted, display: 'inline-flex', padding: 4, marginTop: 4 }}>
+            {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          </button>
+        </div>
         <p style={{ color: muted, fontSize: 14, margin: '0 0 16px' }}>{t.subtitle}</p>
 
         <div style={{ display: 'flex', justifyContent: 'center', gap: 0, marginBottom: 8 }}>
@@ -229,6 +248,10 @@ export default function QuizMode({ darkMode, locale }) {
           <ArrowLeft size={22} />
         </button>
         <span style={{ flex: 1, fontWeight: 800, fontSize: 16 }}>{lv.name}</span>
+        <button onClick={toggleSound} title={soundOn ? 'Mute' : 'Unmute'} aria-label="Toggle sounds"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: muted, display: 'inline-flex', padding: 4 }}>
+          {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
+        </button>
         <span style={{ color: blue, fontWeight: 700 }}>{t.correct}: {correct}</span>
       </div>
 
@@ -282,33 +305,60 @@ export default function QuizMode({ darkMode, locale }) {
               locale={locale}
             />
           </div>
-          {!checked ? (
+          {!checked && (
             <button onClick={checkTyping} disabled={!norm(input)} style={{
               width: '100%', padding: 14, borderRadius: 10, marginBottom: 8,
               background: norm(input) ? blue : (darkMode ? '#333' : '#e0e0e0'),
               color: norm(input) ? '#fff' : muted, border: 'none', cursor: norm(input) ? 'pointer' : 'default',
               fontSize: 15, fontWeight: 600, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
             }}><Check size={16} /> {t.check}</button>
-          ) : (
-            <div style={{ padding: 14, borderRadius: 12, marginBottom: 8,
-              background: (lastCorrect ? 'rgba(22,163,74,0.08)' : 'rgba(220,38,38,0.08)'),
-              border: `1px solid ${lastCorrect ? green : red}66`, display: 'flex', gap: 10, alignItems: 'center' }}>
-              {lastCorrect ? <CheckCircle size={22} color={green} /> : <XCircle size={22} color={red} />}
-              <div>
-                <div style={{ fontWeight: 700, color: lastCorrect ? green : red }}>{lastCorrect ? t.correctMsg : t.notQuite}</div>
-                {!lastCorrect && <div style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 22, color: textColor }}>{t.answer} {convertLatinToBalinese(q.latin)}</div>}
-              </div>
-            </div>
           )}
         </>
       )}
 
-      {answered && (
-        <button onClick={next} style={{
-          width: '100%', padding: 14, borderRadius: 10, background: blue, color: '#fff',
-          border: 'none', cursor: 'pointer', fontSize: 15, fontWeight: 600, marginTop: 4,
-        }}>{idx + 1 >= queue.length ? t.seeResult : t.next}</button>
+      {/* Duolingo-style feedback bar — slides up from the bottom after each answer */}
+      {answered && !result && (
+        <>
+          <div style={{ height: 104 }} />
+          <div style={{
+            position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 900,
+            background: lastCorrect ? (darkMode ? '#0d2d1f' : '#d7f5e3') : (darkMode ? '#2d0a0a' : '#ffe3e3'),
+            borderTop: `2px solid ${lastCorrect ? green : red}`,
+            boxShadow: '0 -6px 24px rgba(0,0,0,0.14)',
+            animation: 'aksaraSlideUp 0.22s ease-out',
+          }}>
+            <div style={{ maxWidth: 600, margin: '0 auto', padding: '16px', display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{
+                width: 44, height: 44, flexShrink: 0, borderRadius: '50%',
+                background: lastCorrect ? green : red, color: '#fff',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {lastCorrect ? <CheckCircle size={26} /> : <XCircle size={26} />}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 800, fontSize: 16, color: lastCorrect ? green : red }}>
+                  {lastCorrect ? t.correctMsg : t.notQuite}
+                </div>
+                {!lastCorrect && (
+                  <div style={{ fontSize: 14, color: textColor, marginTop: 2 }}>
+                    {t.answer}{' '}
+                    {mode === 'reading'
+                      ? <b>{q.latin}</b>
+                      : <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 20 }}>{convertLatinToBalinese(q.latin)}</span>}
+                  </div>
+                )}
+              </div>
+              <button onClick={next} style={{
+                flexShrink: 0, padding: '12px 24px', borderRadius: 12,
+                background: lastCorrect ? green : red, color: '#fff', border: 'none',
+                cursor: 'pointer', fontSize: 15, fontWeight: 800,
+              }}>{idx + 1 >= queue.length ? t.seeResult : t.next}</button>
+            </div>
+          </div>
+        </>
       )}
+
+      <style>{`@keyframes aksaraSlideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}`}</style>
 
       {result && (
         <ResultModal t={t} result={result} darkMode={darkMode} onClose={closeResult} />

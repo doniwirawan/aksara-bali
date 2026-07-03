@@ -19,10 +19,12 @@ import {
     AlignLeft,
     AlignCenter,
     AlignRight,
-    Image as ImageIcon
+    Image as ImageIcon,
+    Volume2
 } from 'lucide-react'
 import { authedFetch } from '../utils/supabase'
 import { trackEvent } from '../utils/analytics'
+import { speak, canSpeak } from '../utils/speak'
 
 const translations = {
     en: {
@@ -1182,6 +1184,30 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
         }
     }
 
+    // Speak the Latin reading aloud (that's how the Balinese output is pronounced).
+    const handleListen = () => {
+        const words = getWordsFromText(latinText)
+        if (!words.length) return
+        trackEvent('converter-listen')
+        speak(latinText, locale === 'id' ? 'id-ID' : 'en-US')
+    }
+
+    // Share the result via the Web Share API, falling back to copying.
+    const handleShare = async () => {
+        const shareText = isReverseMode ? latinText : balineseText
+        if (!shareText) return
+        trackEvent('converter-share')
+        try {
+            if (navigator.share) {
+                await navigator.share({ title: 'Aksara Bali', text: shareText })
+            } else {
+                await navigator.clipboard.writeText(shareText)
+                setCopySuccessRight(true)
+                setTimeout(() => setCopySuccessRight(false), 2000)
+            }
+        } catch { /* user dismissed the share sheet — ignore */ }
+    }
+
     const handleDownloadLeft = () => {
         trackEvent('converter-download')
         const element = document.createElement('a')
@@ -1381,6 +1407,26 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                                             <Download size={16} className="me-2" />
                                             {t.download}
                                         </button>
+                                        {canSpeak() && (
+                                            <button
+                                                onClick={handleListen}
+                                                className="btn btn-outline-secondary"
+                                                disabled={!latinText}
+                                                title={locale === 'id' ? 'Dengar pengucapan' : 'Hear pronunciation'}
+                                            >
+                                                <Volume2 size={16} className="me-2" />
+                                                {locale === 'id' ? 'Dengar' : 'Listen'}
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={handleShare}
+                                            className="btn btn-outline-secondary"
+                                            disabled={isReverseMode ? !latinText : !balineseText}
+                                            title={t.share}
+                                        >
+                                            <Share2 size={16} className="me-2" />
+                                            {t.share}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -1405,9 +1451,10 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                                         ? 'repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50% / 20px 20px'
                                         : styleBgColor,
                                 }}>
-                                    <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: `${styleFontSize}px`, color: styleTextColor, lineHeight: 1.6, wordBreak: 'break-word' }}>
+                                    <span key={balineseText} style={{ display: 'inline-block', fontFamily: '"Noto Sans Balinese", serif', fontSize: `${styleFontSize}px`, color: styleTextColor, lineHeight: 1.6, wordBreak: 'break-word', animation: 'aksaraFadeIn 0.3s ease' }}>
                                         {balineseText || 'ᬳᬓ᭄ᬱᬭᬩᬮᬶ'}
                                     </span>
+                                    <style>{`@keyframes aksaraFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}`}</style>
                                 </div>
                                 <div className="d-flex flex-wrap align-items-center gap-3 mb-3">
                                     <label className="d-flex align-items-center gap-2 mb-0">
