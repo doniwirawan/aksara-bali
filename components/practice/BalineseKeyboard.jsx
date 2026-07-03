@@ -163,6 +163,33 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
         ))}
       </div>
 
+      {/* Pangangge row — above the consonants, kept on a single line */}
+      <div style={{ marginBottom: '12px' }}>
+        <div style={{ fontSize: '11px', color: subColor, fontWeight: 600, marginBottom: '4px', letterSpacing: '0.3px' }}>
+          {kb.pangangge}
+        </div>
+        <div style={{ display: 'flex', gap: '5px', overflowX: 'auto' }}>
+          {PANGANGGE.map(({ char, label }) => (
+            <button
+              key={char}
+              onClick={() => onKeyPress(char)}
+              title={label}
+              style={{
+                flex: '1 0 40px', minWidth: '40px',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                padding: '6px 2px', borderRadius: '8px', border: `1px solid ${keyBorder}`,
+                background: darkMode ? '#20283a' : '#eef4ff', cursor: 'pointer', transition: 'all 0.1s', minHeight: '48px', gap: '2px',
+              }}
+              onMouseEnter={keyHoverOn}
+              onMouseLeave={e => { e.currentTarget.style.background = darkMode ? '#20283a' : '#eef4ff'; e.currentTarget.style.borderColor = keyBorder }}
+            >
+              <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '20px', lineHeight: 1, color: inkColor }}>{'◌' + char}</span>
+              <span style={{ fontSize: '10px', color: subColor, fontWeight: '500' }}>{label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {mode === 'grid' ? (
         <>
           {/* Sub-tabs (pangangge is now a persistent row below, not a tab) */}
@@ -226,32 +253,6 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
           ))}
         </div>
       )}
-
-      {/* Persistent Pangangge row — vowel marks + syllable-final signs */}
-      <div style={{ marginBottom: '10px' }}>
-        <div style={{ fontSize: '11px', color: subColor, fontWeight: 600, marginBottom: '4px', letterSpacing: '0.3px' }}>
-          {kb.pangangge}
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(52px, 1fr))', gap: '5px' }}>
-          {PANGANGGE.map(({ char, label }) => (
-            <button
-              key={char}
-              onClick={() => onKeyPress(char)}
-              title={label}
-              style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                padding: '6px 2px', borderRadius: '8px', border: `1px solid ${keyBorder}`,
-                background: darkMode ? '#20283a' : '#eef4ff', cursor: 'pointer', transition: 'all 0.1s', minHeight: '48px', gap: '2px',
-              }}
-              onMouseEnter={keyHoverOn}
-              onMouseLeave={e => { e.currentTarget.style.background = darkMode ? '#20283a' : '#eef4ff'; e.currentTarget.style.borderColor = keyBorder }}
-            >
-              <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '20px', lineHeight: 1, color: inkColor }}>{'◌' + char}</span>
-              <span style={{ fontSize: '10px', color: subColor, fontWeight: '500' }}>{label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Control keys */}
       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
