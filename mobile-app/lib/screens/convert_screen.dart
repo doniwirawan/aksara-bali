@@ -9,6 +9,7 @@ import '../converter.dart';
 import '../theme.dart';
 import '../l10n.dart';
 import '../balinese_keyboard.dart';
+import '../sfx.dart';
 
 const _diacritics = ['ā', 'ī', 'ū', 'ě', 'ṇ'];
 const _textSwatches = [
@@ -65,6 +66,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
   }
 
   void _swap() {
+    Sfx.instance.tap();
     setState(() {
       _reverse = !_reverse;
       final prev = _output;
@@ -83,6 +85,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
   }
 
   void _insertDiacritic(String ch) {
+    Sfx.instance.tap();
     final sel = _controller.selection;
     final text = _controller.text;
     final start = sel.isValid ? sel.start : text.length;

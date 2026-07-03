@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'theme.dart';
+import 'sfx.dart';
 
 /// On-screen Balinese (Aksara Bali) keyboard. Inserts raw glyphs into [controller]
 /// at the caret, then calls [onChanged]. Used so Balinese→Latin input doesn't need
@@ -24,6 +25,7 @@ class BalineseKeyboard extends StatelessWidget {
   ];
 
   void _insert(String glyph) {
+    Sfx.instance.tap();
     final sel = controller.selection;
     final text = controller.text;
     final start = sel.isValid ? sel.start : text.length;
@@ -37,6 +39,7 @@ class BalineseKeyboard extends StatelessWidget {
   }
 
   void _backspace() {
+    Sfx.instance.tap();
     final text = controller.text;
     if (text.isEmpty) return;
     final sel = controller.selection;
