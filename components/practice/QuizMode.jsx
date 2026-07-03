@@ -382,7 +382,9 @@ export default function QuizMode({ darkMode, locale }) {
                 <div style={{ fontWeight: 800, fontSize: 16, color: lastCorrect ? green : red }}>
                   {lastCorrect ? t.correctMsg : t.notQuite}
                 </div>
-                {!lastCorrect && (
+                {/* In writing mode always show the correct aksara (right or wrong) so
+                    you can compare your writing; in reading mode only reveal on a miss. */}
+                {(mode !== 'reading' || !lastCorrect) && (
                   <div style={{ fontSize: 14, color: textColor, marginTop: 2 }}>
                     {t.answer}{' '}
                     {mode === 'reading'
