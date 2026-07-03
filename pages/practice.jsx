@@ -154,10 +154,11 @@ export default function PracticePage({ locale, setLocale }) {
           {/* Tab content */}
           <div style={{ background: cardBg, borderRadius: '16px', border: `1px solid ${borderColor}`, padding: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
 
-            {/* QUIZ TAB */}
-            {activeTab === 'quiz' && (
+            {/* QUIZ TAB — kept mounted (just hidden) so quiz progress, level,
+                and score survive switching to other tabs and back. */}
+            <div style={{ display: activeTab === 'quiz' ? 'block' : 'none' }}>
               <QuizMode darkMode={darkMode} locale={locale} />
-            )}
+            </div>
 
             {/* AKSARA REFERENCE TAB */}
             {activeTab === 'reference' && (
