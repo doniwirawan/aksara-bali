@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'theme.dart';
 import 'l10n.dart';
 import 'gamification.dart';
+import 'sfx.dart';
 import 'screens/convert_screen.dart';
 import 'screens/write_screen.dart';
 import 'screens/quiz_screen.dart';
@@ -18,6 +19,7 @@ Future<void> main() async {
   await loadLang();
   await loadTheme();
   await loadStats();
+  await Sfx.instance.init();
   runApp(const AksaraBaliApp());
 }
 

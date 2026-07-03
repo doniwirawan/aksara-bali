@@ -7,6 +7,7 @@ import '../theme.dart';
 import '../l10n.dart';
 import '../gamification.dart';
 import '../balinese_keyboard.dart';
+import '../sfx.dart';
 
 // Pass threshold (out of 100) to unlock the next level.
 const int kPassScore = 70;
@@ -125,17 +126,20 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void _answer(String latin) {
     if (_selected != null) return;
+    final ok = latin == _queue[_index]['latin'];
     setState(() {
       _selected = latin;
       _praiseIdx = _rng.nextInt(5);
-      if (latin == _queue[_index]['latin']) _correct++;
+      if (ok) _correct++;
     });
+    ok ? Sfx.instance.correct() : Sfx.instance.wrong();
   }
 
   void _check() {
     if (_checked) return;
     final ok = _norm(_typeController.text) == _norm(latinToBalinese(_queue[_index]['latin'] ?? ''));
     setState(() { _checked = true; _lastCorrect = ok; _praiseIdx = _rng.nextInt(5); if (ok) _correct++; });
+    ok ? Sfx.instance.correct() : Sfx.instance.wrong();
   }
 
   Future<void> _next() async {
@@ -170,6 +174,7 @@ class _QuizScreenState extends State<QuizScreen> {
     final wrong = total - _correct;
     final passed = score >= kPassScore;
     final allDone = _levels.asMap().keys.every((i) => (_best[mode]![i] ?? 0) >= kPassScore);
+    passed ? Sfx.instance.complete() : Sfx.instance.wrong();
 
     // Gamification: daily streak + achievements.
     await recordDailyActivity();
@@ -332,6 +337,13 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
           const SizedBox(width: 8),
           Expanded(child: Text(lv.name, style: TextStyle(fontWeight: FontWeight.w800, color: kInk, fontSize: 16))),
+          IconButton(
+            onPressed: () { Sfx.instance.setEnabled(!Sfx.instance.enabled); setState(() {}); },
+            icon: Icon(Sfx.instance.enabled ? Icons.volume_up_outlined : Icons.volume_off_outlined, size: 20, color: kMuted),
+            tooltip: tr(context, 'Sound', 'Suara'),
+            padding: EdgeInsets.zero, constraints: const BoxConstraints(), visualDensity: VisualDensity.compact,
+          ),
+          const SizedBox(width: 8),
           Text('${tr(context, 'Correct', 'Benar')}: $_correct', style: TextStyle(color: kAccent, fontWeight: FontWeight.w700)),
         ]),
         const SizedBox(height: 12),
@@ -430,6 +442,12 @@ class _QuizScreenState extends State<QuizScreen> {
               style: TextStyle(color: color, fontWeight: FontWeight.w800, fontSize: 17)),
           if (!ok) Text(_queue[_index]['latin'] ?? '',
               style: TextStyle(color: kInk, fontSize: 15, fontWeight: FontWeight.w600)),
+          if (_queue[_index]['meaning'] != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(_queue[_index]['meaning']!,
+                  style: TextStyle(color: kMuted, fontSize: 13)),
+            ),
         ])),
       ]),
     );

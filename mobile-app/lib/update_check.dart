@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 /// Installed app version. Bump alongside `version:` in pubspec.yaml on release.
 /// Also shown in the About footer.
-const kAppVersion = '1.4.0';
+const kAppVersion = '1.5.0';
 
 /// Latest release of the public APK repo. The app is offline-by-default, so this
 /// is only ever fetched when the user taps "Check for updates" in About.
