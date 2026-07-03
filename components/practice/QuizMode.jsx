@@ -347,6 +347,9 @@ export default function QuizMode({ darkMode, locale }) {
                       : <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 20 }}>{convertLatinToBalinese(q.latin)}</span>}
                   </div>
                 )}
+                {q.meaning && (
+                  <div style={{ fontSize: 13, color: textColor, opacity: 0.8, marginTop: 2 }}>{q.meaning}</div>
+                )}
               </div>
               <button onClick={next} style={{
                 flexShrink: 0, padding: '12px 24px', borderRadius: 12,

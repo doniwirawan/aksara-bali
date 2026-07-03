@@ -660,6 +660,9 @@ function renderMarkdown(content) {
                         <Tag key={ci} style={{
                           padding: '8px 12px', border: '1px solid #e0e0e0',
                           background: ri === 0 ? '#f0f4ff' : 'transparent',
+                          // Header sits on a light-blue fill, so pin dark text —
+                          // otherwise dark-mode's light text is invisible on it.
+                          color: ri === 0 ? '#1a2340' : 'inherit',
                           fontWeight: ri === 0 ? '600' : 'normal',
                           textAlign: 'left',
                         }}>
