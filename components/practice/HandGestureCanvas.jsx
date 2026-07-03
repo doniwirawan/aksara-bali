@@ -339,7 +339,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
 
     const dtRef = distanceTransform(refGrid)   // distance to nearest reference ink
     const dtUser = distanceTransform(userGrid) // distance to nearest user ink
-    const TAU = 6 // tolerance (grid cells) covering stroke width + wobble
+    const TAU = 4 // tolerance (grid cells); tighter = stricter shape match
 
     // Precision: how close the user's ink sits to the reference shape.
     // Recall: how well the reference shape is covered by the user's ink.
@@ -357,10 +357,10 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
       : 0
 
     let resultStatus, message
-    if (score >= 55) {
+    if (score >= 62) {
       resultStatus = 'correct'
       message = ct.correct
-    } else if (score >= 30) {
+    } else if (score >= 40) {
       resultStatus = 'partial'
       message = ct.partial
     } else {
