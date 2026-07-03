@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aksara-bali-v2.2.0';
+const CACHE_NAME = 'aksara-bali-v2.3.0';
 const urlsToCache = [
     '/',
     '/practice',
@@ -88,16 +88,38 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    // Navigation / HTML documents → NETWORK-FIRST.
+    // A cached HTML page points the browser at hashed JS chunks
+    // (/_next/static/chunks/...) baked into that HTML. After a redeploy those
+    // chunk hashes change and the old files are removed from the server, so
+    // serving stale HTML makes the chunk requests 404 → the app can't hydrate
+    // → Next.js shows "Application error: a client-side exception has occurred".
+    // Always fetch fresh HTML so the document and its chunk hashes stay in sync;
+    // fall back to cache only when the network is unavailable (offline).
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request)
+                .then((response) => {
+                    const copy = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+                    return response;
+                })
+                .catch(() =>
+                    caches.match(event.request).then((hit) => hit || caches.match('/'))
+                )
+        );
+        return;
+    }
+
+    // Everything else (hashed JS/CSS, images, fonts) is immutable/versioned,
+    // so CACHE-FIRST is safe and fast.
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
-                // Return cached version or fetch from network
                 if (response) {
-                    console.log('[SW] Serving from cache:', event.request.url);
                     return response;
                 }
 
-                console.log('[SW] Fetching from network:', event.request.url);
                 return fetch(event.request)
                     .then((response) => {
                         // Don't cache if not a valid response
@@ -114,16 +136,6 @@ self.addEventListener('fetch', (event) => {
                             });
 
                         return response;
-                    })
-                    .catch((error) => {
-                        console.error('[SW] Fetch failed:', error);
-
-                        // Return a fallback for HTML pages
-                        if (event.request.headers.get('accept').includes('text/html')) {
-                            return caches.match('/');
-                        }
-
-                        throw error;
                     });
             })
     );

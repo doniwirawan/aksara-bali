@@ -178,8 +178,8 @@ export default function PracticePage({ locale, setLocale }) {
                     <span style={{ fontSize: '13px', color: mutedColor }}>{pt.practiceLabel}</span>
                     <button
                       onClick={prevWord}
-                      aria-label={id ? 'Kata sebelumnya' : 'Previous word'}
-                      title={id ? 'Kata sebelumnya' : 'Previous word'}
+                      aria-label={lang === 'id' ? 'Kata sebelumnya' : 'Previous word'}
+                      title={lang === 'id' ? 'Kata sebelumnya' : 'Previous word'}
                       style={{
                         width: 34, height: 34, borderRadius: '50%',
                         border: `1px solid ${borderColor}`, background: 'transparent',
@@ -191,8 +191,8 @@ export default function PracticePage({ locale, setLocale }) {
                     </button>
                     <button
                       onClick={nextWord}
-                      aria-label={id ? 'Kata berikutnya' : 'Next word'}
-                      title={id ? 'Kata berikutnya' : 'Next word'}
+                      aria-label={lang === 'id' ? 'Kata berikutnya' : 'Next word'}
+                      title={lang === 'id' ? 'Kata berikutnya' : 'Next word'}
                       style={{
                         width: 34, height: 34, borderRadius: '50%',
                         border: `1px solid ${borderColor}`, background: 'transparent',
