@@ -1,6 +1,7 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/next'
 import { useRouter } from 'next/router'
 import { useState, useEffect, useCallback } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -622,6 +623,7 @@ function MyApp({ Component, pageProps }) {
             <AuthProvider>
               <Component {...pageProps} locale={locale} setLocale={handleSetLocale} />
             </AuthProvider>
+            <Analytics />
         </>
     )
 }
