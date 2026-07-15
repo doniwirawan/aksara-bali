@@ -131,6 +131,11 @@ export default function Footer({ darkMode, locale }) {
                   <Linkedin size={15} /> {id ? 'Developer' : 'Developer'}
                 </a>
               </li>
+              <li style={{ marginTop: '10px' }}>
+                <a href="https://ko-fi.com/L7T7234BJ2" target="_blank" rel="noopener noreferrer" data-track="footer-kofi">
+                  <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt={id ? 'Dukung saya di Ko-fi' : 'Support me on Ko-fi'} style={{ height: '24px' }} />
+                </a>
+              </li>
             </ul>
           </div>
         </div>

@@ -11,6 +11,8 @@ A full-featured web app for learning and converting Balinese script (Aksara Bali
 ![Vercel](https://img.shields.io/badge/Deployed-Vercel-black?style=flat&logo=vercel)
 ![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue?style=flat)
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/L7T7234BJ2)
+
 ---
 
 ## 📱 Android App
