@@ -14,13 +14,22 @@ const HandGestureCanvas = dynamic(() => import('./HandGestureCanvas'), {
 const PASS = 70
 const STORAGE_KEY = 'aksara_quiz_best'
 
+// Duolingo-style track: a gentle start, then themed units (filtered by word
+// category), then difficulty-based boss levels at the end. `diffs` and `cats`
+// are both optional filters — omitted means "any".
 const LEVELS = [
   { name: 'Pemula', sub: { id: 'Kenali dasar aksara.', en: 'Learn the basics.' }, diffs: ['easy'], count: 8 },
-  { name: 'Mampu', sub: { id: 'Latih kemampuan lebih dalam.', en: 'Build deeper skill.' }, diffs: ['easy', 'medium'], count: 10 },
-  { name: 'Cakap', sub: { id: 'Uji pemahaman aksara.', en: 'Test your understanding.' }, diffs: ['medium'], count: 10 },
-  { name: 'Ahli', sub: { id: 'Tantangan pertanyaan lanjutan.', en: 'Advanced challenges.' }, diffs: ['medium', 'hard'], count: 10 },
-  { name: 'Master', sub: { id: 'Tes ketajaman pemahaman.', en: 'Sharpen your mastery.' }, diffs: ['hard'], count: 10 },
-  { name: 'GrandMaster', sub: { id: 'Buktikan kamu sang master.', en: 'Prove you are the master.' }, diffs: ['easy', 'medium', 'hard'], count: 12 },
+  { name: 'Hewan & Makanan', sub: { id: 'Kata seputar hewan dan makanan.', en: 'Animal and food words.' }, cats: ['Hewan', 'Makanan'], count: 10 },
+  { name: 'Alam & Tempat', sub: { id: 'Alam dan tempat-tempat di Bali.', en: 'Nature and places in Bali.' }, cats: ['Alam', 'Tempat'], count: 10 },
+  { name: 'Keluarga & Tubuh', sub: { id: 'Keluarga dan anggota tubuh.', en: 'Family and body parts.' }, cats: ['Keluarga', 'Tubuh'], count: 10 },
+  { name: 'Warna & Angka', sub: { id: 'Warna dan angka dalam bahasa Bali.', en: 'Colors and numbers.' }, cats: ['Warna', 'Angka'], count: 10 },
+  { name: 'Kerja & Sifat', sub: { id: 'Kata kerja dan kata sifat sehari-hari.', en: 'Everyday verbs and adjectives.' }, cats: ['Kata kerja', 'Sifat'], count: 10 },
+  { name: 'Waktu & Wewaran', sub: { id: 'Kata waktu dan nama-nama hari.', en: 'Time words and day names.' }, cats: ['Waktu'], count: 10 },
+  { name: 'Budaya', sub: { id: 'Seni dan budaya Bali.', en: 'Balinese arts and culture.' }, cats: ['Budaya'], count: 10 },
+  { name: 'Agama', sub: { id: 'Upacara dan istilah keagamaan.', en: 'Ceremonies and religious terms.' }, cats: ['Agama'], count: 10 },
+  { name: 'Filosofi & Sastra', sub: { id: 'Filosofi hidup dan sastra Bali.', en: 'Philosophy and literature.' }, cats: ['Filosofi', 'Sastra'], count: 10 },
+  { name: 'Master', sub: { id: 'Tes ketajaman pemahaman.', en: 'Sharpen your mastery.' }, diffs: ['hard'], count: 12 },
+  { name: 'GrandMaster', sub: { id: 'Buktikan kamu sang master.', en: 'Prove you are the master.' }, count: 15 },
 ]
 
 function shuffle(arr) {
@@ -120,7 +129,11 @@ export default function QuizMode({ darkMode, locale }) {
   }, [])
 
   const startLevel = useCallback((i) => {
-    const pool = shuffle(QUIZ_WORDS.filter(w => LEVELS[i].diffs.includes(w.difficulty)))
+    const lv = LEVELS[i]
+    const pool = shuffle(QUIZ_WORDS.filter(w =>
+      (!lv.diffs || lv.diffs.includes(w.difficulty)) &&
+      (!lv.cats || lv.cats.includes(w.category))
+    ))
     const q = pool.slice(0, LEVELS[i].count)
     setActive(i); setQueue(q); setIdx(0); setCorrect(0)
     setSelected(null); setInput(''); setChecked(false)

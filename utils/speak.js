@@ -5,9 +5,25 @@ export function canSpeak() {
   return typeof window !== 'undefined' && 'speechSynthesis' in window
 }
 
+// Chrome/Edge load voices asynchronously: getVoices() is often [] until the
+// 'voiceschanged' event fires, which made every early click fall back to the
+// English respelling. Cache the list and keep it fresh.
+let VOICES = []
+function refreshVoices() {
+  VOICES = window.speechSynthesis.getVoices() || []
+}
+if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+  refreshVoices()
+  window.speechSynthesis.addEventListener?.('voiceschanged', refreshVoices)
+}
+
 function pickVoice(prefix) {
-  const voices = window.speechSynthesis.getVoices() || []
-  return voices.find((v) => v.lang?.toLowerCase().startsWith(prefix)) || null
+  if (!VOICES.length) refreshVoices()
+  const match = VOICES.filter((v) => v.lang?.toLowerCase().replace('_', '-').startsWith(prefix))
+  if (!match.length) return null
+  // Cloud voices ("Google Bahasa Indonesia", "Microsoft … Online (Natural)")
+  // sound far more natural than the local SAPI/eSpeak ones — prefer them.
+  return match.find((v) => /google|online|natural/i.test(v.name)) || match[0]
 }
 
 // When no Indonesian voice is installed we fall back to an English voice, which
@@ -32,11 +48,15 @@ export function speak(text, lang = 'id-ID') {
   try {
     synth.cancel()
     const idVoice = pickVoice('id')
-    const voice = idVoice || pickVoice('en')
-    const u = new SpeechSynthesisUtterance(idVoice ? text : toEnglishApprox(text))
+    // Only respell for English when we KNOW the voice list is loaded and it
+    // really has no Indonesian voice. With an empty list, speak the original
+    // text tagged id-ID and let the engine resolve its own default voice.
+    const useIndonesian = !!idVoice || VOICES.length === 0
+    const voice = idVoice || (useIndonesian ? null : pickVoice('en'))
+    const u = new SpeechSynthesisUtterance(useIndonesian ? text : toEnglishApprox(text))
     // Match the utterance language to the chosen voice so its pronunciation
     // rules actually apply to the (respelled) text.
-    u.lang = idVoice ? lang : (voice?.lang || 'en-US')
+    u.lang = useIndonesian ? lang : (voice?.lang || 'en-US')
     u.rate = 0.9
     if (voice) u.voice = voice
     synth.speak(u)

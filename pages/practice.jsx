@@ -8,6 +8,24 @@ import Footer from '../components/Footer'
 import { convertLatinToBalinese, QUIZ_WORDS } from '../utils/balineseConverter'
 import { Target, PenLine, Keyboard, Shuffle, ClipboardList, Copy, Lightbulb, ChevronLeft, ChevronRight, BookOpen, Maximize2 } from 'lucide-react'
 import AksaraReference from '../components/practice/AksaraReference'
+import PageTour from '../components/PageTour'
+
+const PRACTICE_TOUR = [
+  { title: { id: 'Halaman Latihan 🎯', en: 'Practice page 🎯' },
+    desc: { id: 'Di sini tempatmu belajar aksara Bali: kuis berlevel ala Duolingo, kanvas menulis, papan ketik, dan daftar aksara.', en: 'This is where you learn Balinese script: Duolingo-style leveled quizzes, a writing canvas, a keyboard, and the script reference.' } },
+  { element: '[data-track="practice-tab-quiz"]',
+    title: { id: 'Kuis berlevel', en: 'Leveled quiz' },
+    desc: { id: 'Mulai dari sini. Taklukkan tiap level (skor minimal 70) untuk membuka level berikutnya — dari kata dasar sampai istilah filosofi.', en: 'Start here. Pass each level (score 70+) to unlock the next — from basic words up to philosophy terms.' } },
+  { element: '[data-track="practice-tab-write"]',
+    title: { id: 'Latihan menulis', en: 'Writing practice' },
+    desc: { id: 'Gambar aksara dengan mouse, sentuhan, atau gerakan tangan lewat kamera. Tulisanmu dinilai otomatis.', en: 'Draw the script with mouse, touch, or hand gestures via your camera. Your writing is graded automatically.' } },
+  { element: '[data-track="practice-tab-keyboard"]',
+    title: { id: 'Papan ketik aksara', en: 'Script keyboard' },
+    desc: { id: 'Ketik bebas memakai papan ketik aksara Bali, lalu salin hasilnya ke mana saja.', en: 'Type freely with the Balinese script keyboard, then copy the result anywhere.' } },
+  { element: '[data-track="practice-tab-reference"]',
+    title: { id: 'Daftar aksara', en: 'Script reference' },
+    desc: { id: 'Lupa bentuk hurufnya? Semua aksara dasar dan pasangannya ada di tab ini.', en: 'Forgot a letter? Every base character and its forms live in this tab.' } },
+]
 
 // HandGestureCanvas uses webcam + MediaPipe (browser-only)
 const HandGestureCanvas = dynamic(
@@ -346,6 +364,7 @@ export default function PracticePage({ locale, setLocale }) {
           </div>
 
         </main>
+        <PageTour pageKey="practice" locale={locale} steps={PRACTICE_TOUR} />
         <Footer darkMode={darkMode} locale={locale || 'id'} />
       </div>
     </>

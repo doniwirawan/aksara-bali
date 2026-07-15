@@ -3,6 +3,15 @@ import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Search, Target } from 'lucide-react'
+import PageTour from '../components/PageTour'
+
+const FAQ_TOUR = [
+  { title: { id: 'Pertanyaan umum ❓', en: 'Common questions ❓' },
+    desc: { id: 'Semua pertanyaan yang sering ditanyakan soal aksara Bali dan alat ini terkumpul di halaman ini, dikelompokkan per topik. Klik pertanyaan untuk membuka jawabannya.', en: 'Everything people commonly ask about Balinese script and this tool is collected here, grouped by topic. Click a question to open its answer.' } },
+  { element: '[data-tour="faq-search"]',
+    title: { id: 'Cari cepat', en: 'Quick search' },
+    desc: { id: 'Malas scroll? Ketik kata kuncinya di sini dan jawabannya langsung tersaring.', en: 'Don’t feel like scrolling? Type a keyword here and the answers filter instantly.' } },
+]
 
 const FAQ_DATA = [
   {
@@ -285,7 +294,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
           </div>
 
           {/* Search */}
-          <div style={{ position: 'relative', marginBottom: '32px' }}>
+          <div data-tour="faq-search" style={{ position: 'relative', marginBottom: '32px' }}>
             <input
               type="search"
               placeholder={ui.placeholder}
@@ -388,6 +397,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
             </div>
           </div>
         </main>
+        <PageTour pageKey="faq" locale={locale} steps={FAQ_TOUR} />
         <Footer darkMode={darkMode} locale={locale || 'id'} />
       </div>
     </>

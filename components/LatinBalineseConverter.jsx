@@ -1268,7 +1268,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
 
                     <div className="row g-4 mb-4">
                         <div className="col-md-5">
-                            <div className="card h-100">
+                            <div className="card h-100" data-tour="conv-input">
                                 <div className={`card-header ${isReverseMode ? 'bg-success' : 'bg-primary'} text-white`}>
                                     <h5 className="mb-0">
                                         <i className="bi bi-keyboard me-2"></i>
@@ -1348,6 +1348,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                                     onClick={handleModeSwitch}
                                     className={`btn ${isReverseMode ? 'btn-outline-primary' : 'btn-primary'} mb-3`}
                                     style={{ minWidth: '150px' }}
+                                    data-tour="conv-switch"
                                 >
                                     <ArrowLeftRight size={16} className="me-2" />
                                     {isReverseMode ? t.switchToNormal : t.switchToReverse}
@@ -1362,7 +1363,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                         </div>
 
                         <div className="col-md-5">
-                            <div className="card h-100">
+                            <div className="card h-100" data-tour="conv-output">
                                 <div className={`card-header ${isReverseMode ? 'bg-primary' : 'bg-success'} text-white`}>
                                     <h5 className="mb-0">
                                         {isReverseMode ? t.latinOutput : t.balineseOutput}
@@ -1413,6 +1414,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                                                 className="btn btn-outline-secondary"
                                                 disabled={!latinText}
                                                 title={locale === 'id' ? 'Dengar pengucapan' : 'Hear pronunciation'}
+                                                data-tour="conv-listen"
                                             >
                                                 <Volume2 size={16} className="me-2" />
                                                 {locale === 'id' ? 'Dengar' : 'Listen'}

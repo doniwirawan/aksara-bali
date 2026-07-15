@@ -281,4 +281,145 @@ export const QUIZ_WORDS = [
   { latin: 'sasih', meaning: 'sasih / bulan kalender', category: 'Waktu', difficulty: 'hard' },
   { latin: 'penjor', meaning: 'penjor / hiasan bambu', category: 'Budaya', difficulty: 'hard' },
   { latin: 'ogoh', meaning: 'ogoh / ogoh-ogoh', category: 'Budaya', difficulty: 'hard' },
+
+  // Warna (colors)
+  { latin: 'barak', meaning: 'barak / merah', category: 'Warna', difficulty: 'easy' },
+  { latin: 'putih', meaning: 'putih / white', category: 'Warna', difficulty: 'easy' },
+  { latin: 'selem', meaning: 'selem / hitam', category: 'Warna', difficulty: 'easy' },
+  { latin: 'kuning', meaning: 'kuning / yellow', category: 'Warna', difficulty: 'easy' },
+  { latin: 'gadang', meaning: 'gadang / hijau', category: 'Warna', difficulty: 'medium' },
+  { latin: 'pelung', meaning: 'pelung / biru', category: 'Warna', difficulty: 'medium' },
+
+  // Angka (numbers)
+  { latin: 'besik', meaning: 'besik / satu', category: 'Angka', difficulty: 'easy' },
+  { latin: 'telu', meaning: 'telu / tiga', category: 'Angka', difficulty: 'easy' },
+  { latin: 'papat', meaning: 'papat / empat', category: 'Angka', difficulty: 'easy' },
+  { latin: 'pitu', meaning: 'pitu / tujuh', category: 'Angka', difficulty: 'easy' },
+  { latin: 'dasa', meaning: 'dasa / sepuluh', category: 'Angka', difficulty: 'easy' },
+  { latin: 'kalih', meaning: 'kalih / dua (halus)', category: 'Angka', difficulty: 'medium' },
+  { latin: 'nenem', meaning: 'nenem / enam', category: 'Angka', difficulty: 'medium' },
+  { latin: 'kutus', meaning: 'kutus / delapan', category: 'Angka', difficulty: 'medium' },
+  { latin: 'sia', meaning: 'sia / sembilan', category: 'Angka', difficulty: 'medium' },
+  { latin: 'satus', meaning: 'satus / seratus', category: 'Angka', difficulty: 'medium' },
+  { latin: 'siu', meaning: 'siu / seribu', category: 'Angka', difficulty: 'medium' },
+
+  // Tubuh (body)
+  { latin: 'cunguh', meaning: 'cunguh / hidung', category: 'Tubuh', difficulty: 'easy' },
+  { latin: 'kuping', meaning: 'kuping / telinga', category: 'Tubuh', difficulty: 'easy' },
+  { latin: 'gigi', meaning: 'gigi / teeth', category: 'Tubuh', difficulty: 'easy' },
+  { latin: 'basang', meaning: 'basang / perut', category: 'Tubuh', difficulty: 'easy' },
+  { latin: 'bok', meaning: 'bok / rambut', category: 'Tubuh', difficulty: 'easy' },
+
+  // Keluarga (family)
+  { latin: 'pekak', meaning: 'pekak / kakek', category: 'Keluarga', difficulty: 'easy' },
+  { latin: 'dadong', meaning: 'dadong / nenek', category: 'Keluarga', difficulty: 'easy' },
+  { latin: 'beli', meaning: 'beli / kakak laki-laki', category: 'Keluarga', difficulty: 'easy' },
+  { latin: 'mbok', meaning: 'mbok / kakak perempuan', category: 'Keluarga', difficulty: 'easy' },
+  { latin: 'adi', meaning: 'adi / adik', category: 'Keluarga', difficulty: 'easy' },
+
+  // Hewan (animals)
+  { latin: 'siap', meaning: 'siap / ayam', category: 'Hewan', difficulty: 'easy' },
+  { latin: 'bebek', meaning: 'bebek / itik', category: 'Hewan', difficulty: 'easy' },
+  { latin: 'kedis', meaning: 'kedis / burung', category: 'Hewan', difficulty: 'easy' },
+  { latin: 'bojog', meaning: 'bojog / monyet', category: 'Hewan', difficulty: 'easy' },
+  { latin: 'lelipi', meaning: 'lelipi / ular', category: 'Hewan', difficulty: 'medium' },
+  { latin: 'penyu', meaning: 'penyu / kura-kura laut', category: 'Hewan', difficulty: 'medium' },
+
+  // Makanan (food)
+  { latin: 'poh', meaning: 'poh / mangga', category: 'Makanan', difficulty: 'easy' },
+  { latin: 'gedang', meaning: 'gedang / pepaya', category: 'Makanan', difficulty: 'easy' },
+  { latin: 'juuk', meaning: 'juuk / jeruk', category: 'Makanan', difficulty: 'easy' },
+  { latin: 'jaja', meaning: 'jaja / kue tradisional', category: 'Makanan', difficulty: 'easy' },
+  { latin: 'bubuh', meaning: 'bubuh / bubur', category: 'Makanan', difficulty: 'easy' },
+  { latin: 'tipat', meaning: 'tipat / ketupat', category: 'Makanan', difficulty: 'medium' },
+  { latin: 'lawar', meaning: 'lawar / masakan khas Bali', category: 'Makanan', difficulty: 'medium' },
+  { latin: 'sela', meaning: 'sela / ubi', category: 'Makanan', difficulty: 'medium' },
+
+  // Alam (nature)
+  { latin: 'bintang', meaning: 'bintang / star', category: 'Alam', difficulty: 'easy' },
+  { latin: 'ujan', meaning: 'ujan / hujan', category: 'Alam', difficulty: 'easy' },
+  { latin: 'don', meaning: 'don / daun', category: 'Alam', difficulty: 'easy' },
+  { latin: 'tukad', meaning: 'tukad / sungai', category: 'Alam', difficulty: 'medium' },
+  { latin: 'danu', meaning: 'danu / danau', category: 'Alam', difficulty: 'medium' },
+  { latin: 'alas', meaning: 'alas / hutan', category: 'Alam', difficulty: 'medium' },
+  { latin: 'bias', meaning: 'bias / pasir', category: 'Alam', difficulty: 'medium' },
+  { latin: 'punyan', meaning: 'punyan / pohon', category: 'Alam', difficulty: 'medium' },
+
+  // Tempat (places)
+  { latin: 'sanur', meaning: 'Sanur (tempat)', category: 'Tempat', difficulty: 'medium' },
+  { latin: 'denpasar', meaning: 'Denpasar / ibu kota Bali', category: 'Tempat', difficulty: 'medium' },
+  { latin: 'uluwatu', meaning: 'Uluwatu (tempat)', category: 'Tempat', difficulty: 'medium' },
+  { latin: 'batur', meaning: 'Batur / gunung & danau', category: 'Tempat', difficulty: 'medium' },
+  { latin: 'besakih', meaning: 'Besakih / pura terbesar di Bali', category: 'Tempat', difficulty: 'hard' },
+
+  // Waktu (time) & wewaran (day names)
+  { latin: 'jani', meaning: 'jani / sekarang', category: 'Waktu', difficulty: 'easy' },
+  { latin: 'mani', meaning: 'mani / besok', category: 'Waktu', difficulty: 'easy' },
+  { latin: 'dibi', meaning: 'dibi / kemarin', category: 'Waktu', difficulty: 'medium' },
+  { latin: 'tengai', meaning: 'tengai / siang', category: 'Waktu', difficulty: 'medium' },
+  { latin: 'sanja', meaning: 'sanja / sore', category: 'Waktu', difficulty: 'medium' },
+  { latin: 'redite', meaning: 'redite / hari Minggu', category: 'Waktu', difficulty: 'hard' },
+  { latin: 'soma', meaning: 'soma / hari Senin', category: 'Waktu', difficulty: 'hard' },
+  { latin: 'anggara', meaning: 'anggara / hari Selasa', category: 'Waktu', difficulty: 'hard' },
+  { latin: 'buda', meaning: 'buda / hari Rabu', category: 'Waktu', difficulty: 'hard' },
+  { latin: 'wraspati', meaning: 'wraspati / hari Kamis', category: 'Waktu', difficulty: 'hard' },
+  { latin: 'sukra', meaning: 'sukra / hari Jumat', category: 'Waktu', difficulty: 'hard' },
+  { latin: 'saniscara', meaning: 'saniscara / hari Sabtu', category: 'Waktu', difficulty: 'hard' },
+
+  // Kata kerja (verbs)
+  { latin: 'nginem', meaning: 'nginem / minum', category: 'Kata kerja', difficulty: 'medium' },
+  { latin: 'malaib', meaning: 'malaib / berlari', category: 'Kata kerja', difficulty: 'medium' },
+  { latin: 'negak', meaning: 'negak / duduk', category: 'Kata kerja', difficulty: 'medium' },
+  { latin: 'majujuk', meaning: 'majujuk / berdiri', category: 'Kata kerja', difficulty: 'medium' },
+  { latin: 'matakon', meaning: 'matakon / bertanya', category: 'Kata kerja', difficulty: 'medium' },
+  { latin: 'meli', meaning: 'meli / membeli', category: 'Kata kerja', difficulty: 'medium' },
+  { latin: 'ngadep', meaning: 'ngadep / menjual', category: 'Kata kerja', difficulty: 'medium' },
+  { latin: 'teka', meaning: 'teka / datang', category: 'Kata kerja', difficulty: 'medium' },
+  { latin: 'mulih', meaning: 'mulih / pulang', category: 'Kata kerja', difficulty: 'medium' },
+  { latin: 'maca', meaning: 'maca / membaca', category: 'Kata kerja', difficulty: 'medium' },
+  { latin: 'nulis', meaning: 'nulis / menulis', category: 'Kata kerja', difficulty: 'medium' },
+
+  // Sifat (adjectives)
+  { latin: 'liu', meaning: 'liu / banyak', category: 'Sifat', difficulty: 'medium' },
+  { latin: 'bedik', meaning: 'bedik / sedikit', category: 'Sifat', difficulty: 'medium' },
+  { latin: 'joh', meaning: 'joh / jauh', category: 'Sifat', difficulty: 'medium' },
+  { latin: 'paek', meaning: 'paek / dekat', category: 'Sifat', difficulty: 'medium' },
+  { latin: 'tegeh', meaning: 'tegeh / tinggi', category: 'Sifat', difficulty: 'medium' },
+  { latin: 'endep', meaning: 'endep / rendah', category: 'Sifat', difficulty: 'medium' },
+  { latin: 'melah', meaning: 'melah / baik', category: 'Sifat', difficulty: 'medium' },
+  { latin: 'jele', meaning: 'jele / jelek', category: 'Sifat', difficulty: 'medium' },
+  { latin: 'anyar', meaning: 'anyar / baru', category: 'Sifat', difficulty: 'medium' },
+  { latin: 'panes', meaning: 'panes / panas', category: 'Sifat', difficulty: 'medium' },
+  { latin: 'etis', meaning: 'etis / dingin', category: 'Sifat', difficulty: 'medium' },
+
+  // Budaya (culture)
+  { latin: 'gong', meaning: 'gong / gong', category: 'Budaya', difficulty: 'easy' },
+  { latin: 'kendang', meaning: 'kendang / gendang', category: 'Budaya', difficulty: 'medium' },
+  { latin: 'suling', meaning: 'suling / seruling', category: 'Budaya', difficulty: 'medium' },
+  { latin: 'keris', meaning: 'keris / senjata pusaka', category: 'Budaya', difficulty: 'medium' },
+  { latin: 'udeng', meaning: 'udeng / ikat kepala', category: 'Budaya', difficulty: 'medium' },
+  { latin: 'kamen', meaning: 'kamen / kain bawahan', category: 'Budaya', difficulty: 'medium' },
+  { latin: 'rindik', meaning: 'rindik / musik bambu', category: 'Budaya', difficulty: 'hard' },
+
+  // Agama (religion)
+  { latin: 'dewata', meaning: 'dewata / para dewa', category: 'Agama', difficulty: 'hard' },
+  { latin: 'acintya', meaning: 'Acintya / wujud tertinggi Tuhan', category: 'Agama', difficulty: 'hard' },
+  { latin: 'sanghyang', meaning: 'sanghyang / gelar dewata', category: 'Agama', difficulty: 'hard' },
+  { latin: 'taksu', meaning: 'taksu / karisma spiritual', category: 'Agama', difficulty: 'hard' },
+  { latin: 'leak', meaning: 'leak / ilmu hitam mitologi', category: 'Agama', difficulty: 'hard' },
+  { latin: 'rangda', meaning: 'Rangda / ratu leak', category: 'Agama', difficulty: 'hard' },
+  { latin: 'trisandya', meaning: 'trisandya / doa harian Hindu Bali', category: 'Agama', difficulty: 'hard' },
+  { latin: 'padmasana', meaning: 'padmasana / tempat pemujaan', category: 'Agama', difficulty: 'hard' },
+
+  // Filosofi (philosophy)
+  { latin: 'atman', meaning: 'atman / jiwa', category: 'Filosofi', difficulty: 'hard' },
+  { latin: 'ahimsa', meaning: 'ahimsa / tanpa kekerasan', category: 'Filosofi', difficulty: 'hard' },
+  { latin: 'satya', meaning: 'satya / kejujuran', category: 'Filosofi', difficulty: 'hard' },
+  { latin: 'trimurti', meaning: 'trimurti / tiga dewa utama', category: 'Filosofi', difficulty: 'hard' },
+
+  // Sastra (literature)
+  { latin: 'satua', meaning: 'satua / dongeng', category: 'Sastra', difficulty: 'hard' },
+  { latin: 'geguritan', meaning: 'geguritan / puisi tradisional', category: 'Sastra', difficulty: 'hard' },
+  { latin: 'pupuh', meaning: 'pupuh / bentuk puisi tembang', category: 'Sastra', difficulty: 'hard' },
+  { latin: 'usada', meaning: 'usada / naskah pengobatan', category: 'Sastra', difficulty: 'hard' },
 ]

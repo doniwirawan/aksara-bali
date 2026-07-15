@@ -24,6 +24,27 @@ import {
     Zap
 } from 'lucide-react'
 import LatinBalineseConverter from '../components/LatinBalineseConverter'
+import PageTour from '../components/PageTour'
+
+const HOME_TOUR = [
+  { title: { id: 'Selamat datang! 👋', en: 'Welcome! 👋' },
+    desc: { id: 'Ini konverter aksara Bali — ubah tulisan Latin jadi aksara Bali langsung di browser. Ikuti tur singkat ini biar tahu cara pakainya.', en: 'This is the Balinese script converter — turn Latin text into Aksara Bali right in your browser. Take this quick tour to see how it works.' } },
+  { element: '[data-tour="conv-input"]',
+    title: { id: 'Ketik di sini', en: 'Type here' },
+    desc: { id: 'Tulis teks Latin apa saja di kotak ini — misalnya namamu. Konversinya jalan otomatis sambil kamu mengetik.', en: 'Write any Latin text in this box — your name, for example. It converts automatically as you type.' } },
+  { element: '[data-tour="conv-output"]',
+    title: { id: 'Hasil aksara Bali', en: 'Balinese script result' },
+    desc: { id: 'Hasilnya muncul di sini. Kamu bisa salin, unduh, atau dengar cara bacanya.', en: 'The result appears here. You can copy it, download it, or listen to how it reads.' } },
+  { element: '[data-tour="conv-switch"]',
+    title: { id: 'Balik arahnya', en: 'Switch direction' },
+    desc: { id: 'Tombol ini membalik arah konversi: dari aksara Bali kembali ke Latin.', en: 'This button reverses the conversion: from Balinese script back to Latin.' } },
+  { element: '[data-tour="conv-listen"]',
+    title: { id: 'Dengar pengucapannya', en: 'Hear the pronunciation' },
+    desc: { id: 'Klik untuk mendengar kata-katamu diucapkan.', en: 'Click to hear your words spoken aloud.' } },
+  { element: 'a[href="/practice"]',
+    title: { id: 'Lanjut belajar', en: 'Keep learning' },
+    desc: { id: 'Sudah bisa mengonversi? Buka halaman Latihan untuk kuis berlevel, kanvas menulis, dan papan ketik aksara.', en: 'Ready for more? Open the Practice page for leveled quizzes, a writing canvas, and the script keyboard.' } },
+]
 import LanguageSwitcher, { translations } from '../components/LanguageSwitcher'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -371,6 +392,7 @@ export default function Home({ locale, setLocale }) {
 
                 <main className="pb-4">
                     <LatinBalineseConverter locale={locale} darkMode={darkMode} />
+                    <PageTour pageKey="home" locale={locale} steps={HOME_TOUR} />
 
                     {/* Get the Android app */}
                     <div style={{ maxWidth: 900, margin: '0 auto', padding: '24px 16px 0', fontFamily: 'Inter, system-ui, sans-serif' }}>
