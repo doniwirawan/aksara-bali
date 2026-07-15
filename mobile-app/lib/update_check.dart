@@ -5,6 +5,13 @@ import 'package:http/http.dart' as http;
 /// Also shown in the About footer.
 const kAppVersion = '1.5.1';
 
+/// True for builds distributed through Google Play. Play forbids an app from
+/// updating itself or installing APKs sourced from outside Play, so the update
+/// check below must not ship in the AAB. Build it with:
+///   flutter build appbundle --dart-define=PLAY_STORE=true
+/// The GitHub-distributed APK is built without the flag and keeps the updater.
+const kPlayStoreBuild = bool.fromEnvironment('PLAY_STORE');
+
 /// Latest release of the public APK repo. The app is offline-by-default, so this
 /// is only ever fetched when the user taps "Check for updates" in About.
 const _releasesApi =

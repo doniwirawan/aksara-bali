@@ -67,8 +67,10 @@ class AboutScreen extends StatelessWidget {
 
         // Footer
         Center(child: Text('Version $kAppVersion', style: TextStyle(color: kTextMuted, fontSize: 12, fontWeight: FontWeight.w600))),
-        const SizedBox(height: 12),
-        const _UpdateCheckButton(),
+        if (!kPlayStoreBuild) ...[
+          const SizedBox(height: 12),
+          const _UpdateCheckButton(),
+        ],
         const SizedBox(height: 14),
         Center(child: Text(tr(context, 'Free educational tool for preserving Aksara Bali', 'Alat edukasi gratis untuk melestarikan Aksara Bali'),
             textAlign: TextAlign.center, style: TextStyle(color: kTextMuted, fontSize: 12, height: 1.4))),
