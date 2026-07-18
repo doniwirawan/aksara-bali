@@ -18,7 +18,27 @@ Latin word ──(app converter)──▶ Balinese Unicode ──(text2image + f
 
 ---
 
-## 0. Prerequisites
+## Easiest: one command (Docker) ⭐
+
+If you have Docker, you don't need to install any Tesseract tooling or fonts — the
+image (`scripts/ocr/Dockerfile`) ships every training binary and three Balinese fonts:
+
+```bash
+bash scripts/ocr/train-docker.sh
+```
+
+This generates the corpus, renders it with all fonts, trains a from-scratch LSTM
+model, runs a smoke test, and writes `public/tessdata/ban.traineddata`. Commit that
+file and the model auto-loads for every user — no per-user setup.
+
+Tunables: `LINES=6000 MAX_ITER=40000 bash scripts/ocr/train-docker.sh`
+(from-scratch Brahmic training needs tens of thousands of iterations; ~20 iters/sec
+on CPU). The manual steps below are the same pipeline if you prefer running it
+natively.
+
+---
+
+## 0. Prerequisites (manual / native route)
 
 You need the **Tesseract training tools** (not just the runtime) and a **Balinese font
 that shapes correctly**. No GPU required — LSTM training runs on CPU.

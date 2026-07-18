@@ -1,0 +1,2 @@
+# Trained OCR model is binary — never apply line-ending normalization.
+*.traineddata binary

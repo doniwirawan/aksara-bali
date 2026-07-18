@@ -90,7 +90,12 @@ function main() {
     while (rows.length < target && guard < target * 50) {
       guard++
       const latin = makeLine(words)
-      const bali = convertLatinToBalinese(latin)
+      // Convert each word separately and join with a real space. The converter
+      // turns spaces into zero-width U+200B, which text2image merges into
+      // grapheme clusters the LSTM encoder can't encode (→ every multi-word line
+      // gets skipped in training). A normal space renders a clean gap, trains
+      // fine, and balineseToLatin maps it back to a space.
+      const bali = latin.split(' ').map((w) => convertLatinToBalinese(w)).join(' ')
       if (!bali.trim() || seen.has(bali)) continue // skip empties + duplicates
       seen.add(bali)
       rows.push({ latin, bali })
@@ -99,9 +104,7 @@ function main() {
     const evalRows = rows.slice(0, N_EVAL)
     const trainRows = rows.slice(N_EVAL)
 
-    // text2image expects one text line per row. It converts the app's
-    // zero-width word separators (U+200B) into nothing; keep them so the
-    // rendered script matches the site exactly.
+    // text2image expects one text line per row.
     const toText = (r) => r.map((x) => x.bali).join('\n') + '\n'
 
     writeFileSync(join(OUT, 'ban.training_text'), toText(trainRows), 'utf8')
