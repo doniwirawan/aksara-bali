@@ -63,9 +63,15 @@ This writes to `scripts/ocr/out/`:
 - `ban.eval_text` — held-out lines for measuring accuracy
 - `ban.reference.tsv` — `latin <TAB> balinese`, for eyeballing correctness
 
-Want more/other words? Create `scripts/ocr/wordlist.txt` (one Latin word or phrase per
-line, `#` for comments) and re-run — it overrides the built-in vocabulary. More varied
-text = a more robust model.
+The word source is `scripts/ocr/wordlist.txt` — a curated corpus of ~750 Balinese +
+Indonesian words plus a Sanskrit/Kawi section that exercises every trainable glyph
+(verified: all 53 reachable base aksara, conjuncts, vowel signs, virama and numerals
+appear). Edit it (one Latin word or phrase per line, `#` for comments) to add your own
+vocabulary and re-run. If the file is deleted, the generator falls back to the app's
+built-in `QUIZ_WORDS`. More varied text = a more robust model.
+
+> Note: the converter never emits the `nga` base (ᬗ) or the long-vowel signs
+> (ᬵ/ᬷ/ᬹ), so synthetic data can't teach them — fine-tune on real photos to add these.
 
 ---
 
