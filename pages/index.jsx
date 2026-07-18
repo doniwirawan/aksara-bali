@@ -21,7 +21,8 @@ import {
     FileText,
     LayoutDashboard,
     HelpCircle,
-    Zap
+    Zap,
+    ScanText
 } from 'lucide-react'
 import LatinBalineseConverter from '../components/LatinBalineseConverter'
 import PageTour from '../components/PageTour'
@@ -438,6 +439,13 @@ export default function Home({ locale, setLocale }) {
                         </p>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '14px' }}>
                             {[
+                                {
+                                    href: '/read',
+                                    icon: ScanText,
+                                    title: locale === 'id' ? 'Baca dari Foto' : 'Read from Photo',
+                                    desc: locale === 'id' ? 'Potret aksara Bali dan baca hasilnya dalam Latin — OCR langsung di browser.' : 'Snap Balinese script and read it back in Latin — OCR right in your browser.',
+                                    color: '#0dcaf0',
+                                },
                                 {
                                     href: '/practice',
                                     icon: Target,

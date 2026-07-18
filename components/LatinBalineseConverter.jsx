@@ -20,11 +20,13 @@ import {
     AlignCenter,
     AlignRight,
     Image as ImageIcon,
-    Volume2
+    Volume2,
+    ScanText
 } from 'lucide-react'
 import { authedFetch } from '../utils/supabase'
 import { trackEvent } from '../utils/analytics'
 import { speak, canSpeak } from '../utils/speak'
+import OcrPanel from './OcrPanel'
 
 const translations = {
     en: {
@@ -184,6 +186,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     const [copySuccessRight, setCopySuccessRight] = useState(false)
     const [transliterationMode, setTransliterationMode] = useState('auto')
     const [isReverseMode, setIsReverseMode] = useState(false)
+    const [showOcr, setShowOcr] = useState(false)
 
     // Word-art styling + PNG export (Latin → Balinese)
     const [styleFontSize, setStyleFontSize] = useState(64)
@@ -1304,6 +1307,32 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                                             ))}
                                         </div>
                                     )}
+                                    {/* OCR: read Aksara Bali from a photo into the reverse-mode input */}
+                                    <div className="mt-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowOcr(v => !v)}
+                                            className="btn btn-sm btn-outline-info d-flex align-items-center gap-2"
+                                            aria-expanded={showOcr}
+                                        >
+                                            <ScanText size={15} />
+                                            {locale === 'id' ? 'Baca dari foto' : 'Read from photo'}
+                                        </button>
+                                        {showOcr && (
+                                            <div className="mt-2">
+                                                <OcrPanel
+                                                    locale={locale}
+                                                    darkMode={darkMode}
+                                                    onResult={(res) => {
+                                                        if (res?.balinese) {
+                                                            setIsReverseMode(true)
+                                                            setBalineseText(res.balinese)
+                                                        }
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
                                     <div className="mt-3 d-flex gap-2">
                                         <button
                                             onClick={handleCopyLeft}

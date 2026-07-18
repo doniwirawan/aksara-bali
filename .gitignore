@@ -37,6 +37,9 @@ yarn-error.log*
 # migration scripts (contain secrets)
 /scripts/migrate.js
 
+# OCR training artefacts (regenerate with scripts/ocr/generate-training-data.mjs)
+/scripts/ocr/out/
+
 # vercel
 .vercel
 
