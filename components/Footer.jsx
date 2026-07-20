@@ -51,7 +51,7 @@ export default function Footer({ darkMode, locale }) {
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', flexWrap: 'wrap' }}>
               <a
-                href="https://play.google.com/store/apps/details?id=xyz.doniwirawan.aksara_bali_mobile"
+                href="https://play.google.com/apps/internaltest/4700728977787153239"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="footer-play-store"

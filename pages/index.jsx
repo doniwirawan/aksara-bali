@@ -417,7 +417,7 @@ export default function Home({ locale, setLocale }) {
                                 </div>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                                <a href="https://play.google.com/store/apps/details?id=xyz.doniwirawan.aksara_bali_mobile" target="_blank" rel="noopener noreferrer"
+                                <a href="https://play.google.com/apps/internaltest/4700728977787153239" target="_blank" rel="noopener noreferrer"
                                     data-track="landing-play-store"
                                     style={{
                                         display: 'inline-flex', alignItems: 'center', gap: '8px',
