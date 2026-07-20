@@ -45,8 +45,10 @@ A fully **offline** Android companion — convert, practice, and learn Aksara Ba
 
 > **Play test track** — open
 > [this link](https://play.google.com/apps/internaltest/4700728977787153239) on your
-> Android phone, tap **"Become a tester"**, then install from Play as usual. Make
-> sure the Play Store is signed in to the Google account you opened the link with.
+> Android phone and install from Play as usual. The test is invite-only: your Google
+> account has to be on the tester list first, so [open an issue](https://github.com/doniwirawan/aksara-bali/issues)
+> or message me with the Gmail you use on the Play Store and I'll add you.
+> Otherwise, grab the APK below.
 >
 > Sideload instead: enable **"Install unknown apps"**, then open the downloaded APK.
 > The APK build is debug-signed; the Play build is Play-signed.
