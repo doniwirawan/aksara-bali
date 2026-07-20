@@ -12,6 +12,13 @@ https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile
 
 Replace `<LINK>` below with it.
 
+> **Internal testing link** (open to anyone, installs immediately, no 14-day clock):
+> <https://play.google.com/apps/internaltest/4700728977787153239>
+>
+> Use this for casual "just try it" shares. It does **not** count toward the
+> 12-testers-for-14-days closed-testing requirement — only opt-ins through the
+> **closed** track link above do.
+
 ---
 
 ## The two things testers always get wrong

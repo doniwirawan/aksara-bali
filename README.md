@@ -3,7 +3,7 @@
 A full-featured web app for learning and converting Balinese script (Aksara Bali). Built with Next.js and Supabase.
 
 🌐 **Live demo**: [transliterasi-latin-ke-bahasa-bali.vercel.app](https://transliterasi-latin-ke-bahasa-bali.vercel.app)
-📱 **Android app**: [Download the latest APK](https://github.com/doniwirawan/aksara-bali/releases/latest)
+📱 **Android app**: [Join the Play Store test](https://play.google.com/apps/internaltest/4700728977787153239) · [Download the latest APK](https://github.com/doniwirawan/aksara-bali/releases/latest)
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green?style=flat&logo=supabase)
@@ -29,6 +29,8 @@ A fully **offline** Android companion — convert, practice, and learn Aksara Ba
 <p align="center"><sub>Converter · Writing practice · Leveled quizzes · Aksara reference · About</sub></p>
 
 <p align="center">
+  <a href="https://play.google.com/apps/internaltest/4700728977787153239"><b>▶️ Try it on Google Play (test track)</b></a>
+  &nbsp;·&nbsp;
   <a href="https://github.com/doniwirawan/aksara-bali/releases/latest"><b>⬇️ Download the latest APK</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/doniwirawan/aksara-bali/releases/tag/v1.1.0">v1.1.0 release notes</a>
@@ -41,8 +43,13 @@ A fully **offline** Android companion — convert, practice, and learn Aksara Ba
 - **Aksara reference** and word-art styling with transparent PNG export
 - Light/dark themes (Material 3) and bundled **Noto Sans Balinese** font
 
-> Sideload: enable **"Install unknown apps"**, then open the downloaded APK. The
-> current build is debug-signed; a future Play Store release will be Play-signed.
+> **Play test track** — open
+> [this link](https://play.google.com/apps/internaltest/4700728977787153239) on your
+> Android phone, tap **"Become a tester"**, then install from Play as usual. Make
+> sure the Play Store is signed in to the Google account you opened the link with.
+>
+> Sideload instead: enable **"Install unknown apps"**, then open the downloaded APK.
+> The APK build is debug-signed; the Play build is Play-signed.
 
 ---
 

@@ -49,19 +49,34 @@ export default function Footer({ darkMode, locale }) {
                 ? 'Alat edukasi gratis untuk melestarikan aksara Bali tradisional dengan teknologi modern.'
                 : 'Free educational tool to preserve traditional Balinese script with modern technology.'}
             </p>
-            <a
-              href="https://github.com/doniwirawan/aksara-bali/releases/latest"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-track="footer-download-apk"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '7px', marginTop: '16px',
-                padding: '9px 16px', borderRadius: '10px', background: '#0d6efd', color: '#fff',
-                textDecoration: 'none', fontSize: '13px', fontWeight: 600,
-              }}
-            >
-              <Download size={16} /> {id ? 'Unduh APK Android' : 'Download Android APK'}
-            </a>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', flexWrap: 'wrap' }}>
+              <a
+                href="https://play.google.com/apps/internaltest/4700728977787153239"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="footer-play-test"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '7px',
+                  padding: '9px 16px', borderRadius: '10px', background: '#0d6efd', color: '#fff',
+                  textDecoration: 'none', fontSize: '13px', fontWeight: 600,
+                }}
+              >
+                {id ? 'Coba di Google Play' : 'Try on Google Play'}
+              </a>
+              <a
+                href="https://github.com/doniwirawan/aksara-bali/releases/latest"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="footer-download-apk"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '7px',
+                  padding: '9px 16px', borderRadius: '10px', border: `1px solid ${mutedColor}`,
+                  color: textColor, textDecoration: 'none', fontSize: '13px', fontWeight: 600,
+                }}
+              >
+                <Download size={16} /> {id ? 'Unduh APK' : 'Download APK'}
+              </a>
+            </div>
           </div>
 
           {/* Navigation */}

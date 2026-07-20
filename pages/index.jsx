@@ -416,16 +416,28 @@ export default function Home({ locale, setLocale }) {
                                     </div>
                                 </div>
                             </div>
-                            <a href="https://github.com/doniwirawan/aksara-bali/releases/latest" target="_blank" rel="noopener noreferrer"
-                                data-track="landing-download-apk"
-                                style={{
-                                    display: 'inline-flex', alignItems: 'center', gap: '8px',
-                                    background: '#0d6efd', color: '#fff', textDecoration: 'none',
-                                    padding: '12px 22px', borderRadius: '12px', fontWeight: '600', fontSize: '14px',
-                                    boxShadow: '0 2px 8px rgba(13,110,253,0.3)',
-                                }}>
-                                <Download size={18} /> {locale === 'id' ? 'Unduh APK' : 'Download APK'}
-                            </a>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                                <a href="https://play.google.com/apps/internaltest/4700728977787153239" target="_blank" rel="noopener noreferrer"
+                                    data-track="landing-play-test"
+                                    style={{
+                                        display: 'inline-flex', alignItems: 'center', gap: '8px',
+                                        background: '#0d6efd', color: '#fff', textDecoration: 'none',
+                                        padding: '12px 22px', borderRadius: '12px', fontWeight: '600', fontSize: '14px',
+                                        boxShadow: '0 2px 8px rgba(13,110,253,0.3)',
+                                    }}>
+                                    <Smartphone size={18} /> {locale === 'id' ? 'Coba di Google Play' : 'Try on Google Play'}
+                                </a>
+                                <a href="https://github.com/doniwirawan/aksara-bali/releases/latest" target="_blank" rel="noopener noreferrer"
+                                    data-track="landing-download-apk"
+                                    style={{
+                                        display: 'inline-flex', alignItems: 'center', gap: '8px',
+                                        background: 'transparent', color: '#0d6efd', textDecoration: 'none',
+                                        padding: '12px 22px', borderRadius: '12px', fontWeight: '600', fontSize: '14px',
+                                        border: '1px solid #0d6efd',
+                                    }}>
+                                    <Download size={18} /> {locale === 'id' ? 'Unduh APK' : 'Download APK'}
+                                </a>
+                            </div>
                         </div>
                     </div>
 
