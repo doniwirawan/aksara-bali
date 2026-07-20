@@ -3,21 +3,20 @@
 Goal: **≥12 testers opted in and continuously enrolled for 14 days**, who
 actually *use* the app. Recruit **14–16** to absorb drop-out.
 
-Before sending anything, get the opt-in link from Play Console
-(**Closed testing → Testers → Copy link**). It looks like:
+The links testers need:
 
-```
-https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile
-```
+| | |
+|---|---|
+| **Opt-in link** (send them this) | <https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile> |
+| **Store listing** (after opting in) | <https://play.google.com/store/apps/details?id=xyz.doniwirawan.aksara_bali_mobile> |
 
-Replace `<LINK>` below with it.
+`<LINK>` in the messages below is the opt-in link.
 
-> **Internal testing link** — <https://play.google.com/apps/internaltest/4700728977787153239>
->
-> Installs immediately with no 14-day clock, but the tester's Google account must
-> already be on the **internal** testers list in Play Console (max 100 accounts).
-> Good for quick demos. It does **not** count toward the 12-testers-for-14-days
-> requirement — only opt-ins through the **closed** track link above do.
+> There is also an **internal** testing track
+> (<https://play.google.com/apps/internaltest/4700728977787153239>), which installs
+> immediately for accounts on the internal list. Its testers do **not** count
+> toward the 12-testers-for-14-days requirement — only opt-ins through the
+> **closed** track link above do.
 
 ---
 
@@ -123,7 +122,7 @@ Ranked by how fast they actually convert, not by audience size.
 >
 > **1.** Buka link ini di HP Android kamu (pastikan Play Store-nya login pakai
 > Gmail yang tadi kamu kasih):
-> <LINK>
+> https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile
 >
 > **2.** Tap **"Become a tester"** / **"Jadi penguji"**.
 >

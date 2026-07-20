@@ -138,11 +138,12 @@ green before Play lets you roll out even a closed test:
    (looks like `https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile`).
    **This is the link you send testers.** It is the only way they can join.
 
-> The **internal testing** track has its own share link —
-> <https://play.google.com/apps/internaltest/4700728977787153239> — which installs
-> right away for accounts on the internal testers list (max 100). Handy for demos,
-> but internal-track testers do **not** count toward the 14-day closed-testing
-> requirement.
+> **The live links for this app:**
+> - Closed-test opt-in — <https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile>
+> - Store listing — <https://play.google.com/store/apps/details?id=xyz.doniwirawan.aksara_bali_mobile>
+> - Internal track — <https://play.google.com/apps/internaltest/4700728977787153239>
+>   (installs right away for accounts on the internal list, but those testers do
+>   **not** count toward the 14-day requirement)
 
 ### 4d. The 14 days
 - The clock starts when a tester **opts in via the link**, not when you add their
