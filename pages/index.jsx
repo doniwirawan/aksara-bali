@@ -417,15 +417,15 @@ export default function Home({ locale, setLocale }) {
                                 </div>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                                <a href="https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile" target="_blank" rel="noopener noreferrer"
-                                    data-track="landing-play-test"
+                                <a href="https://play.google.com/store/apps/details?id=xyz.doniwirawan.aksara_bali_mobile" target="_blank" rel="noopener noreferrer"
+                                    data-track="landing-play-store"
                                     style={{
                                         display: 'inline-flex', alignItems: 'center', gap: '8px',
                                         background: '#0d6efd', color: '#fff', textDecoration: 'none',
                                         padding: '12px 22px', borderRadius: '12px', fontWeight: '600', fontSize: '14px',
                                         boxShadow: '0 2px 8px rgba(13,110,253,0.3)',
                                     }}>
-                                    <Smartphone size={18} /> {locale === 'id' ? 'Coba di Google Play' : 'Try on Google Play'}
+                                    <Smartphone size={18} /> {locale === 'id' ? 'Dapatkan di Google Play' : 'Get it on Google Play'}
                                 </a>
                                 <a href="https://github.com/doniwirawan/aksara-bali/releases/latest" target="_blank" rel="noopener noreferrer"
                                     data-track="landing-download-apk"
