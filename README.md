@@ -3,7 +3,7 @@
 A full-featured web app for learning and converting Balinese script (Aksara Bali). Built with Next.js and Supabase.
 
 🌐 **Live demo**: [transliterasi-latin-ke-bahasa-bali.vercel.app](https://transliterasi-latin-ke-bahasa-bali.vercel.app)
-📱 **Android app**: [Join the Play Store test](https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile) · [Play Store listing](https://play.google.com/store/apps/details?id=xyz.doniwirawan.aksara_bali_mobile) · [Download the latest APK](https://github.com/doniwirawan/aksara-bali/releases/latest)
+📱 **Android app**: [Get it on Google Play](https://play.google.com/store/apps/details?id=xyz.doniwirawan.aksara_bali_mobile) · [Download the latest APK](https://github.com/doniwirawan/aksara-bali/releases/latest)
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green?style=flat&logo=supabase)
@@ -29,7 +29,7 @@ A fully **offline** Android companion — convert, practice, and learn Aksara Ba
 <p align="center"><sub>Converter · Writing practice · Leveled quizzes · Aksara reference · About</sub></p>
 
 <p align="center">
-  <a href="https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile"><b>▶️ Try it on Google Play</b></a>
+  <a href="https://play.google.com/store/apps/details?id=xyz.doniwirawan.aksara_bali_mobile"><b>▶️ Get it on Google Play</b></a>
   &nbsp;·&nbsp;
   <a href="https://github.com/doniwirawan/aksara-bali/releases/latest"><b>⬇️ Download the latest APK</b></a>
   &nbsp;·&nbsp;
@@ -43,13 +43,8 @@ A fully **offline** Android companion — convert, practice, and learn Aksara Ba
 - **Aksara reference** and word-art styling with transparent PNG export
 - Light/dark themes (Material 3) and bundled **Noto Sans Balinese** font
 
-> **Play test track** — open
-> [the opt-in link](https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile)
-> on your Android phone, tap **"Become a tester"**, then install from the
+> **Google Play** — install from the
 > [Play Store listing](https://play.google.com/store/apps/details?id=xyz.doniwirawan.aksara_bali_mobile).
-> Anyone can join — just make sure the Play Store is signed in to the same Google
-> account you opened the link with. It can take 10–20 minutes for the listing to
-> appear after you opt in.
 >
 > Sideload instead: enable **"Install unknown apps"**, then open the downloaded APK.
 > The APK build is debug-signed; the Play build is Play-signed.

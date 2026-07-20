@@ -51,17 +51,17 @@ export default function Footer({ darkMode, locale }) {
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', flexWrap: 'wrap' }}>
               <a
-                href="https://play.google.com/apps/testing/xyz.doniwirawan.aksara_bali_mobile"
+                href="https://play.google.com/store/apps/details?id=xyz.doniwirawan.aksara_bali_mobile"
                 target="_blank"
                 rel="noopener noreferrer"
-                data-track="footer-play-test"
+                data-track="footer-play-store"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: '7px',
                   padding: '9px 16px', borderRadius: '10px', background: '#0d6efd', color: '#fff',
                   textDecoration: 'none', fontSize: '13px', fontWeight: 600,
                 }}
               >
-                {id ? 'Coba di Google Play' : 'Try on Google Play'}
+                {id ? 'Dapatkan di Google Play' : 'Get it on Google Play'}
               </a>
               <a
                 href="https://github.com/doniwirawan/aksara-bali/releases/latest"
