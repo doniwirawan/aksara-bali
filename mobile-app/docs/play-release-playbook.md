@@ -12,7 +12,7 @@ App facts (keep these consistent everywhere):
 |---|---|
 | App name | Aksara Bali Converter |
 | Package | `xyz.doniwirawan.aksara_bali_mobile` |
-| Version | 1.5.1 (versionCode 7) |
+| Version | 1.5.2 (versionCode 8) |
 | Website | https://aksarabali.doniwirawan.xyz |
 | Privacy policy | https://aksarabali.doniwirawan.xyz/privacy |
 | Data collected | None — app is fully offline, no accounts |
@@ -46,7 +46,7 @@ flutter build apk --release --split-per-abi   # GitHub Releases build, updater i
 ## 2. Pre-upload checklist
 
 - [x] Release signed by the upload key (`android/key.properties` present, gitignored)
-- [x] `targetSdk` 35 — meets Play's requirement for new apps
+- [x] `targetSdk` 36 — meets Play's requirement (deadline 31 Aug 2026)
 - [x] `minSdk` 24 (needed by `flutter_tts`)
 - [x] No `INTERNET`-dependent features in the Play build (updater compiled out)
 - [ ] **Back up `android/app/upload-keystore.jks`** somewhere off this machine.
