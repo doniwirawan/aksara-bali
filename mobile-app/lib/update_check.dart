@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 /// Installed app version. Bump alongside `version:` in pubspec.yaml on release.
 /// Also shown in the About footer.
-const kAppVersion = '1.5.1';
+const kAppVersion = '1.5.2';
 
 /// True for builds distributed through Google Play. Play forbids an app from
 /// updating itself or installing APKs sourced from outside Play, so the update
