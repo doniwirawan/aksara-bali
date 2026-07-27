@@ -1,7 +1,8 @@
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../converter.dart';
 import '../words_data.dart';
 import '../theme.dart';
@@ -72,26 +73,7 @@ class _WriteScreenState extends State<WriteScreen> {
     if (size == null || _strokes.isEmpty) return;
     setState(() => _checking = true);
 
-    final balinese = latinToBalinese(_word['latin'] ?? '');
-    final w = size.width.round();
-    final h = size.height.round();
-
-    final userBytes = await _rasterize(w, h, (canvas) {
-      _StrokePainter(_strokes).paint(canvas, size);
-    });
-    final refBytes = await _rasterize(w, h, (canvas) {
-      final fontSize = min(h * 0.65, w * 0.45);
-      final tp = TextPainter(
-        text: TextSpan(
-          text: balinese,
-          style: TextStyle(fontFamily: kBaliFont, fontSize: fontSize, color: Colors.black),
-        ),
-        textDirection: TextDirection.ltr,
-      )..layout();
-      tp.paint(canvas, Offset((w - tp.width) / 2, (h - tp.height) / 2));
-    });
-
-    final result = _score(userBytes, refBytes, w, h);
+    final result = await _scoreStrokes(size, _strokes, latinToBalinese(_word['latin'] ?? ''));
     if (mounted) setState(() { _result = result; _checking = false; });
 
     // If the writing is good: record progress and move to the next word.
@@ -104,14 +86,25 @@ class _WriteScreenState extends State<WriteScreen> {
     }
   }
 
-  // Render [draw] onto an offscreen canvas and return its raw RGBA pixels.
-  Future<Uint8List> _rasterize(int w, int h, void Function(Canvas) draw) async {
-    final recorder = ui.PictureRecorder();
-    draw(Canvas(recorder));
-    final image = await recorder.endRecording().toImage(w, h);
-    final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
-    image.dispose();
-    return data!.buffer.asUint8List();
+  // Open the distraction-free full-screen canvas. Returns true when the word was
+  // solved in there, so we move straight on to the next one.
+  Future<void> _openFullscreen() async {
+    final solved = await Navigator.of(context).push<bool>(MaterialPageRoute(
+      fullscreenDialog: true,
+      builder: (_) => _FullscreenWritePage(
+        strokes: _strokes,
+        balinese: latinToBalinese(_word['latin'] ?? ''),
+        latin: _word['latin'] ?? '',
+        showGuide: _showGuide,
+      ),
+    ));
+    if (!mounted) return;
+    // The strokes were edited in there, so any score shown here is stale.
+    if (solved == true) {
+      _newWord();
+    } else {
+      setState(() => _result = null);
+    }
   }
 
   @override
@@ -139,37 +132,15 @@ class _WriteScreenState extends State<WriteScreen> {
       ]),
     );
 
-    final canvas = Container(
+    final canvas = _DrawCanvas(
       key: _canvasKey,
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: kBorder),
-      ),
-      child: Stack(children: [
-        if (_showGuide)
-          Align(
-            alignment: const Alignment(0, -0.28), // nudge the guide a bit higher
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(balinese, maxLines: 1, textAlign: TextAlign.center,
-                    textHeightBehavior: const TextHeightBehavior(
-                        applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
-                    style: TextStyle(fontFamily: kBaliFont, fontSize: 120, color: Colors.black.withValues(alpha: 0.10))),
-              ),
-            ),
-          ),
-        GestureDetector(
-          onPanStart: (d) => setState(() { _result = null; _strokes.add([d.localPosition]); }),
-          onPanUpdate: (d) => setState(() {
-            if (_strokes.isNotEmpty) _strokes.last.add(d.localPosition);
-          }),
-          child: CustomPaint(painter: _StrokePainter(_strokes), size: Size.infinite),
-        ),
-      ]),
+      strokes: _strokes,
+      guide: balinese,
+      showGuide: _showGuide,
+      onStart: (p) => setState(() { _result = null; _strokes.add([p]); }),
+      onUpdate: (p) => setState(() {
+        if (_strokes.isNotEmpty) _strokes.last.add(p);
+      }),
     );
 
     final undoBtn = OutlinedButton.icon(
@@ -188,12 +159,31 @@ class _WriteScreenState extends State<WriteScreen> {
       icon: Icon(_showGuide ? Icons.visibility : Icons.visibility_off, size: 18),
       label: FittedBox(fit: BoxFit.scaleDown, child: Text(tr(context, 'Guide', 'Panduan'), maxLines: 1, softWrap: false)),
     );
+    final fullscreenLabel = tr(context, 'Full screen', 'Layar penuh');
+    final fullscreenIconBtn = Tooltip(
+      message: fullscreenLabel,
+      child: OutlinedButton(
+        onPressed: _openFullscreen,
+        style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          minimumSize: const Size(46, 46),
+        ),
+        child: const Icon(Icons.fullscreen, size: 22),
+      ),
+    );
+    final fullscreenBtn = OutlinedButton.icon(
+      onPressed: _openFullscreen,
+      icon: const Icon(Icons.fullscreen, size: 18),
+      label: FittedBox(fit: BoxFit.scaleDown, child: Text(fullscreenLabel, maxLines: 1, softWrap: false)),
+    );
     final controls = Row(children: [
       Expanded(child: undoBtn),
       const SizedBox(width: 10),
       Expanded(child: clearBtn),
       const SizedBox(width: 10),
       Expanded(child: guideBtn),
+      const SizedBox(width: 10),
+      fullscreenIconBtn,
     ]);
 
     final checkButton = FilledButton.icon(
@@ -293,6 +283,8 @@ class _WriteScreenState extends State<WriteScreen> {
                   clearBtn,
                   const SizedBox(height: 8),
                   guideBtn,
+                  const SizedBox(height: 8),
+                  fullscreenBtn,
                   const SizedBox(height: 10),
                   checkButton,
                   const SizedBox(height: 10),
@@ -306,7 +298,10 @@ class _WriteScreenState extends State<WriteScreen> {
         );
       }
 
-      // Portrait
+      // Portrait — size the canvas off the available height so it stays large on
+      // phones and gets properly big on tablets (the old 1.5 aspect ratio made it
+      // short and wide however much room there was).
+      final canvasH = (c.maxHeight.isFinite ? c.maxHeight * 0.52 : 360.0).clamp(240.0, 560.0);
       return SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -316,7 +311,7 @@ class _WriteScreenState extends State<WriteScreen> {
             const SizedBox(height: 12),
             modeToggle,
             const SizedBox(height: 14),
-            AspectRatio(aspectRatio: 1.5, child: canvas),
+            SizedBox(height: canvasH, child: canvas),
             const SizedBox(height: 12),
             if (_result != null) ...[_ScoreCard(_result!), const SizedBox(height: 12)],
             controls,
@@ -350,6 +345,276 @@ class _WriteScreenState extends State<WriteScreen> {
       ),
     );
   }
+}
+
+// Claims the gesture the moment a finger lands on the canvas. A plain
+// PanGestureRecognizer only wins the arena after ~36px of movement, by which
+// time the surrounding SingleChildScrollView (which claims after ~18px of
+// vertical movement) has already taken over — so vertical strokes scrolled the
+// page instead of drawing.
+class _DrawPanRecognizer extends PanGestureRecognizer {
+  @override
+  void addAllowedPointer(PointerDownEvent event) {
+    super.addAllowedPointer(event);
+    resolve(GestureDisposition.accepted);
+  }
+}
+
+// Drawing surface: faint guide glyph underneath, the user's strokes on top.
+class _DrawCanvas extends StatelessWidget {
+  const _DrawCanvas({
+    super.key,
+    required this.strokes,
+    required this.guide,
+    required this.showGuide,
+    required this.onStart,
+    required this.onUpdate,
+  });
+
+  final List<List<Offset>> strokes;
+  final String guide;
+  final bool showGuide;
+  final void Function(Offset) onStart;
+  final void Function(Offset) onUpdate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: kBorder),
+      ),
+      child: Stack(children: [
+        if (showGuide)
+          Align(
+            alignment: const Alignment(0, -0.28), // nudge the guide a bit higher
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(guide, maxLines: 1, textAlign: TextAlign.center,
+                    textHeightBehavior: const TextHeightBehavior(
+                        applyHeightToFirstAscent: false, applyHeightToLastDescent: false),
+                    style: TextStyle(fontFamily: kBaliFont, fontSize: 120, color: Colors.black.withValues(alpha: 0.10))),
+              ),
+            ),
+          ),
+        RawGestureDetector(
+          behavior: HitTestBehavior.opaque,
+          gestures: <Type, GestureRecognizerFactory>{
+            _DrawPanRecognizer: GestureRecognizerFactoryWithHandlers<_DrawPanRecognizer>(
+              _DrawPanRecognizer.new,
+              (r) {
+                r.onStart = (d) => onStart(d.localPosition);
+                r.onUpdate = (d) => onUpdate(d.localPosition);
+              },
+            ),
+          },
+          child: CustomPaint(painter: _StrokePainter(strokes), size: Size.infinite),
+        ),
+      ]),
+    );
+  }
+}
+
+// Distraction-free canvas that fills the whole screen — much easier to write on,
+// especially on tablets. Edits [strokes] in place; pops true once solved.
+class _FullscreenWritePage extends StatefulWidget {
+  const _FullscreenWritePage({
+    required this.strokes,
+    required this.balinese,
+    required this.latin,
+    required this.showGuide,
+  });
+
+  final List<List<Offset>> strokes;
+  final String balinese;
+  final String latin;
+  final bool showGuide;
+
+  @override
+  State<_FullscreenWritePage> createState() => _FullscreenWritePageState();
+}
+
+class _FullscreenWritePageState extends State<_FullscreenWritePage> {
+  final _canvasKey = GlobalKey();
+  late bool _showGuide = widget.showGuide;
+  bool _checking = false;
+  _ScoreResult? _result;
+
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    super.dispose();
+  }
+
+  Future<void> _check() async {
+    final size = _canvasKey.currentContext?.size;
+    if (size == null || widget.strokes.isEmpty) return;
+    setState(() => _checking = true);
+
+    final result = await _scoreStrokes(size, widget.strokes, widget.balinese);
+    if (!mounted) return;
+    setState(() { _result = result; _checking = false; });
+
+    if (result.isCorrect) {
+      recordDailyActivity();
+      recordWritingCorrect();
+      Future.delayed(const Duration(milliseconds: 1300), () {
+        if (mounted) Navigator.of(context).pop(true);
+      });
+    }
+  }
+
+  Widget _iconBtn(IconData icon, VoidCallback? onPressed) => OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(padding: EdgeInsets.zero, minimumSize: const Size(46, 46)),
+        child: Icon(icon, size: 20),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    final r = _result;
+    return Scaffold(
+      backgroundColor: kBg,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 6, 10, 10),
+          child: Column(children: [
+            Row(children: [
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(widget.balinese, maxLines: 1,
+                      style: TextStyle(fontFamily: kBaliFont, fontSize: 26, color: kInk, height: 1.6)),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(widget.latin, style: TextStyle(color: kMuted, fontSize: 13)),
+              IconButton(
+                tooltip: tr(context, 'Exit full screen', 'Keluar layar penuh'),
+                onPressed: () => Navigator.of(context).pop(false),
+                icon: const Icon(Icons.fullscreen_exit),
+              ),
+            ]),
+            const SizedBox(height: 4),
+            // The score banner floats over the canvas: letting it take layout
+            // space would shrink the canvas and clip the strokes already drawn.
+            Expanded(
+              child: Stack(children: [
+                _DrawCanvas(
+                  key: _canvasKey,
+                  strokes: widget.strokes,
+                  guide: widget.balinese,
+                  showGuide: _showGuide,
+                  onStart: (p) => setState(() { _result = null; widget.strokes.add([p]); }),
+                  onUpdate: (p) => setState(() {
+                    if (widget.strokes.isNotEmpty) widget.strokes.last.add(p);
+                  }),
+                ),
+                if (r != null)
+                  Positioned(
+                    left: 12, right: 12, top: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: r.color.withValues(alpha: 0.5)),
+                      ),
+                      child: Row(children: [
+                        Icon(r.isCorrect ? Icons.emoji_events : (r.isPartial ? Icons.adjust : Icons.refresh),
+                            color: r.color, size: 22),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            r.isCorrect
+                                ? tr(context, 'Great job!', 'Bagus sekali!')
+                                : r.isPartial
+                                    ? tr(context, 'Almost there!', 'Hampir!')
+                                    : tr(context, 'Try again', 'Coba lagi'),
+                            style: TextStyle(color: r.color, fontWeight: FontWeight.w800, fontSize: 15),
+                          ),
+                        ),
+                        Text('${r.score}%',
+                            style: TextStyle(color: r.color, fontWeight: FontWeight.w900, fontSize: 20)),
+                      ]),
+                    ),
+                  ),
+              ]),
+            ),
+            const SizedBox(height: 10),
+            Row(children: [
+              _iconBtn(Icons.undo, widget.strokes.isEmpty
+                  ? null
+                  : () => setState(() { widget.strokes.removeLast(); _result = null; })),
+              const SizedBox(width: 8),
+              _iconBtn(Icons.delete_outline, widget.strokes.isEmpty
+                  ? null
+                  : () => setState(() { widget.strokes.clear(); _result = null; })),
+              const SizedBox(width: 8),
+              _iconBtn(_showGuide ? Icons.visibility : Icons.visibility_off,
+                  () => setState(() => _showGuide = !_showGuide)),
+              const SizedBox(width: 10),
+              Expanded(
+                child: FilledButton.icon(
+                  onPressed: (widget.strokes.isEmpty || _checking) ? null : _check,
+                  icon: _checking
+                      ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                      : const Icon(Icons.check_circle_outline, size: 18),
+                  label: Text(_checking
+                      ? tr(context, 'Checking…', 'Memeriksa…')
+                      : tr(context, 'Check my writing', 'Periksa tulisan')),
+                ),
+              ),
+            ]),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+// Render [draw] onto an offscreen canvas and return its raw RGBA pixels.
+Future<Uint8List> _rasterize(int w, int h, void Function(Canvas) draw) async {
+  final recorder = ui.PictureRecorder();
+  draw(Canvas(recorder));
+  final image = await recorder.endRecording().toImage(w, h);
+  final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+  image.dispose();
+  return data!.buffer.asUint8List();
+}
+
+// Score [strokes] drawn on a [size] canvas against the reference [balinese] glyph.
+Future<_ScoreResult> _scoreStrokes(Size size, List<List<Offset>> strokes, String balinese) async {
+  final w = size.width.round();
+  final h = size.height.round();
+
+  final userBytes = await _rasterize(w, h, (canvas) {
+    _StrokePainter(strokes).paint(canvas, size);
+  });
+  final refBytes = await _rasterize(w, h, (canvas) {
+    final fontSize = min(h * 0.65, w * 0.45);
+    final tp = TextPainter(
+      text: TextSpan(
+        text: balinese,
+        style: TextStyle(fontFamily: kBaliFont, fontSize: fontSize, color: Colors.black),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    tp.paint(canvas, Offset((w - tp.width) / 2, (h - tp.height) / 2));
+  });
+
+  return _score(userBytes, refBytes, w, h);
 }
 
 // Pixel-comparison scoring, ported 1:1 from the web (HandGestureCanvas).
