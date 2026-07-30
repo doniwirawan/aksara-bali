@@ -155,17 +155,6 @@ export default function Footer({ darkMode, locale }) {
           </div>
         </div>
 
-        {/* Site-wide disclosure: content and much of the maintenance here is
-            AI-assisted, so readers should verify Balinese wording. */}
-        <div style={{
-          borderTop: `1px solid ${borderColor}`, paddingTop: '18px', marginBottom: '18px',
-          color: mutedColor, fontSize: '12.5px', lineHeight: 1.7,
-        }}>
-          {id
-            ? 'Sebagian besar isi dan pemeliharaan situs ini dikerjakan dengan bantuan AI, lalu diperiksa secara berkala. Kata dan aksara Bali sebaiknya tetap Anda periksa bersama guru atau penutur asli sebelum dipakai untuk keperluan resmi, cetak, atau upacara.'
-            : 'Most of this site’s content and upkeep is produced with AI assistance and reviewed over time. Balinese wording and script should still be checked with a teacher or native speaker before use in anything official, printed, or ceremonial.'}
-        </div>
-
         {/* Bottom bar */}
         <div style={{ borderTop: `1px solid ${borderColor}`, paddingTop: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
           <small style={{ color: mutedColor, fontSize: '13px' }}>
@@ -190,6 +179,17 @@ export default function Footer({ darkMode, locale }) {
             </span>
           </small>
         </div>
+
+        {/* AI disclosure — deliberately quiet: small, low-contrast, and last on
+            the page, but real text so it is readable and crawlable. */}
+        <p style={{
+          margin: '14px 0 0', fontSize: '10.5px', lineHeight: 1.6,
+          color: mutedColor, opacity: 0.55, maxWidth: '760px',
+        }}>
+          {id
+            ? 'Situs ini sebagian besar dijalankan secara otomatis dengan bantuan AI — isi, terjemahan, dan pemeliharaannya disusun dengan AI lalu diperiksa secara berkala. Kata dan aksara Bali sebaiknya tetap diperiksa bersama guru atau penutur asli sebelum dipakai untuk keperluan resmi, cetak, atau upacara.'
+            : 'This site is largely automated with AI — its content, translations, and upkeep are AI-generated and reviewed over time. Balinese wording and script should still be checked with a teacher or native speaker before use in anything official, printed, or ceremonial.'}
+        </p>
       </div>
     </footer>
   )
