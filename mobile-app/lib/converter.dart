@@ -105,6 +105,17 @@ String latinToBalinese(String text) {
           final murda = balineseMapping['${sub}_murda'];
           buf.write(sanskrit && murda != null ? murda : balineseMapping[sub]!); i += len; matched = found = true; break;
         }
+        // "ng" + vowel is the letter NGA carrying a vowel, not a cecek. The
+        // look-ahead grows one character at a time, so without this the 2-char
+        // "ng" branch below wins before "nga" is reachable and "bunga" comes
+        // out as cecek + a stray latin "a". Keep in sync with the web
+        // converter (utils/balineseConverter.js).
+        if (len == 2 && sub == 'ng' && i + 2 < s.length && _isVowel(s[i + 2])) {
+          final v = s[i + 2];
+          buf.write(balineseMapping['nga']!);
+          if (v != 'a') buf.write(balineseMapping['${v}_mark']!);
+          i += 3; matched = found = true; break;
+        }
         if (len == 2 && sub == 'ng') { buf.write(balineseMapping['ng']); i += len; matched = found = true; break; }
         if (len == 2 && ['aa','ii','uu'].contains(sub)) {
           if (i == 0 || s[i - 1] == ' ' || !_isConsonant(s[i - 1])) {

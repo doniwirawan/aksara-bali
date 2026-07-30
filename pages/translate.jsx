@@ -33,6 +33,17 @@ const T = {
     sourceBody: 'Data kamus diambil dari Kamus Anggah-Ungguh Kruna Bali–Indonesia. Untuk pencarian yang lebih luas, kamus komunitas, dan contoh kalimat, gunakan rujukan berikut:',
     convNote: 'Ingin mengubah tulisan Latin menjadi aksara Bali? Gunakan',
     convLink: 'konverter aksara Bali',
+    tabWord: 'Cari kata',
+    tabSentence: 'Bantu kalimat',
+    sentencePlaceholder: 'Tulis kalimat bahasa Indonesia, misalnya "saya belajar aksara bali di rumah"...',
+    sentenceWarn: 'Ini penggantian kata per kata, bukan terjemahan. Urutan kata bahasa Bali bisa berbeda, dan pilihan kata bergantung pada lawan bicara. Pakai hasilnya sebagai titik awal, lalu periksa bersama penutur asli.',
+    levelPick: 'Ragam bahasa',
+    levelAndap: 'Andap (biasa)',
+    levelAlus: 'Alus (hormat)',
+    resultBali: 'Bahasa Bali (kata per kata)',
+    resultScript: 'Aksara Bali',
+    unmatched: 'Kata bergaris bawah belum ada di kamus dan dibiarkan apa adanya.',
+    sentenceStart: 'Tulis kalimat untuk melihat padanan katanya.',
     disclaimer: 'Kamus ini disusun otomatis dari sumber cetak, jadi mungkin ada salah baca. Untuk keperluan resmi, cetak, atau upacara, mintalah pemeriksaan penutur asli.',
   },
   en: {
@@ -52,6 +63,17 @@ const T = {
     sourceBody: 'Entries come from the Kamus Anggah-Ungguh Kruna Bali–Indonesia. For broader search, community dictionaries, and example sentences, use these:',
     convNote: 'Want to turn Latin text into Balinese script? Use the',
     convLink: 'Balinese script converter',
+    tabWord: 'Word search',
+    tabSentence: 'Sentence helper',
+    sentencePlaceholder: 'Write an Indonesian sentence, e.g. "saya belajar aksara bali di rumah"...',
+    sentenceWarn: 'This is word-by-word substitution, not translation. Balinese word order can differ, and word choice depends on who you are addressing. Treat the result as a starting point and check it with a native speaker.',
+    levelPick: 'Register',
+    levelAndap: 'Andap (everyday)',
+    levelAlus: 'Alus (respectful)',
+    resultBali: 'Balinese (word by word)',
+    resultScript: 'Balinese script',
+    unmatched: 'Underlined words are not in the dictionary and were left as they are.',
+    sentenceStart: 'Write a sentence to see the word equivalents.',
     disclaimer: 'This dictionary was parsed automatically from a printed source, so misreadings are possible. For official, printed, or ceremonial use, have a native speaker check it.',
   },
 }
@@ -65,11 +87,35 @@ const LINKS = [
 
 const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim()
 
+// Word-by-word substitution for the sentence helper. Deliberately not sold as
+// translation: Balinese word order and speech levels need a human.
+function buildSentence(entries, text, level) {
+  if (!entries) return []
+  const index = new Map()
+  for (const e of entries) {
+    const key = norm(e.i)
+    if (!key) continue
+    if (!index.has(key)) index.set(key, e)
+  }
+  return text.split(/(\s+|[.,!?;:()"']+)/).filter(Boolean).map(token => {
+    if (!/\p{L}/u.test(token)) return { token, out: token, matched: null }
+    const e = index.get(norm(token))
+    if (!e) return { token, out: token, matched: false }
+    const order = level === 'alus' ? ['s', 'm', 'o', 'a'] : ['a', 'm', 's', 'o']
+    // Entries can list alternatives ("puri, gria"); a sentence takes one.
+    const pick = order.map(k => e[k]).find(Boolean)?.split(/[,/]/)[0].trim()
+    return { token, out: pick || token, matched: !!pick, entry: e }
+  })
+}
+
 export default function TranslatePage({ locale, setLocale }) {
   const [darkMode, setDarkMode] = useState(false)
   const [entries, setEntries] = useState(null)
   const [query, setQuery] = useState('')
   const [copied, setCopied] = useState('')
+  const [mode, setMode] = useState('word')
+  const [sentence, setSentence] = useState('')
+  const [level, setLevel] = useState('andap')
   const lang = locale === 'en' ? 'en' : 'id'
   const t = T[lang]
 
@@ -104,6 +150,13 @@ export default function TranslatePage({ locale, setLocale }) {
     }
     return scored.sort((x, y) => y.best - x.best).slice(0, 40).map(s => s.e)
   }, [entries, query])
+
+  const sentenceParts = useMemo(
+    () => (mode === 'sentence' && sentence.trim() ? buildSentence(entries, sentence, level) : []),
+    [entries, sentence, level, mode]
+  )
+  const sentenceBali = sentenceParts.map(p => p.out).join('')
+  const sentenceScript = sentenceBali.trim() ? convertLatinToBalinese(sentenceBali) : ''
 
   const copy = useCallback(async (text, key) => {
     try {
@@ -152,6 +205,112 @@ export default function TranslatePage({ locale, setLocale }) {
           <h1 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 8px' }}>{t.title}</h1>
           <p style={{ color: mutedColor, margin: '0 0 24px', lineHeight: 1.6, fontSize: 15 }}>{t.subtitle}</p>
 
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+            {[['word', t.tabWord], ['sentence', t.tabSentence]].map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => setMode(key)}
+                style={{
+                  padding: '8px 16px', borderRadius: 999, fontSize: 14, cursor: 'pointer',
+                  fontWeight: mode === key ? 600 : 400,
+                  border: `1px solid ${mode === key ? '#0d6efd' : borderColor}`,
+                  background: mode === key ? '#0d6efd' : 'transparent',
+                  color: mode === key ? '#fff' : mutedColor,
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {mode === 'sentence' && (
+            <div style={{ marginBottom: 28 }}>
+              <textarea
+                value={sentence}
+                onChange={e => setSentence(e.target.value)}
+                placeholder={t.sentencePlaceholder}
+                rows={3}
+                style={{
+                  width: '100%', padding: 14, fontSize: 16, borderRadius: 12,
+                  border: `1px solid ${borderColor}`, background: cardBg, color: textColor,
+                  outline: 'none', resize: 'vertical', fontFamily: 'inherit',
+                }}
+              />
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '12px 0', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 13, color: mutedColor }}>{t.levelPick}:</span>
+                {[['andap', t.levelAndap], ['alus', t.levelAlus]].map(([key, label]) => (
+                  <button
+                    key={key}
+                    onClick={() => setLevel(key)}
+                    style={{
+                      padding: '5px 12px', borderRadius: 999, fontSize: 13, cursor: 'pointer',
+                      border: `1px solid ${level === key ? '#0d6efd' : borderColor}`,
+                      background: level === key ? '#0d6efd15' : 'transparent',
+                      color: level === key ? '#0d6efd' : mutedColor,
+                      fontWeight: level === key ? 600 : 400,
+                    }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              <p style={{
+                fontSize: 12.5, lineHeight: 1.7, color: mutedColor, margin: '0 0 14px',
+                padding: '10px 12px', borderRadius: 10,
+                background: darkMode ? '#241d10' : '#fdf6e3',
+                border: `1px solid ${darkMode ? '#3a3020' : '#efe3c2'}`,
+              }}>
+                {t.sentenceWarn}
+              </p>
+
+              {!sentence.trim() && <p style={{ color: mutedColor, fontSize: 14 }}>{t.sentenceStart}</p>}
+
+              {sentence.trim() && (
+                <div style={{ display: 'grid', gap: 12 }}>
+                  <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 16 }}>
+                    <div style={{ fontSize: 12, color: mutedColor, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
+                      {t.resultBali}
+                    </div>
+                    <p style={{ margin: 0, fontSize: 17, lineHeight: 1.7 }}>
+                      {sentenceParts.map((p, i) => (
+                        <span key={i} style={p.matched === false
+                          ? { textDecoration: 'underline dotted', textUnderlineOffset: 3, opacity: 0.75 }
+                          : undefined}>
+                          {p.out}
+                        </span>
+                      ))}
+                    </p>
+                    <p style={{ margin: '10px 0 0', fontSize: 11.5, color: mutedColor }}>{t.unmatched}</p>
+                  </div>
+
+                  <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 16 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                      <span style={{ fontSize: 12, color: mutedColor, textTransform: 'uppercase', letterSpacing: 1 }}>
+                        {t.resultScript}
+                      </span>
+                      <button
+                        onClick={() => copy(sentenceScript, 'sentence')}
+                        style={{
+                          marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6,
+                          fontSize: 12, padding: '5px 10px', borderRadius: 8, cursor: 'pointer',
+                          border: `1px solid ${borderColor}`, background: 'transparent', color: mutedColor,
+                        }}
+                      >
+                        {copied === 'sentence' ? <Check size={13} /> : <Copy size={13} />}
+                        {copied === 'sentence' ? t.copied : t.copy}
+                      </button>
+                    </div>
+                    <p style={{ margin: 0, fontSize: 24, lineHeight: 1.9 }}>{sentenceScript}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {mode === 'word' && (
+          <>
           <div style={{ position: 'relative', marginBottom: 20 }}>
             <Search size={18} style={{ position: 'absolute', left: 14, top: 15, color: mutedColor }} />
             <input
@@ -231,6 +390,8 @@ export default function TranslatePage({ locale, setLocale }) {
                 ))}
               </div>
             </>
+          )}
+          </>
           )}
 
           <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 18, marginTop: 28 }}>
