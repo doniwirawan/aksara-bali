@@ -478,42 +478,50 @@ Pilihan katanya juga bergantung pada konteks yang tidak terlihat oleh mesin: usi
 
 Kata-kata berikut aman dipakai dalam percakapan sehari-hari yang sopan.
 
-| Indonesia | Bahasa Bali | Aksara Bali |
-|-----------|------------|------------|
-| terima kasih | matur suksma | ᬫᬢᬸᬭ᭄​ᬲᬸᬓ᭄ᬲ᭄ᬫ |
-| sama-sama | suksma mewali | ᬲᬸᬓ᭄ᬲ᭄ᬫ​ᬫᬾᬯᬮᬶ |
-| maaf | ampura | ᬅᬫ᭄ᬧᬸᬭ |
-| permisi | sugra | ᬲᬸᬕ᭄ᬭ |
-| selamat pagi | rahajeng semeng | ᬭᬳᬚᬾᬂ​ᬲᬾᬫᬾᬂ |
-| selamat datang | rahajeng rauh | ᬭᬳᬚᬾᬂ​ᬭᬉᬳ᭄ |
-| apa kabar | punapi gatra | ᬧᬸᬦᬧᬶ​ᬕᬢ᭄ᬭ |
-| baik | becik | ᬩᬾᬘᬶᬓ᭄ |
-| ya | inggih | ᬇᬂᬕᬶᬳ᭄ |
-| tidak | nenten | ᬦᬾᬦ᭄ᬢᬾᬦ᭄ |
-| sudah | sampun | ᬲᬫ᭄ᬧᬸᬦ᭄ |
-| belum | durung | ᬤᬸᬭᬸᬂ |
-| sekarang | mangkin | ᬫᬂᬓᬶᬦ᭄ |
-| ada | wenten | ᬯᬾᬦ᭄ᬢᬾᬦ᭄ |
-| dari | saking | ᬲᬓᬶᬂ |
-| di | ring | ᬭᬶᬂ |
-| yang | sane | ᬲᬦᬾ |
-| ini | niki | ᬦᬶᬓᬶ |
-| itu | punika | ᬧᬸᬦᬶᬓ |
-| lagi | malih | ᬫᬮᬶᬳ᭄ |
-| semua | sami | ᬲᬫᬶ |
-| sangat | pisan | ᬧᬶᬲᬦ᭄ |
-| saudara | semeton | ᬲᬾᬫᬾᬢᭀᬦ᭄ |
-| ibu | meme | ᬫᬾᬫᬾ |
-| ayah | bapa | ᬩᬧ |
-| kakak | beli | ᬩᬾᬮᬶ |
-| adik | adi | ᬅᬤᬶ |
-| rumah | umah | ᬉᬫᬳ᭄ |
-| air | toya | ᬢᭀᬬ |
-| bunga | sekar | ᬲᬾᬓᬭ᭄ |
-| laut | pasih | ᬧᬲᬶᬳ᭄ |
-| jalan | margi | ᬫᬭ᭄ᬕᬶ |
-| belajar | melajah | ᬫᬾᬮᬚᬳ᭄ |
-| cinta | tresna | ᬢ᭄ᬭᬾᬲ᭄ᬦ |
+| Indonesia | Andap (biasa) | Alus / mider | Aksara Bali |
+|-----------|---------------|--------------|------------|
+| rumah | umah | puri | ᬧᬸᬭᬶ |
+| air | yéh | toya | ᬢᭀᬬ |
+| bunga | bunga | sekar | ᬲᬾᬓᬭ᭄ |
+| laut | pasih | segara | ᬲᬾᬕᬭ |
+| jalan | rurung | margi | ᬫᬭ᭄ᬕᬶ |
+| gunung | aga | giri | ᬕᬶᬭᬶ |
+| bulan | bulan | wulan | ᬯᬸᬮᬦ᭄ |
+| buku | buku | pustaka | ᬧᬸᬲ᭄ᬢᬓ |
+| guru | guru | acarya | ᬅᬘᬭ᭄ᬬ |
+| ibu | mémé | biang | ᬩᬶᬅᬂ |
+| ayah | ajung | aji | ᬅᬚᬶ |
+| adik | adi | rai | ᬭᬇ |
+| nasi | nasi | rayunan | ᬭᬬᬸᬦᬦ᭄ |
+| batu | batu | watu | ᬯᬢᬸ |
+| anjing | cicing | asu | ᬅᬲᬸ |
+| perempuan | luh | istri | ᬇᬲ᭄ᬢ᭄ᬭᬶ |
+| laki-laki | muani | lanang | ᬮᬦᬂ |
+| mulut | bungut | cangkem | ᬘᬂᬓᬾᬫ᭄ |
+| cincin | bungkung | ali-ali | ᬅᬮᬶ-ᬅᬮᬶ |
+| ingat | inget | éling | ᬏᬮᬶᬂ |
+| banyak | aken | akéh | ᬅᬓᬾᬳ᭄ |
+| makan | maem | mrayunan | ᬫ᭄ᬭᬬᬸᬦᬦ᭄ |
+| minum | inem | inum | ᬇᬦᬸᬫ᭄ |
+| pulang | mulih | mantuk | ᬫᬦ᭄ᬢᬸᬓ᭄ |
+| iya | aa | inggih | ᬇᬂᬕᬶᬳ᭄ |
+| tidak | aing | nénten | ᬦᬾᬦ᭄ᬢᬾᬦ᭄ |
+| sudah | suba | sampun | ᬲᬫ᭄ᬧᬸᬦ᭄ |
+| belum | kondén | durung | ᬤᬸᬭᬸᬂ |
+| ada | ada | wénten | ᬯᬾᬦ᭄ᬢᬾᬦ᭄ |
+| dari | uli | saking | ᬲᬓᬶᬂ |
+| di | ba | ring | ᬭᬶᬂ |
+| yang | ané | sané | ᬲᬦᬾ |
+| itu | ento | punika | ᬧᬸᬦᬶᬓ |
+| lagi | bin | malih | ᬫᬮᬶᬳ᭄ |
+| maaf | aksama | ampura | ᬅᬫ᭄ᬧᬸᬭ |
+| permisi | tabik | sugra | ᬲᬸᬕ᭄ᬭ |
+| semua | makejang | samian | ᬲᬫᬶᬅᬦ᭄ |
+| sangat | gati | pisan | ᬧᬶᬲᬦ᭄ |
+| bagus | agus | becik | ᬩᬾᬘᬶᬓ᭄ |
+| hidup | idup | nyeneng | ᬦ᭄ᬬᬾᬦᬾᬂ |
+
+Kolom pada tabel di atas diambil dari *Kamus Anggah-Ungguh Kruna Bali–Indonesia*, sumber yang sama dengan <a href="/translate">kamus bahasa Bali</a> di situs ini. Bentuk andap dipakai dalam percakapan sehari-hari; bentuk alus atau mider dipakai ketika Anda ingin lebih hormat.
 
 ## Cara Menggabungkan Keduanya
 
@@ -575,42 +583,50 @@ Word choice also depends on context a machine cannot see: the listener's age, so
 
 The words below are safe for ordinary polite conversation.
 
-| Indonesian | Balinese | Balinese script |
-|-----------|----------|----------------|
-| terima kasih | matur suksma | ᬫᬢᬸᬭ᭄​ᬲᬸᬓ᭄ᬲ᭄ᬫ |
-| sama-sama | suksma mewali | ᬲᬸᬓ᭄ᬲ᭄ᬫ​ᬫᬾᬯᬮᬶ |
-| maaf | ampura | ᬅᬫ᭄ᬧᬸᬭ |
-| permisi | sugra | ᬲᬸᬕ᭄ᬭ |
-| selamat pagi | rahajeng semeng | ᬭᬳᬚᬾᬂ​ᬲᬾᬫᬾᬂ |
-| selamat datang | rahajeng rauh | ᬭᬳᬚᬾᬂ​ᬭᬉᬳ᭄ |
-| apa kabar | punapi gatra | ᬧᬸᬦᬧᬶ​ᬕᬢ᭄ᬭ |
-| baik | becik | ᬩᬾᬘᬶᬓ᭄ |
-| ya | inggih | ᬇᬂᬕᬶᬳ᭄ |
-| tidak | nenten | ᬦᬾᬦ᭄ᬢᬾᬦ᭄ |
-| sudah | sampun | ᬲᬫ᭄ᬧᬸᬦ᭄ |
-| belum | durung | ᬤᬸᬭᬸᬂ |
-| sekarang | mangkin | ᬫᬂᬓᬶᬦ᭄ |
-| ada | wenten | ᬯᬾᬦ᭄ᬢᬾᬦ᭄ |
-| dari | saking | ᬲᬓᬶᬂ |
-| di | ring | ᬭᬶᬂ |
-| yang | sane | ᬲᬦᬾ |
-| ini | niki | ᬦᬶᬓᬶ |
-| itu | punika | ᬧᬸᬦᬶᬓ |
-| lagi | malih | ᬫᬮᬶᬳ᭄ |
-| semua | sami | ᬲᬫᬶ |
-| sangat | pisan | ᬧᬶᬲᬦ᭄ |
-| saudara | semeton | ᬲᬾᬫᬾᬢᭀᬦ᭄ |
-| ibu | meme | ᬫᬾᬫᬾ |
-| ayah | bapa | ᬩᬧ |
-| kakak | beli | ᬩᬾᬮᬶ |
-| adik | adi | ᬅᬤᬶ |
-| rumah | umah | ᬉᬫᬳ᭄ |
-| air | toya | ᬢᭀᬬ |
-| bunga | sekar | ᬲᬾᬓᬭ᭄ |
-| laut | pasih | ᬧᬲᬶᬳ᭄ |
-| jalan | margi | ᬫᬭ᭄ᬕᬶ |
-| belajar | melajah | ᬫᬾᬮᬚᬳ᭄ |
-| cinta | tresna | ᬢ᭄ᬭᬾᬲ᭄ᬦ |
+| Indonesian | Andap (everyday) | Alus / mider | Balinese script |
+|-----------|------------------|--------------|----------------|
+| rumah (house) | umah | puri | ᬧᬸᬭᬶ |
+| air (water) | yéh | toya | ᬢᭀᬬ |
+| bunga (flower) | bunga | sekar | ᬲᬾᬓᬭ᭄ |
+| laut (sea) | pasih | segara | ᬲᬾᬕᬭ |
+| jalan (road) | rurung | margi | ᬫᬭ᭄ᬕᬶ |
+| gunung (mountain) | aga | giri | ᬕᬶᬭᬶ |
+| bulan (moon) | bulan | wulan | ᬯᬸᬮᬦ᭄ |
+| buku (book) | buku | pustaka | ᬧᬸᬲ᭄ᬢᬓ |
+| guru (teacher) | guru | acarya | ᬅᬘᬭ᭄ᬬ |
+| ibu (mother) | mémé | biang | ᬩᬶᬅᬂ |
+| ayah (father) | ajung | aji | ᬅᬚᬶ |
+| adik (younger sibling) | adi | rai | ᬭᬇ |
+| nasi (rice) | nasi | rayunan | ᬭᬬᬸᬦᬦ᭄ |
+| batu (stone) | batu | watu | ᬯᬢᬸ |
+| anjing (dog) | cicing | asu | ᬅᬲᬸ |
+| perempuan (woman) | luh | istri | ᬇᬲ᭄ᬢ᭄ᬭᬶ |
+| laki-laki (man) | muani | lanang | ᬮᬦᬂ |
+| mulut (mouth) | bungut | cangkem | ᬘᬂᬓᬾᬫ᭄ |
+| cincin (ring) | bungkung | ali-ali | ᬅᬮᬶ-ᬅᬮᬶ |
+| ingat (remember) | inget | éling | ᬏᬮᬶᬂ |
+| banyak (many) | aken | akéh | ᬅᬓᬾᬳ᭄ |
+| makan (eat) | maem | mrayunan | ᬫ᭄ᬭᬬᬸᬦᬦ᭄ |
+| minum (drink) | inem | inum | ᬇᬦᬸᬫ᭄ |
+| pulang (go home) | mulih | mantuk | ᬫᬦ᭄ᬢᬸᬓ᭄ |
+| iya (yes) | aa | inggih | ᬇᬂᬕᬶᬳ᭄ |
+| tidak (no) | aing | nénten | ᬦᬾᬦ᭄ᬢᬾᬦ᭄ |
+| sudah (already) | suba | sampun | ᬲᬫ᭄ᬧᬸᬦ᭄ |
+| belum (not yet) | kondén | durung | ᬤᬸᬭᬸᬂ |
+| ada (there is) | ada | wénten | ᬯᬾᬦ᭄ᬢᬾᬦ᭄ |
+| dari (from) | uli | saking | ᬲᬓᬶᬂ |
+| di (at) | ba | ring | ᬭᬶᬂ |
+| yang (which) | ané | sané | ᬲᬦᬾ |
+| itu (that) | ento | punika | ᬧᬸᬦᬶᬓ |
+| lagi (again) | bin | malih | ᬫᬮᬶᬳ᭄ |
+| maaf (sorry) | aksama | ampura | ᬅᬫ᭄ᬧᬸᬭ |
+| permisi (excuse me) | tabik | sugra | ᬲᬸᬕ᭄ᬭ |
+| semua (all) | makejang | samian | ᬲᬫᬶᬅᬦ᭄ |
+| sangat (very) | gati | pisan | ᬧᬶᬲᬦ᭄ |
+| bagus (good) | agus | becik | ᬩᬾᬘᬶᬓ᭄ |
+| hidup (life) | idup | nyeneng | ᬦ᭄ᬬᬾᬦᬾᬂ |
+
+These columns come from the *Kamus Anggah-Ungguh Kruna Bali–Indonesia*, the same source behind the <a href="/translate">dictionary</a> on this site. The andap form is everyday speech; the alus or mider form is what you use when being more respectful.
 
 ## Combining the Two Steps
 

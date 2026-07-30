@@ -120,7 +120,7 @@ Huruf "e" dalam ejaan Latin bahasa Bali sebenarnya mewakili **dua bunyi berbeda*
 - **Taling** (ᬾ) — bunyi /e/ seperti pada *dewa*, *sekar*, *becik*
 - **Pepet** (ᭂ) — bunyi /ə/ seperti pada *ketut* atau *sěmeng*, bunyi "e" lemah
 
-Inilah sumber kesalahan paling umum saat mengetik aksara Bali dengan keyboard biasa: satu tombol "e" harus mewakili dua tanda. Konverter di situs ini menuliskan **taling** untuk "e". Kalau Anda memerlukan pepet, gunakan papan ketik aksara Bali di <a href="/practice">halaman latihan</a> dan pilih tombol ᭂ. Penjelasan lengkap konvensi pengetikan ada di artikel <a href="/blog/cara-mengetik-aksara-bali-keyboard">cara mengetik aksara Bali di keyboard</a>.
+Inilah sumber kebingungan paling umum saat mengetik aksara Bali dengan keyboard biasa: satu tombol "e" harus mewakili dua tanda. Konverter di situs ini menuliskan **taling** untuk "e", dan **pepet** untuk huruf **"x"** — jadi "kxtut" menghasilkan ᬓᭂᬢᬸᬢ᭄. Tombol bantuan ě pada konverter juga menghasilkan pepet. Alternatif lain: pilih tombol ᭂ pada papan ketik aksara Bali di <a href="/practice">halaman latihan</a>. Penjelasan lengkap konvensi pengetikan ada di artikel <a href="/blog/cara-mengetik-aksara-bali-keyboard">cara mengetik aksara Bali di keyboard</a>.
 
 ## Ra Repa dan La Lenga
 
@@ -295,7 +295,7 @@ The letter "e" in romanised Balinese actually stands for **two different sounds*
 - **Taling** (ᬾ) — the /e/ in *dewa*, *sekar*, *becik*
 - **Pepet** (ᭂ) — the schwa /ə/, the weak "e" in words like *ketut* or *sěmeng*
 
-This is the single most common error when typing Balinese on an ordinary keyboard: one "e" key has to stand for two marks. This site's converter writes **taling** for "e". When you need pepet, use the Balinese keyboard on the <a href="/practice">practice page</a> and tap the ᭂ key. The full set of typing conventions is covered in <a href="/blog/cara-mengetik-aksara-bali-keyboard">typing Balinese script on a keyboard</a>.
+This is the single most common confusion when typing Balinese on an ordinary keyboard: one "e" key has to stand for two marks. This site's converter writes **taling** for "e" and **pepet** for the letter **"x"** — so "kxtut" gives ᬓᭂᬢᬸᬢ᭄. The ě helper key on the converter produces pepet too. Alternatively, tap the ᭂ key on the Balinese keyboard on the <a href="/practice">practice page</a>. The full set of typing conventions is covered in <a href="/blog/cara-mengetik-aksara-bali-keyboard">typing Balinese script on a keyboard</a>.
 
 ## Ra Repa and La Lenga
 
@@ -430,9 +430,13 @@ Ini bagian yang paling sering menimbulkan kebingungan. Huruf "e" dalam bahasa Ba
 | /e/ | ᬾ | taling | dewa, sekar, becik |
 | /ə/ | ᭂ | pepet | ketut, sěmeng |
 
-Karena keyboard QWERTY hanya punya satu tombol "e", setiap alat harus memilih konvensinya sendiri. **Konverter di situs ini menuliskan taling (ᬾ) untuk setiap "e" yang Anda ketik.**
+Karena keyboard QWERTY hanya punya satu tombol "e", setiap alat harus memilih konvensinya sendiri. Di situs ini:
 
-Kalau tulisan Anda memerlukan pepet, gunakan papan ketik aksara Bali di <a href="/practice">halaman latihan</a> dan ketuk tombol ᭂ. Ini penting untuk teks yang menuntut ketepatan — kutipan lontar, teks upacara, atau bahan ajar.
+- **"e" menghasilkan taling** (ᬾ) — *dewa* menjadi ᬤᬾᬯ
+- **"x" menghasilkan pepet** (ᭂ) — *kxtut* menjadi ᬓᭂᬢᬸᬢ᭄
+- Tombol bantuan **ě** pada konverter juga menghasilkan pepet
+
+Konvensi "x" ini sudah lama dipakai oleh alat pengetikan aksara Bali, jadi kalau Anda terbiasa dengan alat lain, kebiasaan mengetik Anda tetap berlaku. Untuk memilih tandanya secara langsung, papan ketik aksara Bali di <a href="/practice">halaman latihan</a> juga menyediakan tombol ᭂ.
 
 Satu aturan tambahan yang menyertainya: gabungan **ra + pepet** ditulis ᬋ (ra repa) dan **la + pepet** ditulis ᬍ (la lenga), bukan sebagai konsonan bertanda. Rinciannya ada di <a href="/blog/daftar-lengkap-aksara-bali">daftar lengkap aksara Bali</a>.
 
@@ -477,7 +481,7 @@ Kalau hasil tempelan tampil sebagai kotak-kotak (□□□), perangkat penerima 
 
 **Bisakah mengetik langsung dalam aksara tanpa lewat Latin?** Bisa, lewat papan ketik di <a href="/practice">halaman latihan</a>.
 
-**Bagaimana menulis pepet?** Gunakan tombol ᭂ pada papan ketik tersebut; konverter Latin menuliskan taling untuk "e".
+**Bagaimana menulis pepet?** Ketik "x" di konverter — "x" menghasilkan pepet (ᭂ), sedangkan "e" menghasilkan taling. Tombol ᭂ pada papan ketik juga tersedia.
 
 **Bagaimana membaca aksara Bali yang sudah ada?** Pakai mode terbalik di konverter, atau unggah fotonya ke panel **Baca dari foto** di <a href="/">halaman konverter</a> yang memakai OCR.
 
@@ -524,9 +528,13 @@ This is the most common source of confusion. The letter "e" in Balinese stands f
 | /e/ | ᬾ | taling | dewa, sekar, becik |
 | /ə/ | ᭂ | pepet | ketut, sěmeng |
 
-Because a QWERTY keyboard has only one "e" key, every tool has to pick a convention. **This site's converter writes taling (ᬾ) for every "e" you type.**
+Because a QWERTY keyboard has only one "e" key, every tool has to pick a convention. On this site:
 
-When your text needs pepet, use the Balinese keyboard on the <a href="/practice">practice page</a> and tap the ᭂ key. This matters for text where precision counts — lontar quotations, ritual text, or teaching material.
+- **"e" gives taling** (ᬾ) — *dewa* becomes ᬤᬾᬯ
+- **"x" gives pepet** (ᭂ) — *kxtut* becomes ᬓᭂᬢᬸᬢ᭄
+- The **ě** helper key on the converter also produces pepet
+
+That "x" convention has long been used by Balinese typing tools, so if you learned on another one your habits carry over. To place the mark yourself, the Balinese keyboard on the <a href="/practice">practice page</a> also has a ᭂ key.
 
 One rule travels with it: **ra + pepet** is written ᬋ (ra repa) and **la + pepet** is written ᬍ (la lenga), never as a marked consonant. Details are in the <a href="/blog/daftar-lengkap-aksara-bali">complete Balinese script chart</a>.
 
@@ -571,7 +579,7 @@ If the pasted text shows as boxes (□□□), the receiving device has no Balin
 
 **Can I type directly in script instead of Latin?** Yes, with the keyboard on the <a href="/practice">practice page</a>.
 
-**How do I write pepet?** Use the ᭂ key on that keyboard; the Latin converter writes taling for "e".
+**How do I write pepet?** Type "x" in the converter — "x" produces pepet (ᭂ) while "e" produces taling. The ᭂ key on the keyboard works too.
 
 **How do I read existing Balinese script?** Use reverse mode in the converter, or drop a photo into the **Baca dari foto** panel on the <a href="/">converter page</a>, which runs OCR.
 
