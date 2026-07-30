@@ -60,6 +60,27 @@ const covers = [
     glyph: 'ᬢ', // ta
   },
   {
+    slug: 'gantungan-gempelan-aksara-bali',
+    kicker: 'Panduan',
+    title: ['Gantungan dan', 'Gempelan'],
+    photo: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2',
+    glyph: 'ᬩ', // ba
+  },
+  {
+    slug: 'copy-paste-aksara-bali',
+    kicker: 'Siap Salin',
+    title: ['Copy Paste', 'Aksara Bali'],
+    photo: 'https://images.unsplash.com/photo-1532186651327-6ac23687d189',
+    glyph: 'ᬲ', // sa
+  },
+  {
+    slug: 'translate-bahasa-indonesia-ke-bahasa-bali',
+    kicker: 'Bahasa',
+    title: ['Translate Indonesia', 'ke Bahasa Bali'],
+    photo: 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62',
+    glyph: 'ᬭ', // ra
+  },
+  {
     slug: 'ucapan-bahasa-bali-sehari-hari',
     kicker: 'Basa Bali',
     title: ['Ucapan Bahasa Bali', 'Sehari-hari'],

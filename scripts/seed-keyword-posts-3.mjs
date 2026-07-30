@@ -148,7 +148,7 @@ Ketika dua konsonan bertemu tanpa vokal di tengah kata, konsonan kedua tidak dit
 
 | Kata | Aksara | Keterangan |
 |------|--------|-----------|
-| surya | ᬲᬸᬭ᭄ᬬ | ya digantung di bawah ra |
+| karya | ᬓᬭ᭄ᬬ | ya digantung di bawah ra |
 | banjar | ᬩᬦ᭄ᬚᬭ᭄ | ja digantung di bawah na |
 | suksma | ᬲᬸᬓ᭄ᬲ᭄ᬫ | dua gugus berturutan |
 
@@ -323,7 +323,7 @@ When two consonants meet with no vowel between them inside a word, the second is
 
 | Word | Script | Note |
 |------|--------|------|
-| surya | ᬲᬸᬭ᭄ᬬ | ya hangs under ra |
+| karya | ᬓᬭ᭄ᬬ | ya hangs under ra |
 | banjar | ᬩᬦ᭄ᬚᬭ᭄ | ja hangs under na |
 | suksma | ᬲᬸᬓ᭄ᬲ᭄ᬫ | two clusters in a row |
 

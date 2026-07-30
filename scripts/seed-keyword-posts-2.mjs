@@ -307,7 +307,7 @@ Tanda adeg-adeg (᭄) menghapus vokal /a/ bawaan sebuah aksara. Inilah yang memb
 | sak | ᬲᬓ᭄ | penutup k di akhir kata |
 | wayan | ᬯᬬᬦ᭄ | penutup n di akhir kata |
 
-Di tengah kata, pertemuan dua konsonan ditulis dengan **gantungan** — bentuk kecil aksara kedua yang digantung di bawah aksara pertama. Contohnya terlihat pada "surya" (ᬲᬸᬭ᭄ᬬ) dan "banjar" (ᬩᬦ᭄ᬚᬭ᭄).
+Di tengah kata, pertemuan dua konsonan ditulis dengan **gantungan** — bentuk kecil aksara kedua yang digantung di bawah aksara pertama. Contohnya terlihat pada "karya" (ᬓᬭ᭄ᬬ) dan "banjar" (ᬩᬦ᭄ᬚᬭ᭄).
 
 ## Angka Bali
 
@@ -422,7 +422,7 @@ The adeg-adeg mark (᭄) removes a letter's inherent /a/ vowel. It is what lets 
 | sak | ᬲᬓ᭄ | final k |
 | wayan | ᬯᬬᬦ᭄ | final n |
 
-Inside a word, two meeting consonants are written with **gantungan** — a small form of the second letter hung beneath the first. You can see it in "surya" (ᬲᬸᬭ᭄ᬬ) and "banjar" (ᬩᬦ᭄ᬚᬭ᭄).
+Inside a word, two meeting consonants are written with **gantungan** — a small form of the second letter hung beneath the first. You can see it in "karya" (ᬓᬭ᭄ᬬ) and "banjar" (ᬩᬦ᭄ᬚᬭ᭄).
 
 ## Balinese Numerals
 
@@ -526,7 +526,7 @@ Karena itu, menyalin satu daftar kata tanpa memperhatikan konteks bisa terdengar
 | pura | pura | ᬧᬸᬭ |
 | sekar | bunga | ᬲᬾᬓᬭ᭄ |
 | bulan | bulan | ᬩᬸᬮᬦ᭄ |
-| surya | matahari | ᬲᬸᬭ᭄ᬬ |
+| batu | batu | ᬩᬢᬸ |
 
 ## Frasa yang Sering Dipakai
 
@@ -600,7 +600,7 @@ Because of that, copying a word list without regard for context can sound off �
 | pura | temple | ᬧᬸᬭ |
 | sekar | flower | ᬲᬾᬓᬭ᭄ |
 | bulan | moon | ᬩᬸᬮᬦ᭄ |
-| surya | sun | ᬲᬸᬭ᭄ᬬ |
+| batu | stone | ᬩᬢᬸ |
 
 ## Common Phrases
 

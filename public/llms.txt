@@ -40,12 +40,15 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 - `/blog/menulis-aksara-bali-online` — Three ways to write Balinese script online (converter, virtual keyboard, handwriting canvas) and how to paste results into other apps
 - `/blog/cara-mengetik-aksara-bali-keyboard` — Typing Balinese on an ordinary QWERTY keyboard: conventions, taling vs pepet, the on-screen script keyboard, reading from a photo
 - `/blog/nama-dalam-aksara-bali` — Writing your name in Balinese script, with Balinese, Indonesian, and foreign name examples and respelling rules
+- `/blog/copy-paste-aksara-bali` — Ready-to-copy Balinese script blocks: greetings, common words, the 18 base letters, numerals, punctuation, and where they paste cleanly
 - `/blog/cara-instal-font-aksara-bali` — Installing a Balinese script font on computers and smartphones (fixes □□□ boxes)
 - `/blog/aplikasi-android-aksara-bali-rilis-baru` — The offline Aksara Bali Android app: converter, quizzes, learning
 
 ### Blog Articles — Learning the Script
 - `/blog/daftar-lengkap-aksara-bali` — Complete glyph chart: 18 wreastra letters, 14 swara vowels, 33 wyanjana consonants by articulation (kanthya/talawya/murdhanya/dantya/osthya), pangangge incl. taling vs pepet, ra repa and la lenga, gantungan, numerals, punctuation, and the U+1B00–U+1B7F Unicode block
 - `/blog/ucapan-bahasa-bali-sehari-hari` — Everyday Balinese greetings and phrases with their script, plus a note on speech levels (sor singgih)
+- `/blog/gantungan-gempelan-aksara-bali` — Consonant clusters: gantungan vs gempelan, when adeg-adeg is used instead, and how Unicode encodes stacking
+- `/blog/translate-bahasa-indonesia-ke-bahasa-bali` — Translation vs transliteration, why speech levels (sor singgih) block full automation, and a starter Indonesian–Balinese vocabulary
 - `/blog/cara-belajar-aksara-bali` — Beginner's guide to learning Balinese script
 - `/blog/belajar-hanacaraka-panduan-lengkap` — Memorising the 18 base hanacaraka letters
 - `/blog/pangangge-tanda-vokal-aksara-bali` — Pangangge: the vowel signs that change a letter's sound
