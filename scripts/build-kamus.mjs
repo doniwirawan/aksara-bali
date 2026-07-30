@@ -39,15 +39,28 @@ function parse(from, to, order) {
     if (!line) continue
 
     const cols = line.split(/\s{2,}/).map(c => c.trim()).filter(Boolean)
-    if (cols.length < 4 || cols.length > 5) continue           // not a table row
+    if (cols.length < 3 || cols.length > 5) continue           // not a table row
     if (cols.some(c => c.split(/\s+/).length > 4)) continue    // prose
     if (/^\d+$/.test(cols[0])) continue                        // page number
     if (/^(kt\.?andap|kata|bab|kamus)/i.test(cols[0])) continue
 
-    // A four-column row lost its trailing column, not its first.
-    const padded = cols.length === 5 ? cols : [...cols, '-']
     const entry = {}
-    order.forEach((key, idx) => { entry[key] = clean(padded[idx]) })
+    if (cols.length >= 4) {
+      // A four-column row lost its trailing column, not its first.
+      const padded = cols.length === 5 ? cols : [...cols, '-']
+      order.forEach((key, idx) => { entry[key] = clean(padded[idx]) })
+    } else {
+      // The scan dropped the dash placeholders on some rows, leaving three
+      // columns: headword, one counterpart form, and the gloss. Which alus
+      // column the middle value belonged to is no longer recoverable, so it
+      // goes to mider — the book's column for "there is only one alus form" —
+      // and the row is flagged so it can be reviewed.
+      const [first, middle, last] = cols.map(clean)
+      if (order[0] === 'a') { entry.a = first; entry.m = middle; entry.i = last }
+      else { entry.i = first; entry.a = middle; entry.m = last }
+      entry.s = ''; entry.o = ''
+      entry.partial = true
+    }
 
     if (!entry.i || !(entry.a || entry.s || entry.o || entry.m)) continue
     rows.push(entry)
@@ -68,6 +81,7 @@ const entries = rows.filter(e => {
   seen.add(key)
   return true
 })
+const partial = entries.filter(e => e.partial).length
 
 await fs.mkdir(path.dirname(OUT), { recursive: true })
 await fs.writeFile(OUT, JSON.stringify({
@@ -77,5 +91,5 @@ await fs.writeFile(OUT, JSON.stringify({
 }))
 
 const size = (await fs.stat(OUT)).size
-console.log(`${entries.length} entries -> ${OUT} (${Math.round(size / 1024)} KB)`)
+console.log(`${entries.length} entries (${partial} recovered from incomplete scan rows) -> ${OUT} (${Math.round(size / 1024)} KB)`)
 console.log('sample:', JSON.stringify(entries.slice(0, 2)))

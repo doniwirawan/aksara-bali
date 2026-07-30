@@ -52,8 +52,13 @@ if (process.argv.includes('--export-only')) {
   await exportToJson()
 } else {
   const file = JSON.parse(await fs.readFile(JSON_PATH, 'utf8'))
+  const SOURCE = 'Kamus Anggah-Ungguh Kruna Bali-Indonesia'
   const rows = file.entries.map(e => ({
     indonesian: e.i, andap: e.a || '', singgih: e.s || '', sor: e.o || '', mider: e.m || '',
+    // Rows rebuilt from an incomplete scan line: the alus column they belonged
+    // to is a guess, so mark them for review rather than passing them off as
+    // faithful transcriptions.
+    source: e.partial ? SOURCE + ' (baris tak lengkap, perlu diperiksa)' : SOURCE,
   }))
   console.log(`importing ${rows.length} entries...`)
 
