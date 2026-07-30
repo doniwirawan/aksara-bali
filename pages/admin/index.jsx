@@ -6,7 +6,7 @@ import { ADMIN_EMAIL, isAdminEmail } from '../../utils/admin'
 import {
   BarChart3, PenLine, HelpCircle, Users, RefreshCw, Zap, Target, Flame,
   CheckCircle, ClipboardList, X, Image as ImageIcon, Clock, Trash2, Eye, EyeOff,
-  MousePointerClick, Activity, Moon, Sun, Download,
+  MousePointerClick, Activity, Moon, Sun, Download, Languages,
 } from 'lucide-react'
 
 const BLOG_CATEGORIES = ['Sejarah & Budaya', 'Panduan Belajar', 'Linguistik', 'Naskah Kuno', 'Teknologi & Budaya', 'Umum']
@@ -177,6 +177,24 @@ export default function AdminDashboard() {
     fetchBlog()
   }
 
+  // ─── Dictionary suggestions ───────────────────────────────
+  const [suggestions, setSuggestions] = useState([])
+  const [sugLoading, setSugLoading] = useState(false)
+
+  const fetchSuggestions = useCallback(async () => {
+    setSugLoading(true)
+    const res = await fetch('/api/dictionary-suggestions/', { headers: getHeaders() })
+    if (res.ok) setSuggestions(await res.json())
+    setSugLoading(false)
+  }, [])
+
+  const setSuggestionStatus = async (id, status) => {
+    await fetch('/api/dictionary-suggestions/', {
+      method: 'PUT', headers: getHeaders(), body: JSON.stringify({ id, status }),
+    })
+    fetchSuggestions()
+  }
+
   // ─── FAQ ──────────────────────────────────────────────────
   const fetchFaq = useCallback(async () => {
     setFaqLoading(true)
@@ -288,6 +306,7 @@ export default function AdminDashboard() {
     if (!authenticated) return
     if (activeTab === 'blog' || activeTab === 'analytics') fetchBlog()
     if (activeTab === 'faq') fetchFaq()
+    if (activeTab === 'kamus') fetchSuggestions()
     if (activeTab === 'users') fetchUsers()
   }, [activeTab, authenticated])
 
@@ -339,6 +358,7 @@ export default function AdminDashboard() {
     { key: 'analytics', icon: Activity, label: 'Analytics' },
     { key: 'blog', icon: PenLine, label: 'Blog' },
     { key: 'faq', icon: HelpCircle, label: 'FAQ' },
+    { key: 'kamus', icon: Languages, label: 'Usulan Kamus' },
     { key: 'users', icon: Users, label: 'Pengguna' },
   ]
 
@@ -803,6 +823,63 @@ export default function AdminDashboard() {
                   ))}
                 </div>
               )}
+            </>
+          )}
+
+          {/* ── DICTIONARY SUGGESTIONS TAB ── */}
+          {activeTab === 'kamus' && (
+            <>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>
+                  Usulan Kamus {suggestions.length ? `(${suggestions.filter(x => x.status === 'pending').length} menunggu)` : ''}
+                </h2>
+                <button onClick={fetchSuggestions} disabled={sugLoading} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <RefreshCw size={14} /> {sugLoading ? 'Memuat...' : 'Perbarui'}
+                </button>
+              </div>
+
+              <p style={{ fontSize: '13px', color: th.muted, margin: '0 0 16px' }}>
+                Usulan kata dari pembaca lewat halaman <a href="/translate" style={{ color: '#0d6efd' }}>/translate</a>.
+                Yang diterima perlu ditambahkan ke <code>scripts/data/kamus-bahasa-bali.txt</code> lalu dibangun ulang
+                dengan <code>node scripts/build-kamus.mjs</code>.
+              </p>
+
+              {!sugLoading && suggestions.length === 0 && (
+                <div style={s.card}>Belum ada usulan masuk.</div>
+              )}
+
+              <div style={{ display: 'grid', gap: '12px' }}>
+                {suggestions.map(item => (
+                  <div key={item.id} style={{ ...s.card, opacity: item.status === 'pending' ? 1 : 0.65 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '8px' }}>
+                      <strong style={{ fontSize: '15px' }}>{item.indonesian}</strong>
+                      <span style={{
+                        fontSize: '11px', padding: '2px 8px', borderRadius: '8px', fontWeight: 600,
+                        background: item.status === 'accepted' ? '#19875420' : item.status === 'rejected' ? '#dc354520' : '#fd7e1420',
+                        color: item.status === 'accepted' ? '#198754' : item.status === 'rejected' ? '#dc3545' : '#fd7e14',
+                      }}>{item.status}</span>
+                      <span style={{ fontSize: '12px', color: th.muted, marginLeft: 'auto' }}>
+                        {(item.created_at || '').split('T')[0]}{item.contributor ? ` · ${item.contributor}` : ''}
+                      </span>
+                    </div>
+
+                    <div style={{ fontSize: '13px', color: th.muted, display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
+                      {[['andap', item.andap], ['alus singgih', item.singgih], ['alus sor', item.sor], ['mider', item.mider]]
+                        .filter(([, v]) => v)
+                        .map(([label, v]) => <span key={label}><em>{label}:</em> <strong style={{ color: th.text }}>{v}</strong></span>)}
+                    </div>
+
+                    {item.note && <p style={{ fontSize: '13px', color: th.muted, margin: '8px 0 0' }}>{item.note}</p>}
+
+                    {item.status === 'pending' && (
+                      <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                        <button onClick={() => setSuggestionStatus(item.id, 'accepted')} style={{ ...s.btnOutline, color: '#198754', borderColor: '#198754' }}>Terima</button>
+                        <button onClick={() => setSuggestionStatus(item.id, 'rejected')} style={{ ...s.btnOutline, color: '#dc3545', borderColor: '#dc3545' }}>Tolak</button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </>
           )}
 
