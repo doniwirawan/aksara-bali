@@ -15,8 +15,10 @@ const clean = (v, max = 120) =>
 export default async function handler(req, res) {
   const supabase = createServerClient()
 
-  // Anyone may suggest a word; only admins can read or moderate the queue.
+  // Anyone may suggest a word or flag a wrong one; only admins can read or
+  // moderate the queue.
   if (req.method === 'POST') {
+    const kind = req.body?.kind === 'flag' ? 'flag' : 'add'
     const indonesian = clean(req.body?.indonesian)
     const andap = clean(req.body?.andap)
     const singgih = clean(req.body?.singgih)
@@ -24,16 +26,21 @@ export default async function handler(req, res) {
     const mider = clean(req.body?.mider)
     const note = clean(req.body?.note, 500)
     const contributor = clean(req.body?.contributor, 80)
+    const reportedEntry = clean(req.body?.reportedEntry, 300)
 
     if (!indonesian) return res.status(400).json({ error: 'Missing Indonesian word' })
-    if (!(andap || singgih || sor || mider)) {
+    if (kind === 'add' && !(andap || singgih || sor || mider)) {
       return res.status(400).json({ error: 'Provide at least one Balinese form' })
+    }
+    // A flag is only useful if it says what is wrong.
+    if (kind === 'flag' && !note) {
+      return res.status(400).json({ error: 'Describe what is wrong with the entry' })
     }
     // Honeypot: real users never fill this.
     if (clean(req.body?.website)) return res.status(200).json({ ok: true })
 
     const { error } = await supabase.from('dictionary_suggestions')
-      .insert([{ indonesian, andap, singgih, sor, mider, note, contributor }])
+      .insert([{ kind, indonesian, andap, singgih, sor, mider, note, contributor, reported_entry: reportedEntry }])
     if (error) return res.status(500).json({ error: error.message })
     return res.status(201).json({ ok: true })
   }

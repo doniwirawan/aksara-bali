@@ -50,3 +50,5 @@ next-env.d.ts
 .vercel
 # raw dictionary drop (the parsed copy lives in scripts/data/)
 767595183-Kamus-Bahasa-Bali.*
+# source dictionary scan — kept local, not published
+scripts/data/kamus-bahasa-bali.txt

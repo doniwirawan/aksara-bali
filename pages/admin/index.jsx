@@ -852,6 +852,11 @@ export default function AdminDashboard() {
                 {suggestions.map(item => (
                   <div key={item.id} style={{ ...s.card, opacity: item.status === 'pending' ? 1 : 0.65 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '8px' }}>
+                      <span style={{
+                        fontSize: '11px', padding: '2px 8px', borderRadius: '8px', fontWeight: 600,
+                        background: item.kind === 'flag' ? '#dc354520' : '#0d6efd20',
+                        color: item.kind === 'flag' ? '#dc3545' : '#0d6efd',
+                      }}>{item.kind === 'flag' ? 'laporan' : 'usulan'}</span>
                       <strong style={{ fontSize: '15px' }}>{item.indonesian}</strong>
                       <span style={{
                         fontSize: '11px', padding: '2px 8px', borderRadius: '8px', fontWeight: 600,
@@ -869,6 +874,11 @@ export default function AdminDashboard() {
                         .map(([label, v]) => <span key={label}><em>{label}:</em> <strong style={{ color: th.text }}>{v}</strong></span>)}
                     </div>
 
+                    {item.reported_entry && (
+                      <p style={{ fontSize: '13px', color: th.muted, margin: '8px 0 0' }}>
+                        Entri dilaporkan: <strong style={{ color: th.text }}>{item.reported_entry}</strong>
+                      </p>
+                    )}
                     {item.note && <p style={{ fontSize: '13px', color: th.muted, margin: '8px 0 0' }}>{item.note}</p>}
 
                     {item.status === 'pending' && (

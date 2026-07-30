@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { Search, Copy, Check, BookOpen, ExternalLink, Info, Plus } from 'lucide-react'
+import { Search, Copy, Check, BookOpen, ExternalLink, Info, Plus, Flag } from 'lucide-react'
 import { convertLatinToBalinese } from '../utils/balineseConverter'
 
 const BASE = 'https://aksarabali.doniwirawan.xyz'
@@ -24,6 +24,7 @@ const T = {
     empty: 'Kata itu belum ada di kamus ini. Coba kata dasarnya, atau cari di BASAbali Wiki.',
     start: 'Mulai mengetik untuk mencari kata.',
     loading: 'Memuat kamus...',
+    stats: (entries, forms) => `${entries.toLocaleString('id-ID')} entri · ${forms.toLocaleString('id-ID')} bentuk kata bahasa Bali`,
     indonesian: 'Indonesia',
     copy: 'Salin aksara',
     copied: 'Tersalin',
@@ -61,6 +62,14 @@ const T = {
     fNeedId: 'Isi dulu kata bahasa Indonesianya.',
     fNeedBali: 'Isi setidaknya satu bentuk bahasa Bali.',
     fFailed: 'Gagal mengirim. Coba lagi sebentar lagi.',
+    flag: 'Laporkan',
+    flagTitle: 'Laporkan entri ini',
+    flagBody: 'Ada yang keliru pada entri ini? Beri tahu bagian mananya — ejaan, ragam bahasanya, atau artinya. Kamus ini dipindai dari buku cetak, jadi salah baca memang mungkin terjadi.',
+    flagPlaceholder: 'Contoh: bentuk alusnya seharusnya ..., atau artinya bukan ...',
+    flagSubmit: 'Kirim laporan',
+    flagThanks: 'Terima kasih — laporan Anda sudah masuk.',
+    flagNeedNote: 'Tuliskan dulu apa yang keliru.',
+    flagCancel: 'Batal',
     disclaimer: 'Kamus ini disusun otomatis dari sumber cetak, jadi mungkin ada salah baca. Untuk keperluan resmi, cetak, atau upacara, mintalah pemeriksaan penutur asli.',
   },
   en: {
@@ -71,6 +80,7 @@ const T = {
     empty: 'That word is not in this dictionary yet. Try its root form, or search BASAbali Wiki.',
     start: 'Start typing to search.',
     loading: 'Loading dictionary...',
+    stats: (entries, forms) => `${entries.toLocaleString('en-US')} entries · ${forms.toLocaleString('en-US')} Balinese word forms`,
     indonesian: 'Indonesian',
     copy: 'Copy script',
     copied: 'Copied',
@@ -108,6 +118,14 @@ const T = {
     fNeedId: 'Please fill in the Indonesian word first.',
     fNeedBali: 'Please provide at least one Balinese form.',
     fFailed: 'Could not send. Please try again shortly.',
+    flag: 'Report',
+    flagTitle: 'Report this entry',
+    flagBody: 'Something wrong with this entry? Tell us which part — the spelling, the register, or the meaning. This dictionary was scanned from print, so misreadings do happen.',
+    flagPlaceholder: 'For example: the alus form should be ..., or the meaning is not ...',
+    flagSubmit: 'Send report',
+    flagThanks: 'Thank you — your report has been received.',
+    flagNeedNote: 'Please describe what is wrong first.',
+    flagCancel: 'Cancel',
     disclaimer: 'This dictionary was parsed automatically from a printed source, so misreadings are possible. For official, printed, or ceremonial use, have a native speaker check it.',
   },
 }
@@ -153,6 +171,9 @@ export default function TranslatePage({ locale, setLocale }) {
   const [formOpen, setFormOpen] = useState(false)
   const [form, setForm] = useState({ indonesian: '', andap: '', singgih: '', sor: '', mider: '', note: '', contributor: '', website: '' })
   const [formState, setFormState] = useState('idle')
+  const [flagFor, setFlagFor] = useState(null)
+  const [flagNote, setFlagNote] = useState('')
+  const [flagState, setFlagState] = useState('idle')
   const [formError, setFormError] = useState('')
   const lang = locale === 'en' ? 'en' : 'id'
   const t = T[lang]
@@ -189,6 +210,22 @@ export default function TranslatePage({ locale, setLocale }) {
     return scored.sort((x, y) => y.best - x.best).slice(0, 40).map(s => s.e)
   }, [entries, query])
 
+  // A row can carry four registers, and some list alternates — so the number of
+  // words is much larger than the number of entries.
+  const formCount = useMemo(() => {
+    if (!entries) return 0
+    const forms = new Set()
+    for (const e of entries) {
+      for (const f of [e.a, e.s, e.o, e.m]) {
+        for (const part of (f || '').split(/[,/]/)) {
+          const p = part.trim().toLowerCase()
+          if (p) forms.add(p)
+        }
+      }
+    }
+    return forms.size
+  }, [entries])
+
   const sentenceParts = useMemo(
     () => (mode === 'sentence' && sentence.trim() ? buildSentence(entries, sentence, level) : []),
     [entries, sentence, level, mode]
@@ -216,6 +253,29 @@ export default function TranslatePage({ locale, setLocale }) {
       setFormError(t.fFailed)
     }
   }, [form, t])
+
+  const submitFlag = useCallback(async (entry) => {
+    if (!flagNote.trim()) { setFlagState('need-note'); return }
+    setFlagState('sending')
+    try {
+      const res = await fetch('/api/dictionary-suggestions/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          kind: 'flag',
+          indonesian: entry.i,
+          note: flagNote,
+          reportedEntry: [entry.a, entry.s, entry.o, entry.m].filter(Boolean).join(' / '),
+        }),
+      })
+      if (!res.ok) throw new Error('failed')
+      setFlagState('done')
+      setFlagNote('')
+      setTimeout(() => { setFlagFor(null); setFlagState('idle') }, 1800)
+    } catch {
+      setFlagState('failed')
+    }
+  }, [flagNote])
 
   const copy = useCallback(async (text, key) => {
     try {
@@ -262,7 +322,12 @@ export default function TranslatePage({ locale, setLocale }) {
 
         <main style={{ maxWidth: 860, margin: '0 auto', padding: '32px 16px 80px' }}>
           <h1 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 8px' }}>{t.title}</h1>
-          <p style={{ color: mutedColor, margin: '0 0 24px', lineHeight: 1.6, fontSize: 15 }}>{t.subtitle}</p>
+          <p style={{ color: mutedColor, margin: '0 0 8px', lineHeight: 1.6, fontSize: 15 }}>{t.subtitle}</p>
+          {entries && (
+            <p style={{ color: mutedColor, margin: '0 0 24px', fontSize: 13, opacity: 0.85 }}>
+              {t.stats(entries.length, formCount)}
+            </p>
+          )}
 
           <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
             {[['word', t.tabWord], ['sentence', t.tabSentence]].map(([key, label]) => (
@@ -445,6 +510,54 @@ export default function TranslatePage({ locale, setLocale }) {
                         )
                       })}
                     </div>
+
+                    {flagFor === idx ? (
+                      <div style={{ marginTop: 12, padding: 12, borderRadius: 10, background: darkMode ? '#241d10' : '#fdf6e3', border: `1px solid ${darkMode ? '#3a3020' : '#efe3c2'}` }}>
+                        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{t.flagTitle}</div>
+                        <p style={{ fontSize: 12.5, color: mutedColor, margin: '0 0 8px', lineHeight: 1.6 }}>{t.flagBody}</p>
+                        <textarea
+                          value={flagNote}
+                          onChange={ev => { setFlagNote(ev.target.value); if (flagState === 'need-note') setFlagState('idle') }}
+                          placeholder={t.flagPlaceholder}
+                          rows={2}
+                          style={{
+                            width: '100%', padding: '8px 10px', fontSize: 14, borderRadius: 8,
+                            border: `1px solid ${borderColor}`, background: cardBg, color: textColor,
+                            outline: 'none', resize: 'vertical', fontFamily: 'inherit',
+                          }}
+                        />
+                        {flagState === 'need-note' && <p style={{ color: '#dc2626', fontSize: 12, margin: '6px 0 0' }}>{t.flagNeedNote}</p>}
+                        {flagState === 'failed' && <p style={{ color: '#dc2626', fontSize: 12, margin: '6px 0 0' }}>{t.fFailed}</p>}
+                        {flagState === 'done' && <p style={{ color: '#16a34a', fontSize: 12, margin: '6px 0 0' }}>{t.flagThanks}</p>}
+                        <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                          <button
+                            onClick={() => submitFlag(e)}
+                            disabled={flagState === 'sending'}
+                            style={{ fontSize: 13, fontWeight: 600, padding: '6px 14px', borderRadius: 8, border: 'none', background: '#0d6efd', color: '#fff', cursor: 'pointer' }}
+                          >
+                            {flagState === 'sending' ? t.fSending : t.flagSubmit}
+                          </button>
+                          <button
+                            onClick={() => { setFlagFor(null); setFlagNote(''); setFlagState('idle') }}
+                            style={{ fontSize: 13, padding: '6px 14px', borderRadius: 8, border: `1px solid ${borderColor}`, background: 'transparent', color: mutedColor, cursor: 'pointer' }}
+                          >
+                            {t.flagCancel}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => { setFlagFor(idx); setFlagNote(''); setFlagState('idle') }}
+                        style={{
+                          marginTop: 10, display: 'inline-flex', alignItems: 'center', gap: 5,
+                          fontSize: 12, padding: 0, border: 'none', background: 'transparent',
+                          color: mutedColor, cursor: 'pointer', textDecoration: 'underline',
+                          textUnderlineOffset: 3, opacity: 0.75,
+                        }}
+                      >
+                        <Flag size={12} /> {t.flag}
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>

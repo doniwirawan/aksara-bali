@@ -3,6 +3,9 @@
 //
 //   node scripts/build-kamus.mjs [source.txt]
 //
+// The source text is NOT in the repo (it is a scan of a printed book). Keep it
+// locally at scripts/data/kamus-bahasa-bali.txt, or pass a path as argv[2].
+//
 // The source holds TWO dictionaries with different column orders:
 //
 //   Bali - Indonesia   Kt.Andap | Kata Asi | Kata Aso | Ami/Mider | Kata BI
