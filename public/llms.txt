@@ -29,6 +29,7 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 
 ### Core Pages
 - `/` — Main Latin to Balinese script converter (real-time conversion, reverse mode, copy/download/share, word-art PNG export, text-to-speech) plus the "Baca dari foto" panel, which reads Balinese script from an uploaded or camera photo via OCR
+- `/translate` — Balinese dictionary: search an Indonesian or Balinese word and see its andap, alus singgih, alus sor, and mider forms with Balinese script, built from the Kamus Anggah-Ungguh Kruna Bali–Indonesia
 - `/practice` — Interactive learning: leveled quiz, writing canvas with hand gesture recognition, virtual Balinese keyboard (including the pepet key), script reference
 - `/blog` — Articles about Balinese script, history, culture, linguistics, and how to use the tools
 - `/faq` — Frequently asked questions about Balinese script and the tool
@@ -41,6 +42,8 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 - `/blog/cara-mengetik-aksara-bali-keyboard` — Typing Balinese on an ordinary QWERTY keyboard: conventions, taling vs pepet, the on-screen script keyboard, reading from a photo
 - `/blog/nama-dalam-aksara-bali` — Writing your name in Balinese script, with Balinese, Indonesian, and foreign name examples and respelling rules
 - `/blog/copy-paste-aksara-bali` — Ready-to-copy Balinese script blocks: greetings, common words, the 18 base letters, numerals, punctuation, and where they paste cleanly
+- `/blog/aksara-bali-untuk-tato-dan-desain` — Preparing Balinese script for tattoos, invitations, and design, plus characters that should not be used decoratively
+- `/blog/menulis-aksara-bali-di-word-canva` — Using Balinese script in Word, Google Docs, Canva, Photoshop, and PowerPoint
 - `/blog/cara-instal-font-aksara-bali` — Installing a Balinese script font on computers and smartphones (fixes □□□ boxes)
 - `/blog/aplikasi-android-aksara-bali-rilis-baru` — The offline Aksara Bali Android app: converter, quizzes, learning
 
@@ -55,6 +58,9 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 - `/blog/angka-bali-sistem-penomoran-tradisional` — Balinese numerals and the traditional numbering system
 
 ### Blog Articles — Language and History
+- `/blog/asal-usul-aksara-bali-aji-saka` — Script descent from Brahmi to Balinese, and the Aji Saka legend behind the hanacaraka order
+- `/blog/kelengkapan-penjor-galungan` — The parts of a Galungan penjor and what each symbolises, with their names in Balinese script
+- `/blog/rangkaian-hari-raya-nyepi` — The Nyepi sequence (Melasti, Pangrupukan, Nyepi, Ngembak Geni) and Catur Brata Penyepian
 - `/blog/mengenal-aksara-bali` — History and structure of Balinese script
 - `/blog/aksara-bali-dan-bahasa-sansekerta` — Relationship between Balinese script and Sanskrit
 - `/blog/aksara-murda-huruf-kapital-bali` — Aksara murda: the retroflex letters used for Sanskrit words
@@ -89,6 +95,12 @@ Balinese font. See `/blog/cara-instal-font-aksara-bali`, or export the result as
 taling (ᬾ) for /e/ and pepet (ᭂ) for the schwa /ə/. The Latin converter writes taling for "e";
 use the pepet key on the `/practice` keyboard when you need ᭂ.
 
+**Can you translate Indonesian into Balinese?** The `/translate` page looks words up in a Balinese
+dictionary and shows the andap / alus singgih / alus sor / mider forms, each with its script. It is a
+dictionary, not a sentence translator — Balinese speech levels (anggah-ungguh basa) make word choice
+depend on who is being addressed. BASAbali Wiki, Wikipedia Basa Bali, and Wikisource Basa Bali are
+linked there for deeper reference.
+
 **Can I type directly in Balinese script?** Yes — the virtual Balinese keyboard on `/practice`.
 
 **Is it safe to use for a tattoo or invitation?** Use it as a starting point, then have a
@@ -109,6 +121,7 @@ extra care.
 - Text-to-speech pronunciation of the Latin text
 - PWA (Progressive Web App) — installable, works offline
 - Companion Android app with offline converter, quizzes, and script reference
+- Balinese dictionary with speech levels (andap, alus singgih, alus sor, mider), 2,690 entries
 - Bilingual UI: Indonesian and English
 - Dark mode support
 - Supabase analytics backend (conversion logs, quiz results, writing checks)

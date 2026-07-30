@@ -750,7 +750,9 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
   return (
     <>
       <Head>
-        <title>{post.title} | Blog Aksara Bali</title>
+        {/* Only append the site suffix when there is room for it — Google cuts
+            the title tag around 60 characters. */}
+        <title>{post.title.length > 52 ? post.title : `${post.title} | Blog Aksara Bali`}</title>
         <meta name="description" content={post.description} />
         <meta name="keywords" content={post.tags.join(', ')} />
         <meta property="og:title" content={post.title} />
@@ -854,6 +856,20 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
             <ul style={{ paddingLeft: '20px', margin: 0 }}>
               {renderMarkdown(displayContent)}
             </ul>
+
+            {/* Disclosure: drafts are AI-assisted, so readers should verify
+                Balinese wording before relying on it. */}
+            <div style={{
+              marginTop: '28px', padding: '14px 16px', borderRadius: '10px',
+              background: darkMode ? '#1f1a10' : '#fdf6e3',
+              border: `1px solid ${darkMode ? '#3a3020' : '#efe3c2'}`,
+              fontSize: '13px', lineHeight: 1.6, color: mutedColor,
+              fontFamily: 'Inter, system-ui, sans-serif',
+            }}>
+              {lang === 'en'
+                ? 'Note: parts of this article were drafted with AI assistance and are reviewed over time. Balinese wording and script should still be checked with a teacher or native speaker before you use them for anything official, printed, or ceremonial. Spotted a mistake? Please let us know.'
+                : 'Catatan: sebagian tulisan ini disusun dengan bantuan AI dan diperiksa secara berkala. Kata dan aksara Bali sebaiknya tetap Anda periksa ulang bersama guru atau penutur asli sebelum dipakai untuk keperluan resmi, cetak, atau upacara. Menemukan kekeliruan? Beri tahu kami.'}
+            </div>
           </div>
 
           {/* Related articles */}

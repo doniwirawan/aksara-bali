@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../context/AuthContext'
-import { Zap, Target, FileText, HelpCircle, Globe, Moon, Sun, User, BarChart3, Menu, X } from 'lucide-react'
+import { Zap, Target, FileText, HelpCircle, Globe, Moon, Sun, User, BarChart3, Menu, X, Languages } from 'lucide-react'
 
 const NAV_LINKS = [
   { href: '/', label: 'Konverter', labelEn: 'Converter', icon: Zap },
   // /read is hidden from the nav — OCR is reachable from the "Baca dari foto"
   // panel on the converter page.
+  { href: '/translate', label: 'Kamus', labelEn: 'Dictionary', icon: Languages },
   { href: '/practice', label: 'Latihan', labelEn: 'Practice', icon: Target },
   { href: '/blog', label: 'Blog', labelEn: 'Blog', icon: FileText },
   { href: '/faq', label: 'FAQ', labelEn: 'FAQ', icon: HelpCircle },

@@ -239,7 +239,7 @@ Kalau kata yang Anda cari tidak ada di sini, buat sendiri lewat <a href="/">konv
 | rahajeng rauh | selamat datang | ᬭᬳᬚᬾᬂ​ᬭᬉᬳ᭄ |
 | rahajeng nyepi | selamat hari Nyepi | ᬭᬳᬚᬾᬂ​ᬦ᭄ᬬᬾᬧᬶ |
 | matur suksma | terima kasih | ᬫᬢᬸᬭ᭄​ᬲᬸᬓ᭄ᬲ᭄ᬫ |
-| sami sami | sama-sama | ᬲᬫᬶ​ᬲᬫᬶ |
+| suksma mewali | sama-sama | ᬲᬸᬓ᭄ᬲ᭄ᬫ​ᬫᬾᬯᬮᬶ |
 | ampura | mohon maaf | ᬅᬫ᭄ᬧᬸᬭ |
 | dumogi rahayu | semoga selamat | ᬤᬸᬫᭀᬕᬶ​ᬭᬳᬬᬸ |
 
@@ -348,7 +348,7 @@ If the word you want is not here, make it yourself with the <a href="/">Balinese
 | rahajeng rauh | welcome | ᬭᬳᬚᬾᬂ​ᬭᬉᬳ᭄ |
 | rahajeng nyepi | happy Nyepi | ᬭᬳᬚᬾᬂ​ᬦ᭄ᬬᬾᬧᬶ |
 | matur suksma | thank you | ᬫᬢᬸᬭ᭄​ᬲᬸᬓ᭄ᬲ᭄ᬫ |
-| sami sami | you are welcome | ᬲᬫᬶ​ᬲᬫᬶ |
+| suksma mewali | you are welcome | ᬲᬸᬓ᭄ᬲ᭄ᬫ​ᬫᬾᬯᬮᬶ |
 | ampura | sorry | ᬅᬫ᭄ᬧᬸᬭ |
 | dumogi rahayu | may you be safe | ᬤᬸᬫᭀᬕᬶ​ᬭᬳᬬᬸ |
 
@@ -481,7 +481,7 @@ Kata-kata berikut aman dipakai dalam percakapan sehari-hari yang sopan.
 | Indonesia | Bahasa Bali | Aksara Bali |
 |-----------|------------|------------|
 | terima kasih | matur suksma | ᬫᬢᬸᬭ᭄​ᬲᬸᬓ᭄ᬲ᭄ᬫ |
-| sama-sama | sami sami | ᬲᬫᬶ​ᬲᬫᬶ |
+| sama-sama | suksma mewali | ᬲᬸᬓ᭄ᬲ᭄ᬫ​ᬫᬾᬯᬮᬶ |
 | maaf | ampura | ᬅᬫ᭄ᬧᬸᬭ |
 | permisi | sugra | ᬲᬸᬕ᭄ᬭ |
 | selamat pagi | rahajeng semeng | ᬭᬳᬚᬾᬂ​ᬲᬾᬫᬾᬂ |
@@ -578,7 +578,7 @@ The words below are safe for ordinary polite conversation.
 | Indonesian | Balinese | Balinese script |
 |-----------|----------|----------------|
 | terima kasih | matur suksma | ᬫᬢᬸᬭ᭄​ᬲᬸᬓ᭄ᬲ᭄ᬫ |
-| sama-sama | sami sami | ᬲᬫᬶ​ᬲᬫᬶ |
+| sama-sama | suksma mewali | ᬲᬸᬓ᭄ᬲ᭄ᬫ​ᬫᬾᬯᬮᬶ |
 | maaf | ampura | ᬅᬫ᭄ᬧᬸᬭ |
 | permisi | sugra | ᬲᬸᬕ᭄ᬭ |
 | selamat pagi | rahajeng semeng | ᬭᬳᬚᬾᬂ​ᬲᬾᬫᬾᬂ |

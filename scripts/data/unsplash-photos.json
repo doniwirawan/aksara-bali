@@ -1,0 +1,762 @@
+{
+  "bali-temple": [
+    {
+      "id": "bnMPFPuSCI0",
+      "photo": "https://images.unsplash.com/photo-1604999333679-b86d54738315",
+      "credit": "Guillaume Marques",
+      "creditUrl": "https://unsplash.com/@mrqs_g",
+      "sourceUrl": "https://unsplash.com/photos/brown-and-green-temple-near-body-of-water-under-blue-and-white-cloudy-sky-during-daytime-bnMPFPuSCI0",
+      "alt": "brown and green temple near body of water under blue and white cloudy sky during daytime"
+    },
+    {
+      "id": "1kdIG_258bU",
+      "photo": "https://images.unsplash.com/photo-1537996194471-e657df975ab4",
+      "credit": "Aron Visuals",
+      "creditUrl": "https://unsplash.com/@aronvisuals",
+      "sourceUrl": "https://unsplash.com/photos/temple-beside-body-of-water-and-trees-1kdIG_258bU",
+      "alt": "temple beside body of water and trees"
+    },
+    {
+      "id": "Y0UUhY1V7Po",
+      "photo": "https://images.unsplash.com/photo-1711609110590-5ad5c4599e56",
+      "credit": "Katarzyna Zygnerska",
+      "creditUrl": "https://unsplash.com/@katasha",
+      "sourceUrl": "https://unsplash.com/photos/a-body-of-water-with-a-small-island-in-the-middle-of-it-Y0UUhY1V7Po",
+      "alt": "a body of water with a small island in the middle of it"
+    },
+    {
+      "id": "U_i6h9Y50wQ",
+      "photo": "https://images.unsplash.com/photo-1544644181-1484b3fdfc62",
+      "credit": "Sebastian Pena Lambarri",
+      "creditUrl": "https://unsplash.com/@sebaspenalambarri",
+      "sourceUrl": "https://unsplash.com/photos/pura-ulun-danu-bratan-indonesia-U_i6h9Y50wQ",
+      "alt": "Pura Ulun Danu Bratan, Indonesia"
+    },
+    {
+      "id": "ycyLUcEoalE",
+      "photo": "https://images.unsplash.com/photo-1532186651327-6ac23687d189",
+      "credit": "Aron Visuals",
+      "creditUrl": "https://unsplash.com/@aronvisuals",
+      "sourceUrl": "https://unsplash.com/photos/temple-in-between-body-of-water-ycyLUcEoalE",
+      "alt": "temple in between body of water"
+    }
+  ],
+  "bali-culture": [
+    {
+      "id": "VvJ0DL_PLR8",
+      "photo": "https://images.unsplash.com/photo-1542897644-e04428948020",
+      "credit": "Ruben Hutabarat",
+      "creditUrl": "https://unsplash.com/@rubenhutabarat",
+      "sourceUrl": "https://unsplash.com/photos/women-in-traditional-dress-with-flower-pots-on-head-during-daytime-VvJ0DL_PLR8",
+      "alt": "women in traditional dress with flower pots on head during daytime"
+    },
+    {
+      "id": "lwGe7vHZ_OY",
+      "photo": "https://images.unsplash.com/photo-1542897730-a00e7d3c4b4d",
+      "credit": "Ruben Hutabarat",
+      "creditUrl": "https://unsplash.com/@rubenhutabarat",
+      "sourceUrl": "https://unsplash.com/photos/low-angle-photography-of-plant-during-daytime-lwGe7vHZ_OY",
+      "alt": "low angle photography of plant during daytime"
+    },
+    {
+      "id": "QZaYfCbnjig",
+      "photo": "https://images.unsplash.com/photo-1542897643-cfccd88c7127",
+      "credit": "Ruben Hutabarat",
+      "creditUrl": "https://unsplash.com/@rubenhutabarat",
+      "sourceUrl": "https://unsplash.com/photos/group-of-people-parade-on-street-QZaYfCbnjig",
+      "alt": "group of people parade on street"
+    },
+    {
+      "id": "pJMk3OIEYW4",
+      "photo": "https://images.unsplash.com/photo-1665748245425-75b4081be19f",
+      "credit": "junot adiputra",
+      "creditUrl": "https://unsplash.com/@noxnoobs",
+      "sourceUrl": "https://unsplash.com/photos/a-group-of-women-wearing-traditional-clothing-pJMk3OIEYW4",
+      "alt": "a group of women wearing traditional clothing"
+    },
+    {
+      "id": "7dcSL8aM3hg",
+      "photo": "https://images.unsplash.com/photo-1627974159699-b355b081460e",
+      "credit": "Polina Kuzovkova",
+      "creditUrl": "https://unsplash.com/@p_kuzovkova",
+      "sourceUrl": "https://unsplash.com/photos/woman-in-white-long-sleeve-shirt-holding-hands-with-woman-in-white-long-sleeve-shirt-7dcSL8aM3hg",
+      "alt": "woman in white long sleeve shirt holding hands with woman in white long sleeve shirt"
+    }
+  ],
+  "balinese-ceremony": [
+    {
+      "id": "VvJ0DL_PLR8",
+      "photo": "https://images.unsplash.com/photo-1542897644-e04428948020",
+      "credit": "Ruben Hutabarat",
+      "creditUrl": "https://unsplash.com/@rubenhutabarat",
+      "sourceUrl": "https://unsplash.com/photos/women-in-traditional-dress-with-flower-pots-on-head-during-daytime-VvJ0DL_PLR8",
+      "alt": "women in traditional dress with flower pots on head during daytime"
+    },
+    {
+      "id": "7dcSL8aM3hg",
+      "photo": "https://images.unsplash.com/photo-1627974159699-b355b081460e",
+      "credit": "Polina Kuzovkova",
+      "creditUrl": "https://unsplash.com/@p_kuzovkova",
+      "sourceUrl": "https://unsplash.com/photos/woman-in-white-long-sleeve-shirt-holding-hands-with-woman-in-white-long-sleeve-shirt-7dcSL8aM3hg",
+      "alt": "woman in white long sleeve shirt holding hands with woman in white long sleeve shirt"
+    },
+    {
+      "id": "QZaYfCbnjig",
+      "photo": "https://images.unsplash.com/photo-1542897643-cfccd88c7127",
+      "credit": "Ruben Hutabarat",
+      "creditUrl": "https://unsplash.com/@rubenhutabarat",
+      "sourceUrl": "https://unsplash.com/photos/group-of-people-parade-on-street-QZaYfCbnjig",
+      "alt": "group of people parade on street"
+    },
+    {
+      "id": "hEQznQUJAdw",
+      "photo": "https://images.unsplash.com/photo-1542897643-8158da5b4607",
+      "credit": "Ruben Hutabarat",
+      "creditUrl": "https://unsplash.com/@rubenhutabarat",
+      "sourceUrl": "https://unsplash.com/photos/group-of-people-parade-on-street-hEQznQUJAdw",
+      "alt": "group of people parade on street"
+    },
+    {
+      "id": "D3bk706VEds",
+      "photo": "https://images.unsplash.com/photo-1585704123905-b89826d5daa6",
+      "credit": "Eyestetix Studio",
+      "creditUrl": "https://unsplash.com/@eyestetix_studio",
+      "sourceUrl": "https://unsplash.com/photos/woman-in-white-lace-dress-with-yellow-and-red-flower-headdress-D3bk706VEds",
+      "alt": "woman in white lace dress with yellow and red flower headdress"
+    },
+    {
+      "id": "BLlJtpBi5wY",
+      "photo": "https://images.unsplash.com/photo-1747539080867-61d90999f7c7",
+      "credit": "Bayus Salafi",
+      "creditUrl": "https://unsplash.com/@bayussalafi",
+      "sourceUrl": "https://unsplash.com/photos/woman-in-prayer-with-incense-smoke-BLlJtpBi5wY",
+      "alt": "Woman in prayer, with incense smoke."
+    }
+  ],
+  "bali-offering": [
+    {
+      "id": "VvJ0DL_PLR8",
+      "photo": "https://images.unsplash.com/photo-1542897644-e04428948020",
+      "credit": "Ruben Hutabarat",
+      "creditUrl": "https://unsplash.com/@rubenhutabarat",
+      "sourceUrl": "https://unsplash.com/photos/women-in-traditional-dress-with-flower-pots-on-head-during-daytime-VvJ0DL_PLR8",
+      "alt": "women in traditional dress with flower pots on head during daytime"
+    },
+    {
+      "id": "QZaYfCbnjig",
+      "photo": "https://images.unsplash.com/photo-1542897643-cfccd88c7127",
+      "credit": "Ruben Hutabarat",
+      "creditUrl": "https://unsplash.com/@rubenhutabarat",
+      "sourceUrl": "https://unsplash.com/photos/group-of-people-parade-on-street-QZaYfCbnjig",
+      "alt": "group of people parade on street"
+    },
+    {
+      "id": "hEQznQUJAdw",
+      "photo": "https://images.unsplash.com/photo-1542897643-8158da5b4607",
+      "credit": "Ruben Hutabarat",
+      "creditUrl": "https://unsplash.com/@rubenhutabarat",
+      "sourceUrl": "https://unsplash.com/photos/group-of-people-parade-on-street-hEQznQUJAdw",
+      "alt": "group of people parade on street"
+    },
+    {
+      "id": "wtJret3oAE8",
+      "photo": "https://images.unsplash.com/photo-1587632467120-c79b296a5dda",
+      "credit": "Pier Francesco Grizi",
+      "creditUrl": "https://unsplash.com/@pfgrizi",
+      "sourceUrl": "https://unsplash.com/photos/red-yellow-and-green-floral-basket-wtJret3oAE8",
+      "alt": "red yellow and green floral basket"
+    },
+    {
+      "id": "fbEaAix6Yus",
+      "photo": "https://images.unsplash.com/photo-1631813991050-477dc7f7e2f6",
+      "credit": "Roberto Rendon",
+      "creditUrl": "https://unsplash.com/@bertorendon13",
+      "sourceUrl": "https://unsplash.com/photos/a-woman-sitting-on-the-ground-with-a-flower-in-her-hair-fbEaAix6Yus",
+      "alt": "a woman sitting on the ground with a flower in her hair"
+    }
+  ],
+  "palm-leaf-manuscript": [
+    {
+      "id": "yri82tuk2TQ",
+      "photo": "https://images.unsplash.com/photo-1467688695332-6b486449d78f",
+      "credit": "Mark Rasmuson",
+      "creditUrl": "https://unsplash.com/@mrasmuson",
+      "sourceUrl": "https://unsplash.com/photos/photo-of-open-book-yri82tuk2TQ",
+      "alt": "photo of open book"
+    },
+    {
+      "id": "nAPqVWA4SQQ",
+      "photo": "https://images.unsplash.com/photo-1712668908633-7bc528dff18f",
+      "credit": "Hannah Fleming-Hlll",
+      "creditUrl": "https://unsplash.com/@fhdigital",
+      "sourceUrl": "https://unsplash.com/photos/a-cross-on-top-of-an-open-bible-nAPqVWA4SQQ",
+      "alt": "a cross on top of an open bible"
+    },
+    {
+      "id": "rNxfMnfnenE",
+      "photo": "https://images.unsplash.com/photo-1702753390015-d4abffb87306",
+      "credit": "Afonso Azevedo Neves",
+      "creditUrl": "https://unsplash.com/@ofotografoportugues",
+      "sourceUrl": "https://unsplash.com/photos/an-old-book-with-writing-on-it-rNxfMnfnenE",
+      "alt": "an old book with writing on it"
+    },
+    {
+      "id": "u6V1iYlsFwo",
+      "photo": "https://images.unsplash.com/photo-1711634998612-68a22cddb3c4",
+      "credit": "G + L",
+      "creditUrl": "https://unsplash.com/@_wonderinthewild",
+      "sourceUrl": "https://unsplash.com/photos/a-bouquet-of-flowers-sitting-on-top-of-a-table-u6V1iYlsFwo",
+      "alt": "a bouquet of flowers sitting on top of a table"
+    },
+    {
+      "id": "csr_pl3YwEU",
+      "photo": "https://images.unsplash.com/photo-1603361233308-b3ec0f7c0a16",
+      "credit": "Boudewijn Huysmans",
+      "creditUrl": "https://unsplash.com/@boudewijn_huysmans",
+      "sourceUrl": "https://unsplash.com/photos/brown-and-red-labeled-box-csr_pl3YwEU",
+      "alt": "brown and red labeled box"
+    },
+    {
+      "id": "r0vOY_cW22w",
+      "photo": "https://images.unsplash.com/photo-1720700955600-a21cd215d1a3",
+      "credit": "The Cleveland Museum of Art",
+      "creditUrl": "https://unsplash.com/@clevelandart",
+      "sourceUrl": "https://unsplash.com/photos/ornate-manuscript-page-with-calligraphy-and-decorative-borders-r0vOY_cW22w",
+      "alt": "Ornate manuscript page with calligraphy and decorative borders."
+    }
+  ],
+  "old-manuscript": [
+    {
+      "id": "5bzMOpMTDRM",
+      "photo": "https://images.unsplash.com/photo-1506513083865-434a8a207e11",
+      "credit": "Kiwihug",
+      "creditUrl": "https://unsplash.com/@kiwihug",
+      "sourceUrl": "https://unsplash.com/photos/opened-book-on-grey-surface-5bzMOpMTDRM",
+      "alt": "opened book on grey surface"
+    },
+    {
+      "id": "MiNq1Mjikfw",
+      "photo": "https://images.unsplash.com/photo-1561812938-f6e60cbf95e3",
+      "credit": "Alessio Fiorentino",
+      "creditUrl": "https://unsplash.com/@fioreale",
+      "sourceUrl": "https://unsplash.com/photos/a-close-up-of-a-handwriting-on-a-piece-of-paper-MiNq1Mjikfw",
+      "alt": "a close up of a handwriting on a piece of paper"
+    },
+    {
+      "id": "KKHs1e2yiwc",
+      "photo": "https://images.unsplash.com/photo-1633871677534-ae14eb2d4ff0",
+      "credit": "Towfiqu barbhuiya",
+      "creditUrl": "https://unsplash.com/@towfiqu999999",
+      "sourceUrl": "https://unsplash.com/photos/a-close-up-of-a-pile-of-paper-on-a-table-KKHs1e2yiwc",
+      "alt": "a close up of a pile of paper on a table"
+    },
+    {
+      "id": "yri82tuk2TQ",
+      "photo": "https://images.unsplash.com/photo-1467688695332-6b486449d78f",
+      "credit": "Mark Rasmuson",
+      "creditUrl": "https://unsplash.com/@mrasmuson",
+      "sourceUrl": "https://unsplash.com/photos/photo-of-open-book-yri82tuk2TQ",
+      "alt": "photo of open book"
+    },
+    {
+      "id": "Y7gK7evzIMc",
+      "photo": "https://images.unsplash.com/photo-1616405160919-c209d0062a4a",
+      "credit": "Aleksandra Sapozhnikova",
+      "creditUrl": "https://unsplash.com/@rruprrup",
+      "sourceUrl": "https://unsplash.com/photos/white-and-red-book-page-Y7gK7evzIMc",
+      "alt": "white and red book page"
+    },
+    {
+      "id": "JdxsCHWRSXQ",
+      "photo": "https://images.unsplash.com/photo-1602660187275-7275b639d7ea",
+      "credit": "Boudewijn Huysmans",
+      "creditUrl": "https://unsplash.com/@boudewijn_huysmans",
+      "sourceUrl": "https://unsplash.com/photos/a-very-old-book-with-some-writing-on-it-JdxsCHWRSXQ",
+      "alt": "a very old book with some writing on it"
+    }
+  ],
+  "calligraphy-writing": [
+    {
+      "id": "y02jEX_B0O0",
+      "photo": "https://images.unsplash.com/photo-1455390582262-044cdead277a",
+      "credit": "Aaron Burden",
+      "creditUrl": "https://unsplash.com/@aaronburden",
+      "sourceUrl": "https://unsplash.com/photos/fountain-pen-on-black-lined-paper-y02jEX_B0O0",
+      "alt": "fountain pen on black lined paper"
+    },
+    {
+      "id": "vJqSAasmCEY",
+      "photo": "https://images.unsplash.com/photo-1486303954368-398fea0e72cd",
+      "credit": "Niketh Vellanki",
+      "creditUrl": "https://unsplash.com/@thenikyv",
+      "sourceUrl": "https://unsplash.com/photos/person-holding-black-paint-brush-while-painting-black-text-on-white-paper-vJqSAasmCEY",
+      "alt": "person holding black paint brush while painting black text on white paper"
+    },
+    {
+      "id": "pMSIUfvI_18",
+      "photo": "https://images.unsplash.com/photo-1545038522-9bb451739ab9",
+      "credit": "Yifeng Lu",
+      "creditUrl": "https://unsplash.com/@maxlogi",
+      "sourceUrl": "https://unsplash.com/photos/kanji-script-text-close-up-photography-pMSIUfvI_18",
+      "alt": "Kanji script text close-up photography"
+    },
+    {
+      "id": "159PxvMVDs8",
+      "photo": "https://images.unsplash.com/photo-1601480905449-90fca867ad37",
+      "credit": "Tia",
+      "creditUrl": "https://unsplash.com/@tee_ya",
+      "sourceUrl": "https://unsplash.com/photos/text-159PxvMVDs8",
+      "alt": "text"
+    },
+    {
+      "id": "9TucEPaZxok",
+      "photo": "https://images.unsplash.com/photo-1564630322990-4a9e93d13946",
+      "credit": "Judith Browne",
+      "creditUrl": "https://unsplash.com/@jbcalligraphy52",
+      "sourceUrl": "https://unsplash.com/photos/closeup-photo-of-black-and-white-printing-paper-9TucEPaZxok",
+      "alt": "closeup photo of black and white printing paper"
+    },
+    {
+      "id": "_d2YajYba98",
+      "photo": "https://images.unsplash.com/photo-1628962691167-27b7db9997e0",
+      "credit": "Oussama Abouchatir",
+      "creditUrl": "https://unsplash.com/@paradigmvisuals",
+      "sourceUrl": "https://unsplash.com/photos/person-writing-on-white-paper-_d2YajYba98",
+      "alt": "person writing on white paper"
+    }
+  ],
+  "handwriting": [
+    {
+      "id": "y02jEX_B0O0",
+      "photo": "https://images.unsplash.com/photo-1455390582262-044cdead277a",
+      "credit": "Aaron Burden",
+      "creditUrl": "https://unsplash.com/@aaronburden",
+      "sourceUrl": "https://unsplash.com/photos/fountain-pen-on-black-lined-paper-y02jEX_B0O0",
+      "alt": "fountain pen on black lined paper"
+    },
+    {
+      "id": "s9CC2SKySJM",
+      "photo": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173",
+      "credit": "Unseen Studio",
+      "creditUrl": "https://unsplash.com/@uns__nstudio",
+      "sourceUrl": "https://unsplash.com/photos/person-writing-on-brown-wooden-table-near-white-ceramic-mug-s9CC2SKySJM",
+      "alt": "person writing on brown wooden table near white ceramic mug"
+    },
+    {
+      "id": "8eSrC43qdro",
+      "photo": "https://images.unsplash.com/photo-1517971071642-34a2d3ecc9cd",
+      "credit": "Hannah Olinger",
+      "creditUrl": "https://unsplash.com/@hannaholinger",
+      "sourceUrl": "https://unsplash.com/photos/a-person-writing-on-a-piece-of-paper-with-a-pen-8eSrC43qdro",
+      "alt": "a person writing on a piece of paper with a pen"
+    },
+    {
+      "id": "DR31squbFoA",
+      "photo": "https://images.unsplash.com/photo-1529251333259-d36cccaf22ea",
+      "credit": "Debby Hudson",
+      "creditUrl": "https://unsplash.com/@hudsoncrafted",
+      "sourceUrl": "https://unsplash.com/photos/purple-flowers-on-paper-DR31squbFoA",
+      "alt": "purple flowers on paper"
+    },
+    {
+      "id": "00nHr1Lpq6w",
+      "photo": "https://images.unsplash.com/photo-1543769657-fcf1236421bc",
+      "credit": "Micah Boswell",
+      "creditUrl": "https://unsplash.com/@micahboswell",
+      "sourceUrl": "https://unsplash.com/photos/handwritten-text-00nHr1Lpq6w",
+      "alt": "handwritten text"
+    },
+    {
+      "id": "hjwKMkehBco",
+      "photo": "https://images.unsplash.com/photo-1473186505569-9c61870c11f9",
+      "credit": "Álvaro Serrano",
+      "creditUrl": "https://unsplash.com/@alvaroserrano",
+      "sourceUrl": "https://unsplash.com/photos/black-and-silver-fountain-pen-hjwKMkehBco",
+      "alt": "black and silver fountain pen"
+    }
+  ],
+  "keyboard-typing": [
+    {
+      "id": "npxXWgQ33ZQ",
+      "photo": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+      "credit": "Glenn Carstens-Peters",
+      "creditUrl": "https://unsplash.com/@glenncarstenspeters",
+      "sourceUrl": "https://unsplash.com/photos/person-using-macbook-pro-npxXWgQ33ZQ",
+      "alt": "person using MacBook Pro"
+    },
+    {
+      "id": "WkfDrhxDMC8",
+      "photo": "https://images.unsplash.com/photo-1547394765-185e1e68f34e",
+      "credit": "Christian Wiediger",
+      "creditUrl": "https://unsplash.com/@christianw",
+      "sourceUrl": "https://unsplash.com/photos/closeup-photo-of-computer-keyboard-WkfDrhxDMC8",
+      "alt": "closeup photo of computer keyboard"
+    },
+    {
+      "id": "vZJdYl5JVXY",
+      "photo": "https://images.unsplash.com/photo-1508780709619-79562169bc64",
+      "credit": "Kaitlyn Baker",
+      "creditUrl": "https://unsplash.com/@kaitlynbaker",
+      "sourceUrl": "https://unsplash.com/photos/person-using-laptop-vZJdYl5JVXY",
+      "alt": "person using laptop"
+    },
+    {
+      "id": "2xU7rYxsTiM",
+      "photo": "https://images.unsplash.com/photo-1529236183275-4fdcf2bc987e",
+      "credit": "Sergi Kabrera",
+      "creditUrl": "https://unsplash.com/@skabrera",
+      "sourceUrl": "https://unsplash.com/photos/white-computer-keyboard-2xU7rYxsTiM",
+      "alt": "white computer keyboard"
+    },
+    {
+      "id": "oA7MMRxTVzo",
+      "photo": "https://images.unsplash.com/photo-1560457079-9a6532ccb118",
+      "credit": "Sam Albury",
+      "creditUrl": "https://unsplash.com/@sammisamuel21",
+      "sourceUrl": "https://unsplash.com/photos/closeup-photo-of-black-and-white-apple-keyboard-keys-oA7MMRxTVzo",
+      "alt": "closeup photo of black and white Apple keyboard keys"
+    },
+    {
+      "id": "IcclLmLQuw8",
+      "photo": "https://images.unsplash.com/photo-1573643808568-4a3c26f3a06b",
+      "credit": "Ilya Pavlov",
+      "creditUrl": "https://unsplash.com/@ilyapavlov",
+      "sourceUrl": "https://unsplash.com/photos/person-using-computer-keyboard-IcclLmLQuw8",
+      "alt": "person using computer keyboard"
+    }
+  ],
+  "laptop-writing": [
+    {
+      "id": "npxXWgQ33ZQ",
+      "photo": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+      "credit": "Glenn Carstens-Peters",
+      "creditUrl": "https://unsplash.com/@glenncarstenspeters",
+      "sourceUrl": "https://unsplash.com/photos/person-using-macbook-pro-npxXWgQ33ZQ",
+      "alt": "person using MacBook Pro"
+    },
+    {
+      "id": "hBuwVLcYTnA",
+      "photo": "https://images.unsplash.com/photo-1499914485622-a88fac536970",
+      "credit": "Christin Hume",
+      "creditUrl": "https://unsplash.com/@christinhumephoto",
+      "sourceUrl": "https://unsplash.com/photos/person-using-macbook-hBuwVLcYTnA",
+      "alt": "person using MacBook"
+    },
+    {
+      "id": "vZJdYl5JVXY",
+      "photo": "https://images.unsplash.com/photo-1508780709619-79562169bc64",
+      "credit": "Kaitlyn Baker",
+      "creditUrl": "https://unsplash.com/@kaitlynbaker",
+      "sourceUrl": "https://unsplash.com/photos/person-using-laptop-vZJdYl5JVXY",
+      "alt": "person using laptop"
+    },
+    {
+      "id": "Hcfwew744z4",
+      "photo": "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
+      "credit": "Christin Hume",
+      "creditUrl": "https://unsplash.com/@christinhumephoto",
+      "sourceUrl": "https://unsplash.com/photos/person-using-laptop-computer-Hcfwew744z4",
+      "alt": "person using laptop computer"
+    },
+    {
+      "id": "FHnnjk1Yj7Y",
+      "photo": "https://images.unsplash.com/photo-1501504905252-473c47e087f8",
+      "credit": "Nick Morrison",
+      "creditUrl": "https://unsplash.com/@nickmorrison",
+      "sourceUrl": "https://unsplash.com/photos/macbook-pro-near-white-open-book-FHnnjk1Yj7Y",
+      "alt": "MacBook Pro near white open book"
+    },
+    {
+      "id": "mfB1B1s4sMc",
+      "photo": "https://images.unsplash.com/photo-1515378960530-7c0da6231fb1",
+      "credit": "Christin Hume",
+      "creditUrl": "https://unsplash.com/@christinhumephoto",
+      "sourceUrl": "https://unsplash.com/photos/person-sitting-front-of-laptop-mfB1B1s4sMc",
+      "alt": "person sitting front of laptop"
+    }
+  ],
+  "tattoo-artist": [
+    {
+      "id": "hxNiXP498UI",
+      "photo": "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd",
+      "credit": "Allef Vinicius",
+      "creditUrl": "https://unsplash.com/@seteph",
+      "sourceUrl": "https://unsplash.com/photos/person-doing-tattoo-hxNiXP498UI",
+      "alt": "person doing tattoo"
+    },
+    {
+      "id": "5t4qCgtaLGU",
+      "photo": "https://images.unsplash.com/photo-1597852075234-fd721ac361d3",
+      "credit": "benjamin lehman",
+      "creditUrl": "https://unsplash.com/@abject",
+      "sourceUrl": "https://unsplash.com/photos/person-with-tattoo-on-right-arm-5t4qCgtaLGU",
+      "alt": "person with tattoo on right arm"
+    },
+    {
+      "id": "xyJZvUL4_TY",
+      "photo": "https://images.unsplash.com/photo-1552627019-947c3789ffb5",
+      "credit": "Kristian Angelo",
+      "creditUrl": "https://unsplash.com/@kgadia87",
+      "sourceUrl": "https://unsplash.com/photos/grayscale-photo-of-man-doing-tattoo-xyJZvUL4_TY",
+      "alt": "grayscale photo of man doing tattoo"
+    },
+    {
+      "id": "52Kf36w124Y",
+      "photo": "https://images.unsplash.com/photo-1605647533135-51b5906087d0",
+      "credit": "Maxim Hopman",
+      "creditUrl": "https://unsplash.com/@nampoh",
+      "sourceUrl": "https://unsplash.com/photos/a-man-with-tattoos-on-his-arm-holding-a-cigarette-52Kf36w124Y",
+      "alt": "a man with tattoos on his arm holding a cigarette"
+    },
+    {
+      "id": "EQucs66pts0",
+      "photo": "https://images.unsplash.com/photo-1583213261205-63258746ed4c",
+      "credit": "Fallon Michael",
+      "creditUrl": "https://unsplash.com/@fallonmichaeltx",
+      "sourceUrl": "https://unsplash.com/photos/blue-and-white-floral-tray-EQucs66pts0",
+      "alt": "blue and white floral tray"
+    },
+    {
+      "id": "zeT_i6av9rU",
+      "photo": "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a",
+      "credit": "Lucas Lenzi",
+      "creditUrl": "https://unsplash.com/@lucaslenzi",
+      "sourceUrl": "https://unsplash.com/photos/shallow-focus-photo-of-person-tattooing-persons-right-arm-zeT_i6av9rU",
+      "alt": "shallow focus photo of person tattooing person's right arm"
+    }
+  ],
+  "design-studio": [
+    {
+      "id": "o2TRWThve_I",
+      "photo": "https://images.unsplash.com/photo-1498075702571-ecb018f3752d",
+      "credit": "Kelly Sikkema",
+      "creditUrl": "https://unsplash.com/@kellysikkema",
+      "sourceUrl": "https://unsplash.com/photos/person-lettering-on-tracing-paper-using-mechanical-pencil-o2TRWThve_I",
+      "alt": "person lettering on tracing paper using mechanical pencil"
+    },
+    {
+      "id": "FSFfEQkd1sc",
+      "photo": "https://images.unsplash.com/photo-1510074377623-8cf13fb86c08",
+      "credit": "Annie Spratt",
+      "creditUrl": "https://unsplash.com/@anniespratt",
+      "sourceUrl": "https://unsplash.com/photos/turned-off-flat-screen-monitors-on-top-of-beige-desks-FSFfEQkd1sc",
+      "alt": "turned off flat screen monitors on top of beige desks"
+    },
+    {
+      "id": "D6mlvnGbAVg",
+      "photo": "https://images.unsplash.com/photo-1664638413302-d1ca29ac885b",
+      "credit": "Mohammad Lotfian",
+      "creditUrl": "https://unsplash.com/@mohalotfi",
+      "sourceUrl": "https://unsplash.com/photos/a-hand-holding-a-book-D6mlvnGbAVg",
+      "alt": "a hand holding a book"
+    },
+    {
+      "id": "nME9TubZtSo",
+      "photo": "https://images.unsplash.com/photo-1565791380713-1756b9a05343",
+      "credit": "Hannah Busing",
+      "creditUrl": "https://unsplash.com/@hannahbusing",
+      "sourceUrl": "https://unsplash.com/photos/brown-wooden-table-nME9TubZtSo",
+      "alt": "brown wooden table"
+    },
+    {
+      "id": "8ryz8T0bWx4",
+      "photo": "https://images.unsplash.com/photo-1613759612065-d5971d32ca49",
+      "credit": "Brands&People",
+      "creditUrl": "https://unsplash.com/@brandsandpeople",
+      "sourceUrl": "https://unsplash.com/photos/man-in-black-long-sleeve-shirt-standing-beside-woman-in-red-and-white-plaid-dress-shirt-8ryz8T0bWx4",
+      "alt": "man in black long sleeve shirt standing beside woman in red and white plaid dress shirt"
+    },
+    {
+      "id": "muOHbrFGEQY",
+      "photo": "https://images.unsplash.com/photo-1512295767273-ac109ac3acfa",
+      "credit": "Georgie Cobbs",
+      "creditUrl": "https://unsplash.com/@georgie_cobbs",
+      "sourceUrl": "https://unsplash.com/photos/gray-apple-wireless-keyboard-beside-black-tablet-computer-and-stylus-pen-muOHbrFGEQY",
+      "alt": "gray Apple wireless keyboard beside black tablet computer and stylus pen"
+    }
+  ],
+  "classroom-learning": [
+    {
+      "id": "PDRFeeDniCk",
+      "photo": "https://images.unsplash.com/photo-1580582932707-520aed937b7b",
+      "credit": "Ivan Aleksic",
+      "creditUrl": "https://unsplash.com/@ivalex",
+      "sourceUrl": "https://unsplash.com/photos/empty-classroom-with-desks-and-chalkboard-PDRFeeDniCk",
+      "alt": "empty classroom with desks and chalkboard"
+    },
+    {
+      "id": "zFSo6bnZJTw",
+      "photo": "https://images.unsplash.com/photo-1509062522246-3755977927d7",
+      "credit": "Quilia",
+      "creditUrl": "https://unsplash.com/@heyquilia",
+      "sourceUrl": "https://unsplash.com/photos/students-in-classroom-with-teacher-presenting-zFSo6bnZJTw",
+      "alt": "students in classroom with teacher presenting"
+    },
+    {
+      "id": "N_aihp118p8",
+      "photo": "https://images.unsplash.com/photo-1577896851231-70ef18881754",
+      "credit": "National Cancer Institute",
+      "creditUrl": "https://unsplash.com/@nci",
+      "sourceUrl": "https://unsplash.com/photos/woman-standing-in-front-of-children-N_aihp118p8",
+      "alt": "woman standing in front of children"
+    },
+    {
+      "id": "4nKOEAQaTgA",
+      "photo": "https://images.unsplash.com/photo-1581726707445-75cbe4efc586",
+      "credit": "Taylor Flowe",
+      "creditUrl": "https://unsplash.com/@taypaigey",
+      "sourceUrl": "https://unsplash.com/photos/boy-in-black-hoodie-sitting-on-chair-4nKOEAQaTgA",
+      "alt": "boy in black hoodie sitting on chair"
+    },
+    {
+      "id": "Qw6wa96IvvQ",
+      "photo": "https://images.unsplash.com/photo-1740635341299-3b8e3490f546",
+      "credit": "Nathan Cima",
+      "creditUrl": "https://unsplash.com/@nathan_cima",
+      "sourceUrl": "https://unsplash.com/photos/a-classroom-filled-with-lots-of-desks-and-chairs-Qw6wa96IvvQ",
+      "alt": "A classroom filled with lots of desks and chairs"
+    }
+  ],
+  "library-books": [
+    {
+      "id": "LUGuCtvlk1Q",
+      "photo": "https://images.unsplash.com/photo-1610116306796-6fea9f4fae38",
+      "credit": "Gülfer ERGİN",
+      "creditUrl": "https://unsplash.com/@gulfergin_01",
+      "sourceUrl": "https://unsplash.com/photos/pile-of-open-paperback-books-LUGuCtvlk1Q",
+      "alt": "pile of open paperback books"
+    },
+    {
+      "id": "NIJuEQw0RKg",
+      "photo": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da",
+      "credit": "Iñaki del Olmo",
+      "creditUrl": "https://unsplash.com/@inakihxz",
+      "sourceUrl": "https://unsplash.com/photos/assorted-title-of-books-piled-in-the-shelves-NIJuEQw0RKg",
+      "alt": "assorted-title of books piled in the shelves"
+    },
+    {
+      "id": "2JIvboGLeho",
+      "photo": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f",
+      "credit": "Susan Q Yin",
+      "creditUrl": "https://unsplash.com/@syinq",
+      "sourceUrl": "https://unsplash.com/photos/books-on-brown-wooden-shelf-2JIvboGLeho",
+      "alt": "books on brown wooden shelf"
+    },
+    {
+      "id": "Oaqk7qqNh_c",
+      "photo": "https://images.unsplash.com/photo-1457369804613-52c61a468e7d",
+      "credit": "Patrick Tomasso",
+      "creditUrl": "https://unsplash.com/@impatrickt",
+      "sourceUrl": "https://unsplash.com/photos/open-book-lot-Oaqk7qqNh_c",
+      "alt": "open book lot"
+    },
+    {
+      "id": "HH4WBGNyltc",
+      "photo": "https://images.unsplash.com/photo-1532012197267-da84d127e765",
+      "credit": "Jaredd Craig",
+      "creditUrl": "https://unsplash.com/@jaredd",
+      "sourceUrl": "https://unsplash.com/photos/view-of-floating-open-book-from-stacked-books-in-library-HH4WBGNyltc",
+      "alt": "view of floating open book from stacked books in library"
+    },
+    {
+      "id": "RrhhzitYizg",
+      "photo": "https://images.unsplash.com/photo-1541963463532-d68292c34b19",
+      "credit": "Kourosh Qaffari",
+      "creditUrl": "https://unsplash.com/@kqpho",
+      "sourceUrl": "https://unsplash.com/photos/person-holding-open-book-viewing-mountain-view-RrhhzitYizg",
+      "alt": "person holding open book viewing mountain view"
+    }
+  ],
+  "bali-rice-terrace": [
+    {
+      "id": "7hww7t6NLcg",
+      "photo": "https://images.unsplash.com/photo-1558005530-a7958896ec60",
+      "credit": "Geio Tischler",
+      "creditUrl": "https://unsplash.com/@oww",
+      "sourceUrl": "https://unsplash.com/photos/green-grass-field-photography-7hww7t6NLcg",
+      "alt": "green grass field photography"
+    },
+    {
+      "id": "rf5R1qXwlDU",
+      "photo": "https://images.unsplash.com/photo-1559628233-eb1b1a45564b",
+      "credit": "Silas Baisch",
+      "creditUrl": "https://unsplash.com/@silasbaisch",
+      "sourceUrl": "https://unsplash.com/photos/aerial-photography-of-rice-terraces-during-daytime-rf5R1qXwlDU",
+      "alt": "aerial photography of rice terraces during daytime"
+    },
+    {
+      "id": "PvBECXDZw84",
+      "photo": "https://images.unsplash.com/photo-1559628233-100c798642d4",
+      "credit": "Silas Baisch",
+      "creditUrl": "https://unsplash.com/@silasbaisch",
+      "sourceUrl": "https://unsplash.com/photos/aerial-view-of-ricefield-PvBECXDZw84",
+      "alt": "aerial view of ricefield"
+    },
+    {
+      "id": "TF1qnG9eZHQ",
+      "photo": "https://images.unsplash.com/photo-1523539693385-e5e891eb4465",
+      "credit": "Claudia Fernández Ortiz",
+      "creditUrl": "https://unsplash.com/@killpeopleinyourmind",
+      "sourceUrl": "https://unsplash.com/photos/birds-eye-view-of-house-surrounded-by-grass-field-TF1qnG9eZHQ",
+      "alt": "bird's-eye view of house surrounded by grass field"
+    },
+    {
+      "id": "hy_LY9Zyfxo",
+      "photo": "https://images.unsplash.com/photo-1576475706812-822620fc23ba",
+      "credit": "Darren Lawrence",
+      "creditUrl": "https://unsplash.com/@wild_away",
+      "sourceUrl": "https://unsplash.com/photos/woman-sitting-on-swing-bench-hy_LY9Zyfxo",
+      "alt": "woman sitting on swing bench"
+    }
+  ],
+  "stone-carving": [
+    {
+      "id": "UeoVTVxXSho",
+      "photo": "https://images.unsplash.com/photo-1659533023670-c9402a2defcd",
+      "credit": "Ashkan Shahrokh",
+      "creditUrl": "https://unsplash.com/@ashkanshahrokh",
+      "sourceUrl": "https://unsplash.com/photos/text-UeoVTVxXSho",
+      "alt": "text"
+    },
+    {
+      "id": "4EhPIUEMa7U",
+      "photo": "https://images.unsplash.com/photo-1774106585704-2bd9dc6543e6",
+      "credit": "tommao wang",
+      "creditUrl": "https://unsplash.com/@tommaomaoer",
+      "sourceUrl": "https://unsplash.com/photos/stone-carving-of-monkeys-on-a-decorative-pillar-4EhPIUEMa7U",
+      "alt": "Stone carving of monkeys on a decorative pillar."
+    },
+    {
+      "id": "yd6XkU56j0s",
+      "photo": "https://images.unsplash.com/photo-1560457114-9c7a76393738",
+      "credit": "Dominic Phillips",
+      "creditUrl": "https://unsplash.com/@domayne69",
+      "sourceUrl": "https://unsplash.com/photos/mans-face-statue-yd6XkU56j0s",
+      "alt": "man's face statue"
+    },
+    {
+      "id": "vH4r1m5ZHVg",
+      "photo": "https://images.unsplash.com/photo-1779030056899-0b262a62a52d",
+      "credit": "Hidden Hollows",
+      "creditUrl": "https://unsplash.com/@hiddenhollows",
+      "sourceUrl": "https://unsplash.com/photos/textured-stone-surface-with-carved-oak-leaves-and-acorns-vH4r1m5ZHVg",
+      "alt": "Textured stone surface with carved oak leaves and acorns."
+    },
+    {
+      "id": "Q0LaToxdSrE",
+      "photo": "https://images.unsplash.com/photo-1779681257626-5f8104a6c59d",
+      "credit": "Maria Maraboli",
+      "creditUrl": "https://unsplash.com/@maraboli27",
+      "sourceUrl": "https://unsplash.com/photos/smiling-face-carved-into-a-large-textured-stone-Q0LaToxdSrE",
+      "alt": "Smiling face carved into a large, textured stone."
+    },
+    {
+      "id": "JW0oc6k39Ac",
+      "photo": "https://images.unsplash.com/photo-1684064970985-69a98f178b94",
+      "credit": "Anna Zakharova",
+      "creditUrl": "https://unsplash.com/@annaazart",
+      "sourceUrl": "https://unsplash.com/photos/a-close-up-of-a-stone-wall-with-carvings-on-it-JW0oc6k39Ac",
+      "alt": "a close up of a stone wall with carvings on it"
+    }
+  ]
+}

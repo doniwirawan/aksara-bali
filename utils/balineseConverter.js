@@ -86,6 +86,16 @@ export function convertLatinToBalinese(text) {
           i += len; matched = true; syllableFound = true; break
         }
 
+        // "ng" + vowel is the letter NGA carrying a vowel, not a cecek. The
+        // look-ahead grows one character at a time, so without this the 2-char
+        // "ng" branch below would win before "nga" is ever reachable and
+        // "bunga" would come out as cecek + a stray latin "a".
+        if (len === 2 && substr === 'ng' && isVowel(normalizedText[i + 2])) {
+          const v = normalizedText[i + 2]
+          result += balineseMapping['nga'] + (v === 'a' ? '' : balineseMapping[v + '_mark'])
+          i += 3; matched = true; syllableFound = true; break
+        }
+
         if (len === 2 && substr === 'ng') {
           result += balineseMapping['ng']
           i += len; matched = true; syllableFound = true; break

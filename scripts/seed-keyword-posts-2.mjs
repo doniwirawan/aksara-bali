@@ -502,10 +502,10 @@ Kalau yang Anda inginkan adalah kalimat yang benar-benar berbahasa Bali, mulaila
 |------------|------|------------|
 | matur suksma | terima kasih | ᬫᬢᬸᬭ᭄​ᬲᬸᬓ᭄ᬲ᭄ᬫ |
 | suksma | terima kasih (santai) | ᬲᬸᬓ᭄ᬲ᭄ᬫ |
-| sami sami | sama-sama | ᬲᬫᬶ​ᬲᬫᬶ |
+| suksma mewali | sama-sama | ᬲᬸᬓ᭄ᬲ᭄ᬫ​ᬫᬾᬯᬮᬶ |
 | sugra | permisi, mohon maaf | ᬲᬸᬕ᭄ᬭ |
 
-*Matur suksma* adalah bentuk yang lebih halus dan sopan; *suksma* saja lazim dipakai antar teman sebaya.
+*Matur suksma* adalah bentuk yang lebih halus dan sopan; *suksma* saja lazim dipakai antar teman sebaya. Jawabannya adalah *suksma mewali*.
 
 ## Tingkatan Bahasa: Hal yang Tidak Bisa Diabaikan
 
@@ -534,7 +534,7 @@ Karena itu, menyalin satu daftar kata tanpa memperhatikan konteks bisa terdengar
 |------------|------|------------|
 | melajah basa bali | belajar bahasa Bali | ᬫᬾᬮᬚᬳ᭄​ᬩᬲ​ᬩᬮᬶ |
 | melajah aksara bali | belajar aksara Bali | ᬫᬾᬮᬚᬳ᭄​ᬅᬓ᭄ᬲᬭ​ᬩᬮᬶ |
-| sami sami becik | semoga semuanya baik | ᬲᬫᬶ​ᬲᬫᬶ​ᬩᬾᬘᬶᬓ᭄ |
+| matur suksma pisan | terima kasih banyak | ᬫᬢᬸᬭ᭄​ᬲᬸᬓ᭄ᬲ᭄ᬫ​ᬧᬶᬲᬦ᭄ |
 
 ## Cara Memakai Daftar Ini
 
@@ -576,10 +576,10 @@ If you want wording that is genuinely Balinese, you have to start from the Balin
 |----------|---------|----------------|
 | matur suksma | thank you | ᬫᬢᬸᬭ᭄​ᬲᬸᬓ᭄ᬲ᭄ᬫ |
 | suksma | thanks (casual) | ᬲᬸᬓ᭄ᬲ᭄ᬫ |
-| sami sami | you are welcome | ᬲᬫᬶ​ᬲᬫᬶ |
+| suksma mewali | you are welcome | ᬲᬸᬓ᭄ᬲ᭄ᬫ​ᬫᬾᬯᬮᬶ |
 | sugra | excuse me, sorry | ᬲᬸᬕ᭄ᬭ |
 
-*Matur suksma* is the more polite, refined form; plain *suksma* is common between peers.
+*Matur suksma* is the more polite, refined form; plain *suksma* is common between peers. The reply is *suksma mewali*.
 
 ## Speech Levels: Something You Cannot Skip
 
@@ -608,7 +608,7 @@ Because of that, copying a word list without regard for context can sound off �
 |----------|---------|----------------|
 | melajah basa bali | learning the Balinese language | ᬫᬾᬮᬚᬳ᭄​ᬩᬲ​ᬩᬮᬶ |
 | melajah aksara bali | learning Balinese script | ᬫᬾᬮᬚᬳ᭄​ᬅᬓ᭄ᬲᬭ​ᬩᬮᬶ |
-| sami sami becik | may all be well | ᬲᬫᬶ​ᬲᬫᬶ​ᬩᬾᬘᬶᬓ᭄ |
+| matur suksma pisan | thank you very much | ᬫᬢᬸᬭ᭄​ᬲᬸᬓ᭄ᬲ᭄ᬫ​ᬧᬶᬲᬦ᭄ |
 
 ## How to Use This List
 

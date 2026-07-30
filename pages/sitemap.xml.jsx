@@ -38,6 +38,7 @@ function generateSitemap(BLOG_POSTS) {
   const staticPages = [
     { url: '/', priority: '1.0', changefreq: 'daily', lastmod: today },
     { url: '/practice', priority: '0.9', changefreq: 'weekly', lastmod: today },
+    { url: '/translate', priority: '0.9', changefreq: 'weekly', lastmod: today },
     { url: '/blog', priority: '0.9', changefreq: 'weekly', lastmod: today },
     { url: '/faq', priority: '0.8', changefreq: 'monthly', lastmod: today },
   ]
