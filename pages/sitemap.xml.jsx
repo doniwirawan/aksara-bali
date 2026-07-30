@@ -1,7 +1,7 @@
 // Dynamic XML sitemap — accessible at /sitemap.xml
 // Includes hreflang alternates for id/en bilingual support
 
-const BASE_URL = 'https://transliterasi-latin-ke-bahasa-bali.vercel.app'
+const BASE_URL = 'https://aksarabali.doniwirawan.xyz'
 
 // Posts that live only in the hardcoded fallback in pages/blog/[slug].jsx,
 // i.e. have no row in Supabase — keep them listed so they stay indexed.

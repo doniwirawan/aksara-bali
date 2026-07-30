@@ -20,7 +20,7 @@ const posts = [
     excerpt_en: 'What a Balinese script generator is, how it differs from a translator, and how to use one to turn Latin text into Balinese script online — free, right in your browser.',
     category: 'Teknologi & Budaya',
     tags: ['balinese script generator', 'balinese script translator', 'aksara bali generator', 'konverter', 'online'],
-    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/balinese-script-generator-online.png',
+    image_url: 'https://aksarabali.doniwirawan.xyz/covers/balinese-script-generator-online.png',
     read_time: '6 menit',
     content: `
 ## Apa Itu Balinese Script Generator?
@@ -228,7 +228,7 @@ The fastest way to understand a Balinese script generator is to use one. Open th
     excerpt_en: 'How to translate Latin text to Balinese script online: the steps, the rules worth knowing, worked examples, and how to turn Balinese script back into Latin.',
     category: 'Panduan Belajar',
     tags: ['translate latin ke aksara bali', 'latin ke aksara bali', 'translate aksara bali', 'aksara bali online'],
-    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/translate-latin-ke-aksara-bali.png',
+    image_url: 'https://aksarabali.doniwirawan.xyz/covers/translate-latin-ke-aksara-bali.png',
     read_time: '7 menit',
     content: `
 ## Translate Latin ke Aksara Bali: Mulai dari Sini
@@ -442,7 +442,7 @@ The most effective study routine actually combines both: write your own guess by
     excerpt_en: 'Three ways to write Balinese script online — converter, virtual keyboard, and handwriting canvas — plus how to copy the result into WhatsApp, Instagram, and design apps.',
     category: 'Teknologi & Budaya',
     tags: ['menulis aksara bali online', 'salin antuk aksara bali', 'papan ketik aksara bali', 'aksara bali online'],
-    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/menulis-aksara-bali-online.png',
+    image_url: 'https://aksarabali.doniwirawan.xyz/covers/menulis-aksara-bali-online.png',
     read_time: '6 menit',
     content: `
 ## Menulis Aksara Bali Tanpa Instal Apa-apa

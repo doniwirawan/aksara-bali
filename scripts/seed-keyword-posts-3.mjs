@@ -27,7 +27,7 @@ const posts = [
     excerpt_en: 'A complete Balinese script reference: the 18 wreastra letters, 14 swara vowels, 33 wyanjana consonants by articulation, vowel signs, numerals, punctuation, and Unicode code points.',
     category: 'Panduan Belajar',
     tags: ['daftar aksara bali', 'tabel aksara bali', 'balinese alphabet', 'hanacaraka', 'unicode aksara bali', 'referensi'],
-    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/daftar-lengkap-aksara-bali.png',
+    image_url: 'https://aksarabali.doniwirawan.xyz/covers/daftar-lengkap-aksara-bali.png',
     read_time: '10 menit',
     content: `
 ## Referensi Lengkap Aksara Bali
@@ -389,7 +389,7 @@ Empty boxes (□□□) mean your device has no Balinese font; the text itself i
     excerpt_en: 'How to type Balinese script with a normal QWERTY keyboard: typing conventions, taling vs pepet, adeg-adeg, consonant stacking, and the on-screen Balinese keyboard.',
     category: 'Panduan Belajar',
     tags: ['cara mengetik aksara bali', 'keyboard aksara bali', 'qwerty', 'taling pepet', 'papan ketik aksara bali'],
-    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/cara-mengetik-aksara-bali-keyboard.png',
+    image_url: 'https://aksarabali.doniwirawan.xyz/covers/cara-mengetik-aksara-bali-keyboard.png',
     read_time: '7 menit',
     content: `
 ## Mengetik Aksara Bali Tanpa Keyboard Khusus

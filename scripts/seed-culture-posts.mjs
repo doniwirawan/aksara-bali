@@ -12,7 +12,7 @@ const supabase = createClient(
 // in the articles. Balinese terms were run through utils/balineseConverter.js
 // after the nga fix, so "galungan" and "ngembak" render correctly.
 
-const COVERS = 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/'
+const COVERS = 'https://aksarabali.doniwirawan.xyz/covers/'
 
 const posts = [
   {

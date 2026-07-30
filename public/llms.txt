@@ -6,7 +6,7 @@ A free, open-source web application for converting Latin text to traditional Bal
 
 ## Site Information
 
-- **URL**: https://transliterasi-latin-ke-bahasa-bali.vercel.app
+- **URL**: https://aksarabali.doniwirawan.xyz
 - **Author**: Doni Wirawan
 - **Language**: Indonesian (id), English (en)
 - **License**: MIT

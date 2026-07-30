@@ -77,7 +77,7 @@ const FAQ_DATA = [
       },
       {
         q: 'Di mana bisa belajar aksara Bali secara online?',
-        a: 'Tersedia berbagai sumber online: (1) Gunakan fitur Latihan di aksarabali.id untuk kuis interaktif dan papan ketik aksara Bali. (2) Cari tutorial di YouTube dengan kata kunci "belajar aksara Bali". (3) Buku Ajar Bahasa Bali dari Dinas Pendidikan Bali tersedia di toko buku online. (4) Forum komunitas di media sosial (Facebook, Telegram) untuk sesama pelajar aksara Bali.',
+        a: 'Tersedia berbagai sumber online: (1) Gunakan fitur Latihan di situs ini untuk kuis interaktif dan papan ketik aksara Bali. (2) Cari tutorial di YouTube dengan kata kunci "belajar aksara Bali". (3) Buku Ajar Bahasa Bali dari Dinas Pendidikan Bali tersedia di toko buku online. (4) Forum komunitas di media sosial (Facebook, Telegram) untuk sesama pelajar aksara Bali.',
       },
       {
         q: 'Apakah aksara Bali sama dengan aksara Jawa?',
@@ -266,7 +266,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
         <meta property="og:title" content={lang === 'en' ? 'FAQ — Balinese Script Questions' : 'FAQ — Pertanyaan Umum tentang Aksara Bali'} />
         <meta property="og:description" content={lang === 'en' ? 'Everything you need to know about Balinese script: writing system, how to learn, digital use, and cultural preservation.' : 'Semua yang perlu Anda ketahui tentang aksara Bali: sistem penulisan, cara belajar, penggunaan digital, dan pelestarian budaya.'} />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://aksarabali.id/faq" />
+        <link rel="canonical" href="https://aksarabali.doniwirawan.xyz/faq" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaFAQ) }} />
       </Head>
 

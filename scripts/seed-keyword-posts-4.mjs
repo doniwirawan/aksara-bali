@@ -15,7 +15,7 @@ const supabase = createClient(
 // checked against the known tokenizer gaps — words containing nga/ngi/nge
 // mid-word, an "f", or two adjacent vowels are deliberately avoided.
 
-const COVERS = 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/'
+const COVERS = 'https://aksarabali.doniwirawan.xyz/covers/'
 
 const posts = [
   {

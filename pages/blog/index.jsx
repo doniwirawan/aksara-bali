@@ -87,19 +87,19 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
     '@type': 'Blog',
     name: 'Blog Aksara Bali',
     description: 'Artikel tentang aksara Bali, sejarah, cara belajar, dan pelestarian budaya Bali',
-    url: 'https://aksarabali.id/blog',
+    url: 'https://aksarabali.doniwirawan.xyz/blog',
     inLanguage: ['id', 'en'],
     publisher: {
       '@type': 'Organization',
       name: 'Aksara Bali Converter',
-      url: 'https://aksarabali.id',
+      url: 'https://aksarabali.doniwirawan.xyz',
     },
     blogPost: posts.map(post => ({
       '@type': 'BlogPosting',
       headline: post.title,
       description: post.excerpt,
       datePublished: post.date,
-      url: `https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog/${post.slug}`,
+      url: `https://aksarabali.doniwirawan.xyz/blog/${post.slug}`,
       keywords: post.tags.join(', '),
       image: post.imageUrl,
       author: { '@type': 'Person', name: 'Doni Wirawan' },
@@ -119,13 +119,13 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
         <meta property="og:image" content={posts[0]?.imageUrl || ''} />
         <meta property="og:image:width" content="800" />
         <meta property="og:image:height" content="533" />
-        <meta property="og:url" content="https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog" />
+        <meta property="og:url" content="https://aksarabali.doniwirawan.xyz/blog" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Blog Aksara Bali — Artikel Budaya & Panduan Belajar" />
         <meta name="twitter:description" content="Artikel mendalam tentang aksara Bali: sejarah, cara belajar, linguistik, dan pelestarian budaya." />
         <meta name="twitter:image" content={posts[0].imageUrl} />
         <meta name="robots" content="index, follow, max-image-preview:large" />
-        <link rel="canonical" href="https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog" />
+        <link rel="canonical" href="https://aksarabali.doniwirawan.xyz/blog" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}

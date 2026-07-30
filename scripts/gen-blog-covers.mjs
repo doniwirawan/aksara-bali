@@ -22,7 +22,7 @@ dotenv.config({ path: '.env.local' })
 
 const OUT_DIR = path.join(process.cwd(), 'public', 'covers')
 const CATALOGUE = path.join(process.cwd(), 'scripts', 'data', 'unsplash-photos.json')
-const BASE_URL = 'https://transliterasi-latin-ke-bahasa-bali.vercel.app'
+const BASE_URL = 'https://aksarabali.doniwirawan.xyz'
 const W = 1200
 const H = 630
 

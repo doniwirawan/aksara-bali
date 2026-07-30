@@ -501,7 +501,7 @@ Hanya sedikit font yang mendukung aksara Bali dengan lengkap: Noto Sans Balinese
 
 ### Konverter dan Aplikasi
 
-- **Web-based converter** — Alat konversi Latin ke aksara Bali secara real-time, seperti yang ada di aksarabali.id
+- **Web-based converter** — Alat konversi Latin ke aksara Bali secara real-time, seperti yang ada di situs ini
 - **Keyboard mobile** — Keyboard aksara Bali untuk Android dan iOS memungkinkan pengguna mengetik aksara Bali di smartphone
 - **OCR aksara Bali** — Penelitian untuk optical character recognition (OCR) aksara Bali sedang aktif dikembangkan oleh beberapa universitas
 
@@ -717,7 +717,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
   const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
   const mutedColor = darkMode ? '#888' : '#666'
 
-  const BASE = 'https://transliterasi-latin-ke-bahasa-bali.vercel.app'
+  const BASE = 'https://aksarabali.doniwirawan.xyz'
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -761,7 +761,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
         <meta property="og:image" content={post.imageUrl} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="800" />
-        <meta property="og:url" content={`https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog/${slug}`} />
+        <meta property="og:url" content={`https://aksarabali.doniwirawan.xyz/blog/${slug}`} />
         <meta property="article:published_time" content={post.date} />
         <meta property="article:author" content="Doni Wirawan" />
         <meta property="article:tag" content={post.tags.join(',')} />
@@ -770,7 +770,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
         <meta name="twitter:description" content={post.description} />
         <meta name="twitter:image" content={post.imageUrl} />
         <meta name="robots" content="index, follow, max-image-preview:large" />
-        <link rel="canonical" href={`https://transliterasi-latin-ke-bahasa-bali.vercel.app/blog/${slug}`} />
+        <link rel="canonical" href={`https://aksarabali.doniwirawan.xyz/blog/${slug}`} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       </Head>
 

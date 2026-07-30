@@ -11,7 +11,7 @@ const supabase = createClient(
 // caveats it deserves), the Aji Saka origin story that komangputra.com ranks
 // for, and using Balinese script inside Word / Canva / Photoshop.
 
-const COVERS = 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/'
+const COVERS = 'https://aksarabali.doniwirawan.xyz/covers/'
 
 const posts = [
   {

@@ -2,10 +2,10 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://transliterasi-latin-ke-bahasa-bali.vercel.app/sitemap.xml
+Sitemap: https://aksarabali.doniwirawan.xyz/sitemap.xml
 
 # LLM-friendly content file
-# https://transliterasi-latin-ke-bahasa-bali.vercel.app/llms.txt
+# https://aksarabali.doniwirawan.xyz/llms.txt
 
 # Crawl-delay for responsible crawling
 Crawl-delay: 10

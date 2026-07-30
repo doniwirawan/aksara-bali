@@ -5,7 +5,7 @@ import Footer from '../components/Footer'
 import { Search, Copy, Check, BookOpen, ExternalLink, Info } from 'lucide-react'
 import { convertLatinToBalinese } from '../utils/balineseConverter'
 
-const BASE = 'https://transliterasi-latin-ke-bahasa-bali.vercel.app'
+const BASE = 'https://aksarabali.doniwirawan.xyz'
 
 // Speech-level columns as they appear in the source dictionary.
 const LEVELS = [

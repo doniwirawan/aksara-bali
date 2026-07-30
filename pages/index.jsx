@@ -266,7 +266,7 @@ export default function Home({ locale, setLocale }) {
                 <meta property="og:description" content={pageDescription} />
                 <meta property="og:locale" content={locale === 'id' ? 'id_ID' : 'en_US'} />
                 <meta property="og:locale:alternate" content={locale === 'id' ? 'en_US' : 'id_ID'} />
-                <meta property="og:url" content="https://transliterasi-latin-ke-bahasa-bali.vercel.app/" />
+                <meta property="og:url" content="https://aksarabali.doniwirawan.xyz/" />
 
                 {locale === 'id' && (
                     <>
@@ -286,7 +286,7 @@ export default function Home({ locale, setLocale }) {
                             "@type": "WebApplication",
                             "name": t.appTitle,
                             "description": pageDescription,
-                            "url": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/",
+                            "url": "https://aksarabali.doniwirawan.xyz/",
                             "applicationCategory": "EducationalApplication",
                             "operatingSystem": "Web Browser",
                             "inLanguage": locale === 'id' ? ['id-ID', 'ban'] : ['en-US', 'ban'],
