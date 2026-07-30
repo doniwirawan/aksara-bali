@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { Search, Copy, Check, BookOpen, ExternalLink, Info } from 'lucide-react'
+import { Search, Copy, Check, BookOpen, ExternalLink, Info, Plus } from 'lucide-react'
 import { convertLatinToBalinese } from '../utils/balineseConverter'
 
 const BASE = 'https://aksarabali.doniwirawan.xyz'
@@ -44,6 +44,23 @@ const T = {
     resultScript: 'Aksara Bali',
     unmatched: 'Kata bergaris bawah belum ada di kamus dan dibiarkan apa adanya.',
     sentenceStart: 'Tulis kalimat untuk melihat padanan katanya.',
+    contribTitle: 'Usulkan kata',
+    contribBody: 'Kamus ini belum lengkap, dan Anda yang menuturkan bahasanya jauh lebih tahu. Kirimkan kata yang belum ada atau perbaikan untuk yang keliru — usulan akan ditinjau sebelum ditambahkan.',
+    contribOpen: 'Kirim usulan kata',
+    contribClose: 'Tutup formulir',
+    fId: 'Kata bahasa Indonesia',
+    fAndap: 'Andap (biasa)',
+    fSinggih: 'Alus singgih',
+    fSor: 'Alus sor',
+    fMider: 'Mider',
+    fNote: 'Catatan (contoh kalimat, sumber, atau konteks pemakaian)',
+    fName: 'Nama Anda (opsional)',
+    fSubmit: 'Kirim usulan',
+    fSending: 'Mengirim...',
+    fThanks: 'Terima kasih — usulan Anda sudah masuk dan akan ditinjau.',
+    fNeedId: 'Isi dulu kata bahasa Indonesianya.',
+    fNeedBali: 'Isi setidaknya satu bentuk bahasa Bali.',
+    fFailed: 'Gagal mengirim. Coba lagi sebentar lagi.',
     disclaimer: 'Kamus ini disusun otomatis dari sumber cetak, jadi mungkin ada salah baca. Untuk keperluan resmi, cetak, atau upacara, mintalah pemeriksaan penutur asli.',
   },
   en: {
@@ -74,6 +91,23 @@ const T = {
     resultScript: 'Balinese script',
     unmatched: 'Underlined words are not in the dictionary and were left as they are.',
     sentenceStart: 'Write a sentence to see the word equivalents.',
+    contribTitle: 'Suggest a word',
+    contribBody: 'This dictionary is incomplete, and speakers of the language know it far better than a parser does. Send a missing word or a correction — suggestions are reviewed before they are added.',
+    contribOpen: 'Submit a word',
+    contribClose: 'Close the form',
+    fId: 'Indonesian word',
+    fAndap: 'Andap (everyday)',
+    fSinggih: 'Alus singgih',
+    fSor: 'Alus sor',
+    fMider: 'Mider',
+    fNote: 'Note (example sentence, source, or usage context)',
+    fName: 'Your name (optional)',
+    fSubmit: 'Send suggestion',
+    fSending: 'Sending...',
+    fThanks: 'Thank you — your suggestion has been received and will be reviewed.',
+    fNeedId: 'Please fill in the Indonesian word first.',
+    fNeedBali: 'Please provide at least one Balinese form.',
+    fFailed: 'Could not send. Please try again shortly.',
     disclaimer: 'This dictionary was parsed automatically from a printed source, so misreadings are possible. For official, printed, or ceremonial use, have a native speaker check it.',
   },
 }
@@ -116,6 +150,10 @@ export default function TranslatePage({ locale, setLocale }) {
   const [mode, setMode] = useState('word')
   const [sentence, setSentence] = useState('')
   const [level, setLevel] = useState('andap')
+  const [formOpen, setFormOpen] = useState(false)
+  const [form, setForm] = useState({ indonesian: '', andap: '', singgih: '', sor: '', mider: '', note: '', contributor: '', website: '' })
+  const [formState, setFormState] = useState('idle')
+  const [formError, setFormError] = useState('')
   const lang = locale === 'en' ? 'en' : 'id'
   const t = T[lang]
 
@@ -157,6 +195,27 @@ export default function TranslatePage({ locale, setLocale }) {
   )
   const sentenceBali = sentenceParts.map(p => p.out).join('')
   const sentenceScript = sentenceBali.trim() ? convertLatinToBalinese(sentenceBali) : ''
+
+  const submitSuggestion = useCallback(async (e) => {
+    e.preventDefault()
+    setFormError('')
+    if (!form.indonesian.trim()) { setFormError(t.fNeedId); return }
+    if (!(form.andap || form.singgih || form.sor || form.mider).trim?.()) { setFormError(t.fNeedBali); return }
+    setFormState('sending')
+    try {
+      const res = await fetch('/api/dictionary-suggestions/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error('failed')
+      setFormState('done')
+      setForm({ indonesian: '', andap: '', singgih: '', sor: '', mider: '', note: '', contributor: '', website: '' })
+    } catch {
+      setFormState('idle')
+      setFormError(t.fFailed)
+    }
+  }, [form, t])
 
   const copy = useCallback(async (text, key) => {
     try {
@@ -393,6 +452,89 @@ export default function TranslatePage({ locale, setLocale }) {
           )}
           </>
           )}
+
+          <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 18, marginTop: 28 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Plus size={16} /> {t.contribTitle}
+            </h2>
+            <p style={{ color: mutedColor, fontSize: 14, lineHeight: 1.7, margin: '0 0 12px' }}>{t.contribBody}</p>
+
+            {formState === 'done' && (
+              <p style={{ fontSize: 14, color: '#16a34a', margin: '0 0 12px' }}>{t.fThanks}</p>
+            )}
+
+            <button
+              onClick={() => setFormOpen(o => !o)}
+              style={{
+                fontSize: 14, fontWeight: 600, padding: '9px 16px', borderRadius: 10, cursor: 'pointer',
+                border: 'none', background: '#0d6efd', color: '#fff',
+              }}
+            >
+              {formOpen ? t.contribClose : t.contribOpen}
+            </button>
+
+            {formOpen && (
+              <form onSubmit={submitSuggestion} style={{ marginTop: 16, display: 'grid', gap: 10 }}>
+                {[
+                  ['indonesian', t.fId, true],
+                  ['andap', t.fAndap, false],
+                  ['singgih', t.fSinggih, false],
+                  ['sor', t.fSor, false],
+                  ['mider', t.fMider, false],
+                  ['contributor', t.fName, false],
+                ].map(([key, label, required]) => (
+                  <label key={key} style={{ display: 'grid', gap: 4, fontSize: 13, color: mutedColor }}>
+                    {label}{required ? ' *' : ''}
+                    <input
+                      value={form[key]}
+                      onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
+                      style={{
+                        padding: '10px 12px', fontSize: 15, borderRadius: 10,
+                        border: `1px solid ${borderColor}`, background: bg, color: textColor, outline: 'none',
+                      }}
+                    />
+                  </label>
+                ))}
+
+                <label style={{ display: 'grid', gap: 4, fontSize: 13, color: mutedColor }}>
+                  {t.fNote}
+                  <textarea
+                    value={form.note}
+                    onChange={e => setForm(f => ({ ...f, note: e.target.value }))}
+                    rows={3}
+                    style={{
+                      padding: '10px 12px', fontSize: 15, borderRadius: 10, resize: 'vertical',
+                      border: `1px solid ${borderColor}`, background: bg, color: textColor,
+                      outline: 'none', fontFamily: 'inherit',
+                    }}
+                  />
+                </label>
+
+                {/* honeypot */}
+                <input
+                  value={form.website}
+                  onChange={e => setForm(f => ({ ...f, website: e.target.value }))}
+                  tabIndex={-1} autoComplete="off" aria-hidden="true"
+                  style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }}
+                />
+
+                {formError && <p style={{ color: '#dc2626', fontSize: 13, margin: 0 }}>{formError}</p>}
+
+                <button
+                  type="submit"
+                  disabled={formState === 'sending'}
+                  style={{
+                    justifySelf: 'start', fontSize: 14, fontWeight: 600, padding: '10px 18px',
+                    borderRadius: 10, border: 'none', background: '#0d6efd', color: '#fff',
+                    cursor: formState === 'sending' ? 'default' : 'pointer',
+                    opacity: formState === 'sending' ? 0.7 : 1,
+                  }}
+                >
+                  {formState === 'sending' ? t.fSending : t.fSubmit}
+                </button>
+              </form>
+            )}
+          </div>
 
           <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 18, marginTop: 28 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 8 }}>

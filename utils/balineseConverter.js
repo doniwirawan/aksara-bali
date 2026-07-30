@@ -16,6 +16,8 @@ const balineseMapping = {
   'aa_mark': '\u1B35', 'i_mark': '\u1B36', 'ii_mark': '\u1B37',
   'u_mark': '\u1B38', 'uu_mark': '\u1B39', 'e_mark': '\u1B3E', 'o_mark': '\u1B40',
   'ai_mark': '\u1B3F', 'au_mark': '\u1B41', 're_mark': '\u1B42',
+  'x_mark': '\u1B42',            // pepet, typed as "x"
+  'x': '\u1B05\u1B42',           // word-initial pepet rides an independent a
 
   'ng': '\u1B02',
   'r_sound': '\u1B03',
@@ -30,16 +32,23 @@ const balineseMapping = {
   'cecek': '\u1B34', 'bisah': '\u1B01',
 }
 
-const isVowel = (char) => ['a', 'i', 'u', 'e', 'o'].includes(char?.toLowerCase())
-const isConsonant = (char) => 'bcdfghjklmnpqrstvwxyz'.includes(char?.toLowerCase())
+// "x" is the pepet vowel, following the convention Balinese typing tools have
+// used for years — so it counts as a vowel here and not as a consonant.
+const isVowel = (char) => ['a', 'i', 'u', 'e', 'o', 'x'].includes(char?.toLowerCase())
+const isConsonant = (char) => 'bcdfghjklmnpqrstvwyz'.includes(char?.toLowerCase())
 const isPunctuation = (char) => '.,!?;:()[]{}"\'-'.includes(char)
-const normalizeConsonant = (char) => char?.toLowerCase() === 'v' ? 'w' : char?.toLowerCase()
+const normalizeConsonant = (char) => {
+  const c = char?.toLowerCase()
+  if (c === 'v') return 'w'   // V = W in Balinese tradition
+  if (c === 'f') return 'p'   // no /f/ in Balinese; nearest sound is /p/
+  return c
+}
 
 // Latin diacritics (from the ā ī ū ě ṇ … input helpers) normalized to the plain
 // sequences the mapping understands. Keep in sync with the mobile app's converter.
 const LATIN_DIACRITICS = {
   'ā': 'aa', 'â': 'aa', 'ī': 'ii', 'î': 'ii', 'ū': 'uu', 'û': 'uu',
-  'é': 'e', 'è': 'e', 'ě': 'e', 'ĕ': 'e', 'ö': 'e',
+  'é': 'e', 'è': 'e', 'ě': 'x', 'ĕ': 'x', 'ö': 'x',
   'ṛ': 're', 'ṝ': 're', 'ṇ': 'nna', 'ṅ': 'ng', 'ñ': 'nya',
   'ś': 'sa', 'ṣ': 'sa', 'ṭ': 'ta', 'ḍ': 'da', 'ḥ': 'h', 'ṁ': 'ng', 'ṃ': 'ng',
 }

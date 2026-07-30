@@ -701,6 +701,10 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
         'ai_mark': '\u1B3F', // ai
         'au_mark': '\u1B41', // au
         're_mark': '\u1B42',
+        // pepet, typed as "x" (the convention Balinese typing tools use) or
+        // entered with the \u011B helper key.
+        'x_mark': '\u1B42',
+        'x': '\u1B05\u1B42',
 
         'ng': '\u1B02',
         'r_sound': '\u1B03',
@@ -751,12 +755,13 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
         '\u1B40': 'o'
     }
 
+    // "x" is the pepet vowel, so it counts as a vowel and not as a consonant.
     const isVowel = (char) => {
-        return ['a', 'i', 'u', 'e', 'o'].includes(char?.toLowerCase())
+        return ['a', 'i', 'u', 'e', 'o', 'x'].includes(char?.toLowerCase())
     }
 
     const isConsonant = (char) => {
-        const consonants = 'bcdfghjklmnpqrstvwxyz'
+        const consonants = 'bcdfghjklmnpqrstvwyz'
         return consonants.includes(char?.toLowerCase())
     }
 
@@ -765,7 +770,8 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     }
 
     const normalizeConsonant = (char) => {
-        if (char?.toLowerCase() === 'v') return 'w'
+        if (char?.toLowerCase() === 'v') return 'w'   // V = W in Balinese tradition
+        if (char?.toLowerCase() === 'f') return 'p'   // no /f/ in Balinese
         return char?.toLowerCase()
     }
 

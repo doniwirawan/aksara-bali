@@ -48,5 +48,5 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
-767595183-Kamus-Bahasa-Bali.txt
-767595183-Kamus-Bahasa-Bali.pdf
+# raw dictionary drop (the parsed copy lives in scripts/data/)
+767595183-Kamus-Bahasa-Bali.*

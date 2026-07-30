@@ -10,7 +10,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-const SRC = process.argv[2] || '767595183-Kamus-Bahasa-Bali.txt'
+const SRC = process.argv[2] || path.join('scripts', 'data', 'kamus-bahasa-bali.txt')
 const OUT = path.join(process.cwd(), 'public', 'data', 'kamus-bali.json')
 
 const text = await fs.readFile(SRC, 'utf8')

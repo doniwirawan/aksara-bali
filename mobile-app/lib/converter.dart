@@ -21,6 +21,7 @@ const Map<String, String> balineseMapping = {
   'aa_mark': 'ᬵ', 'i_mark': 'ᬶ', 'ii_mark': 'ᬷ',
   'u_mark': 'ᬸ', 'uu_mark': 'ᬹ', 'e_mark': 'ᬾ', 'o_mark': 'ᭀ',
   'ai_mark': 'ᬿ', 'au_mark': 'ᭁ', 're_mark': 'ᭂ',
+  'x_mark': 'ᭂ', 'x': 'ᬅᭂ', // pepet, typed as "x"
   'ng': 'ᬂ', 'r_sound': 'ᬃ', 'h_sound': 'ᬄ', 'virama': '᭄', 'om': 'ᬀ',
   '0': '᭐', '1': '᭑', '2': '᭒', '3': '᭓', '4': '᭔',
   '5': '᭕', '6': '᭖', '7': '᭗', '8': '᭘', '9': '᭙',
@@ -29,10 +30,15 @@ const Map<String, String> balineseMapping = {
 
 const Map<String, String> _longVowelMark = {'aa': 'aa_mark', 'ii': 'ii_mark', 'uu': 'uu_mark'};
 
-bool _isVowel(String? c) => c != null && c.isNotEmpty && ['a', 'i', 'u', 'e', 'o'].contains(c.toLowerCase());
-bool _isConsonant(String? c) => c != null && c.isNotEmpty && 'bcdfghjklmnpqrstvwxyz'.contains(c.toLowerCase());
+bool _isVowel(String? c) => c != null && c.isNotEmpty && ['a', 'i', 'u', 'e', 'o', 'x'].contains(c.toLowerCase());
+bool _isConsonant(String? c) => c != null && c.isNotEmpty && 'bcdfghjklmnpqrstvwyz'.contains(c.toLowerCase());
 bool _isPunct(String c) => '.,!?;:()[]{}"\'-'.contains(c);
-String _normCons(String c) => c.toLowerCase() == 'v' ? 'w' : c.toLowerCase();
+String _normCons(String c) {
+  final l = c.toLowerCase();
+  if (l == 'v') return 'w'; // V = W in Balinese tradition
+  if (l == 'f') return 'p'; // no /f/ in Balinese
+  return l;
+}
 String _normVW(String w) => w.replaceFirst(RegExp('^v', caseSensitive: false), 'w')
     .replaceAllMapped(RegExp('([aeiou])v', caseSensitive: false), (m) => '${m[1]}w');
 
@@ -65,7 +71,7 @@ bool _isStartOfSanskritWord(String text, int position) {
 // sequences the mapping below already understands. Keep in sync with the web app.
 const Map<String, String> _latinDiacritics = {
   'ā': 'aa', 'â': 'aa', 'ī': 'ii', 'î': 'ii', 'ū': 'uu', 'û': 'uu',
-  'é': 'e', 'è': 'e', 'ě': 'e', 'ĕ': 'e', 'ö': 'e',
+  'é': 'e', 'è': 'e', 'ě': 'x', 'ĕ': 'x', 'ö': 'e',
   'ṛ': 're', 'ṝ': 're', 'ṇ': 'nna', 'ṅ': 'ng', 'ñ': 'nya',
   'ś': 'sa', 'ṣ': 'sa', 'ṭ': 'ta', 'ḍ': 'da', 'ḥ': 'h', 'ṁ': 'ng', 'ṃ': 'ng',
 };
