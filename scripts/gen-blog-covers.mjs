@@ -53,6 +53,13 @@ const covers = [
     glyph: 'ᬳ', // ha
   },
   {
+    slug: 'cara-mengetik-aksara-bali-keyboard',
+    kicker: 'Panduan',
+    title: ['Cara Mengetik Aksara', 'Bali di Keyboard'],
+    photo: 'https://images.unsplash.com/photo-1516116216624-53e697fedbea',
+    glyph: 'ᬢ', // ta
+  },
+  {
     slug: 'ucapan-bahasa-bali-sehari-hari',
     kicker: 'Basa Bali',
     title: ['Ucapan Bahasa Bali', 'Sehari-hari'],

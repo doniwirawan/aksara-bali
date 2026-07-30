@@ -28,9 +28,8 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 ## Pages
 
 ### Core Pages
-- `/` — Main Latin to Balinese script converter (real-time conversion, reverse mode, copy/download/share, word-art PNG export, text-to-speech)
-- `/practice` — Interactive learning: leveled quiz, writing canvas with hand gesture recognition, virtual Balinese keyboard, script reference
-- `/read` — Read Balinese script from a photo (OCR), then transliterate it back to Latin
+- `/` — Main Latin to Balinese script converter (real-time conversion, reverse mode, copy/download/share, word-art PNG export, text-to-speech) plus the "Baca dari foto" panel, which reads Balinese script from an uploaded or camera photo via OCR
+- `/practice` — Interactive learning: leveled quiz, writing canvas with hand gesture recognition, virtual Balinese keyboard (including the pepet key), script reference
 - `/blog` — Articles about Balinese script, history, culture, linguistics, and how to use the tools
 - `/faq` — Frequently asked questions about Balinese script and the tool
 - `/admin` — Admin dashboard (authentication required)
@@ -39,12 +38,13 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 - `/blog/balinese-script-generator-online` — What a Balinese script generator is, generator vs translator vs transliterator, sample conversions, saving results
 - `/blog/translate-latin-ke-aksara-bali` — Step-by-step guide to converting Latin text to Balinese script, vowel-sign rules, accuracy tips, reverse direction
 - `/blog/menulis-aksara-bali-online` — Three ways to write Balinese script online (converter, virtual keyboard, handwriting canvas) and how to paste results into other apps
+- `/blog/cara-mengetik-aksara-bali-keyboard` — Typing Balinese on an ordinary QWERTY keyboard: conventions, taling vs pepet, the on-screen script keyboard, reading from a photo
 - `/blog/nama-dalam-aksara-bali` — Writing your name in Balinese script, with Balinese, Indonesian, and foreign name examples and respelling rules
 - `/blog/cara-instal-font-aksara-bali` — Installing a Balinese script font on computers and smartphones (fixes □□□ boxes)
 - `/blog/aplikasi-android-aksara-bali-rilis-baru` — The offline Aksara Bali Android app: converter, quizzes, learning
 
 ### Blog Articles — Learning the Script
-- `/blog/daftar-lengkap-aksara-bali` — Complete reference chart: 18 hanacaraka letters, independent vowels, vowel signs, final-consonant marks, numerals, punctuation
+- `/blog/daftar-lengkap-aksara-bali` — Complete glyph chart: 18 wreastra letters, 14 swara vowels, 33 wyanjana consonants by articulation (kanthya/talawya/murdhanya/dantya/osthya), pangangge incl. taling vs pepet, ra repa and la lenga, gantungan, numerals, punctuation, and the U+1B00–U+1B7F Unicode block
 - `/blog/ucapan-bahasa-bali-sehari-hari` — Everyday Balinese greetings and phrases with their script, plus a note on speech levels (sor singgih)
 - `/blog/cara-belajar-aksara-bali` — Beginner's guide to learning Balinese script
 - `/blog/belajar-hanacaraka-panduan-lengkap` — Memorising the 18 base hanacaraka letters
@@ -79,8 +79,12 @@ first, then convert the writing.
 **Why does the output look like empty boxes (□□□)?** The text is correct but the device lacks a
 Balinese font. See `/blog/cara-instal-font-aksara-bali`, or export the result as a PNG image.
 
-**Can it go from Balinese script back to Latin?** Yes — use reverse mode on `/`, or `/read` to
-recognise script from a photo via OCR.
+**Can it go from Balinese script back to Latin?** Yes — use reverse mode on `/`, or the
+"Baca dari foto" panel on `/` to recognise script from a photo via OCR.
+
+**What is the difference between taling and pepet?** Romanised "e" covers two Balinese sounds:
+taling (ᬾ) for /e/ and pepet (ᭂ) for the schwa /ə/. The Latin converter writes taling for "e";
+use the pepet key on the `/practice` keyboard when you need ᭂ.
 
 **Can I type directly in Balinese script?** Yes — the virtual Balinese keyboard on `/practice`.
 

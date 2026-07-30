@@ -20,7 +20,7 @@ const posts = [
     excerpt_en: 'How to write your name in Balinese script correctly — Balinese, Indonesian, and foreign name examples, plus how to respell names that have no Balinese sound equivalent.',
     category: 'Panduan Belajar',
     tags: ['nama dalam aksara bali', 'tulis nama aksara bali', 'balinese script name', 'konverter'],
-    image_url: 'https://images.unsplash.com/photo-1501179691627-eeaa65ea017c?auto=format&fit=crop&w=1200&q=80',
+    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/nama-dalam-aksara-bali.png',
     read_time: '6 menit',
     content: `
 ## Menulis Nama: Alasan Orang Pertama Kali Mencari Aksara Bali
@@ -232,7 +232,7 @@ Open the <a href="/">Balinese script converter</a> and type your name. If it loo
     excerpt_en: 'A complete Balinese script reference chart: the 18 hanacaraka base letters, independent vowels, vowel signs, Balinese numerals, and punctuation, with Latin equivalents.',
     category: 'Panduan Belajar',
     tags: ['daftar aksara bali', 'tabel aksara bali', 'balinese alphabet', 'hanacaraka', 'referensi'],
-    image_url: 'https://images.unsplash.com/photo-1524675053444-52c3ca294ad2?auto=format&fit=crop&w=1200&q=80',
+    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/daftar-lengkap-aksara-bali.png',
     read_time: '7 menit',
     content: `
 ## Referensi Cepat Aksara Bali
@@ -474,7 +474,7 @@ If this page's tables appear as empty boxes (□□□), your device has no Bali
     excerpt_en: 'The most-used Balinese greetings and everyday phrases — from om swastyastu to matur suksma — with their Balinese script and notes on when to use them.',
     category: 'Panduan Belajar',
     tags: ['ucapan bahasa bali', 'salam bahasa bali', 'translate aksara bali', 'basa bali'],
-    image_url: 'https://images.unsplash.com/photo-1553902000-e036b7d05af5?auto=format&fit=crop&w=1200&q=80',
+    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/ucapan-bahasa-bali-sehari-hari.png',
     read_time: '6 menit',
     content: `
 ## Kata dalam Bahasa Bali, Bukan Sekadar Aksara Bali

@@ -20,7 +20,7 @@ const posts = [
     excerpt_en: 'What a Balinese script generator is, how it differs from a translator, and how to use one to turn Latin text into Balinese script online — free, right in your browser.',
     category: 'Teknologi & Budaya',
     tags: ['balinese script generator', 'balinese script translator', 'aksara bali generator', 'konverter', 'online'],
-    image_url: 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=1200&q=80',
+    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/balinese-script-generator-online.png',
     read_time: '6 menit',
     content: `
 ## Apa Itu Balinese Script Generator?
@@ -114,7 +114,7 @@ Generator memberi Anda titik awal yang baik, bukan hasil akhir yang sakral. Sebe
 
 **Apakah hasilnya bisa disalin ke aplikasi lain?** Bisa. Hasilnya teks Unicode standar, bukan gambar — selama aplikasi tujuan punya font aksara Bali, tampilannya akan normal.
 
-**Bisakah membaca aksara Bali dari foto?** Bisa, lewat halaman <a href="/read">baca dari foto</a> yang menggunakan OCR.
+**Bisakah membaca aksara Bali dari foto?** Bisa. Di halaman <a href="/">konverter</a> ada panel **Baca dari foto** — unggah atau potret tulisannya, dan OCR akan mengenali aksaranya.
 
 ## Coba Sendiri
 
@@ -212,7 +212,7 @@ A generator gives you a solid starting point, not a finished sacred text. Before
 
 **Can I paste the result into other apps?** Yes. The output is standard Unicode text, not an image — as long as the destination app has a Balinese font, it will render normally.
 
-**Can it read Balinese script from a photo?** Yes, through the <a href="/read">read-from-photo</a> page, which uses OCR.
+**Can it read Balinese script from a photo?** Yes. The <a href="/">converter page</a> has a **Baca dari foto** (read from photo) panel — upload or snap the writing and OCR recognises the characters.
 
 ## Try It Yourself
 
@@ -228,7 +228,7 @@ The fastest way to understand a Balinese script generator is to use one. Open th
     excerpt_en: 'How to translate Latin text to Balinese script online: the steps, the rules worth knowing, worked examples, and how to turn Balinese script back into Latin.',
     category: 'Panduan Belajar',
     tags: ['translate latin ke aksara bali', 'latin ke aksara bali', 'translate aksara bali', 'aksara bali online'],
-    image_url: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=1200&q=80',
+    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/translate-latin-ke-aksara-bali.png',
     read_time: '7 menit',
     content: `
 ## Translate Latin ke Aksara Bali: Mulai dari Sini
@@ -292,7 +292,7 @@ Angka juga punya aksaranya sendiri: 2026 menjadi ᭒᭐᭒᭖.
 Sama seringnya, orang justru menemukan tulisan aksara Bali — di papan nama, undangan, atau unggahan media sosial — dan ingin tahu bunyinya. Ada dua jalan:
 
 - **Mode terbalik di konverter.** Aktifkan mode terbalik, tempelkan teks aksara Bali, dan alat akan menuliskannya kembali dalam huruf Latin.
-- **Baca dari foto.** Kalau tulisannya berupa gambar dan tidak bisa disalin, gunakan halaman <a href="/read">baca aksara Bali dari foto</a>. Halaman itu memakai OCR untuk mengenali aksara dari gambar, lalu membacakannya dalam huruf Latin. Hasilnya sangat bergantung pada ketajaman foto dan bentuk hurufnya.
+- **Baca dari foto.** Kalau tulisannya berupa gambar dan tidak bisa disalin, buka panel **Baca dari foto** di <a href="/">halaman konverter</a>. Seret gambarnya ke sana, pilih berkas, atau ambil foto langsung dengan kamera; OCR akan mengenali aksaranya lalu membacakannya dalam huruf Latin. Hasilnya sangat bergantung pada ketajaman foto dan keteraturan bentuk hurufnya.
 
 ## Lima Tips Agar Hasilnya Lebih Akurat
 
@@ -393,7 +393,7 @@ Numbers have their own digits too: 2026 becomes ᭒᭐᭒᭖.
 Just as often, people come across Balinese writing — on a street sign, an invitation, a social media post — and want to know how it sounds. Two routes:
 
 - **Reverse mode in the converter.** Switch it on, paste the Balinese text, and the tool spells it back out in Latin letters.
-- **Read from a photo.** If the writing is an image and cannot be copied, use the <a href="/read">read Balinese script from a photo</a> page. It runs OCR to recognise the characters and then reads them out in Latin. Results depend heavily on how sharp the photo is and how regular the lettering.
+- **Read from a photo.** If the writing is an image and cannot be copied, open the **Baca dari foto** (read from photo) panel on the <a href="/">converter page</a>. Drag an image in, pick a file, or take a photo with your camera; OCR recognises the characters and reads them back in Latin. Results depend heavily on how sharp the photo is and how regular the lettering.
 
 ## Five Tips for More Accurate Output
 
@@ -442,7 +442,7 @@ The most effective study routine actually combines both: write your own guess by
     excerpt_en: 'Three ways to write Balinese script online — converter, virtual keyboard, and handwriting canvas — plus how to copy the result into WhatsApp, Instagram, and design apps.',
     category: 'Teknologi & Budaya',
     tags: ['menulis aksara bali online', 'salin antuk aksara bali', 'papan ketik aksara bali', 'aksara bali online'],
-    image_url: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=1200&q=80',
+    image_url: 'https://transliterasi-latin-ke-bahasa-bali.vercel.app/covers/menulis-aksara-bali-online.png',
     read_time: '6 menit',
     content: `
 ## Menulis Aksara Bali Tanpa Instal Apa-apa
@@ -518,7 +518,7 @@ Untuk teks yang berkaitan dengan upacara, tambahan kehati-hatian layak diberikan
 
 **Bagaimana menulis angka Bali?** Ketik angka biasa di konverter; 2026 menjadi ᭒᭐᭒᭖.
 
-**Bagaimana membaca aksara Bali yang saya temukan di papan nama?** Foto tulisannya dan gunakan halaman <a href="/read">baca dari foto</a>, atau ketik ulang dengan papan ketik lalu pakai mode terbalik di konverter.
+**Bagaimana membaca aksara Bali yang saya temukan di papan nama?** Foto tulisannya, lalu unggah ke panel **Baca dari foto** di <a href="/">konverter</a> — atau ketik ulang dengan papan ketik lalu pakai mode terbalik.
 
 ## Mulai Menulis
 
@@ -598,7 +598,7 @@ For anything tied to ceremony, extra care is warranted: some characters and rera
 
 **How do I write Balinese numerals?** Type ordinary digits into the converter; 2026 becomes ᭒᭐᭒᭖.
 
-**How do I read Balinese script I found on a sign?** Photograph it and use the <a href="/read">read-from-photo</a> page, or retype it with the keyboard and use the converter's reverse mode.
+**How do I read Balinese script I found on a sign?** Photograph it and drop it into the **Baca dari foto** panel on the <a href="/">converter</a> — or retype it with the keyboard and use reverse mode.
 
 ## Start Writing
 
