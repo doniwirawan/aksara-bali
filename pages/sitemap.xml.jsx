@@ -3,21 +3,42 @@
 
 const BASE_URL = 'https://transliterasi-latin-ke-bahasa-bali.vercel.app'
 
-const BLOG_POSTS = [
-  { slug: 'mengenal-aksara-bali', date: '2026-03-15', priority: '0.8' },
-  { slug: 'cara-belajar-aksara-bali', date: '2026-03-10', priority: '0.8' },
-  { slug: 'aksara-bali-dan-bahasa-sansekerta', date: '2026-03-05', priority: '0.7' },
-  { slug: 'lontar-naskah-kuno-bali', date: '2026-02-28', priority: '0.7' },
-  { slug: 'perbedaan-aksara-bali-jawa-latin', date: '2026-02-20', priority: '0.7' },
+// Posts that live only in the hardcoded fallback in pages/blog/[slug].jsx,
+// i.e. have no row in Supabase — keep them listed so they stay indexed.
+const LEGACY_BLOG_POSTS = [
   { slug: 'upaya-pelestarian-aksara-bali-digital', date: '2026-02-15', priority: '0.7' },
 ]
 
-function generateSitemap() {
+async function fetchBlogPosts() {
+  try {
+    const { createClient } = require('@supabase/supabase-js')
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    )
+    const { data } = await supabase
+      .from('blog_posts')
+      .select('slug, updated_at, created_at')
+      .eq('published', true)
+
+    const posts = (data || []).map(p => ({
+      slug: p.slug,
+      date: (p.updated_at || p.created_at || '').split('T')[0],
+      priority: '0.7',
+    }))
+    return [...posts, ...LEGACY_BLOG_POSTS]
+  } catch {
+    return LEGACY_BLOG_POSTS
+  }
+}
+
+function generateSitemap(BLOG_POSTS) {
   const today = new Date().toISOString().split('T')[0]
 
   const staticPages = [
     { url: '/', priority: '1.0', changefreq: 'daily', lastmod: today },
     { url: '/practice', priority: '0.9', changefreq: 'weekly', lastmod: today },
+    { url: '/read', priority: '0.8', changefreq: 'monthly', lastmod: today },
     { url: '/blog', priority: '0.9', changefreq: 'weekly', lastmod: today },
     { url: '/faq', priority: '0.8', changefreq: 'monthly', lastmod: today },
   ]
@@ -48,7 +69,7 @@ ${allPages.map(page => `  <url>
 }
 
 export async function getServerSideProps({ res }) {
-  const sitemap = generateSitemap()
+  const sitemap = generateSitemap(await fetchBlogPosts())
   res.setHeader('Content-Type', 'text/xml')
   res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate')
   res.write(sitemap)

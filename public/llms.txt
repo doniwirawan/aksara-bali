@@ -10,24 +10,80 @@ A free, open-source web application for converting Latin text to traditional Bal
 - **Author**: Doni Wirawan
 - **Language**: Indonesian (id), English (en)
 - **License**: MIT
-- **Last Updated**: 2026-03-27
+- **Last Updated**: 2026-07-30
+
+## What This Site Does
+
+This site is a free Balinese script generator, converter, and transliterator. It is also
+commonly searched for as: balinese script translator, aksara bali generator, aksara bali
+online, translate latin ke aksara bali, latin ke aksara bali, menulis aksara bali online,
+and salin antuk aksara bali. All of those describe the same core task, which the site does
+for free, without an account, entirely in the browser.
+
+Important distinction: the tool performs **transliteration** (changing the writing system
+while keeping the sound), not **translation** (changing meaning between languages). Typing
+"thank you" yields the English sounds written in Balinese characters; the Balinese phrase
+is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 
 ## Pages
 
 ### Core Pages
-- `/` — Main Latin to Balinese script converter (real-time conversion)
-- `/practice` — Interactive learning: quiz mode, writing canvas with hand gesture recognition, virtual Balinese keyboard
-- `/blog` — Articles about Balinese script, history, culture, and linguistics
+- `/` — Main Latin to Balinese script converter (real-time conversion, reverse mode, copy/download/share, word-art PNG export, text-to-speech)
+- `/practice` — Interactive learning: leveled quiz, writing canvas with hand gesture recognition, virtual Balinese keyboard, script reference
+- `/read` — Read Balinese script from a photo (OCR), then transliterate it back to Latin
+- `/blog` — Articles about Balinese script, history, culture, linguistics, and how to use the tools
 - `/faq` — Frequently asked questions about Balinese script and the tool
 - `/admin` — Admin dashboard (authentication required)
 
-### Blog Articles
-- `/blog/mengenal-aksara-bali` — History and structure of Balinese script
+### Blog Articles — Using the Tools
+- `/blog/balinese-script-generator-online` — What a Balinese script generator is, generator vs translator vs transliterator, sample conversions, saving results
+- `/blog/translate-latin-ke-aksara-bali` — Step-by-step guide to converting Latin text to Balinese script, vowel-sign rules, accuracy tips, reverse direction
+- `/blog/menulis-aksara-bali-online` — Three ways to write Balinese script online (converter, virtual keyboard, handwriting canvas) and how to paste results into other apps
+- `/blog/cara-instal-font-aksara-bali` — Installing a Balinese script font on computers and smartphones (fixes □□□ boxes)
+- `/blog/aplikasi-android-aksara-bali-rilis-baru` — The offline Aksara Bali Android app: converter, quizzes, learning
+
+### Blog Articles — Learning the Script
 - `/blog/cara-belajar-aksara-bali` — Beginner's guide to learning Balinese script
+- `/blog/belajar-hanacaraka-panduan-lengkap` — Memorising the 18 base hanacaraka letters
+- `/blog/pangangge-tanda-vokal-aksara-bali` — Pangangge: the vowel signs that change a letter's sound
+- `/blog/angka-bali-sistem-penomoran-tradisional` — Balinese numerals and the traditional numbering system
+
+### Blog Articles — Language and History
+- `/blog/mengenal-aksara-bali` — History and structure of Balinese script
 - `/blog/aksara-bali-dan-bahasa-sansekerta` — Relationship between Balinese script and Sanskrit
-- `/blog/lontar-naskah-kuno-bali` — Lontar palm leaf manuscripts and cultural preservation
+- `/blog/aksara-murda-huruf-kapital-bali` — Aksara murda: the retroflex letters used for Sanskrit words
 - `/blog/perbedaan-aksara-bali-jawa-latin` — Comparison of Balinese, Javanese, and Latin scripts
+- `/blog/lontar-naskah-kuno-bali` — Lontar palm leaf manuscripts and cultural preservation
+- `/blog/kakawin-epik-sastra-bali-kuno` — Kakawin: classical Old Javanese epic poetry in Bali
+- `/blog/upacara-keagamaan-aksara-bali` — The role of Balinese script in Hindu ceremony
+- `/blog/rerajahan-seni-sakral-aksara-bali` — Rerajahan: sacred script-and-symbol art
+- `/blog/aksara-bali-di-kehidupan-sehari-hari` — Balinese script in modern daily life
+- `/blog/aksara-bali-di-era-digital` — Balinese script in the digital age
 - `/blog/upaya-pelestarian-aksara-bali-digital` — Digital preservation of Balinese script
+
+## Common Questions
+
+**How do I convert Latin text to Balinese script?** Open `/`, type or paste Latin text in the
+left box, and the Balinese script appears on the right in real time. Copy, download, or share
+it with the buttons underneath.
+
+**Is it free?** Yes — free, no account, no installation. It also works offline once installed
+as a PWA.
+
+**Does it translate meaning?** No. It transliterates sound. Translate the meaning into Balinese
+first, then convert the writing.
+
+**Why does the output look like empty boxes (□□□)?** The text is correct but the device lacks a
+Balinese font. See `/blog/cara-instal-font-aksara-bali`, or export the result as a PNG image.
+
+**Can it go from Balinese script back to Latin?** Yes — use reverse mode on `/`, or `/read` to
+recognise script from a photo via OCR.
+
+**Can I type directly in Balinese script?** Yes — the virtual Balinese keyboard on `/practice`.
+
+**Is it safe to use for a tattoo or invitation?** Use it as a starting point, then have a
+Balinese teacher or native speaker verify anything printed permanently. Ritual text deserves
+extra care.
 
 ## Key Features
 
@@ -37,7 +93,12 @@ A free, open-source web application for converting Latin text to traditional Bal
 - Interactive quiz with easy/medium/hard difficulty levels
 - Hand gesture drawing recognition using MediaPipe (webcam-based)
 - Virtual Balinese keyboard for direct script input
+- Reverse mode: Balinese script back to Latin
+- OCR: read Balinese script from a photo
+- Word-art export as transparent PNG
+- Text-to-speech pronunciation of the Latin text
 - PWA (Progressive Web App) — installable, works offline
+- Companion Android app with offline converter, quizzes, and script reference
 - Bilingual UI: Indonesian and English
 - Dark mode support
 - Supabase analytics backend (conversion logs, quiz results, writing checks)
