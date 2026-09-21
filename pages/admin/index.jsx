@@ -68,6 +68,7 @@ export default function AdminDashboard() {
   const [usersLoading, setUsersLoading] = useState(false)
   const [leads, setLeads] = useState([])
   const [leadsLoading, setLeadsLoading] = useState(false)
+  const [leadsCopied, setLeadsCopied] = useState(false)
 
   // Delete modal
   const [deleteModal, setDeleteModal] = useState(null) // { type, id, label, onConfirm }
@@ -306,6 +307,19 @@ export default function AdminDashboard() {
     const seen = new Map()
     for (const l of leads) if (!seen.has(l.email)) seen.set(l.email, l)
     return [...seen.values()]
+  }
+
+  // Play Console takes a comma-separated list of tester addresses, so hand over
+  // exactly that — ready to paste straight into the closed-testing tester list.
+  const copyLeadEmails = async () => {
+    const emails = uniqueLeads().map(l => l.email).join(', ')
+    try {
+      await navigator.clipboard.writeText(emails)
+      setLeadsCopied(true)
+      setTimeout(() => setLeadsCopied(false), 2000)
+    } catch {
+      window.prompt('Salin email berikut:', emails)
+    }
   }
 
   const exportLeadsCsv = () => {
@@ -981,6 +995,7 @@ export default function AdminDashboard() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h2 style={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>Email Terkumpul</h2>
                 <div style={{ display: 'flex', gap: '8px' }}>
+                  <button onClick={copyLeadEmails} disabled={leadsLoading || leads.length === 0} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><ClipboardList size={14} /> {leadsCopied ? 'Tersalin!' : 'Salin semua email'}</button>
                   <button onClick={exportLeadsCsv} disabled={leadsLoading || leads.length === 0} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Download size={14} /> Ekspor CSV</button>
                   <button onClick={fetchLeads} disabled={leadsLoading} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><RefreshCw size={14} /> {leadsLoading ? 'Memuat...' : 'Perbarui'}</button>
                 </div>
