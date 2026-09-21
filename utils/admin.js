@@ -1,13 +1,12 @@
-// Centralized admin-email check.
-// Admin emails come from the NEXT_PUBLIC_ADMIN_EMAIL env var (comma-separated for
-// multiple). Kept out of source so no personal email is committed to the repo.
-const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAIL || '')
+// Centralized admin-email check. **Server-side only** — importing this from a
+// component or page body inlines the admin address into the public JS bundle,
+// which is what ADMIN_EMAIL exists to avoid. The browser asks /api/admin-check
+// instead. ADMIN_EMAIL is the private var; NEXT_PUBLIC_ADMIN_EMAIL is still read
+// as a fallback so an environment that only sets the old name keeps working.
+const ADMIN_EMAILS = (process.env.ADMIN_EMAIL || process.env.NEXT_PUBLIC_ADMIN_EMAIL || '')
   .split(',')
   .map(e => e.trim().toLowerCase())
   .filter(Boolean)
-
-// Primary email — used for display (header, env hints).
-export const ADMIN_EMAIL = ADMIN_EMAILS[0] || ''
 
 export function isAdminEmail(email) {
   return !!email && ADMIN_EMAILS.includes(email.toLowerCase())

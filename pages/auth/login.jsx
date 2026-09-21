@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
-import { isAdminEmail } from '../../utils/admin'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -24,11 +23,19 @@ export default function LoginPage() {
       setError(err.message)
       return
     }
-    if (isAdminEmail(data?.user?.email)) {
-      router.push('/admin')
-    } else {
-      router.push('/')
-    }
+    // Whether this account is an admin is the server's to answer — checking it
+    // here would inline the admin address into the public bundle.
+    let admin = false
+    try {
+      const token = data?.session?.access_token
+      if (token) {
+        const res = await fetch('/api/admin-check/', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (res.ok) admin = (await res.json()).admin === true
+      }
+    } catch { /* not an admin, then */ }
+    router.push(admin ? '/admin' : '/')
   }
 
   return (

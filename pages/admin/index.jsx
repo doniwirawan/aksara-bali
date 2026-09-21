@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { supabase } from '../../utils/supabase'
-import { ADMIN_EMAIL, isAdminEmail } from '../../utils/admin'
 import {
   BarChart3, PenLine, HelpCircle, Users, RefreshCw, Zap, Target, Flame,
   CheckCircle, ClipboardList, X, Image as ImageIcon, Clock, Trash2, Eye, EyeOff,
@@ -27,6 +26,7 @@ export default function AdminDashboard() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState('stats')
+  const [adminEmail, setAdminEmail] = useState('')
   const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
@@ -83,10 +83,25 @@ export default function AdminDashboard() {
   const tokenRef = useRef('')
   const getHeaders = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${tokenRef.current}` })
 
+  // The server holds the admin address, so it answers this — see /api/admin-check.
+  const checkAdmin = async (token) => {
+    try {
+      const res = await fetch('/api/admin-check/', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (!res.ok) return false
+      return (await res.json()).admin === true
+    } catch {
+      return false
+    }
+  }
+
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (isAdminEmail(session?.user?.email)) {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (!session?.access_token) return
+      if (await checkAdmin(session.access_token)) {
         tokenRef.current = session.access_token
+        setAdminEmail(session.user?.email || '')
         setAuthenticated(true)
       }
     })
@@ -105,12 +120,13 @@ export default function AdminDashboard() {
     setError('')
     const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
     if (authError) { setError('Email atau password salah'); return }
-    if (!isAdminEmail(data.user?.email)) {
+    if (!await checkAdmin(data.session.access_token)) {
       await supabase.auth.signOut()
       setError('Akun ini bukan admin')
       return
     }
     tokenRef.current = data.session.access_token
+    setAdminEmail(data.user?.email || '')
     setAuthenticated(true)
   }
 
@@ -419,7 +435,7 @@ export default function AdminDashboard() {
             <span style={{ fontWeight: '700', fontSize: '15px' }}>Aksara Bali — Admin</span>
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <span style={{ fontSize: '12px', color: th.muted }}>{ADMIN_EMAIL}</span>
+            <span style={{ fontSize: '12px', color: th.muted }}>{adminEmail}</span>
             <button onClick={toggleDark} aria-label="Mode gelap" style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', padding: '6px 10px' }}>
               {darkMode ? <Sun size={15} /> : <Moon size={15} />}
             </button>
@@ -495,7 +511,7 @@ export default function AdminDashboard() {
               <div style={{ ...s.card, background: darkMode ? '#101a2e' : '#f0f4ff', border: `1px solid ${darkMode ? '#24406e' : '#c5d8fc'}` }}>
                 <h3 style={{ fontSize: '14px', fontWeight: '600', margin: '0 0 10px', color: darkMode ? '#8ab4f8' : '#1e40af', display: 'flex', alignItems: 'center', gap: '6px' }}><ClipboardList size={15} /> Setup Supabase</h3>
                 <p style={{ fontSize: '13px', color: darkMode ? '#c7d2e5' : '#374151', margin: '0 0 8px' }}>Jalankan <code>supabase-schema.sql</code> di Supabase SQL Editor untuk membuat semua tabel (termasuk blog_posts dan faq_items).</p>
-                <p style={{ fontSize: '13px', color: darkMode ? '#c7d2e5' : '#374151', margin: 0 }}>Set env vars: <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>NEXT_PUBLIC_ADMIN_EMAIL</code>, <code>NEXT_PUBLIC_ADMIN_PASSWORD</code></p>
+                <p style={{ fontSize: '13px', color: darkMode ? '#c7d2e5' : '#374151', margin: 0 }}>Set env vars: <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>, <code>ADMIN_EMAIL</code></p>
               </div>
             </>
           )}
@@ -949,7 +965,7 @@ export default function AdminDashboard() {
                 <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Memuat data pengguna...</div>
               ) : (
                 <div style={s.card}>
-                  <div style={{ marginBottom: '12px', fontSize: '13px', color: '#666' }}>Total: <strong>{users.filter(u => !isAdminEmail(u.email)).length}</strong> pengguna</div>
+                  <div style={{ marginBottom: '12px', fontSize: '13px', color: '#666' }}>Total: <strong>{users.filter(u => u.email !== adminEmail).length}</strong> pengguna</div>
                   <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                       <thead>
@@ -958,7 +974,7 @@ export default function AdminDashboard() {
                         ))}</tr>
                       </thead>
                       <tbody>
-                        {users.filter(u => !isAdminEmail(u.email)).map(u => (
+                        {users.filter(u => u.email !== adminEmail).map(u => (
                           <tr key={u.id}>
                             <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8' }}>
                               {u.email}
