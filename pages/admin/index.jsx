@@ -6,7 +6,7 @@ import { ADMIN_EMAIL, isAdminEmail } from '../../utils/admin'
 import {
   BarChart3, PenLine, HelpCircle, Users, RefreshCw, Zap, Target, Flame,
   CheckCircle, ClipboardList, X, Image as ImageIcon, Clock, Trash2, Eye, EyeOff,
-  MousePointerClick, Activity, Moon, Sun, Download, Languages,
+  MousePointerClick, Activity, Moon, Sun, Download, Languages, Mail,
 } from 'lucide-react'
 
 const BLOG_CATEGORIES = ['Sejarah & Budaya', 'Panduan Belajar', 'Linguistik', 'Naskah Kuno', 'Teknologi & Budaya', 'Umum']
@@ -66,6 +66,8 @@ export default function AdminDashboard() {
   // Users
   const [users, setUsers] = useState([])
   const [usersLoading, setUsersLoading] = useState(false)
+  const [leads, setLeads] = useState([])
+  const [leadsLoading, setLeadsLoading] = useState(false)
 
   // Delete modal
   const [deleteModal, setDeleteModal] = useState(null) // { type, id, label, onConfirm }
@@ -93,7 +95,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!authenticated) return
     const tab = router.query.tab
-    const valid = ['stats', 'analytics', 'blog', 'faq', 'users']
+    const valid = ['stats', 'analytics', 'blog', 'faq', 'users', 'email']
     if (tab && valid.includes(tab)) setActiveTab(tab)
   }, [authenticated, router.query.tab])
 
@@ -292,6 +294,33 @@ export default function AdminDashboard() {
     setUsersLoading(false)
   }, [])
 
+  const fetchLeads = useCallback(async () => {
+    setLeadsLoading(true)
+    const res = await fetch('/api/email-leads/', { headers: getHeaders() })
+    if (res.ok) setLeads(await res.json())
+    setLeadsLoading(false)
+  }, [])
+
+  // Unique addresses, newest capture first — that's the mailing list.
+  const uniqueLeads = () => {
+    const seen = new Map()
+    for (const l of leads) if (!seen.has(l.email)) seen.set(l.email, l)
+    return [...seen.values()]
+  }
+
+  const exportLeadsCsv = () => {
+    const rows = uniqueLeads()
+    const csv = ['email,source,locale,created_at']
+      .concat(rows.map(l => [l.email, l.source || '', l.locale || '', l.created_at].join(',')))
+      .join('\n')
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }))
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `email-leads-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+  }
+
   const deleteUser = (id, userEmail) => {
     setDeleteModal({
       label: `Hapus akun "${userEmail}"?`,
@@ -308,6 +337,7 @@ export default function AdminDashboard() {
     if (activeTab === 'faq') fetchFaq()
     if (activeTab === 'kamus') fetchSuggestions()
     if (activeTab === 'users') fetchUsers()
+    if (activeTab === 'email') fetchLeads()
   }, [activeTab, authenticated])
 
   // ─── Styles ───────────────────────────────────────────────
@@ -360,6 +390,7 @@ export default function AdminDashboard() {
     { key: 'faq', icon: HelpCircle, label: 'FAQ' },
     { key: 'kamus', icon: Languages, label: 'Usulan Kamus' },
     { key: 'users', icon: Users, label: 'Pengguna' },
+    { key: 'email', icon: Mail, label: 'Email' },
   ]
 
   return (
@@ -940,6 +971,53 @@ export default function AdminDashboard() {
                       </tbody>
                     </table>
                   </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {activeTab === 'email' && (
+            <>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h2 style={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>Email Terkumpul</h2>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button onClick={exportLeadsCsv} disabled={leadsLoading || leads.length === 0} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Download size={14} /> Ekspor CSV</button>
+                  <button onClick={fetchLeads} disabled={leadsLoading} style={{ ...s.btnOutline, display: 'inline-flex', alignItems: 'center', gap: '6px' }}><RefreshCw size={14} /> {leadsLoading ? 'Memuat...' : 'Perbarui'}</button>
+                </div>
+              </div>
+              {leadsLoading ? (
+                <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>Memuat email...</div>
+              ) : (
+                <div style={s.card}>
+                  <div style={{ marginBottom: '12px', fontSize: '13px', color: '#666' }}>
+                    <strong>{uniqueLeads().length}</strong> email unik dari <strong>{leads.length}</strong> pengisian
+                  </div>
+                  {leads.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '30px', color: '#888', fontSize: '14px' }}>Belum ada email masuk.</div>
+                  ) : (
+                    <div style={{ overflowX: 'auto' }}>
+                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                        <thead>
+                          <tr>{['Email', 'Sumber', 'Bahasa', 'Halaman', 'Waktu'].map(h => (
+                            <th key={h} style={{ textAlign: 'left', padding: '8px 12px', borderBottom: '2px solid #f0f0f0', color: '#555', fontWeight: '600', whiteSpace: 'nowrap' }}>{h}</th>
+                          ))}</tr>
+                        </thead>
+                        <tbody>
+                          {uniqueLeads().map(l => (
+                            <tr key={l.id}>
+                              <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', fontWeight: '600' }}>{l.email}</td>
+                              <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', color: '#0d6efd' }}>{l.source || '—'}</td>
+                              <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', color: '#666' }}>{l.locale || '—'}</td>
+                              <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', color: '#666' }}>{l.path || '—'}</td>
+                              <td style={{ padding: '10px 12px', borderBottom: '1px solid #f8f8f8', color: '#666', whiteSpace: 'nowrap' }}>
+                                {l.created_at ? new Date(l.created_at).toLocaleString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
               )}
             </>

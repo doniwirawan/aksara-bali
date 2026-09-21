@@ -166,3 +166,24 @@ create policy "Service role manage practice words"
   on public.practice_words for all using (auth.role() = 'service_role');
 
 create index if not exists idx_practice_words_difficulty on public.practice_words(difficulty);
+
+-- Table: email_leads (emails captured by the download gate)
+create table if not exists public.email_leads (
+  id         bigserial primary key,
+  email      text not null,
+  source     text,                     -- which download asked for it
+  locale     text,
+  path       text,                     -- page the gate opened on
+  created_at timestamptz not null default now()
+);
+
+alter table public.email_leads enable row level security;
+
+create policy "Allow anon insert email leads"
+  on public.email_leads for insert to anon with check (true);
+
+create policy "Service role can read email leads"
+  on public.email_leads for select using (auth.role() = 'service_role');
+
+create index if not exists idx_email_leads_email   on public.email_leads(lower(email));
+create index if not exists idx_email_leads_created on public.email_leads(created_at desc);

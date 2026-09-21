@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'driver.js/dist/driver.css'
 import '../styles/globals.css'
 import { AuthProvider } from '../context/AuthContext'
+import { EmailGateProvider } from '../components/EmailGate'
 import { trackPageView, trackEvent } from '../utils/analytics'
 import { playTap } from '../utils/sfx'
 
@@ -622,7 +623,9 @@ function MyApp({ Component, pageProps }) {
             </Head>
 
             <AuthProvider>
-              <Component {...pageProps} locale={locale} setLocale={handleSetLocale} />
+              <EmailGateProvider locale={locale}>
+                <Component {...pageProps} locale={locale} setLocale={handleSetLocale} />
+              </EmailGateProvider>
             </AuthProvider>
             <Analytics />
         </>

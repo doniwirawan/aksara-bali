@@ -1,12 +1,22 @@
 import { Github, Bug, Linkedin, Heart, Download } from 'lucide-react'
+import { useEmailGate } from './EmailGate'
 
 export default function Footer({ darkMode, locale }) {
+  const { requireEmail } = useEmailGate()
   const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
   const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
   const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
   const mutedColor = darkMode ? '#888' : '#666'
   const linkColor = darkMode ? '#93c5fd' : '#0d6efd'
   const id = locale === 'id'
+
+  // The APK is gated: collect an email, then send them to the release page.
+  const handleApkClick = async (e) => {
+    e.preventDefault()
+    const href = e.currentTarget.href
+    if (!await requireEmail('apk-footer')) return
+    if (!window.open(href, '_blank', 'noopener')) window.location.href = href
+  }
 
   const NAV_LINKS = [
     { href: '/', label: id ? 'Konverter' : 'Converter' },
@@ -68,6 +78,7 @@ export default function Footer({ darkMode, locale }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="footer-download-apk"
+                onClick={handleApkClick}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: '7px',
                   padding: '9px 16px', borderRadius: '10px', border: `1px solid ${mutedColor}`,

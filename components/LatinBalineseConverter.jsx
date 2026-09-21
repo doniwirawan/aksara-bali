@@ -25,6 +25,7 @@ import {
 } from 'lucide-react'
 import { authedFetch } from '../utils/supabase'
 import { trackEvent } from '../utils/analytics'
+import { useEmailGate } from './EmailGate'
 import { speak, canSpeak } from '../utils/speak'
 import OcrPanel from './OcrPanel'
 
@@ -188,6 +189,8 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     const [isReverseMode, setIsReverseMode] = useState(false)
     const [showOcr, setShowOcr] = useState(false)
 
+    const { requireEmail } = useEmailGate()
+
     // Word-art styling + PNG export (Latin → Balinese)
     const [styleFontSize, setStyleFontSize] = useState(64)
     const [styleAlign, setStyleAlign] = useState('center')
@@ -198,6 +201,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     const downloadStyledImage = async () => {
         const text = balineseText
         if (!text) return
+        if (!await requireEmail('converter-image')) return
         const fs = styleFontSize * 2 // upscale for a crisp export
         try { await document.fonts.load(`${fs}px "Noto Sans Balinese"`) } catch { /* continue */ }
         const W = 1080, pad = 80
@@ -1232,7 +1236,8 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
         } catch { /* user dismissed the share sheet — ignore */ }
     }
 
-    const handleDownloadLeft = () => {
+    const handleDownloadLeft = async () => {
+        if (!await requireEmail('converter-text')) return
         trackEvent('converter-download')
         const element = document.createElement('a')
         const textToDownload = isReverseMode ? balineseText : latinText
@@ -1245,7 +1250,8 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
         document.body.removeChild(element)
     }
 
-    const handleDownloadRight = () => {
+    const handleDownloadRight = async () => {
+        if (!await requireEmail('converter-text-result')) return
         trackEvent('converter-download-result')
         const element = document.createElement('a')
         const textToDownload = isReverseMode ? latinText : balineseText

@@ -49,8 +49,10 @@ const HOME_TOUR = [
 import LanguageSwitcher, { translations } from '../components/LanguageSwitcher'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { useEmailGate } from '../components/EmailGate'
 
 export default function Home({ locale, setLocale }) {
+    const { requireEmail } = useEmailGate()
     const [darkMode, setDarkMode] = useState(false)
     const [isOnline, setIsOnline] = useState(true)
     const [isLoaded, setIsLoaded] = useState(false)
@@ -132,6 +134,14 @@ export default function Home({ locale, setLocale }) {
             };
         }
     }, []);
+
+    // The APK is gated: collect an email, then send them to the release page.
+    const handleApkClick = async (e) => {
+        e.preventDefault()
+        const href = e.currentTarget.href
+        if (!await requireEmail('apk-landing')) return
+        if (!window.open(href, '_blank', 'noopener')) window.location.href = href
+    }
 
     const handleInstallClick = async () => {
         if (!deferredPrompt) {
@@ -429,6 +439,7 @@ export default function Home({ locale, setLocale }) {
                                 </a>
                                 <a href="https://github.com/doniwirawan/aksara-bali/releases/latest" target="_blank" rel="noopener noreferrer"
                                     data-track="landing-download-apk"
+                                    onClick={handleApkClick}
                                     style={{
                                         display: 'inline-flex', alignItems: 'center', gap: '8px',
                                         background: 'transparent', color: '#0d6efd', textDecoration: 'none',
