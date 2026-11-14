@@ -61,6 +61,11 @@ const ASSIGN = {
   'aksara-bali-di-era-digital':                ['laptop-writing', 1, ['Aksara Bali di', 'Era Digital']],
   'cara-instal-font-aksara-bali':              ['laptop-writing', 3, ['Cara Instal Font', 'Aksara Bali']],
   'aplikasi-android-aksara-bali-rilis-baru':   ['keyboard-typing', 2, ['Aplikasi Android', 'Aksara Bali']],
+  // Batch 6 (Kamus)
+  'anggah-ungguh-basa-bali':                   ['bali-culture', 3, ['Anggah-Ungguh', 'Basa Bali']],
+  'bahasa-bali-kuno-prasasti':                 ['stone-carving', 1, ['Bahasa Bali Kuno', 'dan Prasasti']],
+  'kata-bahasa-bali-yang-mulai-punah':         ['bali-culture', 4, ['Kata Bali yang', 'Mulai Punah']],
+  'cara-memakai-kamus-bahasa-bali-online':     ['library-books', 1, ['Cara Memakai', 'Kamus Bahasa Bali']],
 }
 
 const CATEGORY_BUCKET = {

@@ -46,12 +46,14 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 - `/blog/menulis-aksara-bali-di-word-canva` — Using Balinese script in Word, Google Docs, Canva, Photoshop, and PowerPoint
 - `/blog/cara-instal-font-aksara-bali` — Installing a Balinese script font on computers and smartphones (fixes □□□ boxes)
 - `/blog/aplikasi-android-aksara-bali-rilis-baru` — The offline Aksara Bali Android app: converter, quizzes, learning
+- `/blog/cara-memakai-kamus-bahasa-bali-online` — Using the online Balinese dictionary: word search, the four speech levels, the sentence helper, the Old Balinese tab, reporting and suggesting words
 
 ### Blog Articles — Learning the Script
 - `/blog/daftar-lengkap-aksara-bali` — Complete glyph chart: 18 wreastra letters, 14 swara vowels, 33 wyanjana consonants by articulation (kanthya/talawya/murdhanya/dantya/osthya), pangangge incl. taling vs pepet, ra repa and la lenga, gantungan, numerals, punctuation, and the U+1B00–U+1B7F Unicode block
 - `/blog/ucapan-bahasa-bali-sehari-hari` — Everyday Balinese greetings and phrases with their script, plus a note on speech levels (sor singgih)
 - `/blog/gantungan-gempelan-aksara-bali` — Consonant clusters: gantungan vs gempelan, when adeg-adeg is used instead, and how Unicode encodes stacking
 - `/blog/translate-bahasa-indonesia-ke-bahasa-bali` — Translation vs transliteration, why speech levels (sor singgih) block full automation, and a starter Indonesian–Balinese vocabulary
+- `/blog/anggah-ungguh-basa-bali` — Balinese speech levels (andap, alus singgih, alus sor, mider) with dictionary examples and when to use each
 - `/blog/cara-belajar-aksara-bali` — Beginner's guide to learning Balinese script
 - `/blog/belajar-hanacaraka-panduan-lengkap` — Memorising the 18 base hanacaraka letters
 - `/blog/pangangge-tanda-vokal-aksara-bali` — Pangangge: the vowel signs that change a letter's sound
@@ -59,6 +61,8 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 
 ### Blog Articles — Language and History
 - `/blog/asal-usul-aksara-bali-aji-saka` — Script descent from Brahmi to Balinese, and the Aji Saka legend behind the hanacaraka order
+- `/blog/bahasa-bali-kuno-prasasti` — Old Balinese, the language of Bali's earliest inscriptions (Sukawana A I, 882 CE; Blanjong pillar, 913 CE), with sample words
+- `/blog/kata-bahasa-bali-yang-mulai-punah` — Balinese words falling out of use (dampar, jelan, suklit, kawa-kawa, …) with meanings
 - `/blog/kelengkapan-penjor-galungan` — The parts of a Galungan penjor and what each symbolises, with their names in Balinese script
 - `/blog/rangkaian-hari-raya-nyepi` — The Nyepi sequence (Melasti, Pangrupukan, Nyepi, Ngembak Geni) and Catur Brata Penyepian
 - `/blog/mengenal-aksara-bali` — History and structure of Balinese script
