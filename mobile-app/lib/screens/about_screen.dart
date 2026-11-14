@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../theme.dart';
 import '../l10n.dart';
 import '../update_check.dart';
+import '../update_sheet.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -113,8 +114,8 @@ class AboutScreen extends StatelessWidget {
   }
 }
 
-// Manual update check — keeps the app offline-by-default; only hits GitHub when
-// the user taps the button.
+// Manual update check. The app also checks on launch (see HomeShell); this
+// button checks right away and opens the same update sheet.
 class _UpdateCheckButton extends StatefulWidget {
   const _UpdateCheckButton();
   @override
@@ -132,19 +133,10 @@ class _UpdateCheckButtonState extends State<_UpdateCheckButton> {
       final u = await checkForUpdate();
       if (!mounted) return;
       setState(() { _update = u; _state = u == null ? 'latest' : null; _busy = false; });
+      if (u != null) showUpdateSheet(context, u);
     } catch (_) {
       if (!mounted) return;
       setState(() { _state = 'error'; _busy = false; });
-    }
-  }
-
-  Future<void> _open(String url) async {
-    final uri = Uri.parse(url);
-    try {
-      final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
-      if (!ok) await launchUrl(uri, mode: LaunchMode.platformDefault);
-    } catch (_) {
-      try { await launchUrl(uri, mode: LaunchMode.platformDefault); } catch (_) {}
     }
   }
 
@@ -174,9 +166,9 @@ class _UpdateCheckButtonState extends State<_UpdateCheckButton> {
           SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
-              onPressed: () => _open(u.downloadUrl ?? u.releaseUrl),
+              onPressed: () => showUpdateSheet(context, u),
               icon: const Icon(Icons.download, size: 18),
-              label: Text(tr(context, 'Download v${u.version}', 'Unduh v${u.version}')),
+              label: Text(tr(context, 'Update to v${u.version}', 'Perbarui ke v${u.version}')),
             ),
           ),
           const SizedBox(height: 4),

@@ -9,6 +9,8 @@ import 'screens/quiz_screen.dart';
 import 'screens/reference_screen.dart';
 import 'screens/about_screen.dart';
 import 'screens/achievements_screen.dart';
+import 'update_check.dart';
+import 'update_sheet.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +62,13 @@ class _HomeShellState extends State<HomeShell> {
   void initState() {
     super.initState();
     pendingUnlock.addListener(_showUnlock);
+    // GitHub APK only: offer a newer release as soon as it is out.
+    if (!kPlayStoreBuild) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        final u = await autoCheckForUpdate();
+        if (u != null && mounted) showUpdateSheet(context, u);
+      });
+    }
   }
 
   @override

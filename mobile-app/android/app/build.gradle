@@ -60,6 +60,23 @@ android {
     }
 }
 
+// The GitHub APK updates itself in-app; the Play build must not (Play policy).
+// A build counts as Play when it is an app bundle or passes
+// --dart-define=PLAY_STORE=true. Everything else merges src/sideload into
+// release, adding the network + install permissions and the FileProvider.
+def dartDefines = project.hasProperty("dart-defines")
+    ? project.property("dart-defines").toString().split(",").collect { new String(it.decodeBase64(), "UTF-8") }
+    : []
+def isPlayBuild = dartDefines.contains("PLAY_STORE=true") ||
+    gradle.startParameter.taskNames.any { it.toLowerCase().contains("bundle") }
+if (!isPlayBuild) {
+    android.sourceSets.release.manifest.srcFile "src/sideload/AndroidManifest.xml"
+}
+
+dependencies {
+    implementation "androidx.core:core:1.13.1" // FileProvider for the updater
+}
+
 flutter {
     source = "../.."
 }
