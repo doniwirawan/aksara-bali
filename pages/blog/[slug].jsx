@@ -660,9 +660,8 @@ function renderMarkdown(content) {
                         <Tag key={ci} style={{
                           padding: '8px 12px', border: '1px solid var(--line)',
                           background: ri === 0 ? 'var(--accent-tint)' : 'transparent',
-                          // Header sits on a light-blue fill, so pin dark text —
-                          // otherwise dark-mode's light text is invisible on it.
-                          color: ri === 0 ? '#1a2340' : 'inherit',
+                          // The header fill is a themed token, so its text follows the theme too.
+                          color: ri === 0 ? 'var(--ink)' : 'inherit',
                           fontWeight: ri === 0 ? '600' : 'normal',
                           textAlign: 'left',
                         }}>
@@ -849,7 +848,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
           {/* Article content */}
           <div style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, padding: '32px', lineHeight: 1.8, fontSize: '16px' }}>
             {lang === 'en' && !post.contentEn && (
-              <div style={{ padding: '16px', borderRadius: 0, background: darkMode ? '#2d2000' : '#fff9e6', marginBottom: '20px', fontSize: '14px', color: '#92400e', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ padding: '16px', borderRadius: 0, background: 'var(--warn-tint)', border: '1px solid var(--turmeric)', marginBottom: '20px', fontSize: '14px', color: 'var(--ink)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FileText size={16} style={{ flexShrink: 0 }} /> English translation coming soon. Showing Indonesian version.
               </div>
             )}

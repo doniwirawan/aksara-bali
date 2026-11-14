@@ -289,7 +289,7 @@ export default function TranslatePage({ locale, setLocale }) {
   const cardBg = 'var(--surface)'
   const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
   const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
-  const mutedColor = darkMode ? '#8b8b9e' : 'var(--mute)'
+  const mutedColor = 'var(--mute)'
 
   const pageTitle = lang === 'en'
     ? 'Balinese Dictionary — Indonesian to Balinese with Speech Levels'

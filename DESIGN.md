@@ -301,7 +301,7 @@ The app band is a black field with an 800 22px title, shell-text copy, and red +
 Colour swatches are 28px squares with a 1px line border; the chosen one gets a 3px turmeric outline offset 2px. The segmented control is a 1px-bordered row of 40 x 36px cells; the active cell inverts to ink with ground-coloured icon.
 
 ### Coverage and Known Gaps
-- The shared classes above (shell, page frame, workbench, tool rows, app band, strips, word art controls) live in `styles/globals.css`. Most inner pages (translate, practice, blog, dashboard, auth, FAQ, legal) still style their content with inline styles that point at the tokens instead of shared classes; a few of them keep leftover hex values (for example a `#8b8b9e` dark-mode mute in the Kamus page, amber callout colours in blog posts). Treat those as debt. They are not part of the system.
+- The shared classes above (shell, page frame, workbench, tool rows, app band, strips, word art controls) live in `styles/globals.css`. Most inner pages (translate, practice, blog, dashboard, auth, FAQ, legal) still style their content with inline styles that point at the tokens instead of shared classes. Treat that as debt. They are not part of the system.
 - The admin panel (`/admin`) is out of scope and still uses the previous look.
 - The build differs from the original direction in two places, and the build is what this file records: the header bar is 60px (not 64px), and active tabs use a 3px solid underline (red or turmeric), not the thread.
 
