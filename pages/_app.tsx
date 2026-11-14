@@ -136,19 +136,7 @@ const generateStructuredData = (locale) => {
                         ? "Fokus pelestarian budaya"
                         : "Cultural preservation focus"
                 ],
-                "screenshot": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/android-chrome-512x512.png",
-                "aggregateRating": {
-                    "@type": "AggregateRating",
-                    "ratingValue": "4.8",
-                    "reviewCount": "125",
-                    "bestRating": "5",
-                    "worstRating": "1"
-                },
-                "interactionStatistic": {
-                    "@type": "InteractionCounter",
-                    "interactionType": "https://schema.org/UseAction",
-                    "userInteractionCount": "5000"
-                }
+                "screenshot": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/android-chrome-512x512.png"
             },
             {
                 "@type": "WebSite",
