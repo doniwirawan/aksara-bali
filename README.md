@@ -122,6 +122,21 @@ A fully **offline** Android companion — convert, practice, and learn Aksara Ba
 
 ---
 
+## Shared packages
+
+The converter engine, the design system and the React components are published from [`packages/`](packages/README.md), so other tools can reuse them:
+
+| Package | For |
+|---|---|
+| `@aksara-bali/core` | Latin ⇄ Aksara Bali conversion. No dependencies. |
+| `@aksara-bali/design` | The Tridatu look as plain CSS: tokens, light and dark themes, shell, converter workbench. |
+| `@aksara-bali/react` | Workbench, site shell, glyph grid and script keyboard components. |
+| `create-aksara-tool` | `npm create aksara-tool my-tool`: a working converter site, ready to switch to another script. |
+
+[packages/README.md](packages/README.md) explains what each package is for and how they fit together. The packages are MIT; the site itself is PolyForm Noncommercial.
+
+---
+
 ## Public API
 
 CORS-enabled JSON endpoints — usable from a web, mobile, or **Flutter** client.
