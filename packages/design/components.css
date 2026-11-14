@@ -262,3 +262,15 @@ button.glyphs__cell:hover { background: var(--surface-2); }
 .dl__notes { margin: 0 0 16px; padding-left: 20px; display: grid; gap: 8px; }
 .dl__link { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; text-decoration: none; }
 @media (max-width: 640px) { .dl { padding: 20px; } .dl__icon { width: 64px; height: 64px; } }
+
+/* ── Blog footnotes ─────────────────────────────────────────────────────── */
+.fn-ref { font-size: 0.7em; line-height: 0; margin-left: 1px; font-family: var(--font-sans); }
+.fn-ref a { color: var(--link); text-decoration: none; font-weight: 700; padding: 0 1px; }
+.fn-ref a:hover, .fn-ref a:focus-visible { text-decoration: underline; }
+.footnotes { margin-top: 32px; padding-top: 16px; border-top: 2px solid var(--ink); font-family: var(--font-sans); }
+.footnotes__title { font-size: 13px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; margin: 0 0 12px; color: var(--ink); }
+.footnotes__list { margin: 0; padding-left: 22px; display: grid; gap: 8px; font-size: 14px; line-height: 1.55; color: var(--mute); }
+.footnotes__list li::marker { color: var(--ink); font-weight: 700; }
+.footnotes__list a { color: var(--link); overflow-wrap: anywhere; }
+.footnotes__back { text-decoration: none; font-weight: 700; }
+.footnotes__list li:target { background: var(--warn-tint); outline: 4px solid var(--warn-tint); }

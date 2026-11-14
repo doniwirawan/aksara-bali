@@ -612,6 +612,28 @@ export async function getServerSideProps({ params }) {
   return { notFound: true }
 }
 
+// Footnotes: "[^1]" in the text, "[^1]: note" lines anywhere (by convention at
+// the end). Markers become superscript links; the notes render after the body.
+const FOOTNOTE_DEF = /^\[\^(\w+)\]:\s?(.*)$/
+
+function splitFootnotes(content) {
+  const notes = []
+  const body = content.split('\n').filter(line => {
+    const m = line.match(FOOTNOTE_DEF)
+    if (m) notes.push({ id: m[1], text: m[2] })
+    return !m
+  }).join('\n')
+  return { body, notes }
+}
+
+function inline(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/`(.*?)`/g, '<code style="background:var(--surface-2);padding:1px 5px;border-radius:3px;font-size:0.9em">$1</code>')
+    .replace(/\[\^(\w+)\]/g, '<sup class="fn-ref"><a href="#fn-$1" id="fnref-$1">$1</a></sup>')
+}
+
 function renderMarkdown(content) {
   // Simple markdown renderer
   const lines = content.split('\n')
@@ -634,10 +656,7 @@ function renderMarkdown(content) {
       elements.push(
         <li key={i} style={{ margin: '4px 0', lineHeight: 1.6 }}
           dangerouslySetInnerHTML={{
-            __html: text
-              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-              .replace(/\*(.*?)\*/g, '<em>$1</em>')
-              .replace(/`(.*?)`/g, '<code style="background:var(--surface-2);padding:1px 5px;border-radius:3px;font-size:0.9em">$1</code>')
+            __html: inline(text)
           }}
         />
       )
@@ -683,10 +702,7 @@ function renderMarkdown(content) {
       elements.push(
         <p key={i} style={{ margin: '10px 0', lineHeight: 1.7 }}
           dangerouslySetInnerHTML={{
-            __html: line
-              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-              .replace(/\*(.*?)\*/g, '<em>$1</em>')
-              .replace(/`(.*?)`/g, '<code style="background:var(--surface-2);padding:1px 5px;border-radius:3px;font-size:0.9em">$1</code>')
+            __html: inline(line)
           }}
         />
       )
@@ -709,6 +725,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
   const displayTitle = lang === 'en' && post.titleEn ? post.titleEn : post.title
   const displayDescription = lang === 'en' && post.descriptionEn ? post.descriptionEn : post.description
   const displayContent = lang === 'en' && post.contentEn ? post.contentEn : post.content
+  const { body: articleBody, notes: footnotes } = splitFootnotes(displayContent || '')
 
   const bg = 'var(--ground)'
   const cardBg = 'var(--surface)'
@@ -853,8 +870,22 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
               </div>
             )}
             <ul style={{ paddingLeft: '20px', margin: 0 }}>
-              {renderMarkdown(displayContent)}
+              {renderMarkdown(articleBody)}
             </ul>
+
+            {footnotes.length > 0 && (
+              <section className="footnotes" aria-labelledby="footnotes-title">
+                <h2 id="footnotes-title" className="footnotes__title">{lang === 'en' ? 'Notes and sources' : 'Catatan dan sumber'}</h2>
+                <ol className="footnotes__list">
+                  {footnotes.map(n => (
+                    <li key={n.id} id={`fn-${n.id}`} value={/^\d+$/.test(n.id) ? Number(n.id) : undefined}>
+                      <span dangerouslySetInnerHTML={{ __html: inline(n.text) }} />{' '}
+                      <a href={`#fnref-${n.id}`} className="footnotes__back" aria-label={lang === 'en' ? 'Back to text' : 'Kembali ke teks'}>↩</a>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
 
             {/* Disclosure: drafts are AI-assisted, so readers should verify
                 Balinese wording. Kept quiet — small and low-contrast. */}
