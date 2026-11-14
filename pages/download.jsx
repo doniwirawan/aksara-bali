@@ -109,7 +109,7 @@ export default function DownloadPage({ locale, setLocale, release }) {
       <Head>
         <title>{t.title} — Aksara Bali</title>
         <meta name="description" content={t.lede} />
-        <link rel="canonical" href="https://aksarabali.doniwirawan.xyz/download/" />
+        <link key="canonical" rel="canonical" href="https://aksarabali.doniwirawan.xyz/download/" />
       </Head>
 
       <div style={{ minHeight: '100vh', background: 'var(--ground)', color: 'var(--ink)' }}>

@@ -49,7 +49,7 @@ export default function TermsPage({ locale, setLocale }) {
         <title>{title} — Aksara Bali</title>
         <meta name="description" content={lang === 'en' ? 'Terms of service for the Aksara Bali Converter app.' : 'Ketentuan layanan untuk aplikasi Aksara Bali Converter.'} />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://aksarabali.doniwirawan.xyz/terms" />
+        <link key="canonical" rel="canonical" href="https://aksarabali.doniwirawan.xyz/terms" />
       </Head>
 
       <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>

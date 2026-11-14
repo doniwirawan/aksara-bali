@@ -277,12 +277,12 @@ export default function TranslatePage({ locale, setLocale }) {
         <title>{pageTitle}</title>
         <meta name="description" content={pageDesc} />
         <meta name="keywords" content="kamus bahasa bali, translate bahasa indonesia ke bahasa bali, terjemahan bahasa bali, anggah-ungguh basa, alus singgih, aksara bali" />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDesc} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${BASE}/translate`} />
+        <meta key="og:title" property="og:title" content={pageTitle} />
+        <meta key="og:description" property="og:description" content={pageDesc} />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta key="og:url" property="og:url" content={`${BASE}/translate`} />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href={`${BASE}/translate`} />
+        <link key="canonical" rel="canonical" href={`${BASE}/translate`} />
       </Head>
 
       <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>

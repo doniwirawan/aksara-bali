@@ -240,11 +240,11 @@ export default function Home({ locale, setLocale }) {
 
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
 
-                <meta property="og:title" content={pageTitle} />
-                <meta property="og:description" content={pageDescription} />
-                <meta property="og:locale" content={locale === 'id' ? 'id_ID' : 'en_US'} />
-                <meta property="og:locale:alternate" content={locale === 'id' ? 'en_US' : 'id_ID'} />
-                <meta property="og:url" content="https://aksarabali.doniwirawan.xyz/" />
+                <meta key="og:title" property="og:title" content={pageTitle} />
+                <meta key="og:description" property="og:description" content={pageDescription} />
+                <meta key="og:locale" property="og:locale" content={locale === 'id' ? 'id_ID' : 'en_US'} />
+                <meta key="og:locale:alternate" property="og:locale:alternate" content={locale === 'id' ? 'en_US' : 'id_ID'} />
+                <meta key="og:url" property="og:url" content="https://aksarabali.doniwirawan.xyz/" />
 
                 {locale === 'id' && (
                     <>

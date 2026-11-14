@@ -49,7 +49,7 @@ export default function PrivacyPage({ locale, setLocale }) {
         <title>{title} — Aksara Bali</title>
         <meta name="description" content={lang === 'en' ? 'Privacy policy for the Aksara Bali Converter app.' : 'Kebijakan privasi untuk aplikasi Aksara Bali Converter.'} />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://aksarabali.doniwirawan.xyz/privacy" />
+        <link key="canonical" rel="canonical" href="https://aksarabali.doniwirawan.xyz/privacy" />
       </Head>
 
       <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>

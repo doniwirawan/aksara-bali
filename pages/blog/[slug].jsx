@@ -771,22 +771,22 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
         <title>{post.title.length > 52 ? post.title : `${post.title} | Blog Aksara Bali`}</title>
         <meta name="description" content={post.description} />
         <meta name="keywords" content={post.tags.join(', ')} />
-        <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.description} />
-        <meta property="og:type" content="article" />
-        <meta property="og:image" content={post.imageUrl} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="800" />
-        <meta property="og:url" content={`https://aksarabali.doniwirawan.xyz/blog/${slug}`} />
+        <meta key="og:title" property="og:title" content={post.title} />
+        <meta key="og:description" property="og:description" content={post.description} />
+        <meta key="og:type" property="og:type" content="article" />
+        <meta key="og:image" property="og:image" content={post.imageUrl} />
+        <meta key="og:image:width" property="og:image:width" content="1200" />
+        <meta key="og:image:height" property="og:image:height" content="630" />
+        <meta key="og:url" property="og:url" content={`https://aksarabali.doniwirawan.xyz/blog/${slug}`} />
         <meta property="article:published_time" content={post.date} />
         <meta property="article:author" content="Doni Wirawan" />
         <meta property="article:tag" content={post.tags.join(',')} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={post.title} />
-        <meta name="twitter:description" content={post.description} />
-        <meta name="twitter:image" content={post.imageUrl} />
+        <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
+        <meta key="twitter:title" name="twitter:title" content={post.title} />
+        <meta key="twitter:description" name="twitter:description" content={post.description} />
+        <meta key="twitter:image" name="twitter:image" content={post.imageUrl} />
         <meta name="robots" content="index, follow, max-image-preview:large" />
-        <link rel="canonical" href={`https://aksarabali.doniwirawan.xyz/blog/${slug}`} />
+        <link key="canonical" rel="canonical" href={`https://aksarabali.doniwirawan.xyz/blog/${slug}`} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       </Head>
 

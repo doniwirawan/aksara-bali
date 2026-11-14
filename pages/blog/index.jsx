@@ -113,19 +113,19 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
         <meta name="description" content="Temukan artikel lengkap tentang aksara Bali: sejarah, cara belajar, hubungan dengan bahasa Sansekerta, naskah lontar, dan upaya pelestarian digital." />
         <meta name="keywords" content="blog aksara bali, belajar aksara bali, sejarah aksara bali, budaya bali, lontar bali, sansekerta bali, huruf bali, cara menulis aksara bali" />
         <meta name="author" content="Doni Wirawan" />
-        <meta property="og:title" content="Blog Aksara Bali — Artikel Budaya & Panduan Belajar" />
-        <meta property="og:description" content="Artikel mendalam tentang aksara Bali: sejarah, cara belajar, linguistik, dan pelestarian budaya." />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content={posts[0]?.imageUrl || ''} />
-        <meta property="og:image:width" content="800" />
-        <meta property="og:image:height" content="533" />
-        <meta property="og:url" content="https://aksarabali.doniwirawan.xyz/blog" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Blog Aksara Bali — Artikel Budaya & Panduan Belajar" />
-        <meta name="twitter:description" content="Artikel mendalam tentang aksara Bali: sejarah, cara belajar, linguistik, dan pelestarian budaya." />
-        <meta name="twitter:image" content={posts[0].imageUrl} />
+        <meta key="og:title" property="og:title" content="Blog Aksara Bali — Artikel Budaya & Panduan Belajar" />
+        <meta key="og:description" property="og:description" content="Artikel mendalam tentang aksara Bali: sejarah, cara belajar, linguistik, dan pelestarian budaya." />
+        <meta key="og:type" property="og:type" content="website" />
+        <meta key="og:image" property="og:image" content={posts[0]?.imageUrl || 'https://aksarabali.doniwirawan.xyz/og-image.jpg'} />
+        <meta key="og:image:width" property="og:image:width" content="1200" />
+        <meta key="og:image:height" property="og:image:height" content="630" />
+        <meta key="og:url" property="og:url" content="https://aksarabali.doniwirawan.xyz/blog" />
+        <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
+        <meta key="twitter:title" name="twitter:title" content="Blog Aksara Bali — Artikel Budaya & Panduan Belajar" />
+        <meta key="twitter:description" name="twitter:description" content="Artikel mendalam tentang aksara Bali: sejarah, cara belajar, linguistik, dan pelestarian budaya." />
+        <meta key="twitter:image" name="twitter:image" content={posts[0]?.imageUrl || 'https://aksarabali.doniwirawan.xyz/og-image.jpg'} />
         <meta name="robots" content="index, follow, max-image-preview:large" />
-        <link rel="canonical" href="https://aksarabali.doniwirawan.xyz/blog" />
+        <link key="canonical" rel="canonical" href="https://aksarabali.doniwirawan.xyz/blog" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}

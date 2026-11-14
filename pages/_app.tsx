@@ -51,11 +51,11 @@ const generateStructuredData = (locale) => {
         "@graph": [
             {
                 "@type": "WebApplication",
-                "@id": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/#webapp",
+                "@id": "https://aksarabali.doniwirawan.xyz/#webapp",
                 "name": content.appName,
                 "alternateName": content.siteName,
                 "description": content.description,
-                "url": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/",
+                "url": "https://aksarabali.doniwirawan.xyz/",
                 "applicationCategory": "EducationalApplication",
                 "applicationSubCategory": "Language Tool",
                 "operatingSystem": "Web Browser",
@@ -136,12 +136,12 @@ const generateStructuredData = (locale) => {
                         ? "Fokus pelestarian budaya"
                         : "Cultural preservation focus"
                 ],
-                "screenshot": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/android-chrome-512x512.png"
+                "screenshot": "https://aksarabali.doniwirawan.xyz/icons/android-chrome-512x512.png"
             },
             {
                 "@type": "WebSite",
-                "@id": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/#website",
-                "url": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/",
+                "@id": "https://aksarabali.doniwirawan.xyz/#website",
+                "url": "https://aksarabali.doniwirawan.xyz/",
                 "name": content.siteName,
                 "description": content.description,
                 "inLanguage": isIndonesian ? 'id-ID' : 'en-US',
@@ -149,23 +149,23 @@ const generateStructuredData = (locale) => {
                     "@type": "SearchAction",
                     "target": {
                         "@type": "EntryPoint",
-                        "urlTemplate": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/?q={search_term_string}"
+                        "urlTemplate": "https://aksarabali.doniwirawan.xyz/?q={search_term_string}"
                     },
                     "query-input": "required name=search_term_string"
                 },
                 "mainEntity": {
-                    "@id": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/#webapp"
+                    "@id": "https://aksarabali.doniwirawan.xyz/#webapp"
                 }
             },
             {
                 "@type": "Organization",
-                "@id": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/#organization",
+                "@id": "https://aksarabali.doniwirawan.xyz/#organization",
                 "name": "Balinese Script Converter",
                 "alternateName": "Aksara Bali Converter",
-                "url": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/",
+                "url": "https://aksarabali.doniwirawan.xyz/",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/android-chrome-512x512.png",
+                    "url": "https://aksarabali.doniwirawan.xyz/icons/android-chrome-512x512.png",
                     "width": 512,
                     "height": 512,
                     "caption": isIndonesian ? "Logo Konverter Aksara Bali" : "Balinese Script Converter Logo"
@@ -200,7 +200,7 @@ const generateStructuredData = (locale) => {
             },
             {
                 "@type": "CreativeWork",
-                "@id": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/#creativework",
+                "@id": "https://aksarabali.doniwirawan.xyz/#creativework",
                 "name": isIndonesian ? "Konverter Aksara Bali" : "Balinese Script Converter",
                 "description": content.description,
                 "creator": {
@@ -260,7 +260,7 @@ const generateStructuredData = (locale) => {
             },
             {
                 "@type": "FAQPage",
-                "@id": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/#faq",
+                "@id": "https://aksarabali.doniwirawan.xyz/#faq",
                 "mainEntity": [
                     {
                         "@type": "Question",
@@ -298,7 +298,7 @@ const generateBreadcrumbData = (locale, router) => {
             "@type": "ListItem",
             "position": 1,
             "name": isIndonesian ? "Beranda" : "Home",
-            "item": "https://transliterasi-latin-ke-bahasa-bali.vercel.app/"
+            "item": "https://aksarabali.doniwirawan.xyz/"
         }
     ]
 
@@ -308,7 +308,7 @@ const generateBreadcrumbData = (locale, router) => {
             "@type": "ListItem",
             "position": index + 2,
             "name": segment.charAt(0).toUpperCase() + segment.slice(1),
-            "item": `https://transliterasi-latin-ke-bahasa-bali.vercel.app/${pathSegments.slice(0, index + 1).join('/')}`
+            "item": `https://aksarabali.doniwirawan.xyz/${pathSegments.slice(0, index + 1).join('/')}`
         })
     })
 
@@ -414,11 +414,7 @@ function MyApp({ Component, pageProps }) {
     const isIndonesian = locale === 'id'
 
     // Generate SEO-optimized URLs
-    const canonicalUrl = `https://transliterasi-latin-ke-bahasa-bali.vercel.app${router.asPath.split('?')[0]}`
-    const alternateUrls = {
-        en: `https://transliterasi-latin-ke-bahasa-bali.vercel.app${router.asPath}`,
-        id: `https://transliterasi-latin-ke-bahasa-bali.vercel.app/id${router.asPath}`,
-    }
+    const canonicalUrl = `https://aksarabali.doniwirawan.xyz${router.asPath.split('?')[0]}`
 
     return (
         <>
@@ -469,34 +465,29 @@ function MyApp({ Component, pageProps }) {
                 <meta name="geo.position" content="-8.3405;115.0920" />
 
                 {/* Enhanced Canonical and Alternate URLs */}
-                <link rel="canonical" href={canonicalUrl} />
-                <link rel="alternate" hrefLang="en" href={alternateUrls.en} />
-                <link rel="alternate" hrefLang="id" href={alternateUrls.id} />
-                <link rel="alternate" hrefLang="x-default" href={alternateUrls.en} />
+                <link key="canonical" rel="canonical" href={canonicalUrl} />
 
                 {/* Enhanced Open Graph Meta Tags */}
-                <meta property="og:title" content={currentContent.ogTitle} />
-                <meta property="og:description" content={currentContent.ogDescription} />
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content={canonicalUrl} />
-                <meta property="og:site_name" content={currentContent.siteName} />
-                <meta property="og:locale" content={isIndonesian ? 'id_ID' : 'en_US'} />
-                <meta property="og:locale:alternate" content={isIndonesian ? 'en_US' : 'id_ID'} />
-                <meta property="og:image" content="https://transliterasi-latin-ke-bahasa-bali.vercel.app/og-image.jpg" />
-                <meta property="og:image:secure_url" content="https://transliterasi-latin-ke-bahasa-bali.vercel.app/og-image.jpg" />
-                <meta property="og:image:alt" content={currentContent.shortDescription} />
-                <meta property="og:image:width" content="1200" />
-                <meta property="og:image:height" content="630" />
-                <meta property="og:image:type" content="image/jpeg" />
+                <meta key="og:title" property="og:title" content={currentContent.ogTitle} />
+                <meta key="og:description" property="og:description" content={currentContent.ogDescription} />
+                <meta key="og:type" property="og:type" content="website" />
+                <meta key="og:url" property="og:url" content={canonicalUrl} />
+                <meta key="og:site_name" property="og:site_name" content={currentContent.siteName} />
+                <meta key="og:locale" property="og:locale" content={isIndonesian ? 'id_ID' : 'en_US'} />
+                <meta key="og:locale:alternate" property="og:locale:alternate" content={isIndonesian ? 'en_US' : 'id_ID'} />
+                <meta key="og:image" property="og:image" content="https://aksarabali.doniwirawan.xyz/og-image.jpg" />
+                <meta key="og:image:alt" property="og:image:alt" content={currentContent.shortDescription} />
+                <meta key="og:image:width" property="og:image:width" content="1200" />
+                <meta key="og:image:height" property="og:image:height" content="630" />
 
                 {/* Enhanced Twitter Card Meta Tags */}
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:site" content="@BalineseScript" />
-                <meta name="twitter:creator" content="@DoniWirawan" />
-                <meta name="twitter:title" content={currentContent.ogTitle} />
-                <meta name="twitter:description" content={currentContent.twitterDescription} />
-                <meta name="twitter:image" content="https://transliterasi-latin-ke-bahasa-bali.vercel.app/twitter-image.jpg" />
-                <meta name="twitter:image:alt" content={currentContent.shortDescription} />
+                <meta key="twitter:card" name="twitter:card" content="summary_large_image" />
+                <meta key="twitter:site" name="twitter:site" content="@BalineseScript" />
+                <meta key="twitter:creator" name="twitter:creator" content="@DoniWirawan" />
+                <meta key="twitter:title" name="twitter:title" content={currentContent.ogTitle} />
+                <meta key="twitter:description" name="twitter:description" content={currentContent.twitterDescription} />
+                <meta key="twitter:image" name="twitter:image" content="https://aksarabali.doniwirawan.xyz/og-image.jpg" />
+                <meta key="twitter:image:alt" name="twitter:image:alt" content={currentContent.shortDescription} />
 
                 {/* Additional SEO Meta Tags */}
                 <meta name="category" content="Education, Culture, Language, Technology" />

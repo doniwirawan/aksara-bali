@@ -125,9 +125,9 @@ export default function PracticePage({ locale, setLocale }) {
         <title>{lang === 'en' ? 'Balinese Script Practice — Quiz, Write & Keyboard' : 'Latihan Aksara Bali — Kuis, Tulis & Papan Ketik'}</title>
         <meta name="description" content={lang === 'en' ? 'Practice Balinese script with an interactive quiz, drawing canvas with hand gesture detection, and a custom Balinese keyboard.' : 'Latih menulis aksara Bali dengan kuis interaktif, kanvas gambar dengan deteksi gerakan tangan, dan papan ketik aksara Bali khusus.'} />
         <meta name="keywords" content="latihan aksara bali, kuis aksara bali, belajar aksara bali, papan ketik bali, balinese script practice" />
-        <meta property="og:title" content="Latihan Aksara Bali — Kuis & Papan Ketik" />
-        <meta property="og:description" content="Latih menulis aksara Bali dengan kuis, kanvas menggambar, dan papan ketik interaktif." />
-        <link rel="canonical" href="https://aksarabali.doniwirawan.xyz/practice" />
+        <meta key="og:title" property="og:title" content="Latihan Aksara Bali — Kuis & Papan Ketik" />
+        <meta key="og:description" property="og:description" content="Latih menulis aksara Bali dengan kuis, kanvas menggambar, dan papan ketik interaktif." />
+        <link key="canonical" rel="canonical" href="https://aksarabali.doniwirawan.xyz/practice" />
       </Head>
 
       <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>

@@ -263,10 +263,10 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
         <title>{lang === 'en' ? 'FAQ — Balinese Script Frequently Asked Questions' : 'FAQ Aksara Bali — Pertanyaan yang Sering Ditanyakan'}</title>
         <meta name="description" content={lang === 'en' ? 'Complete answers to common questions about Balinese script: how to learn, using the converter, history, fonts, keyboard, and cultural preservation.' : 'Jawaban lengkap untuk pertanyaan umum tentang aksara Bali: cara belajar, menggunakan konverter, sejarah, font, keyboard, dan pelestarian budaya.'} />
         <meta name="keywords" content={lang === 'en' ? 'faq balinese script, balinese script questions, learn balinese script, balinese font, balinese history, lontar bali' : 'faq aksara bali, pertanyaan aksara bali, cara belajar aksara bali, font aksara bali, sejarah aksara bali, lontar bali'} />
-        <meta property="og:title" content={lang === 'en' ? 'FAQ — Balinese Script Questions' : 'FAQ — Pertanyaan Umum tentang Aksara Bali'} />
-        <meta property="og:description" content={lang === 'en' ? 'Everything you need to know about Balinese script: writing system, how to learn, digital use, and cultural preservation.' : 'Semua yang perlu Anda ketahui tentang aksara Bali: sistem penulisan, cara belajar, penggunaan digital, dan pelestarian budaya.'} />
+        <meta key="og:title" property="og:title" content={lang === 'en' ? 'FAQ — Balinese Script Questions' : 'FAQ — Pertanyaan Umum tentang Aksara Bali'} />
+        <meta key="og:description" property="og:description" content={lang === 'en' ? 'Everything you need to know about Balinese script: writing system, how to learn, digital use, and cultural preservation.' : 'Semua yang perlu Anda ketahui tentang aksara Bali: sistem penulisan, cara belajar, penggunaan digital, dan pelestarian budaya.'} />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://aksarabali.doniwirawan.xyz/faq" />
+        <link key="canonical" rel="canonical" href="https://aksarabali.doniwirawan.xyz/faq" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaFAQ) }} />
       </Head>
 
