@@ -33,15 +33,7 @@ class AboutScreen extends StatelessWidget {
       children: [
         // Hero
         Center(
-          child: Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.25), blurRadius: 24, offset: const Offset(0, 8))],
-            ),
-            child: Image.asset('assets/icon/logo.png', width: 84, height: 84),
-          ),
+          child: Image.asset('assets/icon/logo.png', width: 96, height: 96),
         ),
         const SizedBox(height: 20),
         Center(child: Text('Aksara Bali Converter',
@@ -78,9 +70,9 @@ class AboutScreen extends StatelessWidget {
         Center(
           child: Material(
             color: kAccentSoft,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.zero,
             child: InkWell(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.zero,
               onTap: () => _open('https://www.linkedin.com/in/doniwirawan/'),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
@@ -108,7 +100,7 @@ class AboutScreen extends StatelessWidget {
           child: Row(children: [
             Container(
               width: 38, height: 38, alignment: Alignment.center,
-              decoration: BoxDecoration(color: kAccentSoft, borderRadius: BorderRadius.circular(11)),
+              decoration: BoxDecoration(color: kAccentSoft, borderRadius: BorderRadius.zero),
               child: Icon(icon, size: 20, color: kAccent),
             ),
             const SizedBox(width: 14),
@@ -163,7 +155,7 @@ class _UpdateCheckButtonState extends State<_UpdateCheckButton> {
       return Container(
         decoration: BoxDecoration(
           color: kAccentSoft,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.zero,
           border: Border.all(color: kAccent.withValues(alpha: 0.4)),
         ),
         padding: const EdgeInsets.all(16),

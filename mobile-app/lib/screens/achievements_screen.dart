@@ -28,8 +28,7 @@ class AchievementsScreen extends StatelessWidget {
                 final progress = maxed ? 1.0 : (next > prev ? (streak - prev) / (next - prev) : 0.0);
                 return Container(
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(colors: [Color(0xFFF59E0B), Color(0xFFEF4444)]),
-                    borderRadius: BorderRadius.circular(16),
+                    color: kRed,
                   ),
                   padding: const EdgeInsets.all(18),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -52,7 +51,7 @@ class AchievementsScreen extends StatelessWidget {
                     ]),
                     const SizedBox(height: 12),
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.zero,
                       child: LinearProgressIndicator(
                         value: progress.clamp(0.0, 1.0), minHeight: 8,
                         backgroundColor: Colors.white24,
@@ -96,7 +95,7 @@ class AchievementsScreen extends StatelessWidget {
             width: 48, height: 48, alignment: Alignment.center,
             decoration: BoxDecoration(
               color: (earned ? kAccent : kMuted).withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.zero,
             ),
             child: Icon(earned ? a.icon : Icons.lock_outline, color: color, size: 24),
           ),

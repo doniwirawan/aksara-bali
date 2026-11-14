@@ -204,8 +204,8 @@ class _WriteScreenState extends State<WriteScreen> {
     final modeToggle = Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F8),
-        borderRadius: BorderRadius.circular(12),
+        color: kSurfaceRaised,
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: kBorder),
       ),
       child: Row(children: [
@@ -225,7 +225,7 @@ class _WriteScreenState extends State<WriteScreen> {
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.zero,
           border: Border.all(color: kBorder),
         ),
         child: _typed.text.isEmpty
@@ -333,7 +333,7 @@ class _WriteScreenState extends State<WriteScreen> {
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             color: selected ? kAccent : Colors.transparent,
-            borderRadius: BorderRadius.circular(9),
+            borderRadius: BorderRadius.zero,
           ),
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Icon(icon, size: 16, color: selected ? Colors.white : kMuted),
@@ -383,7 +383,7 @@ class _DrawCanvas extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: kBorder),
       ),
       child: Stack(children: [
@@ -528,7 +528,7 @@ class _FullscreenWritePageState extends State<_FullscreenWritePage> {
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.zero,
                         border: Border.all(color: r.color.withValues(alpha: 0.5)),
                       ),
                       child: Row(children: [
@@ -744,7 +744,7 @@ class _ScoreCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: r.color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: r.color.withValues(alpha: 0.4)),
       ),
       padding: const EdgeInsets.all(16),
@@ -765,7 +765,7 @@ class _ScoreCard extends StatelessWidget {
         ]),
         const SizedBox(height: 12),
         ClipRRect(
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.zero,
           child: LinearProgressIndicator(
             value: r.score / 100,
             minHeight: 8,
@@ -792,7 +792,7 @@ class _TypeResultCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       padding: const EdgeInsets.all(16),

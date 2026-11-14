@@ -3,7 +3,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import '../converter.dart';
 import '../theme.dart';
@@ -12,13 +11,14 @@ import '../balinese_keyboard.dart';
 import '../sfx.dart';
 
 const _diacritics = ['ā', 'ī', 'ū', 'ě', 'ṇ'];
+// Word-art colours: the website's set (paper, black, bang red, turmeric, gold, blue, teal).
 const _textSwatches = [
-  Color(0xFFF4EFE5), Color(0xFFD8A84E), Color(0xFFDC2626), Color(0xFF16A34A),
-  Color(0xFF7C3AED), Color(0xFFB8860B), Color(0xFF1A1A1A),
+  Color(0xFFF7F6F2), Color(0xFF17140F), Color(0xFFB4232B), Color(0xFFE2A41C),
+  Color(0xFFD8A84E), Color(0xFF2B5C9E), Color(0xFF0F766E),
 ];
 const _bgSwatches = [
-  Color(0xFF201E19), Color(0xFFF8F9FF), Color(0xFFD8A84E), Color(0xFFEF4444),
-  Color(0xFF151411), Color(0xFFF59E0B), Color(0xFF0F766E),
+  Color(0xFFB4232B), Color(0xFFFFFFFF), Color(0xFF151411), Color(0xFFE2A41C),
+  Color(0xFFD8A84E), Color(0xFF2B5C9E), Color(0xFF0F766E),
 ];
 
 class ConvertScreen extends StatefulWidget {
@@ -116,7 +116,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
             children: [
               Expanded(
                 child: Text('$inLabel → $outLabel',
-                    style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w700, color: kInk)),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, letterSpacing: -0.4, color: kInk)),
               ),
               IconButton.filledTonal(
                 onPressed: _swap,
@@ -147,8 +147,13 @@ class _ConvertScreenState extends State<ConvertScreen> {
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
               style: inFont.copyWith(color: kInk),
+              // The hairline frame around this field is the container's; no second box inside it.
               decoration: InputDecoration(
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                filled: false,
+                contentPadding: EdgeInsets.zero,
                 hintText: _reverse
                     ? tr(context, 'Type with the aksara keyboard below', 'Ketik dengan papan aksara di bawah')
                     : tr(context, 'Type a word, sentence, or paragraph…', 'Ketik kata, kalimat, atau paragraf…'),
@@ -200,8 +205,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
               width: double.infinity,
               constraints: const BoxConstraints(minHeight: 140),
               decoration: BoxDecoration(
-                color: _transparent ? Colors.transparent : (_bgColor ?? kSurfaceRaised),
-                borderRadius: BorderRadius.circular(16),
+                color: _transparent ? Colors.transparent : (_bgColor ?? kScriptField),
               ),
               padding: const EdgeInsets.all(20),
               child: SelectableText(
@@ -211,7 +215,7 @@ class _ConvertScreenState extends State<ConvertScreen> {
                   fontFamily: outIsBali ? kBaliFont : null,
                   fontSize: outIsBali ? _autoSize() : _fontSize * 0.7,
                   height: 1.7,
-                  color: hasOut ? (_textColor ?? kTextPrimary) : (_textColor ?? kTextPrimary).withValues(alpha: 0.3),
+                  color: hasOut ? (_textColor ?? _defaultInk) : (_textColor ?? _defaultInk).withValues(alpha: 0.45),
                 ),
               ),
             ),
@@ -302,12 +306,17 @@ class _ConvertScreenState extends State<ConvertScreen> {
     );
   }
 
+  // Text on the default red field is paper-white; on a picked background it
+  // follows the theme until the user picks a text colour.
+  Color get _defaultInk => (_bgColor == null && !_transparent) ? kPaper : kTextPrimary;
+
   Widget _alignButton(IconData icon, TextAlign value) {
     final selected = _align == value;
     return IconButton(
       onPressed: () => setState(() => _align = value),
       icon: Icon(icon, size: 20),
-      color: selected ? kAccent : kMuted,
+      color: selected ? kTextPrimary : kMuted,
+      style: IconButton.styleFrom(backgroundColor: selected ? kAccentSoft : null),
       visualDensity: VisualDensity.compact,
       tooltip: value.name,
     );
@@ -325,9 +334,9 @@ class _ConvertScreenState extends State<ConvertScreen> {
               width: 26, height: 26,
               decoration: BoxDecoration(
                 color: c,
-                shape: BoxShape.circle,
+                shape: BoxShape.rectangle,
                 border: Border.all(
-                  color: c == selected ? kAccent : kBorder,
+                  color: c == selected ? kTurmeric : kBorder,
                   width: c == selected ? 3 : 1,
                 ),
               ),

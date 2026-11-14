@@ -222,7 +222,7 @@ class _QuizScreenState extends State<QuizScreen> {
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               color: kSurface,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.zero,
               border: Border.all(color: kOutline),
             ),
             child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -251,14 +251,14 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget _modeSeg(_QuizMode m, IconData icon, String label) {
     final sel = _mode == m;
     return InkWell(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.zero,
       onTap: () => setState(() => _mode = m),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
         decoration: BoxDecoration(
           color: sel ? kAccentSoft : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.zero,
         ),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           Icon(icon, size: 18, color: sel ? kAccent : kTextMuted),
@@ -280,20 +280,20 @@ class _QuizScreenState extends State<QuizScreen> {
       opacity: unlocked ? 1 : 0.6,
       child: Material(
         color: kCardBg,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.zero,
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.zero,
           onTap: unlocked ? () => _start(i) : null,
           child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(14), border: Border.all(color: kBorder)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.zero, border: Border.all(color: kBorder)),
             padding: const EdgeInsets.all(16),
             child: Row(children: [
               Container(
                 width: 44, height: 44,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: unlocked ? kAccent.withValues(alpha: 0.12) : const Color(0xFFEDEDF0),
-                  borderRadius: BorderRadius.circular(12),
+                  color: unlocked ? kAccentSoft : kSurfaceRaised,
+                  borderRadius: BorderRadius.zero,
                 ),
                 child: unlocked
                     ? Text('${i + 1}', style: TextStyle(fontWeight: FontWeight.w800, color: kAccent, fontSize: 18))
@@ -348,7 +348,7 @@ class _QuizScreenState extends State<QuizScreen> {
         ]),
         const SizedBox(height: 12),
         ClipRRect(
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.zero,
           child: LinearProgressIndicator(
             value: (_index + 1) / _queue.length,
             minHeight: 6, backgroundColor: kBorder, valueColor: AlwaysStoppedAnimation(kAccent),
@@ -408,12 +408,12 @@ class _QuizScreenState extends State<QuizScreen> {
       padding: const EdgeInsets.only(bottom: 10),
       child: Material(
         color: bg ?? kCardBg,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.zero,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.zero,
           onTap: () => _answer(opt),
           child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: kBorder)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.zero, border: Border.all(color: kBorder)),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Text(opt, style: TextStyle(fontSize: 16, color: fg, fontWeight: FontWeight.w600)),
           ),
@@ -430,7 +430,7 @@ class _QuizScreenState extends State<QuizScreen> {
       width: double.infinity,
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       padding: const EdgeInsets.all(14),
@@ -498,7 +498,7 @@ class _QuizScreenState extends State<QuizScreen> {
         Container(
           decoration: BoxDecoration(
             color: (_lastCorrect ? const Color(0xFF16A34A) : const Color(0xFFDC2626)).withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.zero,
             border: Border.all(color: (_lastCorrect ? const Color(0xFF16A34A) : const Color(0xFFDC2626)).withValues(alpha: 0.4)),
           ),
           padding: const EdgeInsets.all(14),
@@ -548,7 +548,7 @@ class _ResultDialog extends StatelessWidget {
                 'Kamu butuh skor minimal $kPassScore untuk membuka level berikutnya. Ayo ulangi!');
 
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
       child: Padding(
         padding: const EdgeInsets.all(22),

@@ -35,7 +35,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   http: ^1.6.0
-  google_fonts: ^6.3.0
   share_plus: ^12.0.2
   url_launcher: ^6.3.2
   shared_preferences: ^2.5.3
@@ -60,17 +59,18 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icon/icon_app.png"
-  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_background: "#B4232B"
   adaptive_icon_foreground: "assets/icon/icon_fg.png"
   remove_alpha_ios: true
 
 # Splash screen (run: dart run flutter_native_splash:create)
 flutter_native_splash:
-  color: "#FFFFFF"
+  color: "#17140F"
   image: assets/icon/logo.png
   android_12:
-    color: "#FFFFFF"
-    image: assets/icon/logo.png
+    color: "#17140F"
+    icon_background_color: "#B4232B"
+    image: assets/icon/icon_fg.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -91,6 +91,15 @@ flutter:
     - family: NotoSansBalinese
       fonts:
         - asset: assets/fonts/NotoSansBalinese-Regular.ttf
+    - family: SchibstedGrotesk
+      fonts:
+        - asset: assets/fonts/SchibstedGrotesk-Regular.ttf
+        - asset: assets/fonts/SchibstedGrotesk-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/SchibstedGrotesk-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/SchibstedGrotesk-ExtraBold.ttf
+          weight: 800
 
   # To add assets to your application, add an assets section, like this:
   # assets:

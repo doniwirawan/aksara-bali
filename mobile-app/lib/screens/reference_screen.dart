@@ -114,7 +114,7 @@ class ReferenceScreen extends StatelessWidget {
                 width: 60, height: 48, alignment: Alignment.center,
                 clipBehavior: Clip.hardEdge,
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
-                decoration: BoxDecoration(color: kAccent.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(color: kAccent.withValues(alpha: 0.10), borderRadius: BorderRadius.zero),
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(t[0], maxLines: 1,
@@ -134,7 +134,7 @@ class ReferenceScreen extends StatelessWidget {
       width: width,
       child: Material(
         color: kSurfaceRaised,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.zero,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () => speakLatin(g.latin),

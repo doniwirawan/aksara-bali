@@ -59,13 +59,13 @@ class BalineseKeyboard extends StatelessWidget {
 
   Widget _key(String glyph, {String? insert, double size = 22}) {
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: () => _insert(insert ?? glyph),
       child: Container(
         width: 44, height: 44, alignment: Alignment.center,
         decoration: BoxDecoration(
           color: kCardBg,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           border: Border.all(color: kBorder),
         ),
         child: Text(glyph, style: TextStyle(fontFamily: kBaliFont, fontSize: size, color: kInk)),
@@ -75,11 +75,11 @@ class BalineseKeyboard extends StatelessWidget {
 
   Widget _ctrl({required Widget child, required VoidCallback onTap, double width = 64}) {
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: Container(
         width: width, height: 44, alignment: Alignment.center,
-        decoration: BoxDecoration(color: kCardBg, borderRadius: BorderRadius.circular(8), border: Border.all(color: kBorder)),
+        decoration: BoxDecoration(color: kCardBg, borderRadius: BorderRadius.zero, border: Border.all(color: kBorder)),
         child: child,
       ),
     );
@@ -90,8 +90,8 @@ class BalineseKeyboard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: const Color(0xFFF3F4F8),
-        borderRadius: BorderRadius.circular(14),
+        color: kSurfaceRaised,
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: kBorder),
       ),
       child: Column(
