@@ -1,0 +1,591 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-14T05:46:50.150Z",
+  "title": "Design System: Aksara Bali",
+  "extensions": {
+    "colorMeta": {
+      "bang-red": {
+        "role": "primary",
+        "displayName": "Bang Red",
+        "canonical": "oklch(50.2% 0.180 24.3)",
+        "tonalRamp": [
+          "oklch(15% 0.092 24.3)",
+          "oklch(25% 0.117 24.3)",
+          "oklch(35% 0.142 24.3)",
+          "oklch(45% 0.167 24.3)",
+          "oklch(55% 0.167 24.3)",
+          "oklch(65% 0.142 24.3)",
+          "oklch(80% 0.104 24.3)",
+          "oklch(95% 0.067 24.3)"
+        ]
+      },
+      "bang-red-deep": {
+        "role": "primary",
+        "displayName": "Bang Red Deep",
+        "canonical": "oklch(42.3% 0.151 23.9)",
+        "tonalRamp": [
+          "oklch(15% 0.077 23.9)",
+          "oklch(25% 0.098 23.9)",
+          "oklch(35% 0.119 23.9)",
+          "oklch(45% 0.140 23.9)",
+          "oklch(55% 0.140 23.9)",
+          "oklch(65% 0.119 23.9)",
+          "oklch(80% 0.087 23.9)",
+          "oklch(95% 0.056 23.9)"
+        ]
+      },
+      "selem-black": {
+        "role": "secondary",
+        "displayName": "Selem Black",
+        "canonical": "oklch(19.3% 0.011 80.5)",
+        "tonalRamp": [
+          "oklch(15% 0.006 80.5)",
+          "oklch(25% 0.007 80.5)",
+          "oklch(35% 0.009 80.5)",
+          "oklch(45% 0.010 80.5)",
+          "oklch(55% 0.010 80.5)",
+          "oklch(65% 0.009 80.5)",
+          "oklch(80% 0.006 80.5)",
+          "oklch(95% 0.004 80.5)"
+        ]
+      },
+      "kuning-turmeric": {
+        "role": "tertiary",
+        "displayName": "Kuning Turmeric",
+        "canonical": "oklch(75.8% 0.151 80.1)",
+        "tonalRamp": [
+          "oklch(15% 0.077 80.1)",
+          "oklch(25% 0.098 80.1)",
+          "oklch(35% 0.119 80.1)",
+          "oklch(45% 0.141 80.1)",
+          "oklch(55% 0.141 80.1)",
+          "oklch(65% 0.119 80.1)",
+          "oklch(80% 0.088 80.1)",
+          "oklch(95% 0.056 80.1)"
+        ]
+      },
+      "putih-ground": {
+        "role": "neutral",
+        "displayName": "Putih Ground",
+        "canonical": "oklch(97.3% 0.005 95.1)",
+        "tonalRamp": [
+          "oklch(15% 0.003 95.1)",
+          "oklch(25% 0.004 95.1)",
+          "oklch(35% 0.004 95.1)",
+          "oklch(45% 0.005 95.1)",
+          "oklch(55% 0.005 95.1)",
+          "oklch(65% 0.004 95.1)",
+          "oklch(80% 0.003 95.1)",
+          "oklch(95% 0.002 95.1)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface White",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(25% 0.000 89.9)",
+          "oklch(35% 0.000 89.9)",
+          "oklch(45% 0.000 89.9)",
+          "oklch(55% 0.000 89.9)",
+          "oklch(65% 0.000 89.9)",
+          "oklch(80% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "surface-2": {
+        "role": "neutral",
+        "displayName": "Surface Stone",
+        "canonical": "oklch(94.6% 0.010 93.6)",
+        "tonalRamp": [
+          "oklch(15% 0.005 93.6)",
+          "oklch(25% 0.006 93.6)",
+          "oklch(35% 0.008 93.6)",
+          "oklch(45% 0.009 93.6)",
+          "oklch(55% 0.009 93.6)",
+          "oklch(65% 0.008 93.6)",
+          "oklch(80% 0.006 93.6)",
+          "oklch(95% 0.004 93.6)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(19.3% 0.011 80.5)",
+        "tonalRamp": [
+          "oklch(15% 0.006 80.5)",
+          "oklch(25% 0.007 80.5)",
+          "oklch(35% 0.009 80.5)",
+          "oklch(45% 0.010 80.5)",
+          "oklch(55% 0.010 80.5)",
+          "oklch(65% 0.009 80.5)",
+          "oklch(80% 0.006 80.5)",
+          "oklch(95% 0.004 80.5)"
+        ]
+      },
+      "mute": {
+        "role": "neutral",
+        "displayName": "Mute",
+        "canonical": "oklch(46.6% 0.017 84.6)",
+        "tonalRamp": [
+          "oklch(15% 0.009 84.6)",
+          "oklch(25% 0.011 84.6)",
+          "oklch(35% 0.013 84.6)",
+          "oklch(45% 0.016 84.6)",
+          "oklch(55% 0.016 84.6)",
+          "oklch(65% 0.013 84.6)",
+          "oklch(80% 0.010 84.6)",
+          "oklch(95% 0.006 84.6)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(89.1% 0.013 91.5)",
+        "tonalRamp": [
+          "oklch(15% 0.006 91.5)",
+          "oklch(25% 0.008 91.5)",
+          "oklch(35% 0.010 91.5)",
+          "oklch(45% 0.012 91.5)",
+          "oklch(55% 0.012 91.5)",
+          "oklch(65% 0.010 91.5)",
+          "oklch(80% 0.007 91.5)",
+          "oklch(95% 0.005 91.5)"
+        ]
+      },
+      "link-blue": {
+        "role": "neutral",
+        "displayName": "Link Blue",
+        "canonical": "oklch(47.6% 0.119 256.7)",
+        "tonalRamp": [
+          "oklch(15% 0.061 256.7)",
+          "oklch(25% 0.078 256.7)",
+          "oklch(35% 0.094 256.7)",
+          "oklch(45% 0.111 256.7)",
+          "oklch(55% 0.111 256.7)",
+          "oklch(65% 0.094 256.7)",
+          "oklch(80% 0.069 256.7)",
+          "oklch(95% 0.044 256.7)"
+        ]
+      },
+      "ok": {
+        "role": "status",
+        "displayName": "Ok Green",
+        "canonical": "oklch(52.8% 0.111 152.0)",
+        "tonalRamp": [
+          "oklch(15% 0.056 152.0)",
+          "oklch(25% 0.072 152.0)",
+          "oklch(35% 0.087 152.0)",
+          "oklch(45% 0.103 152.0)",
+          "oklch(55% 0.103 152.0)",
+          "oklch(65% 0.087 152.0)",
+          "oklch(80% 0.064 152.0)",
+          "oklch(95% 0.041 152.0)"
+        ]
+      },
+      "danger": {
+        "role": "status",
+        "displayName": "Danger Red",
+        "canonical": "oklch(46.1% 0.167 24.6)",
+        "tonalRamp": [
+          "oklch(15% 0.085 24.6)",
+          "oklch(25% 0.108 24.6)",
+          "oklch(35% 0.132 24.6)",
+          "oklch(45% 0.155 24.6)",
+          "oklch(55% 0.155 24.6)",
+          "oklch(65% 0.132 24.6)",
+          "oklch(80% 0.097 24.6)",
+          "oklch(95% 0.062 24.6)"
+        ]
+      },
+      "warn": {
+        "role": "status",
+        "displayName": "Warn Ochre",
+        "canonical": "oklch(56.2% 0.117 78.3)",
+        "tonalRamp": [
+          "oklch(15% 0.060 78.3)",
+          "oklch(25% 0.076 78.3)",
+          "oklch(35% 0.092 78.3)",
+          "oklch(45% 0.109 78.3)",
+          "oklch(55% 0.109 78.3)",
+          "oklch(65% 0.092 78.3)",
+          "oklch(80% 0.068 78.3)",
+          "oklch(95% 0.043 78.3)"
+        ]
+      },
+      "warn-tint": {
+        "role": "status",
+        "displayName": "Turmeric Tint",
+        "canonical": "oklch(95.7% 0.036 87.8)",
+        "tonalRamp": [
+          "oklch(15% 0.018 87.8)",
+          "oklch(25% 0.023 87.8)",
+          "oklch(35% 0.029 87.8)",
+          "oklch(45% 0.034 87.8)",
+          "oklch(55% 0.034 87.8)",
+          "oklch(65% 0.029 87.8)",
+          "oklch(80% 0.021 87.8)",
+          "oklch(95% 0.013 87.8)"
+        ]
+      },
+      "dark-ground": {
+        "role": "neutral",
+        "displayName": "Night Ground",
+        "canonical": "oklch(17.4% 0.009 84.6)",
+        "tonalRamp": [
+          "oklch(15% 0.004 84.6)",
+          "oklch(25% 0.006 84.6)",
+          "oklch(35% 0.007 84.6)",
+          "oklch(45% 0.008 84.6)",
+          "oklch(55% 0.008 84.6)",
+          "oklch(65% 0.007 84.6)",
+          "oklch(80% 0.005 84.6)",
+          "oklch(95% 0.003 84.6)"
+        ]
+      },
+      "dark-surface": {
+        "role": "neutral",
+        "displayName": "Night Surface",
+        "canonical": "oklch(21.5% 0.009 75.1)",
+        "tonalRamp": [
+          "oklch(15% 0.005 75.1)",
+          "oklch(25% 0.006 75.1)",
+          "oklch(35% 0.007 75.1)",
+          "oklch(45% 0.008 75.1)",
+          "oklch(55% 0.008 75.1)",
+          "oklch(65% 0.007 75.1)",
+          "oklch(80% 0.005 75.1)",
+          "oklch(95% 0.003 75.1)"
+        ]
+      },
+      "dark-ink": {
+        "role": "neutral",
+        "displayName": "Night Ink",
+        "canonical": "oklch(94.9% 0.011 89.7)",
+        "tonalRamp": [
+          "oklch(15% 0.006 89.7)",
+          "oklch(25% 0.007 89.7)",
+          "oklch(35% 0.009 89.7)",
+          "oklch(45% 0.010 89.7)",
+          "oklch(55% 0.010 89.7)",
+          "oklch(65% 0.009 89.7)",
+          "oklch(80% 0.006 89.7)",
+          "oklch(95% 0.004 89.7)"
+        ]
+      },
+      "dark-accent": {
+        "role": "primary",
+        "displayName": "Night Accent",
+        "canonical": "oklch(63.8% 0.171 20.4)",
+        "tonalRamp": [
+          "oklch(15% 0.087 20.4)",
+          "oklch(25% 0.111 20.4)",
+          "oklch(35% 0.135 20.4)",
+          "oklch(45% 0.159 20.4)",
+          "oklch(55% 0.159 20.4)",
+          "oklch(65% 0.135 20.4)",
+          "oklch(80% 0.099 20.4)",
+          "oklch(95% 0.063 20.4)"
+        ]
+      },
+      "dark-link": {
+        "role": "neutral",
+        "displayName": "Night Link",
+        "canonical": "oklch(77.5% 0.085 256.9)",
+        "tonalRamp": [
+          "oklch(15% 0.043 256.9)",
+          "oklch(25% 0.055 256.9)",
+          "oklch(35% 0.067 256.9)",
+          "oklch(45% 0.079 256.9)",
+          "oklch(55% 0.079 256.9)",
+          "oklch(65% 0.067 256.9)",
+          "oklch(80% 0.049 256.9)",
+          "oklch(95% 0.031 256.9)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The one page title in each page head."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles below the workbench."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Tool-row names, panel and app-band titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text and ledes."
+      },
+      "label": {
+        "displayName": "Pane Label",
+        "purpose": "Workbench pane labels and footer column heads only."
+      },
+      "aksara-output": {
+        "displayName": "Aksara Output",
+        "purpose": "Balinese script on the red output field; largest type on the page."
+      },
+      "aksara-input": {
+        "displayName": "Aksara Input",
+        "purpose": "Balinese script typed in reverse mode."
+      },
+      "latin-input": {
+        "displayName": "Latin Input",
+        "purpose": "Text typed into the workbench."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Footer build reference only."
+      }
+    },
+    "thread": [
+      {
+        "name": "thread",
+        "value": "repeating-linear-gradient(115deg, var(--red) 0 8px, #F7F6F2 8px 16px, var(--black) 16px 24px)",
+        "size": "28px 6px",
+        "purpose": "Rule above the header, footer top rule, progress bar, horizontal seam on mobile, tour popover top border."
+      },
+      {
+        "name": "thread-v",
+        "value": "repeating-linear-gradient(170deg, var(--red) 0 10px, #F7F6F2 10px 20px, var(--black) 20px 30px)",
+        "size": "14px 60px",
+        "purpose": "Vertical workbench seam between Latin and aksara."
+      }
+    ],
+    "shadows": [
+      {
+        "name": "state-underline",
+        "value": "inset 0 -3px 0 var(--turmeric)",
+        "purpose": "Active pill, expanded bench chip. A drawn line, not elevation."
+      },
+      {
+        "name": "focus-halo",
+        "value": "0 0 0 3px rgba(226, 164, 28, 0.45)",
+        "purpose": "Focused form controls."
+      },
+      {
+        "name": "bench-input-focus",
+        "value": "inset 0 0 0 3px var(--turmeric)",
+        "purpose": "Focused workbench input."
+      }
+    ],
+    "focus": [
+      {
+        "name": "focus-outline",
+        "value": "outline: 3px solid var(--turmeric); outline-offset: 2px",
+        "purpose": "Global :focus-visible."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "All state transitions."
+      },
+      {
+        "name": "state-transition",
+        "value": "150ms",
+        "purpose": "Colour and border changes on buttons, links, rows, fields."
+      },
+      {
+        "name": "thread-pull",
+        "value": "background-position 0 to 60px (56px horizontal), 500ms ease-out",
+        "purpose": "Seam slides once when converter output changes."
+      },
+      {
+        "name": "aksara-in",
+        "value": "opacity 0.35 to 1, 350ms ease-out",
+        "purpose": "Fresh output fade."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "durations 0.01ms",
+        "purpose": "prefers-reduced-motion disables all motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "440px"
+      },
+      {
+        "name": "touch",
+        "value": "575.98px"
+      },
+      {
+        "name": "page-gutter",
+        "value": "640px"
+      },
+      {
+        "name": "bench-stack",
+        "value": "760px"
+      },
+      {
+        "name": "shell-collapse",
+        "value": "860px"
+      },
+      {
+        "name": "tour-gutter",
+        "value": "1360px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Default action: ink block that turns bang red on hover.",
+      "html": "<button class=\"ds-btn-primary\">Konversi</button>",
+      "css": ".ds-btn-primary{background:var(--ink,#17140F);color:var(--ground,#F7F6F2);border:1px solid var(--ink,#17140F);border-radius:0;padding:10px 18px;font:600 15px 'Schibsted Grotesk',system-ui,sans-serif;cursor:pointer;transition:background-color .15s cubic-bezier(.16,1,.3,1),border-color .15s cubic-bezier(.16,1,.3,1)}.ds-btn-primary:hover{background:#B4232B;border-color:#B4232B;color:#fff}.ds-btn-primary:active{background:#8E1A21;border-color:#8E1A21;transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:3px solid #E2A41C;outline-offset:2px}"
+    },
+    {
+      "name": "Red CTA",
+      "kind": "button",
+      "refersTo": "cta-red",
+      "description": "Play Store / APK call to action, usually on the black shell.",
+      "html": "<a class=\"ds-cta-red\" href=\"#\">Google Play</a>",
+      "css": ".ds-cta-red{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 18px;background:#B4232B;color:#fff;font:700 15px 'Schibsted Grotesk',system-ui,sans-serif;text-decoration:none;border:1px solid transparent}.ds-cta-red:hover{background:#C0313A;color:#fff}.ds-cta-red:focus-visible{outline:3px solid #E2A41C;outline-offset:2px}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action on light surfaces.",
+      "html": "<button class=\"ds-btn-outline\">Batal</button>",
+      "css": ".ds-btn-outline{background:var(--surface,#fff);color:var(--ink,#17140F);border:1px solid var(--line,#DEDBD2);border-radius:0;padding:10px 18px;font:600 15px 'Schibsted Grotesk',system-ui,sans-serif;cursor:pointer;transition:background-color .15s,border-color .15s}.ds-btn-outline:hover{background:var(--surface-2,#EFEDE6);border-color:var(--ink,#17140F)}.ds-btn-outline:focus-visible{outline:3px solid #E2A41C;outline-offset:2px}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Square field; ink border and turmeric halo on focus.",
+      "html": "<input class=\"ds-input\" placeholder=\"Ketik kata...\">",
+      "css": ".ds-input{background:var(--surface,#fff);color:var(--ink,#17140F);border:1px solid var(--line,#DEDBD2);border-radius:0;padding:8px 12px;font:400 16px 'Schibsted Grotesk',system-ui,sans-serif;transition:border-color .15s,box-shadow .15s}.ds-input::placeholder{color:var(--mute,#5E594F)}.ds-input:focus{outline:none;border-color:var(--ink,#17140F);box-shadow:0 0 0 3px rgba(226,164,28,.45)}"
+    },
+    {
+      "name": "Bench Chip",
+      "kind": "chip",
+      "refersTo": "bench-chip",
+      "description": "Workbench tool toggle; turmeric inset underline when expanded.",
+      "html": "<button class=\"ds-chip\" aria-expanded=\"true\">Keyboard</button> <button class=\"ds-chip\">OCR</button>",
+      "css": ".ds-chip{height:38px;padding:0 12px;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line,#DEDBD2);background:var(--surface,#fff);color:var(--ink,#17140F);font:600 14px 'Schibsted Grotesk',system-ui,sans-serif;cursor:pointer}.ds-chip:hover{border-color:var(--ink,#17140F)}.ds-chip[aria-expanded=true]{border-color:var(--ink,#17140F);box-shadow:inset 0 -3px 0 #E2A41C}.ds-chip:focus-visible{outline:3px solid #E2A41C;outline-offset:2px}"
+    },
+    {
+      "name": "Site Header",
+      "kind": "nav",
+      "refersTo": "site-header",
+      "description": "Thread over a sticky black bar: turmeric aksara wordmark, red active underline, off-white login block.",
+      "html": "<div><div class=\"ds-thread\"></div><nav class=\"ds-nav\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-brand-aksara\">ᬅᬓ᭄ᬲ</span><b>Aksara Bali</b></a><a class=\"ds-nav-link is-active\" href=\"#\">Konverter</a><a class=\"ds-nav-link\" href=\"#\">Kamus</a><a class=\"ds-nav-link\" href=\"#\">Latihan</a><a class=\"ds-login\" href=\"#\">Masuk</a></nav></div>",
+      "css": ".ds-thread{height:6px;background:repeating-linear-gradient(115deg,#B4232B 0 8px,#F7F6F2 8px 16px,#17140F 16px 24px);background-size:28px 6px}.ds-nav{display:flex;align-items:center;gap:2px;height:60px;padding:0 24px;background:#17140F;font-family:'Schibsted Grotesk',system-ui,sans-serif}.ds-brand{display:flex;align-items:baseline;gap:10px;color:#F7F6F2;text-decoration:none;margin-right:26px;font-size:17px;font-weight:800}.ds-brand-aksara{font-family:'Noto Sans Balinese',serif;font-size:22px;color:#E2A41C;font-weight:400}.ds-nav-link{color:#BDB7AA;text-decoration:none;font-size:15px;font-weight:500;padding:19px 12px 17px;border-bottom:3px solid transparent;transition:color .15s}.ds-nav-link:hover{color:#F7F6F2}.ds-nav-link.is-active{color:#F7F6F2;font-weight:700;border-bottom-color:#B4232B}.ds-nav-link:focus-visible,.ds-login:focus-visible{outline:3px solid #E2A41C;outline-offset:2px}.ds-login{margin-left:auto;height:34px;padding:0 16px;display:inline-flex;align-items:center;background:#F7F6F2;color:#17140F;font-weight:700;font-size:14px;text-decoration:none}.ds-login:hover{background:#E2A41C}"
+    },
+    {
+      "name": "Converter Workbench",
+      "kind": "custom",
+      "refersTo": "bench-action-primary",
+      "description": "Signature two-pane tool: white Latin pane, braided seam, red aksara field with a flush action row.",
+      "html": "<div class=\"ds-bench\"><div class=\"ds-pane\"><div class=\"ds-label\">Latin</div><div class=\"ds-in\">om swastiastu</div></div><div class=\"ds-seam\"></div><div class=\"ds-pane ds-script\"><div class=\"ds-label\">Aksara Bali</div><div class=\"ds-out\">ᬒᬀ ᬲ᭄ᬯᬲᭋ᭄ᬢᬸ</div><div class=\"ds-acts\"><button class=\"ds-act is-primary\">Salin</button><button class=\"ds-act\">Unduh</button><button class=\"ds-act\">Dengar</button></div></div></div>",
+      "css": ".ds-bench{display:grid;grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr);border:2px solid #17140F;background:#fff;font-family:'Schibsted Grotesk',system-ui,sans-serif}.ds-pane{display:flex;flex-direction:column}.ds-label{min-height:52px;display:flex;align-items:center;padding:10px 20px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #DEDBD2}.ds-in{padding:20px;font-size:1.5rem;font-weight:500;line-height:1.4;color:#17140F;flex:1}.ds-seam{background:repeating-linear-gradient(170deg,#B4232B 0 10px,#F7F6F2 10px 20px,#17140F 20px 30px);background-size:14px 60px}.ds-script{background:#B4232B;color:#fff}.ds-script .ds-label{border-bottom-color:rgba(255,255,255,.28)}.ds-out{flex:1;padding:20px 24px;font-family:'Noto Sans Balinese',serif;font-size:2.5rem;line-height:1.9}.ds-acts{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border-top:1px solid rgba(255,255,255,.28)}.ds-act{min-height:52px;background:transparent;color:#fff;border:0;border-right:1px solid rgba(255,255,255,.28);font:700 15px 'Schibsted Grotesk',system-ui,sans-serif;cursor:pointer}.ds-act:last-child{border-right:0}.ds-act:hover{background:#8E1A21}.ds-act.is-primary{background:#F7F6F2;color:#B4232B}.ds-act.is-primary:hover{background:#fff}.ds-act:focus-visible{outline:3px solid #E2A41C;outline-offset:-3px}"
+    },
+    {
+      "name": "Tool Row",
+      "kind": "card",
+      "refersTo": "",
+      "description": "Home list row showing a tool working on a real word.",
+      "html": "<a class=\"ds-row\" href=\"#\"><span><b class=\"ds-row-name\">Kamus</b><span class=\"ds-row-desc\">Indonesia ⇄ Bali, dengan tingkatan bahasa.</span></span><span class=\"ds-row-demo\">makan <span class=\"ds-arrow\">→</span> ngajeng</span><span class=\"ds-go\">Buka Kamus →</span></a>",
+      "css": ".ds-row{display:grid;grid-template-columns:200px minmax(0,1fr) 120px;gap:24px;align-items:center;padding:22px 4px;border-top:2px solid #17140F;border-bottom:1px solid #DEDBD2;color:#17140F;text-decoration:none;font-family:'Schibsted Grotesk',system-ui,sans-serif;transition:background-color .15s}.ds-row:hover{background:#fff}.ds-row-name{display:block;font-size:22px;font-weight:800;letter-spacing:-.02em}.ds-row-desc{display:block;color:#5E594F;font-size:15px}.ds-row-demo{font-size:16px;font-weight:500}.ds-arrow{color:#B4232B;font-weight:800}.ds-go{justify-self:end;font-weight:700;font-size:14px}.ds-row:hover .ds-go{color:#B4232B}.ds-row:focus-visible{outline:3px solid #E2A41C;outline-offset:2px}"
+    },
+    {
+      "name": "Mode Switch",
+      "kind": "nav",
+      "refersTo": "",
+      "description": "Conversion mode tabs with a turmeric underline on the checked mode.",
+      "html": "<div class=\"ds-modes\"><span class=\"ds-mode is-on\"><b>Otomatis</b></span><span class=\"ds-mode\">Sanskerta</span><span class=\"ds-mode\">Modern</span></div>",
+      "css": ".ds-modes{display:flex;gap:4px;font-family:'Schibsted Grotesk',system-ui,sans-serif;font-size:14px}.ds-mode{padding:8px 12px;color:#5E594F;font-weight:500;border-bottom:3px solid transparent;cursor:pointer}.ds-mode:hover{color:#17140F}.ds-mode.is-on{color:#17140F;border-bottom-color:#E2A41C}"
+    },
+    {
+      "name": "Swatch and Segmented Control",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Word art controls: square swatches with turmeric selection, ink-inverting segment.",
+      "html": "<div class=\"ds-ctrl\"><button class=\"ds-swatch is-on\" style=\"background:#B4232B\"></button><button class=\"ds-swatch\" style=\"background:#17140F\"></button><button class=\"ds-swatch\" style=\"background:#E2A41C\"></button><span class=\"ds-seg\"><button class=\"is-on\">L</button><button>C</button><button>R</button></span></div>",
+      "css": ".ds-ctrl{display:flex;gap:8px;align-items:center}.ds-swatch{width:28px;height:28px;border:1px solid #DEDBD2;padding:0;cursor:pointer}.ds-swatch.is-on,.ds-swatch:focus-visible{outline:3px solid #E2A41C;outline-offset:2px}.ds-seg{display:inline-flex;border:1px solid #DEDBD2}.ds-seg button{width:40px;height:36px;background:#fff;color:#5E594F;border:0;border-right:1px solid #DEDBD2;cursor:pointer}.ds-seg button:last-child{border-right:0}.ds-seg button.is-on{background:#17140F;color:#F7F6F2}.ds-seg button:hover:not(.is-on){color:#17140F}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Tridatu Thread",
+    "overview": "The tridatu is the red, white and black thread worn on Balinese wrists. Here it binds Latin to aksara: a braided stripe of those three colours runs across the top of every page, closes the footer, and forms the seam between the Latin input and the aksara output on the converter workbench. Everything else stays out of its way.\n\nColour comes from the Nawa Sanga directions and is laid down as flat, unmodulated fields that each own a region. Bang red holds the script output. Selem black holds the shell (header, footer, app band). Putih off-white is the ground. Kuning turmeric marks whatever is selected, active, focused or highlighted. A single blue is reserved for links. Corners are square everywhere (Bootstrap's radius tokens are forced to 0), depth comes from 1-2px rules, and nothing floats.\n\nDensity is that of a working tool, not a brochure. The home page shows its tools working on real words (tool rows with live demos) rather than a grid of feature tiles. Balinese script is always set large, because it is the product.",
+    "keyCharacteristics": [
+      "Flat Nawa Sanga colour fields that own regions; no gradients, glass, grain or drop shadows.",
+      "The braided tridatu thread as the one ornament, used as seam, top rule, footer rule and progress bar.",
+      "Square corners on every component, including Bootstrap primitives.",
+      "Turmeric as the single \"this is chosen\" signal: active mode, focus ring, selection, active chip.",
+      "Schibsted Grotesk at heavy weights for Latin; Noto Sans Balinese, always large, for aksara.",
+      "Full dark theme via `[data-bs-theme=\"dark\"]`, with the shell staying black in both themes."
+    ],
+    "rules": [
+      {
+        "name": "The Field Ownership Rule",
+        "body": "Each Nawa Sanga colour owns a region, not a decoration: red owns the script, black owns the shell, off-white owns the ground. Do not scatter red as small accents across a page that already has its red field.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Signal Rule",
+        "body": "Turmeric means \"selected, active or focused\" and nothing else. If it is not a state, it is not turmeric (the brand aksara and install strip are the two shell exceptions).",
+        "section": "colors"
+      },
+      {
+        "name": "The Blue Is For Links Rule",
+        "body": "Link blue appears only on inline links and Bootstrap info roles. Buttons and chips never turn blue.",
+        "section": "colors"
+      },
+      {
+        "name": "The Script Is Large Rule",
+        "body": "Balinese glyphs in content sit at 20px or more (the shipped floor; demos and grids run 24-34px), and in the converter output they are the largest type on the page. The header wordmark, which drops to 17px on phones under 440px, is the one use below that floor. Placeholders and empty states fall back to 16px Latin.",
+        "section": "typography"
+      },
+      {
+        "name": "The Heavy Heading Rule",
+        "body": "All headings are Schibsted Grotesk 800 with negative tracking and balanced wrapping. There is no second display face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Field Rule",
+        "body": "No surface casts a shadow. If something needs separating, give it a rule or a field colour.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Drawn Line Rule",
+        "body": "Inset or halo shadows are allowed only as 3px turmeric state lines (active, expanded, focus).",
+        "section": "elevation"
+      },
+      {
+        "name": "The Square Corner Rule",
+        "body": "Radius is 0 everywhere, including avatars, badges, modals, dropdowns, popovers and scrollbar thumbs.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** give the aksara its own bang red field and set it at the largest size on the screen.",
+      "**Do** use the braided thread as the only ornament: top rule, footer rule, workbench seam, progress bar.",
+      "**Do** mark every selected, active or focused state with turmeric (3px underline, 3px outline, or inset 3px ring).",
+      "**Do** keep every corner at 0 and separate regions with 1px line rules or 2px ink frames.",
+      "**Do** reference the tokens (`var(--surface)`, `var(--ink)`, `var(--line)`) instead of hex, so dark mode follows.",
+      "**Do** keep motion at 150-200ms on `cubic-bezier(0.16, 1, 0.3, 1)` and let reduced-motion disable it.",
+      "**Do** show tools working on real words instead of describing them in feature tiles."
+    ],
+    "donts": [
+      "**Don't** add drop shadows, gradients (other than the thread), glass or grain.",
+      "**Don't** round corners, including pills, avatars and badges.",
+      "**Don't** use turmeric decoratively, or blue for anything except links.",
+      "**Don't** build the converter as two equal grey boxes with a blue accent.",
+      "**Don't** let the shell (header, footer, app band) follow the light theme; it stays selem black.",
+      "**Don't** set Balinese glyphs in content below 20px or in any face other than Noto Sans Balinese."
+    ]
+  }
+}
