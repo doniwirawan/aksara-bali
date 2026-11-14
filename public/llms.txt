@@ -47,6 +47,7 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 - `/blog/cara-instal-font-aksara-bali` — Installing a Balinese script font on computers and smartphones (fixes □□□ boxes)
 - `/blog/aplikasi-android-aksara-bali-rilis-baru` — The offline Aksara Bali Android app: converter, quizzes, learning
 - `/blog/cara-memakai-kamus-bahasa-bali-online` — Using the online Balinese dictionary: word search, the four speech levels, the sentence helper, the Old Balinese tab, reporting and suggesting words
+- `/blog/pergub-80-2018-aksara-bali-papan-nama` — Bali Governor Regulation 80/2018 (Balinese script above Latin on signs), Balinese Language Month every February since 2019, common sign spelling mistakes and how to check a sign
 
 ### Blog Articles — Learning the Script
 - `/blog/daftar-lengkap-aksara-bali` — Complete glyph chart: 18 wreastra letters, 14 swara vowels, 33 wyanjana consonants by articulation (kanthya/talawya/murdhanya/dantya/osthya), pangangge incl. taling vs pepet, ra repa and la lenga, gantungan, numerals, punctuation, and the U+1B00–U+1B7F Unicode block
@@ -54,6 +55,7 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 - `/blog/gantungan-gempelan-aksara-bali` — Consonant clusters: gantungan vs gempelan, when adeg-adeg is used instead, and how Unicode encodes stacking
 - `/blog/translate-bahasa-indonesia-ke-bahasa-bali` — Translation vs transliteration, why speech levels (sor singgih) block full automation, and a starter Indonesian–Balinese vocabulary
 - `/blog/anggah-ungguh-basa-bali` — Balinese speech levels (andap, alus singgih, alus sor, mider) with dictionary examples and when to use each
+- `/blog/nama-hari-wuku-sasih-kalender-bali` — The Balinese calendar: saptawara and pancawara day names, the 30 wuku of the 210-day pawukon, the 12 sasih months, purnama and tilem
 - `/blog/cara-belajar-aksara-bali` — Beginner's guide to learning Balinese script
 - `/blog/belajar-hanacaraka-panduan-lengkap` — Memorising the 18 base hanacaraka letters
 - `/blog/pangangge-tanda-vokal-aksara-bali` — Pangangge: the vowel signs that change a letter's sound
@@ -65,6 +67,8 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 - `/blog/kata-bahasa-bali-yang-mulai-punah` — Balinese words falling out of use (dampar, jelan, suklit, kawa-kawa, …) with meanings
 - `/blog/kelengkapan-penjor-galungan` — The parts of a Galungan penjor and what each symbolises, with their names in Balinese script
 - `/blog/rangkaian-hari-raya-nyepi` — The Nyepi sequence (Melasti, Pangrupukan, Nyepi, Ngembak Geni) and Catur Brata Penyepian
+- `/blog/galungan-kuningan-rangkaian-hari-raya` — Galungan and Kuningan: the days from Sugihan to Kuningan with their pawukon dates, meanings, and the next dates (13 and 23 January 2027)
+- `/blog/hari-raya-saraswati-aksara-bali` — Saraswati day (Saniscara Umanis Watugunung): offerings to books and lontar, the goddess's symbols, Banyu Pinaruh to Pagerwesi, next date 29 May 2027
 - `/blog/mengenal-aksara-bali` — History and structure of Balinese script
 - `/blog/aksara-bali-dan-bahasa-sansekerta` — Relationship between Balinese script and Sanskrit
 - `/blog/aksara-murda-huruf-kapital-bali` — Aksara murda: the retroflex letters used for Sanskrit words

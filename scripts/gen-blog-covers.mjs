@@ -66,6 +66,10 @@ const ASSIGN = {
   'bahasa-bali-kuno-prasasti':                 ['stone-carving', 1, ['Bahasa Bali Kuno', 'dan Prasasti']],
   'kata-bahasa-bali-yang-mulai-punah':         ['bali-culture', 4, ['Kata Bali yang', 'Mulai Punah']],
   'cara-memakai-kamus-bahasa-bali-online':     ['library-books', 1, ['Cara Memakai', 'Kamus Bahasa Bali']],
+  'nama-hari-wuku-sasih-kalender-bali':        ['bali-rice-terrace', 2, ['Hari, Wuku, dan', 'Sasih Kalender Bali']],
+  'galungan-kuningan-rangkaian-hari-raya':     ['balinese-ceremony', 3, ['Galungan dan', 'Kuningan']],
+  'hari-raya-saraswati-aksara-bali':           ['palm-leaf-manuscript', 3, ['Hari Raya', 'Saraswati']],
+  'pergub-80-2018-aksara-bali-papan-nama':     ['bali-temple', 3, ['Aksara Bali', 'di Papan Nama']],
 }
 
 const CATEGORY_BUCKET = {
