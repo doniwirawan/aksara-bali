@@ -31,7 +31,7 @@ const T = {
     levelsTitle: 'Tentang tingkatan bahasa',
     levelsBody: 'Bahasa Bali mengenal anggah-ungguh basa: pilihan kata berubah menurut siapa yang diajak bicara. Kamus ini menampilkan bentuk andap (biasa), alus singgih, alus sor, dan mider bila tersedia. Pilih yang sesuai konteks — bukan sekadar yang pertama muncul.',
     sourceTitle: 'Sumber dan rujukan lain',
-    sourceBody: 'Data kamus diambil dari Kamus Anggah-Ungguh Kruna Bali–Indonesia. Untuk pencarian yang lebih luas, kamus komunitas, dan contoh kalimat, gunakan rujukan berikut:',
+    sourceBody: 'Data kamus diambil dari Kamus Anggah-Ungguh Kruna Bali–Indonesia dan Kamus Bali–Indonesia edisi ke-3 (Badan Pengembangan dan Pembinaan Bahasa, 2016; lisensi CC BY-NC 4.0). Untuk pencarian yang lebih luas, kamus komunitas, dan contoh kalimat, gunakan rujukan berikut:',
     convNote: 'Ingin mengubah tulisan Latin menjadi aksara Bali? Gunakan',
     convLink: 'konverter aksara Bali',
     tabWord: 'Cari kata',
@@ -87,7 +87,7 @@ const T = {
     levelsTitle: 'About speech levels',
     levelsBody: 'Balinese has anggah-ungguh basa: word choice changes with who you are speaking to. This dictionary shows the andap (everyday), alus singgih, alus sor, and mider forms where they exist. Pick the one that fits the situation, not simply the first one listed.',
     sourceTitle: 'Sources and further reference',
-    sourceBody: 'Entries come from the Kamus Anggah-Ungguh Kruna Bali–Indonesia. For broader search, community dictionaries, and example sentences, use these:',
+    sourceBody: 'Entries come from the Kamus Anggah-Ungguh Kruna Bali–Indonesia and the Kamus Bali–Indonesia, 3rd edition (Badan Pengembangan dan Pembinaan Bahasa, 2016; licensed CC BY-NC 4.0). For broader search, community dictionaries, and example sentences, use these:',
     convNote: 'Want to turn Latin text into Balinese script? Use the',
     convLink: 'Balinese script converter',
     tabWord: 'Word search',
@@ -131,6 +131,7 @@ const T = {
 }
 
 const LINKS = [
+  { href: 'https://repositori.kemendikdasmen.go.id/16215/', label: 'Kamus Bali–Indonesia (2016)', note: { id: 'Badan Bahasa, edisi ke-3, CC BY-NC 4.0', en: 'Badan Bahasa, 3rd edition, CC BY-NC 4.0' } },
   { href: 'https://dictionary.basabali.org/', label: 'BASAbali Wiki', note: { id: 'kamus dan korpus bahasa Bali', en: 'Balinese dictionary and corpus' } },
   { href: 'https://ban.wikipedia.org/', label: 'Wikipedia Basa Bali', note: { id: 'ensiklopedia berbahasa Bali', en: 'Balinese-language encyclopedia' } },
   { href: 'https://ban.wikisource.org/', label: 'Wikisource Basa Bali', note: { id: 'naskah dan teks berbahasa Bali', en: 'Balinese texts and manuscripts' } },
@@ -475,6 +476,14 @@ export default function TranslatePage({ locale, setLocale }) {
                       {t.indonesian}
                     </div>
                     <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>{e.i}</div>
+                    {e.src === 'kbi2016' && (
+                      <div style={{ fontSize: 12.5, color: mutedColor, margin: '-6px 0 12px', lineHeight: 1.5 }}>
+                        {lang === 'en'
+                          ? 'From the Kamus Bali–Indonesia (Badan Bahasa, 2016), read automatically from the scan. Report it if something looks wrong.'
+                          : 'Dari Kamus Bali–Indonesia (Badan Bahasa, 2016), dibaca otomatis dari pindaian. Laporkan bila ada yang keliru.'}
+                        {e.n ? ` · ${e.n}` : ''}
+                      </div>
+                    )}
                     {e.src === 'komunitas' && (
                       <div style={{ fontSize: 12.5, color: mutedColor, margin: '-6px 0 12px', lineHeight: 1.5 }}>
                         {lang === 'en'

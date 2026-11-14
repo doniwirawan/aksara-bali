@@ -93,6 +93,12 @@ const EXTRA = path.join('scripts', 'data', 'kamus-tambahan.json')
 const extra = JSON.parse(await fs.readFile(EXTRA, 'utf8')).map(e => ({ ...e, src: 'komunitas' }))
 entries.push(...extra)
 
+// Kamus Bali-Indonesia, 3rd edition (Badan Bahasa, 2016; CC BY-NC 4.0), parsed
+// from the publisher's PDF by scripts/kbi2016/. Only headwords the second
+// dictionary adds are kept; see scripts/kbi2016/README.md.
+const KBI = path.join('scripts', 'data', 'kamus-kbi2016.json')
+entries.push(...JSON.parse(await fs.readFile(KBI, 'utf8')))
+
 await fs.mkdir(path.dirname(OUT), { recursive: true })
 await fs.writeFile(OUT, JSON.stringify({
   source: 'Kamus Anggah-Ungguh Kruna Bali–Indonesia / Indonesia–Bali',
