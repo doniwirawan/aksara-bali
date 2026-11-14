@@ -14,23 +14,49 @@ const HandGestureCanvas = dynamic(() => import('./HandGestureCanvas'), {
 const PASS = 70
 const STORAGE_KEY = 'aksara_quiz_best'
 
-// Duolingo-style track: a gentle start, then themed units (filtered by word
-// category), then difficulty-based boss levels at the end. `diffs` and `cats`
-// are both optional filters — omitted means "any".
+// Duolingo-style track: a gentle start, themed units (filtered by word
+// category), review checkpoints, then difficulty-based boss levels. `diffs`
+// and `cats` are optional filters (omitted = any). A level longer than its
+// word pool cycles the pool in a fresh order. Progress is stored by `id`, so
+// levels can be added or reordered without scrambling anyone's scores.
 const LEVELS = [
-  { name: 'Pemula', sub: { id: 'Kenali dasar aksara.', en: 'Learn the basics.' }, diffs: ['easy'], count: 8 },
-  { name: 'Hewan & Makanan', sub: { id: 'Kata seputar hewan dan makanan.', en: 'Animal and food words.' }, cats: ['Hewan', 'Makanan'], count: 10 },
-  { name: 'Alam & Tempat', sub: { id: 'Alam dan tempat-tempat di Bali.', en: 'Nature and places in Bali.' }, cats: ['Alam', 'Tempat'], count: 10 },
-  { name: 'Keluarga & Tubuh', sub: { id: 'Keluarga dan anggota tubuh.', en: 'Family and body parts.' }, cats: ['Keluarga', 'Tubuh'], count: 10 },
-  { name: 'Warna & Angka', sub: { id: 'Warna dan angka dalam bahasa Bali.', en: 'Colors and numbers.' }, cats: ['Warna', 'Angka'], count: 10 },
-  { name: 'Kerja & Sifat', sub: { id: 'Kata kerja dan kata sifat sehari-hari.', en: 'Everyday verbs and adjectives.' }, cats: ['Kata kerja', 'Sifat'], count: 10 },
-  { name: 'Waktu & Wewaran', sub: { id: 'Kata waktu dan nama-nama hari.', en: 'Time words and day names.' }, cats: ['Waktu'], count: 10 },
-  { name: 'Budaya', sub: { id: 'Seni dan budaya Bali.', en: 'Balinese arts and culture.' }, cats: ['Budaya'], count: 10 },
-  { name: 'Agama', sub: { id: 'Upacara dan istilah keagamaan.', en: 'Ceremonies and religious terms.' }, cats: ['Agama'], count: 10 },
-  { name: 'Filosofi & Sastra', sub: { id: 'Filosofi hidup dan sastra Bali.', en: 'Philosophy and literature.' }, cats: ['Filosofi', 'Sastra'], count: 10 },
-  { name: 'Master', sub: { id: 'Tes ketajaman pemahaman.', en: 'Sharpen your mastery.' }, diffs: ['hard'], count: 12 },
-  { name: 'GrandMaster', sub: { id: 'Buktikan kamu sang master.', en: 'Prove you are the master.' }, count: 15 },
+  { id: 'pemula', name: 'Pemula', sub: { id: 'Kenali dasar aksara.', en: 'Learn the basics.' }, diffs: ['easy'], count: 15 },
+  { id: 'angka', name: 'Angka', sub: { id: 'Bilangan dalam bahasa Bali.', en: 'Balinese numbers.' }, cats: ['Angka'], count: 15 },
+  { id: 'warna', name: 'Warna', sub: { id: 'Nama-nama warna.', en: 'Colours.' }, cats: ['Warna'], count: 12 },
+  { id: 'keluarga', name: 'Keluarga', sub: { id: 'Sebutan anggota keluarga.', en: 'Family members.' }, cats: ['Keluarga'], count: 15 },
+  { id: 'tubuh', name: 'Tubuh', sub: { id: 'Anggota tubuh.', en: 'Parts of the body.' }, cats: ['Tubuh'], count: 18 },
+  { id: 'hewan', name: 'Hewan', sub: { id: 'Hewan di sekitar kita.', en: 'Animals.' }, cats: ['Hewan'], count: 15 },
+  { id: 'makanan', name: 'Makanan', sub: { id: 'Makanan dan dapur Bali.', en: 'Food and the Balinese kitchen.' }, cats: ['Makanan'], count: 15 },
+  { id: 'ulangan-1', name: 'Ulangan I', sub: { id: 'Campuran semua unit sejauh ini.', en: 'Review of every unit so far.' }, cats: ['Angka', 'Warna', 'Keluarga', 'Tubuh', 'Hewan', 'Makanan'], count: 25 },
+  { id: 'alam', name: 'Alam', sub: { id: 'Alam di sekitar Bali.', en: 'Nature.' }, cats: ['Alam'], count: 20 },
+  { id: 'tempat', name: 'Tempat', sub: { id: 'Tempat-tempat di Bali.', en: 'Places in Bali.' }, cats: ['Tempat'], count: 12 },
+  { id: 'umum', name: 'Kata Umum', sub: { id: 'Kata yang sering dipakai.', en: 'Common words.' }, cats: ['Umum'], count: 12 },
+  { id: 'kerja', name: 'Kata Kerja', sub: { id: 'Kata kerja sehari-hari.', en: 'Everyday verbs.' }, cats: ['Kata kerja'], count: 18 },
+  { id: 'sifat', name: 'Kata Sifat', sub: { id: 'Kata sifat sehari-hari.', en: 'Everyday adjectives.' }, cats: ['Sifat'], count: 18 },
+  { id: 'waktu', name: 'Waktu & Wewaran', sub: { id: 'Kata waktu dan nama-nama hari.', en: 'Time words and day names.' }, cats: ['Waktu'], count: 15 },
+  { id: 'ulangan-2', name: 'Ulangan II', sub: { id: 'Campuran tingkat menengah.', en: 'Mixed review, medium level.' }, diffs: ['easy', 'medium'], count: 30 },
+  { id: 'budaya', name: 'Budaya', sub: { id: 'Seni dan budaya Bali.', en: 'Balinese arts and culture.' }, cats: ['Budaya'], count: 17 },
+  { id: 'agama', name: 'Agama', sub: { id: 'Upacara dan istilah keagamaan.', en: 'Ceremonies and religious terms.' }, cats: ['Agama'], count: 25 },
+  { id: 'filosofi-sastra', name: 'Filosofi & Sastra', sub: { id: 'Filosofi hidup dan sastra Bali.', en: 'Philosophy and literature.' }, cats: ['Filosofi', 'Sastra'], count: 20 },
+  { id: 'master', name: 'Master', sub: { id: 'Kata-kata tingkat sulit.', en: 'The hard words.' }, diffs: ['hard'], count: 30 },
+  { id: 'grandmaster', name: 'GrandMaster', sub: { id: 'Semua kata, tanpa ampun.', en: 'Every word, no mercy.' }, count: 40 },
 ]
+
+// Scores were stored by level position before the track grew. Each old
+// position maps to the level(s) that replaced it.
+const LEGACY_LEVELS = [
+  ['pemula'], ['hewan', 'makanan'], ['alam', 'tempat'], ['keluarga', 'tubuh'], ['angka', 'warna'],
+  ['kerja', 'sifat'], ['waktu'], ['budaya'], ['agama'], ['filosofi-sastra'], ['master'], ['grandmaster'],
+]
+
+function migrateBest(raw) {
+  const out = {}
+  for (const [k, v] of Object.entries(raw || {})) {
+    if (/^\d+$/.test(k)) for (const id of LEGACY_LEVELS[+k] || []) out[id] = Math.max(out[id] || 0, v)
+    else out[k] = v
+  }
+  return out
+}
 
 function shuffle(arr) {
   const a = [...arr]
@@ -105,7 +131,7 @@ export default function QuizMode({ darkMode, locale }) {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) setBest(JSON.parse(raw))
+      if (raw) setBest(migrateBest(JSON.parse(raw)))
     } catch { /* ignore */ }
     setSoundOn(sfxEnabled())
   }, [])
@@ -121,7 +147,7 @@ export default function QuizMode({ darkMode, locale }) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)) } catch { /* ignore */ }
   }
 
-  const unlocked = (i) => i === 0 || (best[i - 1] || 0) >= PASS
+  const unlocked = (i) => i === 0 || (best[LEVELS[i - 1].id] || 0) >= PASS
 
   const buildOptions = useCallback((q) => {
     const others = shuffle(QUIZ_WORDS.map(w => w.latin).filter(l => l !== q.latin))
@@ -134,7 +160,13 @@ export default function QuizMode({ darkMode, locale }) {
       (!lv.diffs || lv.diffs.includes(w.difficulty)) &&
       (!lv.cats || lv.cats.includes(w.category))
     ))
-    const q = pool.slice(0, LEVELS[i].count)
+    // Longer than the pool: keep dealing fresh shuffles, never the same word twice in a row.
+    const q = []
+    while (pool.length && q.length < lv.count) {
+      const round = shuffle(pool)
+      if (q.length && round[0] === q[q.length - 1] && round.length > 1) round.push(round.shift())
+      q.push(...round.slice(0, lv.count - q.length))
+    }
     setActive(i); setQueue(q); setIdx(0); setCorrect(0)
     setSelected(null); setInput(''); setChecked(false)
     if (q.length) buildOptions(q[0])
@@ -167,9 +199,10 @@ export default function QuizMode({ darkMode, locale }) {
     const total = queue.length
     const score = total === 0 ? 0 : Math.round((correct / total) * 100)
     const next = { ...best }
-    if (score > (next[active] || 0)) next[active] = score
+    const id = LEVELS[active].id
+    if (score > (next[id] || 0)) next[id] = score
     saveBest(next)
-    const allDone = LEVELS.every((_, i) => (next[i] || 0) >= PASS)
+    const allDone = LEVELS.every(l => (next[l.id] || 0) >= PASS)
     const passed = score >= PASS
     if (passed) playComplete(); else playWrong()
     setResult({
@@ -193,9 +226,9 @@ export default function QuizMode({ darkMode, locale }) {
   }
 
   // ── Theme tokens ──
-  const textColor = darkMode ? 'var(--line)' : 'var(--ink)'
+  const textColor = 'var(--ink)'
   const cardBg = 'var(--surface)'
-  const border = darkMode ? '#333' : 'var(--line)'
+  const border = 'var(--line)'
   const muted = darkMode ? 'var(--mute)' : 'var(--mute)'
   const blue = 'var(--accent)'
   const green = 'var(--ok)'
@@ -233,7 +266,7 @@ export default function QuizMode({ darkMode, locale }) {
 
         {LEVELS.map((lv, i) => {
           const open = unlocked(i)
-          const b = best[i] || 0
+          const b = best[lv.id] || 0
           return (
             <button key={lv.name} onClick={() => open && startLevel(i)} disabled={!open} style={{
               width: '100%', display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
@@ -430,7 +463,7 @@ export default function QuizMode({ darkMode, locale }) {
 
 function ResultModal({ t, result, darkMode, onClose }) {
   const { correct, score, wrong, passed, allDone, levelName } = result
-  const textColor = darkMode ? 'var(--line)' : 'var(--ink)'
+  const textColor = 'var(--ink)'
   const cardBg = 'var(--surface)'
   const muted = darkMode ? 'var(--mute)' : 'var(--mute)'
   const title = allDone ? t.allDoneTitle : passed ? t.passTitle(levelName) : t.failTitle

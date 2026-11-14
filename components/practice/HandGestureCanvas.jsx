@@ -878,7 +878,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
 
   const bg = darkMode ? 'var(--surface)' : 'var(--surface-2)'
   const border = darkMode ? '#333' : 'var(--line)'
-  const textColor = darkMode ? 'var(--line)' : '#333'
+  const textColor = 'var(--ink)'
 
   const COLORS = ['#17140F', '#B4232B', '#2B5C9E', '#2F7D4A', '#E2A41C']
   const WIDTHS = [2, 4, 7, 12]

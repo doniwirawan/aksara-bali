@@ -244,6 +244,21 @@ export const QUIZ_WORDS = [
   { latin: 'panes', meaning: 'panes / panas', category: 'Sifat', difficulty: 'medium' },
   { latin: 'etis', meaning: 'etis / dingin', category: 'Sifat', difficulty: 'medium' },
 
+  // Warna & Tubuh: extra forms, each checked against the Kamus Anggah-Ungguh
+  { latin: 'baag', meaning: 'baag / merah', category: 'Warna', difficulty: 'medium' },
+  { latin: 'badeng', meaning: 'badeng / hitam', category: 'Warna', difficulty: 'medium' },
+  { latin: 'ijo', meaning: 'ijo / hijau', category: 'Warna', difficulty: 'easy' },
+  { latin: 'tendas', meaning: 'tendas / kepala', category: 'Tubuh', difficulty: 'medium' },
+  { latin: 'bungut', meaning: 'bungut / mulut', category: 'Tubuh', difficulty: 'medium' },
+  { latin: 'baong', meaning: 'baong / leher', category: 'Tubuh', difficulty: 'medium' },
+  { latin: 'pala', meaning: 'pala / bahu', category: 'Tubuh', difficulty: 'easy' },
+  { latin: 'tundun', meaning: 'tundun / punggung', category: 'Tubuh', difficulty: 'medium' },
+  { latin: 'jriji', meaning: 'jriji / jari', category: 'Tubuh', difficulty: 'hard' },
+  { latin: 'layah', meaning: 'layah / lidah', category: 'Tubuh', difficulty: 'medium' },
+  { latin: 'tangkah', meaning: 'tangkah / dada', category: 'Tubuh', difficulty: 'medium' },
+  { latin: 'gidat', meaning: 'gidat / dahi', category: 'Tubuh', difficulty: 'medium' },
+  { latin: 'entud', meaning: 'entud / lutut', category: 'Tubuh', difficulty: 'medium' },
+
   // Budaya (culture)
   { latin: 'gong', meaning: 'gong / gong', category: 'Budaya', difficulty: 'easy' },
   { latin: 'kendang', meaning: 'kendang / gendang', category: 'Budaya', difficulty: 'medium' },
