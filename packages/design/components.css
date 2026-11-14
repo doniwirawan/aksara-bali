@@ -244,3 +244,21 @@ button.glyphs__cell:hover { background: var(--surface-2); }
 .akb__row { display: flex; gap: 6px; }
 .akb__wide { flex: 1; height: 44px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); font: 600 14px var(--font-sans); cursor: pointer; }
 .akb__wide:hover { border-color: var(--ink); }
+
+/* =================== Download page =================== */
+.dl { border: 2px solid var(--line-strong); background: var(--surface); padding: 28px; margin-bottom: 32px; }
+.dl__main { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; }
+.dl__icon { width: 88px; height: 88px; flex-shrink: 0; display: block; }
+.dl__name { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+.dl__meta { color: var(--mute); font-variant-numeric: tabular-nums; }
+.dl__buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.dl__cta { width: 100%; justify-content: center; min-height: 54px; font-size: 16px; }
+.dl__cta--ghost { border-color: var(--line-strong); color: var(--ink); background: transparent; }
+.dl__cta--ghost:hover { background: var(--surface-2); color: var(--ink); }
+.dl__hint { margin: 8px 0 0; font-size: 13px; color: var(--mute); }
+.dl__safe { display: flex; align-items: center; gap: 8px; margin: 22px 0 0; font-size: 13px; color: var(--mute); }
+.dl__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.dl__steps { margin: 0; padding: 20px 20px 20px 42px; display: grid; gap: 10px; }
+.dl__notes { margin: 0 0 16px; padding-left: 20px; display: grid; gap: 8px; }
+.dl__link { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; text-decoration: none; }
+@media (max-width: 640px) { .dl { padding: 20px; } .dl__icon { width: 64px; height: 64px; } }

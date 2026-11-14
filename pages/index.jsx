@@ -27,10 +27,8 @@ const HOME_TOUR = [
 import LanguageSwitcher, { translations } from '../components/LanguageSwitcher'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { useEmailGate } from '../components/EmailGate'
 
 export default function Home({ locale, setLocale }) {
-    const { requireEmail } = useEmailGate()
     const [darkMode, setDarkMode] = useState(false)
     const [isOnline, setIsOnline] = useState(true)
     const [isLoaded, setIsLoaded] = useState(false)
@@ -112,14 +110,6 @@ export default function Home({ locale, setLocale }) {
             };
         }
     }, []);
-
-    // The APK is gated: collect an email, then send them to the release page.
-    const handleApkClick = async (e) => {
-        e.preventDefault()
-        const href = e.currentTarget.href
-        if (!await requireEmail('apk-landing')) return
-        if (!window.open(href, '_blank', 'noopener')) window.location.href = href
-    }
 
     const handleInstallClick = async () => {
         if (!deferredPrompt) {
@@ -453,8 +443,7 @@ export default function Home({ locale, setLocale }) {
                                     data-track="landing-play-store" className="cta cta--red">
                                     <Smartphone size={18} /> {locale === 'id' ? 'Dapatkan di Google Play' : 'Get it on Google Play'}
                                 </a>
-                                <a href="https://github.com/doniwirawan/aksara-bali/releases/latest" target="_blank" rel="noopener noreferrer"
-                                    data-track="landing-download-apk" onClick={handleApkClick} className="cta cta--ghost">
+                                <a href="/download/" data-track="landing-download-apk" className="cta cta--ghost">
                                     <Download size={18} /> {locale === 'id' ? 'Unduh APK' : 'Download APK'}
                                 </a>
                             </div>

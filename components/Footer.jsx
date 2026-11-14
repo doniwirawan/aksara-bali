@@ -1,22 +1,13 @@
 import { Github, Bug, Linkedin, Download, Smartphone, Heart } from 'lucide-react'
-import { useEmailGate } from './EmailGate'
 
 export default function Footer({ darkMode, locale }) {
-  const { requireEmail } = useEmailGate()
   const id = locale === 'id'
-
-  // The APK is gated: collect an email, then send them to the release page.
-  const handleApkClick = async (e) => {
-    e.preventDefault()
-    const href = e.currentTarget.href
-    if (!await requireEmail('apk-footer')) return
-    if (!window.open(href, '_blank', 'noopener')) window.location.href = href
-  }
 
   const NAV_LINKS = [
     { href: '/', label: id ? 'Konverter' : 'Converter' },
     { href: '/translate', label: id ? 'Kamus' : 'Dictionary' },
     { href: '/practice', label: id ? 'Latihan' : 'Practice' },
+    { href: '/download/', label: id ? 'Unduh aplikasi' : 'Get the app' },
     { href: '/blog', label: 'Blog' },
     { href: '/faq', label: 'FAQ' },
   ]
@@ -56,12 +47,10 @@ export default function Footer({ darkMode, locale }) {
               >
                 <Smartphone size={16} /> {id ? 'Dapatkan di Google Play' : 'Get it on Google Play'}
               </a>
+              {/* The download page holds the direct APK links and asks for the email first. */}
               <a
-                href="https://github.com/doniwirawan/aksara-bali/releases/latest"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/download/"
                 data-track="footer-download-apk"
-                onClick={handleApkClick}
                 className="site-footer__app"
               >
                 <Download size={16} /> {id ? 'Unduh APK' : 'Download APK'}
