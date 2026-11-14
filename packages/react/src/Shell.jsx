@@ -15,20 +15,23 @@ export function Thread({ className }) {
 
 /**
  * Black site header with the thread on top.
- *  - `mark`: the script wordmark (e.g. "ᬅᬓ᭄ᬱᬭ"), shown in turmeric
+ *  - `icon`: URL of the app icon, shown as the mark (optional)
+ *  - `mark`: the script wordmark (e.g. "ᬅᬓ᭄ᬱᬭ"), shown in turmeric when there is no icon
  *  - `name`: the Latin product name
  *  - `links`: [{ href, label }], `active`: the href to highlight
  *  - `tools`: right-hand controls (language, theme, sign-in)
  * Below 860px the links move into a drawer behind a menu button.
  */
-export function SiteHeader({ mark, name, href = '/', links = [], active, tools, menuLabel = 'Menu' }) {
+export function SiteHeader({ icon, mark, name, href = '/', links = [], active, tools, menuLabel = 'Menu' }) {
   const [open, setOpen] = useState(false)
   return (
     <header className="site-header">
       <Thread />
       <div className="site-header__bar">
         <a href={href} className="site-brand" aria-label={name}>
-          {mark && <span className="site-brand__aksara" aria-hidden="true">{mark}</span>}
+          {icon
+            ? <img src={icon} alt="" width="30" height="30" className="site-brand__icon" />
+            : mark && <span className="site-brand__aksara" aria-hidden="true">{mark}</span>}
           <span className="site-brand__name">{name}</span>
         </a>
         <nav className="site-nav" aria-label="Main navigation">

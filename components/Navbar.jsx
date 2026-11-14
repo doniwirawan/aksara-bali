@@ -52,7 +52,7 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
       <div className="thread" aria-hidden="true" />
       <div className="site-header__bar">
         <a href="/" className="site-brand" aria-label="Aksara Bali">
-          <span className="site-brand__aksara" aria-hidden="true">ᬅᬓ᭄ᬱᬭ</span>
+          <img src="/icons/favicon.svg" alt="" width="30" height="30" className="site-brand__icon" />
           <span className="site-brand__name">Aksara Bali</span>
         </a>
 

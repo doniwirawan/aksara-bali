@@ -38,7 +38,7 @@ export default function Footer({ darkMode, locale }) {
         <div className="site-footer__grid">
           <div className="site-footer__brand">
             <div className="site-footer__mark">
-              <span className="site-brand__aksara" aria-hidden="true">ᬅᬓ᭄ᬱᬭ ᬩᬮᬶ</span>
+              <img src="/icons/icon.svg" alt="" width="56" height="56" className="site-brand__icon site-footer__icon" />
               <span className="site-footer__name">Aksara Bali</span>
             </div>
             <p>
