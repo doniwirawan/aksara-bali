@@ -129,6 +129,7 @@ The converter engine, the design system and the React components are published f
 | Package | For |
 |---|---|
 | `@aksara-bali/core` | Latin ⇄ Aksara Bali conversion. No dependencies. |
+| `@aksara-bali/kamus` | Indonesian ⇄ Balinese lookup with speech levels, a sentence helper, and the live Kamus data. |
 | `@aksara-bali/design` | The Tridatu look as plain CSS: tokens, light and dark themes, shell, converter workbench. |
 | `@aksara-bali/react` | Workbench, site shell, glyph grid and script keyboard components. |
 | `create-aksara-tool` | `npm create aksara-tool my-tool`: a working converter site, ready to switch to another script. |

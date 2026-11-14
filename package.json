@@ -8,11 +8,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "npm test -w @aksara-bali/core"
+    "test": "npm test -w @aksara-bali/core -w @aksara-bali/kamus"
   },
   "dependencies": {
     "@aksara-bali/core": "0.1.0",
     "@aksara-bali/design": "0.1.0",
+    "@aksara-bali/kamus": "0.1.0",
     "@aksara-bali/react": "0.1.0",
     "@supabase/supabase-js": "^2.100.0",
     "@vercel/analytics": "^2.0.1",

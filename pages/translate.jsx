@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Search, Copy, Check, BookOpen, ExternalLink, Info, Plus, Flag } from 'lucide-react'
 import { convertLatinToBalinese } from '../utils/balineseConverter'
+import { createKamus } from '@aksara-bali/kamus'
 
 const BASE = 'https://aksarabali.doniwirawan.xyz'
 
@@ -147,29 +148,6 @@ const LINKS = [
   { href: 'https://www.instagram.com/banwikipedia/', label: '@banwikipedia', note: { id: 'komunitas Wikipedia Basa Bali di Instagram', en: 'the Balinese Wikipedia community on Instagram' } },
 ]
 
-const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim()
-
-// Word-by-word substitution for the sentence helper. Deliberately not sold as
-// translation: Balinese word order and speech levels need a human.
-function buildSentence(entries, text, level) {
-  if (!entries) return []
-  const index = new Map()
-  for (const e of entries) {
-    const key = norm(e.i)
-    if (!key) continue
-    if (!index.has(key)) index.set(key, e)
-  }
-  return text.split(/(\s+|[.,!?;:()"']+)/).filter(Boolean).map(token => {
-    if (!/\p{L}/u.test(token)) return { token, out: token, matched: null }
-    const e = index.get(norm(token))
-    if (!e) return { token, out: token, matched: false }
-    const order = level === 'alus' ? ['s', 'm', 'o', 'a'] : ['a', 'm', 's', 'o']
-    // Entries can list alternatives ("puri, gria"); a sentence takes one.
-    const pick = order.map(k => e[k]).find(Boolean)?.split(/[,/]/)[0].trim()
-    return { token, out: pick || token, matched: !!pick, entry: e }
-  })
-}
-
 export default function TranslatePage({ locale, setLocale }) {
   const [darkMode, setDarkMode] = useState(false)
   const [entries, setEntries] = useState(null)
@@ -211,57 +189,19 @@ export default function TranslatePage({ locale, setLocale }) {
       .catch(() => setKuno([]))
   }, [mode, kuno])
 
-  const kunoResults = useMemo(() => {
-    const q = norm(kunoQuery)
-    if (!kuno || q.length < 2) return []
-    const scored = []
-    for (const e of kuno) {
-      const k = norm(e.k), i = norm(e.i)
-      const best = k === q || i.split(/[;,]\s*/).includes(q) ? 3 : k.startsWith(q) ? 2 : (k.includes(q) || i.includes(q)) ? 1 : 0
-      if (best) scored.push({ e, best })
-    }
-    return scored.sort((x, y) => y.best - x.best).slice(0, 40).map(s => s.e)
-  }, [kuno, kunoQuery])
+  const kunoKamus = useMemo(() => createKamus(kuno || [], { fields: ['k', 'i'] }), [kuno])
+  const kunoResults = useMemo(() => (kuno ? kunoKamus.search(kunoQuery) : []), [kunoKamus, kuno, kunoQuery])
 
-  const results = useMemo(() => {
-    const q = norm(query)
-    if (!entries || q.length < 2) return []
-    const fields = ['i', 'a', 's', 'o', 'm']
-    const scored = []
-    for (const e of entries) {
-      let best = 0
-      for (const f of fields) {
-        if (!e[f]) continue
-        const v = norm(e[f])
-        if (v === q) best = Math.max(best, 3)
-        else if (v.split(/[,/]\s*/).some(part => part.trim() === q)) best = Math.max(best, 3)
-        else if (v.startsWith(q)) best = Math.max(best, 2)
-        else if (v.includes(q)) best = Math.max(best, 1)
-      }
-      if (best) scored.push({ e, best })
-    }
-    return scored.sort((x, y) => y.best - x.best).slice(0, 40).map(s => s.e)
-  }, [entries, query])
+  const kamus = useMemo(() => createKamus(entries || []), [entries])
+  const results = useMemo(() => (entries ? kamus.search(query) : []), [kamus, entries, query])
 
   // A row can carry four registers, and some list alternates — so the number of
   // words is much larger than the number of entries.
-  const formCount = useMemo(() => {
-    if (!entries) return 0
-    const forms = new Set()
-    for (const e of entries) {
-      for (const f of [e.a, e.s, e.o, e.m]) {
-        for (const part of (f || '').split(/[,/]/)) {
-          const p = part.trim().toLowerCase()
-          if (p) forms.add(p)
-        }
-      }
-    }
-    return forms.size
-  }, [entries])
+  const formCount = useMemo(() => (entries ? kamus.forms().size : 0), [kamus, entries])
 
   const sentenceParts = useMemo(
-    () => (mode === 'sentence' && sentence.trim() ? buildSentence(entries, sentence, level) : []),
-    [entries, sentence, level, mode]
+    () => (mode === 'sentence' && sentence.trim() ? kamus.sentence(sentence, { level }) : []),
+    [kamus, sentence, level, mode]
   )
   const sentenceBali = sentenceParts.map(p => p.out).join('')
   const sentenceScript = sentenceBali.trim() ? convertLatinToBalinese(sentenceBali) : ''

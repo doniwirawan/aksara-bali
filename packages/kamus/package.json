@@ -1,0 +1,24 @@
+{
+  "name": "@aksara-bali/kamus",
+  "version": "0.1.0",
+  "description": "Indonesian ⇄ Balinese dictionary lookup with speech levels (andap, alus singgih, alus sor, mider), a word-by-word sentence helper, and a loader for the live Aksara Bali Kamus data.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": ["src", "README.md", "LICENSE"],
+  "sideEffects": false,
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": ["balinese", "bahasa-bali", "kamus", "dictionary", "indonesian", "anggah-ungguh", "translation"],
+  "author": "Doni Wirawan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doniwirawan/aksara-bali.git",
+    "directory": "packages/kamus"
+  },
+  "homepage": "https://aksarabali.doniwirawan.xyz/translate/"
+}

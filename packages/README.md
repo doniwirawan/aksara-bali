@@ -1,12 +1,13 @@
 # @aksara-bali packages
 
-Four packages taken out of [aksarabali.doniwirawan.xyz](https://aksarabali.doniwirawan.xyz), so the next script tool doesn't start from zero. That might be a Javanese, Sundanese or Lontara converter, a school worksheet generator, or another Balinese app.
+Five packages taken out of [aksarabali.doniwirawan.xyz](https://aksarabali.doniwirawan.xyz), so the next script tool doesn't start from zero. That might be a Javanese, Sundanese or Lontara converter, a school worksheet generator, or another Balinese app.
 
 The site uses all of them itself, so they get tested in real use with every deploy.
 
 | Package | What it's for | Use it when you want… |
 |---|---|---|
 | [`@aksara-bali/core`](core/) | The conversion engine: Latin ⇄ Aksara Bali, plus the keyboard layout and practice words. Plain JavaScript, no dependencies. | Script conversion anywhere: a web page, a Node API, a bot, a spreadsheet script. |
+| [`@aksara-bali/kamus`](kamus/) | Indonesian ⇄ Balinese dictionary lookup with speech levels, a word-by-word sentence helper, and a loader for the live Kamus data (5,600+ entries, plus Old Balinese). | Translation features: look up a word, pick the andap or alus form, or rough out a sentence. |
 | [`@aksara-bali/design`](design/) | The Tridatu look as plain CSS: colours, fonts, light and dark themes, the braided thread, page shell, converter workbench. | A new page or tool that looks like part of the same family, whatever framework you use. |
 | [`@aksara-bali/react`](react/) | React components that render that design: workbench, header and footer, glyph grid, on-screen script keyboard. | To build a React or Next.js tool fast, without writing the markup yourself. |
 | [`create-aksara-tool`](create-aksara-tool/) | A starter generator: `npm create aksara-tool my-tool` gives a working converter site. | To start a new tool in one command. |
@@ -20,7 +21,7 @@ create-aksara-tool        →  generates a Next.js app that uses ↓
 @aksara-bali/core          →  the engine; the components never convert by themselves
 ```
 
-`core` and `design` don't depend on anything. `react` uses `design`'s class names, but takes the converter as a prop, so you can plug in a different script's engine.
+`core`, `kamus` and `design` don't depend on anything. `react` uses `design`'s class names, but takes the converter as a prop, so you can plug in a different script's engine.
 
 ## Common jobs
 
@@ -30,6 +31,15 @@ create-aksara-tool        →  generates a Next.js app that uses ↓
 import { toBali, toLatin } from '@aksara-bali/core'
 toBali('rahajeng semeng')   // Aksara Bali
 toLatin('ᬩᬮᬶ')              // 'bali'
+```
+
+**Look up and translate words**
+
+```js
+import { loadKamus } from '@aksara-bali/kamus'
+const kamus = await loadKamus()
+kamus.toBalinese('makan', { level: 'alus' })   // 'marayunan'
+kamus.sentence('saya makan di rumah').map(t => t.out).join('')
 ```
 
 **Give an existing site the Aksara Bali look**
@@ -62,7 +72,7 @@ Then edit `script.config.js`. Swap in that script's converter, wordmark, languag
 
 - **Packages:** MIT. Anyone may use them, including commercially.
 - **The aksarabali.doniwirawan.xyz site:** PolyForm Noncommercial 1.0.0.
-- **Kamus data:** not part of any package. Part of it comes from the *Kamus Bali–Indonesia* (2016), which is CC BY-NC 4.0.
+- **Kamus data:** not bundled in any package. `@aksara-bali/kamus` fetches it from the site. Parts of it are CC BY-NC 4.0, so credit the sources and keep use non-commercial.
 
 ## Working on the packages
 
@@ -70,7 +80,7 @@ They are npm workspaces inside this repo.
 
 ```sh
 npm install                          # links packages/* into node_modules
-npm test                             # core's golden tests (253 recorded conversions)
+npm test                             # core's golden tests + kamus tests
 npm run build -w @aksara-bali/react  # bundles react/dist (only needed for publishing)
 ```
 

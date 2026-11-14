@@ -30,6 +30,14 @@ const nextConfig = {
     async headers() {
         return [
             {
+                // Dictionary data, readable from other sites by @aksara-bali/kamus loadKamus().
+                source: '/data/:path*',
+                headers: [
+                    { key: 'Access-Control-Allow-Origin', value: '*' },
+                    { key: 'Cache-Control', value: 'public, max-age=3600, stale-while-revalidate=86400' },
+                ],
+            },
+            {
                 source: '/site.webmanifest',
                 headers: [
                     {
