@@ -1,13 +1,8 @@
-import { Github, Bug, Linkedin, Heart, Download } from 'lucide-react'
+import { Github, Bug, Linkedin, Download, Smartphone, Heart } from 'lucide-react'
 import { useEmailGate } from './EmailGate'
 
 export default function Footer({ darkMode, locale }) {
   const { requireEmail } = useEmailGate()
-  const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
-  const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const mutedColor = darkMode ? '#888' : '#666'
-  const linkColor = darkMode ? '#93c5fd' : '#0d6efd'
   const id = locale === 'id'
 
   // The APK is gated: collect an email, then send them to the release page.
@@ -20,7 +15,9 @@ export default function Footer({ darkMode, locale }) {
 
   const NAV_LINKS = [
     { href: '/', label: id ? 'Konverter' : 'Converter' },
+    { href: '/translate', label: id ? 'Kamus' : 'Dictionary' },
     { href: '/practice', label: id ? 'Latihan' : 'Practice' },
+    { href: '/read', label: id ? 'Baca dari foto' : 'Read from photo' },
     { href: '/blog', label: 'Blog' },
     { href: '/faq', label: 'FAQ' },
   ]
@@ -36,42 +33,29 @@ export default function Footer({ darkMode, locale }) {
   ]
 
   return (
-    <footer style={{
-      borderTop: `1px solid ${borderColor}`,
-      background: bg,
-      fontFamily: 'Inter, system-ui, sans-serif',
-      marginTop: '48px',
-    }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 20px 24px' }}>
-        {/* Top grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '32px', marginBottom: '32px' }}>
-          {/* Brand */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="40" height="40" style={{ borderRadius: '8px', background: '#fff', padding: '2px', boxSizing: 'border-box' }} />
-              <div>
-                <div style={{ fontWeight: '700', fontSize: '15px', color: textColor }}>Aksara Bali</div>
-                <div style={{ fontSize: '11px', color: mutedColor, letterSpacing: '0.5px' }}>CONVERTER</div>
-              </div>
+    <footer className="site-footer">
+      <div className="thread" aria-hidden="true" />
+      <div className="site-footer__inner">
+        <div className="site-footer__grid">
+          <div className="site-footer__brand">
+            <div className="site-footer__mark">
+              <span className="site-brand__aksara" aria-hidden="true">ᬅᬓ᭄ᬱᬭ ᬩᬮᬶ</span>
+              <span className="site-footer__name">Aksara Bali</span>
             </div>
-            <p style={{ fontSize: '13px', color: mutedColor, lineHeight: 1.6, margin: 0 }}>
+            <p>
               {id
                 ? 'Alat edukasi gratis untuk melestarikan aksara Bali tradisional dengan teknologi modern.'
                 : 'Free educational tool to preserve traditional Balinese script with modern technology.'}
             </p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', flexWrap: 'wrap' }}>
+            <div className="site-footer__apps">
               <a
                 href="https://play.google.com/apps/internaltest/4700728977787153239"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="footer-play-store"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '7px',
-                  padding: '9px 16px', borderRadius: '10px', background: '#0d6efd', color: '#fff',
-                  textDecoration: 'none', fontSize: '13px', fontWeight: 600,
-                }}
+                className="site-footer__app is-primary"
               >
-                {id ? 'Dapatkan di Google Play' : 'Get it on Google Play'}
+                <Smartphone size={16} /> {id ? 'Dapatkan di Google Play' : 'Get it on Google Play'}
               </a>
               <a
                 href="https://github.com/doniwirawan/aksara-bali/releases/latest"
@@ -79,113 +63,72 @@ export default function Footer({ darkMode, locale }) {
                 rel="noopener noreferrer"
                 data-track="footer-download-apk"
                 onClick={handleApkClick}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '7px',
-                  padding: '9px 16px', borderRadius: '10px', border: `1px solid ${mutedColor}`,
-                  color: textColor, textDecoration: 'none', fontSize: '13px', fontWeight: 600,
-                }}
+                className="site-footer__app"
               >
                 <Download size={16} /> {id ? 'Unduh APK' : 'Download APK'}
               </a>
             </div>
           </div>
 
-          {/* Navigation */}
           <div>
-            <div style={{ fontWeight: '600', fontSize: '13px', color: textColor, marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              {id ? 'Halaman' : 'Pages'}
-            </div>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            <h2 className="site-footer__head">{id ? 'Halaman' : 'Pages'}</h2>
+            <ul className="site-footer__list">
               {NAV_LINKS.map(link => (
-                <li key={link.href} style={{ marginBottom: '8px' }}>
-                  <a href={link.href} style={{ color: mutedColor, textDecoration: 'none', fontSize: '14px' }}
-                    onMouseEnter={e => e.currentTarget.style.color = linkColor}
-                    onMouseLeave={e => e.currentTarget.style.color = mutedColor}
-                  >{link.label}</a>
-                </li>
+                <li key={link.href}><a href={link.href}>{link.label}</a></li>
               ))}
             </ul>
           </div>
 
-          {/* Resources */}
           <div>
-            <div style={{ fontWeight: '600', fontSize: '13px', color: textColor, marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              {id ? 'Sumber Daya' : 'Resources'}
-            </div>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            <h2 className="site-footer__head">{id ? 'Sumber Daya' : 'Resources'}</h2>
+            <ul className="site-footer__list">
               {RESOURCES.map(r => (
-                <li key={r.href} style={{ marginBottom: '8px' }}>
-                  <a href={r.href} target="_blank" rel="noopener noreferrer" style={{ color: mutedColor, textDecoration: 'none', fontSize: '14px' }}
-                    onMouseEnter={e => e.currentTarget.style.color = linkColor}
-                    onMouseLeave={e => e.currentTarget.style.color = mutedColor}
-                  >{r.label}</a>
-                </li>
+                <li key={r.href}><a href={r.href} target="_blank" rel="noopener noreferrer">{r.label}</a></li>
               ))}
             </ul>
           </div>
 
-          {/* Contact */}
           <div>
-            <div style={{ fontWeight: '600', fontSize: '13px', color: textColor, marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-              {id ? 'Kontak' : 'Contact'}
-            </div>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li style={{ marginBottom: '8px' }}>
-                <a href="https://github.com/doniwirawan/aksara-bali" target="_blank" rel="noopener noreferrer"
-                  style={{ color: mutedColor, textDecoration: 'none', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
-                  onMouseEnter={e => e.currentTarget.style.color = linkColor}
-                  onMouseLeave={e => e.currentTarget.style.color = mutedColor}
-                >
+            <h2 className="site-footer__head">{id ? 'Kontak' : 'Contact'}</h2>
+            <ul className="site-footer__list">
+              <li>
+                <a href="https://github.com/doniwirawan/aksara-bali" target="_blank" rel="noopener noreferrer">
                   <Github size={15} /> {id ? 'Kode Sumber' : 'Source Code'}
                 </a>
               </li>
-              <li style={{ marginBottom: '8px' }}>
-                <a href="https://github.com/doniwirawan/aksara-bali/issues" target="_blank" rel="noopener noreferrer"
-                  style={{ color: mutedColor, textDecoration: 'none', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
-                  onMouseEnter={e => e.currentTarget.style.color = linkColor}
-                  onMouseLeave={e => e.currentTarget.style.color = mutedColor}
-                >
+              <li>
+                <a href="https://github.com/doniwirawan/aksara-bali/issues" target="_blank" rel="noopener noreferrer">
                   <Bug size={15} /> {id ? 'Laporkan Bug' : 'Report Bug'}
                 </a>
               </li>
               <li>
-                <a href="https://www.linkedin.com/in/doniwirawan/" target="_blank" rel="noopener noreferrer"
-                  style={{ color: mutedColor, textDecoration: 'none', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
-                  onMouseEnter={e => e.currentTarget.style.color = linkColor}
-                  onMouseLeave={e => e.currentTarget.style.color = mutedColor}
-                >
-                  <Linkedin size={15} /> {id ? 'Developer' : 'Developer'}
+                <a href="https://www.linkedin.com/in/doniwirawan/" target="_blank" rel="noopener noreferrer">
+                  <Linkedin size={15} /> Developer
                 </a>
               </li>
-              <li style={{ marginTop: '10px' }}>
+              <li>
                 <a href="https://ko-fi.com/L7T7234BJ2" target="_blank" rel="noopener noreferrer" data-track="footer-kofi">
-                  <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt={id ? 'Dukung saya di Ko-fi' : 'Support me on Ko-fi'} style={{ height: '24px' }} />
+                  {id ? 'Dukung di Ko-fi' : 'Support on Ko-fi'}
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div style={{ borderTop: `1px solid ${borderColor}`, paddingTop: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
-          <small style={{ color: mutedColor, fontSize: '13px' }}>
+        <div className="site-footer__bottom">
+          <small>
             © {new Date().getFullYear()} Doni Wirawan · MIT License ·{' '}
             {id ? 'Terinspirasi dari ' : 'Inspired by '}
-            <a href="https://github.com/bennylin/transliterasijawa" target="_blank" rel="noopener noreferrer" style={{ color: linkColor, textDecoration: 'none' }}>
+            <a href="https://github.com/bennylin/transliterasijawa" target="_blank" rel="noopener noreferrer">
               transliterasijawa
             </a>
             {id ? ' oleh bennylin' : ' by bennylin'}
           </small>
-          <small style={{ color: mutedColor, fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-            <a href="/privacy" style={{ color: mutedColor, textDecoration: 'none' }}
-              onMouseEnter={e => e.currentTarget.style.color = linkColor}
-              onMouseLeave={e => e.currentTarget.style.color = mutedColor}>{id ? 'Privasi' : 'Privacy'}</a>
-            <a href="/terms" style={{ color: mutedColor, textDecoration: 'none' }}
-              onMouseEnter={e => e.currentTarget.style.color = linkColor}
-              onMouseLeave={e => e.currentTarget.style.color = mutedColor}>{id ? 'Ketentuan' : 'Terms'}</a>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-            {id ? 'Dibuat dengan' : 'Made with'} <Heart size={13} fill="#e11d48" color="#e11d48" /> {id ? 'untuk Bali' : 'for Bali'}</span>
-            <span style={{ marginLeft: '8px', opacity: 0.7, fontFamily: 'monospace' }}>
+          <small className="site-footer__legal">
+            <a href="/privacy">{id ? 'Privasi' : 'Privacy'}</a>
+            <a href="/terms">{id ? 'Ketentuan' : 'Terms'}</a>
+            <span className="site-footer__made">{id ? 'Dibuat dengan' : 'Made with'} <Heart size={12} fill="currentColor" aria-label={id ? 'cinta' : 'love'} /> {id ? 'untuk Bali' : 'for Bali'}</span>
+            <span className="site-footer__build">
               v{process.env.NEXT_PUBLIC_APP_VERSION} · {process.env.NEXT_PUBLIC_BUILD_REF}
             </span>
           </small>
@@ -193,10 +136,7 @@ export default function Footer({ darkMode, locale }) {
 
         {/* AI disclosure — deliberately quiet: small, low-contrast, and last on
             the page, but real text so it is readable and crawlable. */}
-        <p style={{
-          margin: '14px 0 0', fontSize: '10.5px', lineHeight: 1.6,
-          color: mutedColor, opacity: 0.55, maxWidth: '760px',
-        }}>
+        <p className="site-footer__ai">
           {id
             ? 'Situs ini sebagian besar dijalankan secara otomatis dengan bantuan AI — isi, terjemahan, dan pemeliharaannya disusun dengan AI lalu diperiksa secara berkala. Kata dan aksara Bali sebaiknya tetap diperiksa bersama guru atau penutur asli sebelum dipakai untuk keperluan resmi, cetak, atau upacara.'
             : 'This site is largely automated with AI — its content, translations, and upkeep are AI-generated and reviewed over time. Balinese wording and script should still be checked with a teacher or native speaker before use in anything official, printed, or ceremonial.'}

@@ -637,7 +637,7 @@ function renderMarkdown(content) {
             __html: text
               .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
               .replace(/\*(.*?)\*/g, '<em>$1</em>')
-              .replace(/`(.*?)`/g, '<code style="background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:0.9em">$1</code>')
+              .replace(/`(.*?)`/g, '<code style="background:var(--surface-2);padding:1px 5px;border-radius:3px;font-size:0.9em">$1</code>')
           }}
         />
       )
@@ -658,8 +658,8 @@ function renderMarkdown(content) {
                     <tr key={ri}>
                       {cells.map((cell, ci) => (
                         <Tag key={ci} style={{
-                          padding: '8px 12px', border: '1px solid #e0e0e0',
-                          background: ri === 0 ? '#f0f4ff' : 'transparent',
+                          padding: '8px 12px', border: '1px solid var(--line)',
+                          background: ri === 0 ? 'var(--accent-tint)' : 'transparent',
                           // Header sits on a light-blue fill, so pin dark text —
                           // otherwise dark-mode's light text is invisible on it.
                           color: ri === 0 ? '#1a2340' : 'inherit',
@@ -687,7 +687,7 @@ function renderMarkdown(content) {
             __html: line
               .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
               .replace(/\*(.*?)\*/g, '<em>$1</em>')
-              .replace(/`(.*?)`/g, '<code style="background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:0.9em">$1</code>')
+              .replace(/`(.*?)`/g, '<code style="background:var(--surface-2);padding:1px 5px;border-radius:3px;font-size:0.9em">$1</code>')
           }}
         />
       )
@@ -711,11 +711,11 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
   const displayDescription = lang === 'en' && post.descriptionEn ? post.descriptionEn : post.description
   const displayContent = lang === 'en' && post.contentEn ? post.contentEn : post.content
 
-  const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
-  const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
-  const mutedColor = darkMode ? '#888' : '#666'
+  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const cardBg = 'var(--surface)'
+  const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
+  const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
+  const mutedColor = darkMode ? 'var(--mute)' : 'var(--mute)'
 
   const BASE = 'https://aksarabali.doniwirawan.xyz'
   const schema = {
@@ -774,7 +774,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       </Head>
 
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}
@@ -785,19 +785,19 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
         <main style={{ maxWidth: 760, margin: '0 auto', padding: '40px 16px 80px' }}>
           {/* Article header */}
           <div style={{ marginBottom: '32px' }}>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap', fontFamily: 'Inter, system-ui, sans-serif' }}>
-              <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '10px', background: darkMode ? '#252535' : '#f0f0f0', color: mutedColor }}>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap', fontFamily: 'var(--font-sans)' }}>
+              <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: 0, background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)', color: mutedColor }}>
                 {post.category}
               </span>
               {post.tags.map(tag => (
-                <span key={tag} style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '10px', background: '#0d6efd15', color: '#0d6efd' }}>
+                <span key={tag} style={{ fontSize: '11px', padding: '3px 10px', borderRadius: 0, background: '#0d6efd15', color: 'var(--accent)' }}>
                   #{tag}
                 </span>
               ))}
             </div>
 
             <div style={{ marginBottom: '24px' }}>
-              <div style={{ borderRadius: '16px', overflow: 'hidden', aspectRatio: '16/9', background: darkMode ? '#252535' : '#f0f0f0' }}>
+              <div style={{ borderRadius: 0, overflow: 'hidden', aspectRatio: '16/9', background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)' }}>
                 <img
                   src={post.imageUrl}
                   alt={post.title}
@@ -810,7 +810,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
                 // Never derive a photo URL (those 404) — fall back cleanly instead.
                 const photoLink = post.imageSourceUrl || 'https://unsplash.com/?utm_source=aksara_bali&utm_medium=referral'
                 return (
-                  <p style={{ fontSize: '12px', color: mutedColor, margin: '6px 0 0', textAlign: 'right', fontFamily: 'Inter, system-ui, sans-serif' }}>
+                  <p style={{ fontSize: '12px', color: mutedColor, margin: '6px 0 0', textAlign: 'right', fontFamily: 'var(--font-sans)' }}>
                     {post.imageCredit ? (
                       <>
                         Photo by{' '}
@@ -835,11 +835,11 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
               })()}
             </div>
 
-            <h1 style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 16px', lineHeight: 1.3, fontFamily: 'Inter, system-ui, sans-serif' }}>
+            <h1 style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 16px', lineHeight: 1.3, fontFamily: 'var(--font-sans)' }}>
               {displayTitle}
             </h1>
 
-            <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: mutedColor, fontFamily: 'Inter, system-ui, sans-serif' }}>
+            <div style={{ display: 'flex', gap: '16px', fontSize: '13px', color: mutedColor, fontFamily: 'var(--font-sans)' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><PenLine size={14} /> Doni Wirawan</span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><Calendar size={14} /> {post.date}</span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}><Clock size={14} /> {post.readTime}</span>
@@ -847,9 +847,9 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
           </div>
 
           {/* Article content */}
-          <div style={{ background: cardBg, borderRadius: '16px', border: `1px solid ${borderColor}`, padding: '32px', lineHeight: 1.8, fontSize: '16px' }}>
+          <div style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, padding: '32px', lineHeight: 1.8, fontSize: '16px' }}>
             {lang === 'en' && !post.contentEn && (
-              <div style={{ padding: '16px', borderRadius: '10px', background: darkMode ? '#2d2000' : '#fff9e6', marginBottom: '20px', fontSize: '14px', color: '#92400e', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ padding: '16px', borderRadius: 0, background: darkMode ? '#2d2000' : '#fff9e6', marginBottom: '20px', fontSize: '14px', color: '#92400e', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FileText size={16} style={{ flexShrink: 0 }} /> English translation coming soon. Showing Indonesian version.
               </div>
             )}
@@ -863,7 +863,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
               marginTop: '26px', paddingTop: '14px', margin: '26px 0 0',
               borderTop: `1px solid ${borderColor}`,
               fontSize: '11px', lineHeight: 1.6, color: mutedColor, opacity: 0.6,
-              fontFamily: 'Inter, system-ui, sans-serif',
+              fontFamily: 'var(--font-sans)',
             }}>
               {lang === 'en'
                 ? 'This article was drafted with AI assistance and is reviewed over time. Check Balinese wording with a teacher or native speaker before using it for anything official, printed, or ceremonial.'
@@ -873,7 +873,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
 
           {/* Related articles */}
           {relatedPosts.length > 0 && (
-            <div style={{ marginTop: '40px', fontFamily: 'Inter, system-ui, sans-serif' }}>
+            <div style={{ marginTop: '40px', fontFamily: 'var(--font-sans)' }}>
               <h2 style={{ fontSize: '18px', fontWeight: '700', margin: '0 0 20px', color: textColor }}>
                 {lang === 'en' ? 'Related Articles' : 'Artikel Terkait'}
               </h2>
@@ -881,7 +881,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
                 {relatedPosts.map(r => (
                   <a key={r.slug} href={`/blog/${r.slug}`} style={{ textDecoration: 'none' }}>
                     <div
-                      style={{ background: cardBg, borderRadius: '14px', border: `1px solid ${borderColor}`, overflow: 'hidden', height: '100%' }}
+                      style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, overflow: 'hidden', height: '100%' }}
                       onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.1)'}
                       onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
                     >
@@ -893,7 +893,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
                         />
                       </div>
                       <div style={{ padding: '14px' }}>
-                        <span style={{ fontSize: '11px', background: '#0d6efd15', color: '#0d6efd', padding: '2px 8px', borderRadius: '8px', fontWeight: '600' }}>
+                        <span style={{ fontSize: '11px', background: '#0d6efd15', color: 'var(--accent)', padding: '2px 8px', borderRadius: 0, fontWeight: '600' }}>
                           {r.category}
                         </span>
                         <div style={{ fontWeight: '600', fontSize: '14px', color: textColor, margin: '8px 0 4px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
@@ -912,11 +912,11 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
           )}
 
           {/* Navigation */}
-          <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'space-between', fontFamily: 'Inter, system-ui, sans-serif' }}>
-            <a href="/blog" style={{ color: '#0d6efd', textDecoration: 'none', fontSize: '14px' }}>
+          <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-sans)' }}>
+            <a href="/blog" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '14px' }}>
               ← {lang === 'en' ? 'All Articles' : 'Semua Artikel'}
             </a>
-            <a href="/practice" style={{ color: '#0d6efd', textDecoration: 'none', fontSize: '14px' }}>
+            <a href="/practice" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '14px' }}>
               {lang === 'en' ? 'Try Practice →' : 'Coba Latihan →'}
             </a>
           </div>

@@ -76,11 +76,11 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
     return matchCategory && matchSearch
   })
 
-  const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
-  const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
-  const mutedColor = darkMode ? '#888' : '#666'
+  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const cardBg = 'var(--surface)'
+  const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
+  const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
+  const mutedColor = darkMode ? 'var(--mute)' : 'var(--mute)'
 
   const schemaData = {
     '@context': 'https://schema.org',
@@ -132,7 +132,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
         />
       </Head>
 
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}
@@ -142,17 +142,9 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
 
         <main style={{ maxWidth: 1000, margin: '0 auto', padding: '40px 16px' }}>
           {/* Hero */}
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <a href="/">
-              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
-                style={{ borderRadius: '14px', marginBottom: '12px', display: 'inline-block', boxShadow: '0 2px 12px rgba(13,110,253,0.2)', background: '#fff', padding: '6px', boxSizing: 'border-box' }} />
-            </a>
-            <h1 style={{ fontSize: '32px', fontWeight: '700', margin: '0 0 10px', lineHeight: 1.2 }}>
-              {blogUi.blogTitle}
-            </h1>
-            <p style={{ color: mutedColor, fontSize: '16px', margin: 0, maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
-              {blogUi.blogSub}
-            </p>
+          <div className="page-head">
+            <h1 className="page-title">{blogUi.blogTitle}</h1>
+            <p className="page-lede">{blogUi.blogSub}</p>
           </div>
 
           {/* Search */}
@@ -164,7 +156,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
               onChange={e => setSearchQuery(e.target.value)}
               style={{
                 width: '100%', padding: '12px 16px 12px 44px',
-                borderRadius: '12px', border: `1px solid ${borderColor}`,
+                borderRadius: 0, border: `1px solid ${borderColor}`,
                 background: cardBg, color: textColor,
                 fontSize: '15px', outline: 'none',
                 boxSizing: 'border-box',
@@ -180,9 +172,9 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
                 style={{
-                  padding: '7px 16px', borderRadius: '20px',
-                  border: `1px solid ${activeCategory === cat.id ? '#0d6efd' : borderColor}`,
-                  background: activeCategory === cat.id ? '#0d6efd' : 'transparent',
+                  padding: '7px 16px', borderRadius: 0,
+                  border: `1px solid ${activeCategory === cat.id ? 'var(--accent)' : borderColor}`,
+                  background: activeCategory === cat.id ? 'var(--accent)' : 'transparent',
                   color: activeCategory === cat.id ? '#fff' : mutedColor,
                   cursor: 'pointer', fontSize: '13px', fontWeight: activeCategory === cat.id ? '600' : '400',
                   transition: 'all 0.15s',
@@ -198,7 +190,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
             <a href={`/blog/${filteredPosts[0].slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
               <article style={{
                 display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '24px',
-                padding: '28px', borderRadius: '16px',
+                padding: '28px', borderRadius: 0,
                 background: cardBg, border: `1px solid ${borderColor}`,
                 marginBottom: '24px', cursor: 'pointer',
                 boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
@@ -207,7 +199,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                 onMouseEnter={e => e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,0,0,0.12)'}
                 onMouseLeave={e => e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)'}
               >
-                <div style={{ borderRadius: '12px', overflow: 'hidden', aspectRatio: '4/3', background: darkMode ? '#252535' : '#f8f8f8', minHeight: '160px' }}>
+                <div style={{ borderRadius: 0, overflow: 'hidden', aspectRatio: '4/3', background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)', minHeight: '160px' }}>
                   <img
                     src={filteredPosts[0].imageUrl}
                     alt={displayPost(filteredPosts[0]).title}
@@ -217,10 +209,10 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                 </div>
                 <div>
                   <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '10px', background: '#0d6efd20', color: '#0d6efd', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: 0, background: '#0d6efd20', color: 'var(--accent)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                       <Star size={11} fill="currentColor" /> {lang === 'en' ? 'Featured' : 'Unggulan'}
                     </span>
-                    <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '10px', background: darkMode ? '#252535' : '#f0f0f0', color: mutedColor }}>
+                    <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: 0, background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)', color: mutedColor }}>
                       {displayPost(filteredPosts[0]).category}
                     </span>
                   </div>
@@ -246,7 +238,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
               return (
                 <a key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   <article style={{
-                    padding: '20px', borderRadius: '14px',
+                    padding: '20px', borderRadius: 0,
                     background: cardBg, border: `1px solid ${borderColor}`,
                     cursor: 'pointer', height: '100%',
                     transition: 'box-shadow 0.2s, transform 0.15s',
@@ -256,7 +248,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                     onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
                     onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 6px rgba(0,0,0,0.04)'; e.currentTarget.style.transform = 'translateY(0)' }}
                   >
-                    <div style={{ borderRadius: '10px', overflow: 'hidden', marginBottom: '12px', aspectRatio: '16/9', background: darkMode ? '#252535' : '#f8f8f8' }}>
+                    <div style={{ borderRadius: 0, overflow: 'hidden', marginBottom: '12px', aspectRatio: '16/9', background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)' }}>
                       <img
                         src={post.imageUrl}
                         alt={d.title}
@@ -264,7 +256,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                         loading="lazy"
                       />
                     </div>
-                    <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '8px', background: darkMode ? '#252535' : '#f0f0f0', color: mutedColor, marginBottom: '10px', alignSelf: 'flex-start' }}>
+                    <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: 0, background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)', color: mutedColor, marginBottom: '10px', alignSelf: 'flex-start' }}>
                       {d.category}
                     </span>
                     <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 8px', lineHeight: 1.4, color: textColor, flex: 1 }}>
@@ -279,7 +271,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '10px' }}>
                       {post.tags.slice(0, 3).map(tag => (
-                        <span key={tag} style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '8px', background: '#0d6efd15', color: '#0d6efd' }}>
+                        <span key={tag} style={{ fontSize: '10px', padding: '2px 8px', borderRadius: 0, background: '#0d6efd15', color: 'var(--accent)' }}>
                           #{tag}
                         </span>
                       ))}

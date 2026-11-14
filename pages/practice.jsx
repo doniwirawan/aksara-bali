@@ -81,12 +81,12 @@ export default function PracticePage({ locale, setLocale }) {
   const nextWord = () => setPracticeWordIdx(prev => (prev + 1) % PRACTICE_WORDS.length)
   const prevWord = () => setPracticeWordIdx(prev => (prev - 1 + PRACTICE_WORDS.length) % PRACTICE_WORDS.length)
 
-  const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
-  const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
-  const mutedColor = darkMode ? '#888' : '#666'
-  const tabActiveBg = '#0d6efd'
+  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const cardBg = 'var(--surface)'
+  const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
+  const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
+  const mutedColor = darkMode ? 'var(--mute)' : 'var(--mute)'
+  const tabActiveBg = 'var(--accent)'
 
   const lang = locale === 'en' ? 'en' : 'id'
   const TABS = lang === 'en' ? TABS_EN : TABS_ID
@@ -130,7 +130,7 @@ export default function PracticePage({ locale, setLocale }) {
         <link rel="canonical" href="https://aksarabali.doniwirawan.xyz/practice" />
       </Head>
 
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}
@@ -140,17 +140,9 @@ export default function PracticePage({ locale, setLocale }) {
 
         <main style={{ maxWidth: 900, margin: '0 auto', padding: '24px 16px' }}>
           {/* Page header with logo */}
-          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-            <a href="/">
-              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
-                style={{ borderRadius: '14px', marginBottom: '12px', display: 'inline-block', boxShadow: '0 2px 12px rgba(13,110,253,0.2)', background: '#fff', padding: '6px', boxSizing: 'border-box' }} />
-            </a>
-            <h1 style={{ fontSize: '28px', fontWeight: '700', margin: '0 0 8px', color: textColor }}>
-              {pt.title}
-            </h1>
-            <p style={{ color: mutedColor, margin: 0, fontSize: '15px' }}>
-              {pt.subtitle}
-            </p>
+          <div className="page-head">
+            <h1 className="page-title">{pt.title}</h1>
+            <p className="page-lede">{pt.subtitle}</p>
           </div>
 
           {/* Tab navigation */}
@@ -162,7 +154,7 @@ export default function PracticePage({ locale, setLocale }) {
                 onClick={() => setActiveTab(tab.key)}
                 style={{
                   padding: '10px 24px',
-                  borderRadius: '24px',
+                  borderRadius: 0,
                   border: `2px solid ${activeTab === tab.key ? tabActiveBg : borderColor}`,
                   background: activeTab === tab.key ? tabActiveBg : 'transparent',
                   color: activeTab === tab.key ? '#fff' : textColor,
@@ -181,7 +173,7 @@ export default function PracticePage({ locale, setLocale }) {
           </div>
 
           {/* Tab content */}
-          <div style={{ background: cardBg, borderRadius: '16px', border: `1px solid ${borderColor}`, padding: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
+          <div style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, padding: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
 
             {/* QUIZ TAB — kept mounted (just hidden) so quiz progress, level,
                 and score survive switching to other tabs and back. */}
@@ -238,7 +230,7 @@ export default function PracticePage({ locale, setLocale }) {
                         <button
                           data-track="practice-change-word"
                           onClick={randomizeWord}
-                          style={{ padding: '6px 14px', borderRadius: '20px', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', fontSize: '13px', color: textColor, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                          style={{ padding: '6px 14px', borderRadius: 0, border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', fontSize: '13px', color: textColor, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                         >
                           <Shuffle size={14} /> {pt.changeWord}
                         </button>
@@ -247,7 +239,7 @@ export default function PracticePage({ locale, setLocale }) {
                     <button
                       onClick={toggleFullscreen}
                       title={pt.fullscreen}
-                      style={{ padding: '6px 14px', borderRadius: '20px', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', fontSize: '13px', color: textColor, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                      style={{ padding: '6px 14px', borderRadius: 0, border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', fontSize: '13px', color: textColor, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                     >
                       <Maximize2 size={14} /> {pt.fullscreen}
                     </button>
@@ -259,7 +251,7 @@ export default function PracticePage({ locale, setLocale }) {
                     value={freeWrite}
                     onChange={e => setFreeWrite(e.target.value)}
                     placeholder={pt.freePlaceholder}
-                    style={{ width: '100%', boxSizing: 'border-box', padding: '12px 16px', marginBottom: '12px', borderRadius: '10px', border: `1px solid ${borderColor}`, background: cardBg, color: textColor, fontSize: '15px' }}
+                    style={{ width: '100%', boxSizing: 'border-box', padding: '12px 16px', marginBottom: '12px', borderRadius: 0, border: `1px solid ${borderColor}`, background: cardBg, color: textColor, fontSize: '15px' }}
                   />
                 )}
 
@@ -277,7 +269,7 @@ export default function PracticePage({ locale, setLocale }) {
 
                 {/* Reference sheet */}
                 <details style={{ marginTop: '20px' }}>
-                  <summary style={{ cursor: 'pointer', fontSize: '13px', color: '#0d6efd', fontWeight: '500', padding: '8px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <summary style={{ cursor: 'pointer', fontSize: '13px', color: 'var(--accent)', fontWeight: '500', padding: '8px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <ClipboardList size={15} /> {pt.refSheet}
                   </summary>
                   <div style={{ marginTop: '12px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(70px, 1fr))', gap: '8px' }}>
@@ -289,7 +281,7 @@ export default function PracticePage({ locale, setLocale }) {
                       { b: '\u1B29', l: 'Ba' }, { b: '\u1B17', l: 'Nga' }, { b: '\u1B27', l: 'Pa' },
                       { b: '\u1B1A', l: 'Ja' }, { b: '\u1B2C', l: 'Ya' }, { b: '\u1B1C', l: 'Nya' },
                     ].map(({ b, l }) => (
-                      <div key={l} style={{ textAlign: 'center', padding: '8px 4px', borderRadius: '8px', border: `1px solid ${borderColor}`, background: darkMode ? '#252535' : '#fafafa' }}>
+                      <div key={l} style={{ textAlign: 'center', padding: '8px 4px', borderRadius: 0, border: `1px solid ${borderColor}`, background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)' }}>
                         <div style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '24px' }}>{b}</div>
                         <div style={{ fontSize: '11px', color: mutedColor }}>{l}</div>
                       </div>
@@ -314,9 +306,9 @@ export default function PracticePage({ locale, setLocale }) {
                   minHeight: '90px',
                   padding: '16px 20px',
                   marginBottom: '16px',
-                  borderRadius: '12px',
+                  borderRadius: 0,
                   border: `2px solid ${borderColor}`,
-                  background: darkMode ? '#0f0f1a' : '#f8f9ff',
+                  background: darkMode ? 'var(--ground)' : 'var(--accent-tint)',
                   position: 'relative',
                 }}>
                   {freeText ? (
@@ -335,7 +327,7 @@ export default function PracticePage({ locale, setLocale }) {
                       }}
                       style={{
                         position: 'absolute', top: '12px', right: '12px',
-                        padding: '4px 10px', borderRadius: '6px', border: `1px solid ${borderColor}`,
+                        padding: '4px 10px', borderRadius: 0, border: `1px solid ${borderColor}`,
                         background: 'transparent', cursor: 'pointer', fontSize: '12px', color: mutedColor,
                         display: 'inline-flex', alignItems: 'center', gap: '5px',
                       }}
@@ -356,7 +348,7 @@ export default function PracticePage({ locale, setLocale }) {
                 />
 
                 {/* Tip */}
-                <div style={{ marginTop: '16px', padding: '12px', borderRadius: '8px', background: darkMode ? '#1a2840' : '#f0f4ff', fontSize: '13px', color: darkMode ? '#8aabdc' : '#4a6fa5', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                <div style={{ marginTop: '16px', padding: '12px', borderRadius: 0, background: darkMode ? 'var(--accent-tint)' : 'var(--accent-tint)', fontSize: '13px', color: darkMode ? 'var(--mute)' : 'var(--mute)', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                   <Lightbulb size={16} style={{ flexShrink: 0, marginTop: '1px' }} /> <span>{pt.kbTip}</span>
                 </div>
               </div>

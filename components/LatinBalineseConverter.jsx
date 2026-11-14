@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useCallback, useEffect } from 'react'
 import {
-    Languages,
     Copy,
     Download,
     RotateCcw,
@@ -9,7 +8,6 @@ import {
     Info,
     CheckCircle,
     AlertTriangle,
-    Settings,
     Share2,
     ExternalLink,
     Globe,
@@ -19,7 +17,6 @@ import {
     AlignLeft,
     AlignCenter,
     AlignRight,
-    Image as ImageIcon,
     Volume2,
     ScanText
 } from 'lucide-react'
@@ -164,21 +161,6 @@ const translations = {
     }
 }
 
-const LanguageSwitcher = ({ locale, setLocale, darkMode }) => {
-    const handleLocaleChange = (e) => {
-        const newLocale = e.target.value;
-        setLocale(newLocale);
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('balinese-converter-locale', newLocale);
-        }
-    };
-
-    return (
-        <div className="d-flex align-items-center">
-        </div>
-    );
-};
-
 const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, darkMode }) => {
     const [latinText, setLatinText] = useState('')
     const [balineseText, setBalineseText] = useState('')
@@ -194,7 +176,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     // Word-art styling + PNG export (Latin → Balinese)
     const [styleFontSize, setStyleFontSize] = useState(64)
     const [styleAlign, setStyleAlign] = useState('center')
-    const [styleTextColor, setStyleTextColor] = useState('#1a1a1a')
+    const [styleTextColor, setStyleTextColor] = useState('#17140F')
     const [styleBgColor, setStyleBgColor] = useState('#ffffff')
     const [styleTransparent, setStyleTransparent] = useState(false)
 
@@ -1270,361 +1252,255 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
         setBalineseText('')
     }
 
+    const inputValue = isReverseMode ? balineseText : latinText
+    const outputValue = isReverseMode ? latinText : balineseText
+
     return (
-        <div className="container-fluid py-4">
-            <div className="row justify-content-center">
-                <div className="col-12 col-lg-10">
-                    <div className="text-center mb-4">
-                        <div className="d-flex justify-content-between align-items-start mb-3">
-                            <div></div>
-                            <div className="text-center flex-grow-1">
-                                <h1 className="display-6 fw-bold text-primary mb-3">
-                                    <Languages className="me-3" size={48} />
-                                    {t.title}
-                                </h1>
-                            </div>
-                            <div>
-                                <LanguageSwitcher
-                                    locale={locale}
-                                    setLocale={setLocale}
-                                    darkMode={darkMode}
-                                />
-                            </div>
-                        </div>
-                        <p className="lead text-muted">
-                            {t.subtitle}
-                        </p>
+        <div className="page">
+            <div className="page-head">
+                <h1 className="page-title">{t.title}</h1>
+                <p className="page-lede">{t.subtitle}</p>
+            </div>
+
+            <div className={`bench${outputValue ? ' is-pulled' : ''}`} key={isReverseMode ? 'rev' : 'fwd'}>
+                <div className="bench__pane" data-tour="conv-input">
+                    <div className="bench__label">
+                        <label htmlFor="bench-input" style={{ margin: 0 }}>{isReverseMode ? t.balineseInput : t.latinInput}</label>
+                        <span className="bench__count">{(inputValue || '').length}</span>
                     </div>
-
-                    <div className="row g-4 mb-4">
-                        <div className="col-md-5">
-                            <div className="card h-100" data-tour="conv-input">
-                                <div className={`card-header ${isReverseMode ? 'bg-success' : 'bg-primary'} text-white`}>
-                                    <h5 className="mb-0">
-                                        <i className="bi bi-keyboard me-2"></i>
-                                        {isReverseMode ? t.balineseInput : t.latinInput}
-                                    </h5>
-                                </div>
-                                <div className="card-body">
-                                    <textarea
-                                        className="form-control"
-                                        value={isReverseMode ? balineseText : latinText}
-                                        onChange={(e) => isReverseMode ? setBalineseText(e.target.value) : setLatinText(e.target.value)}
-                                        placeholder={isReverseMode ? t.balineseplaceholder : t.placeholder}
-                                        rows="8"
-                                        style={{
-                                            resize: 'vertical',
-                                            fontSize: isReverseMode ? '14px' : '14px',
-                                            lineHeight: isReverseMode ? '1.5' : '1.5',
-                                            height: '250px'
-                                        }}
-                                    />
-                                    {!isReverseMode && (
-                                        <div className="mt-2 d-flex flex-wrap gap-2">
-                                            {['ā', 'ī', 'ū', 'ě', 'ṇ'].map(ch => (
-                                                <button
-                                                    key={ch}
-                                                    type="button"
-                                                    className="btn btn-sm btn-outline-secondary"
-                                                    style={{ minWidth: '42px', fontSize: '16px' }}
-                                                    onClick={() => setLatinText(latinText + ch)}
-                                                >
-                                                    {ch}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    )}
-                                    {/* OCR: read Aksara Bali from a photo into the reverse-mode input */}
-                                    <div className="mt-3">
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowOcr(v => !v)}
-                                            className="btn btn-sm btn-outline-info d-flex align-items-center gap-2"
-                                            aria-expanded={showOcr}
-                                        >
-                                            <ScanText size={15} />
-                                            {locale === 'id' ? 'Baca dari foto' : 'Read from photo'}
-                                        </button>
-                                        {showOcr && (
-                                            <div className="mt-2">
-                                                <OcrPanel
-                                                    locale={locale}
-                                                    darkMode={darkMode}
-                                                    onResult={(res) => {
-                                                        if (res?.balinese) {
-                                                            setIsReverseMode(true)
-                                                            setBalineseText(res.balinese)
-                                                        }
-                                                    }}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="mt-3 d-flex gap-2">
-                                        <button
-                                            onClick={handleCopyLeft}
-                                            className="btn btn-outline-primary"
-                                            disabled={isReverseMode ? !balineseText : !latinText}
-                                        >
-                                            {copySuccessLeft ? (
-                                                <>
-                                                    <CheckCircle size={16} className="me-2" />
-                                                    {t.copied}
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Copy size={16} className="me-2" />
-                                                    {t.copy}
-                                                </>
-                                            )}
-                                        </button>
-                                        <button
-                                            onClick={handleDownloadLeft}
-                                            className="btn btn-outline-success"
-                                            disabled={isReverseMode ? !balineseText : !latinText}
-                                        >
-                                            <Download size={16} className="me-2" />
-                                            {t.download}
-                                        </button>
-                                        <button
-                                            onClick={handleReset}
-                                            className="btn btn-outline-secondary"
-                                        >
-                                            <RotateCcw size={16} className="me-2" />
-                                            {t.reset}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-2 d-flex align-items-center justify-content-center">
-                            <div className="text-center">
-                                <button
-                                    onClick={handleModeSwitch}
-                                    className={`btn ${isReverseMode ? 'btn-outline-primary' : 'btn-primary'} mb-3`}
-                                    style={{ minWidth: '150px' }}
-                                    data-tour="conv-switch"
-                                >
-                                    <ArrowLeftRight size={16} className="me-2" />
-                                    {isReverseMode ? t.switchToNormal : t.switchToReverse}
-                                </button>
-                                <div className="alert alert-info py-2 px-3 mb-0 d-flex align-items-center gap-2">
-                                    <Zap size={14} className="flex-shrink-0" />
-                                    <small>
-                                        {isReverseMode ? t.realtimeReverse : t.realtimeConversion}
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-5">
-                            <div className="card h-100" data-tour="conv-output">
-                                <div className={`card-header ${isReverseMode ? 'bg-primary' : 'bg-success'} text-white`}>
-                                    <h5 className="mb-0">
-                                        {isReverseMode ? t.latinOutput : t.balineseOutput}
-                                    </h5>
-                                </div>
-                                <div className="card-body">
-                                    <textarea
-                                        className="form-control"
-                                        value={isReverseMode ? latinText : balineseText}
-                                        placeholder={isReverseMode ? t.latinOutputPlaceholder : t.outputPlaceholder}
-                                        readOnly
-                                        style={{
-                                            height: '250px',
-                                            resize: 'vertical',
-                                            fontSize: isReverseMode ? '14px' : '14px',
-                                            lineHeight: isReverseMode ? '1.5' : '1.5'
-                                        }}
-                                    />
-                                    <div className="mt-3 d-flex gap-2">
-                                        <button
-                                            onClick={handleCopyRight}
-                                            className="btn btn-outline-primary"
-                                            disabled={isReverseMode ? !latinText : !balineseText}
-                                        >
-                                            {copySuccessRight ? (
-                                                <>
-                                                    <CheckCircle size={16} className="me-2" />
-                                                    {t.copied}
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Copy size={16} className="me-2" />
-                                                    {t.copy}
-                                                </>
-                                            )}
-                                        </button>
-                                        <button
-                                            onClick={handleDownloadRight}
-                                            className="btn btn-outline-success"
-                                            disabled={isReverseMode ? !latinText : !balineseText}
-                                        >
-                                            <Download size={16} className="me-2" />
-                                            {t.download}
-                                        </button>
-                                        {canSpeak() && (
-                                            <button
-                                                onClick={handleListen}
-                                                className="btn btn-outline-secondary"
-                                                disabled={!latinText}
-                                                title={locale === 'id' ? 'Dengar pengucapan' : 'Hear pronunciation'}
-                                                data-tour="conv-listen"
-                                            >
-                                                <Volume2 size={16} className="me-2" />
-                                                {locale === 'id' ? 'Dengar' : 'Listen'}
-                                            </button>
-                                        )}
-                                        <button
-                                            onClick={handleShare}
-                                            className="btn btn-outline-secondary"
-                                            disabled={isReverseMode ? !latinText : !balineseText}
-                                            title={t.share}
-                                        >
-                                            <Share2 size={16} className="me-2" />
-                                            {t.share}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <textarea
+                        id="bench-input"
+                        className={`bench__input${isReverseMode ? ' is-aksara' : ''}`}
+                        value={inputValue}
+                        onChange={(e) => isReverseMode ? setBalineseText(e.target.value) : setLatinText(e.target.value)}
+                        placeholder={isReverseMode ? t.balineseplaceholder : t.placeholder}
+                        rows="6"
+                        spellCheck={false}
+                        autoCapitalize="none"
+                    />
+                    <div className="bench__tools">
+                        {!isReverseMode && ['ā', 'ī', 'ū', 'ě', 'ṇ'].map(ch => (
+                            <button
+                                key={ch}
+                                type="button"
+                                className="bench__key"
+                                onClick={() => setLatinText(latinText + ch)}
+                                aria-label={`${locale === 'id' ? 'Sisipkan' : 'Insert'} ${ch}`}
+                            >
+                                {ch}
+                            </button>
+                        ))}
+                        <button
+                            type="button"
+                            onClick={() => setShowOcr(v => !v)}
+                            className="bench__chip is-push"
+                            aria-expanded={showOcr}
+                        >
+                            <ScanText size={16} />
+                            {locale === 'id' ? 'Baca dari foto' : 'Read from photo'}
+                        </button>
                     </div>
-
-                    {!isReverseMode && (
-                        <div className="card mb-4">
-                            <div className="card-header">
-                                <h5 className="mb-0">
-                                    <ImageIcon size={20} className="me-2" />
-                                    {locale === 'id' ? 'Gaya Kata & Unduh PNG' : 'Word Art & Download PNG'}
-                                </h5>
-                            </div>
-                            <div className="card-body">
-                                {/* Preview */}
-                                <div style={{
-                                    minHeight: '120px', borderRadius: '12px', marginBottom: '16px', padding: '20px',
-                                    textAlign: styleAlign,
-                                    border: '1px solid #d8d8d8',
-                                    background: styleTransparent
-                                        ? 'repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50% / 20px 20px'
-                                        : styleBgColor,
-                                }}>
-                                    <span key={balineseText} style={{ display: 'inline-block', fontFamily: '"Noto Sans Balinese", serif', fontSize: `${styleFontSize}px`, color: styleTextColor, lineHeight: 1.6, wordBreak: 'break-word', animation: 'aksaraFadeIn 0.3s ease' }}>
-                                        {balineseText || 'ᬳᬓ᭄ᬱᬭᬩᬮᬶ'}
-                                    </span>
-                                    <style>{`@keyframes aksaraFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}`}</style>
-                                </div>
-                                <div className="d-flex flex-wrap align-items-center gap-3 mb-3">
-                                    <label className="d-flex align-items-center gap-2 mb-0">
-                                        <span style={{ fontSize: '13px', color: '#666' }}>{locale === 'id' ? 'Ukuran' : 'Size'}</span>
-                                        <input type="range" min="24" max="120" value={styleFontSize} onChange={(e) => setStyleFontSize(Number(e.target.value))} />
-                                    </label>
-                                    <div className="btn-group" role="group">
-                                        {[['left', AlignLeft], ['center', AlignCenter], ['right', AlignRight]].map(([a, Icon]) => (
-                                            <button key={a} type="button" className={`btn btn-sm ${styleAlign === a ? 'btn-primary' : 'btn-outline-secondary'}`} onClick={() => setStyleAlign(a)}>
-                                                <Icon size={16} />
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="d-flex align-items-center gap-2 mb-2 flex-wrap">
-                                    <span style={{ fontSize: '13px', color: '#666', width: '80px' }}>{locale === 'id' ? 'Warna teks' : 'Text color'}</span>
-                                    {['#1a1a1a', '#ffffff', '#d8a84e', '#0d6efd', '#dc2626', '#16a34a', '#7c3aed'].map(c => (
-                                        <button key={c} type="button" aria-label={`text ${c}`} onClick={() => setStyleTextColor(c)}
-                                            style={{ width: 26, height: 26, borderRadius: '50%', background: c, cursor: 'pointer', border: `${styleTextColor === c ? 3 : 1}px solid ${styleTextColor === c ? '#0d6efd' : '#ccc'}` }} />
-                                    ))}
-                                </div>
-                                <div className="d-flex align-items-center gap-2 mb-3 flex-wrap">
-                                    <span style={{ fontSize: '13px', color: '#666', width: '80px' }}>{locale === 'id' ? 'Latar' : 'Background'}</span>
-                                    {['#ffffff', '#151411', '#d8a84e', '#0d6efd', '#dc2626', '#f59e0b', '#0f766e'].map(c => (
-                                        <button key={c} type="button" aria-label={`bg ${c}`} disabled={styleTransparent} onClick={() => setStyleBgColor(c)}
-                                            style={{ width: 26, height: 26, borderRadius: '50%', background: c, cursor: styleTransparent ? 'default' : 'pointer', opacity: styleTransparent ? 0.4 : 1, border: `${styleBgColor === c ? 3 : 1}px solid ${styleBgColor === c ? '#0d6efd' : '#ccc'}` }} />
-                                    ))}
-                                </div>
-                                <div className="form-check form-switch mb-3">
-                                    <input className="form-check-input" type="checkbox" id="transparentBg" checked={styleTransparent} onChange={(e) => setStyleTransparent(e.target.checked)} />
-                                    <label className="form-check-label" htmlFor="transparentBg" style={{ fontSize: '14px' }}>
-                                        {locale === 'id' ? 'Latar transparan' : 'Transparent background'}
-                                    </label>
-                                </div>
-                                <button className="btn btn-primary" onClick={downloadStyledImage} disabled={!balineseText}>
-                                    <Download size={16} className="me-2" />
-                                    {locale === 'id' ? 'Unduh PNG' : 'Download PNG'}
-                                </button>
-                            </div>
+                    {showOcr && (
+                        <div className="bench__ocr">
+                            <OcrPanel
+                                locale={locale}
+                                darkMode={darkMode}
+                                onResult={(res) => {
+                                    if (res?.balinese) {
+                                        setIsReverseMode(true)
+                                        setBalineseText(res.balinese)
+                                    }
+                                }}
+                            />
                         </div>
                     )}
+                    <div className="bench__tools">
+                        <button
+                            onClick={handleCopyLeft}
+                            className="bench__chip"
+                            disabled={isReverseMode ? !balineseText : !latinText}
+                        >
+                            {copySuccessLeft ? <CheckCircle size={16} /> : <Copy size={16} />}
+                            {copySuccessLeft ? t.copied : t.copy}
+                        </button>
+                        <button
+                            onClick={handleDownloadLeft}
+                            className="bench__chip"
+                            disabled={isReverseMode ? !balineseText : !latinText}
+                        >
+                            <Download size={16} />
+                            {t.download}
+                        </button>
+                        <button onClick={handleReset} className="bench__chip" disabled={!latinText && !balineseText}>
+                            <RotateCcw size={16} />
+                            {t.reset}
+                        </button>
+                    </div>
+                </div>
 
-                    {!isReverseMode && (
-                        <div className="card mb-4">
-                            <div className="card-header">
-                                <h5 className="mb-0">
-                                    <Settings size={20} className="me-2" />
-                                    {t.transliterationMode}
-                                </h5>
-                            </div>
-                            <div className="card-body">
-                                <div className="row g-3">
-                                    <div className="col-auto">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="radio"
-                                                name="transliterationMode"
-                                                id="auto"
-                                                value="auto"
-                                                checked={transliterationMode === 'auto'}
-                                                onChange={(e) => setTransliterationMode(e.target.value)}
-                                            />
-                                            <label className="form-check-label" htmlFor="auto">
-                                                <strong>{t.autoDetect}</strong> ({t.sanskritTooltip})
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div className="col-auto">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="radio"
-                                                name="transliterationMode"
-                                                id="sanskrit"
-                                                value="sanskrit"
-                                                checked={transliterationMode === 'sanskrit'}
-                                                onChange={(e) => setTransliterationMode(e.target.value)}
-                                            />
-                                            <label className="form-check-label" htmlFor="sanskrit">
-                                                <strong>{t.sanskrit}</strong> ({t.alwaysUseMurda})
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div className="col-auto">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="radio"
-                                                name="transliterationMode"
-                                                id="bali"
-                                                value="bali"
-                                                checked={transliterationMode === 'bali'}
-                                                onChange={(e) => setTransliterationMode(e.target.value)}
-                                            />
-                                            <label className="form-check-label" htmlFor="bali">
-                                                <strong>{t.balinese}</strong> ({t.noMurda})
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="mt-2">
-                                    <small className="text-muted">
-                                        {t.autoDetectDescription} {' '}
-                                        {t.databaseInfo.replace('{count}', Object.keys(sanskritDatabase).length)}
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                <div className="bench__seam" aria-hidden="true" />
+
+                <div className="bench__pane is-script" data-tour="conv-output">
+                    <div className="bench__label">
+                        <span>{isReverseMode ? t.latinOutput : t.balineseOutput}</span>
+                        <button
+                            type="button"
+                            onClick={handleModeSwitch}
+                            className="bench__flip"
+                            data-tour="conv-switch"
+                            title={isReverseMode ? t.switchToNormal : t.switchToReverse}
+                        >
+                            <ArrowLeftRight size={14} />
+                            {isReverseMode ? t.switchToNormal : t.switchToReverse}
+                        </button>
+                    </div>
+                    <div
+                        key={outputValue}
+                        className={`bench__output${isReverseMode ? ' is-latin' : ''}${!outputValue ? ' is-empty' : ' is-fresh'}`}
+                        lang={isReverseMode ? undefined : 'ban-Bali'}
+                        aria-live="polite"
+                    >
+                        {outputValue || (isReverseMode ? t.latinOutputPlaceholder : t.outputPlaceholder)}
+                    </div>
+                    <div className="bench__actions">
+                        <button
+                            onClick={handleCopyRight}
+                            className="bench__act is-primary"
+                            disabled={isReverseMode ? !latinText : !balineseText}
+                        >
+                            {copySuccessRight ? <CheckCircle size={17} /> : <Copy size={17} />}
+                            {copySuccessRight ? t.copied : t.copy}
+                        </button>
+                        <button
+                            onClick={handleDownloadRight}
+                            className="bench__act"
+                            disabled={isReverseMode ? !latinText : !balineseText}
+                        >
+                            <Download size={17} />
+                            {t.download}
+                        </button>
+                        {canSpeak() && (
+                            <button
+                                onClick={handleListen}
+                                className="bench__act"
+                                disabled={!latinText}
+                                title={locale === 'id' ? 'Dengar pengucapan' : 'Hear pronunciation'}
+                                data-tour="conv-listen"
+                            >
+                                <Volume2 size={17} />
+                                {locale === 'id' ? 'Dengar' : 'Listen'}
+                            </button>
+                        )}
+                        <button
+                            onClick={handleShare}
+                            className="bench__act"
+                            disabled={isReverseMode ? !latinText : !balineseText}
+                            title={t.share}
+                        >
+                            <Share2 size={17} />
+                            {t.share}
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            <div className="bench-below">
+                {!isReverseMode ? (
+                    <>
+                        <span style={{ fontWeight: 700, color: 'var(--ink)' }}>{t.transliterationMode}</span>
+                        <div className="modes" role="radiogroup" aria-label={t.transliterationMode}>
+                            {[
+                                ['auto', t.autoDetect, t.sanskritTooltip],
+                                ['sanskrit', t.sanskrit, t.alwaysUseMurda],
+                                ['bali', t.balinese, t.noMurda],
+                            ].map(([value, name, hint]) => (
+                                <div className="mode" key={value}>
+                                    <input
+                                        type="radio"
+                                        name="transliterationMode"
+                                        id={value}
+                                        value={value}
+                                        checked={transliterationMode === value}
+                                        onChange={(e) => setTransliterationMode(e.target.value)}
+                                    />
+                                    <label htmlFor={value}><b>{name}</b> ({hint})</label>
+                                </div>
+                            ))}
+                        </div>
+                        <p className="bench-note">
+                            {t.autoDetectDescription}{' '}
+                            {t.databaseInfo.replace('{count}', Object.keys(sanskritDatabase).length)}
+                        </p>
+                    </>
+                ) : (
+                    <span><Zap size={14} style={{ verticalAlign: '-2px' }} /> {t.realtimeReverse}</span>
+                )}
+            </div>
+
+            {!isReverseMode && (
+                <section className="panel" aria-labelledby="wordart-title">
+                    <div className="panel__head">
+                        <h2 className="panel__title" id="wordart-title">
+                            {locale === 'id' ? 'Gaya Kata & Unduh PNG' : 'Word Art & Download PNG'}
+                        </h2>
+                        <button className="btn btn-primary" onClick={downloadStyledImage} disabled={!balineseText}>
+                            <Download size={16} className="me-2" />
+                            {locale === 'id' ? 'Unduh PNG' : 'Download PNG'}
+                        </button>
+                    </div>
+                    <div className="panel__body wordart">
+                        <div
+                            className="wordart__stage"
+                            style={{
+                                textAlign: styleAlign,
+                                background: styleTransparent
+                                    ? 'repeating-conic-gradient(#e6e3db 0% 25%, #fff 0% 50%) 50% / 20px 20px'
+                                    : styleBgColor,
+                            }}
+                        >
+                            <span key={balineseText} style={{ display: 'inline-block', fontFamily: 'var(--font-balinese)', fontSize: `${styleFontSize}px`, color: styleTextColor, lineHeight: 1.6, wordBreak: 'break-word', animation: 'aksaraIn 0.35s var(--ease-out)' }}>
+                                {balineseText || 'ᬳᬓ᭄ᬱᬭᬩᬮᬶ'}
+                            </span>
+                        </div>
+                        <div className="wordart__controls">
+                            <label className="wordart__row" style={{ margin: 0 }}>
+                                <span className="wordart__label">{locale === 'id' ? 'Ukuran' : 'Size'}</span>
+                                <input type="range" min="24" max="120" value={styleFontSize} onChange={(e) => setStyleFontSize(Number(e.target.value))} style={{ flex: 1 }} />
+                            </label>
+                            <div className="wordart__row">
+                                <span className="wordart__label">{locale === 'id' ? 'Rata' : 'Align'}</span>
+                                <div className="seg" role="group">
+                                    {[['left', AlignLeft], ['center', AlignCenter], ['right', AlignRight]].map(([a, Icon]) => (
+                                        <button key={a} type="button" aria-label={a} aria-pressed={styleAlign === a} className={styleAlign === a ? 'is-on' : ''} onClick={() => setStyleAlign(a)}>
+                                            <Icon size={16} />
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="wordart__row">
+                                <span className="wordart__label">{locale === 'id' ? 'Warna teks' : 'Text color'}</span>
+                                {['#17140F', '#ffffff', '#B4232B', '#E2A41C', '#d8a84e', '#2B5C9E', '#0f766e'].map(c => (
+                                    <button key={c} type="button" aria-label={`text ${c}`} aria-pressed={styleTextColor === c} onClick={() => setStyleTextColor(c)}
+                                        className={`swatch${styleTextColor === c ? ' is-on' : ''}`} style={{ background: c }} />
+                                ))}
+                            </div>
+                            <div className="wordart__row">
+                                <span className="wordart__label">{locale === 'id' ? 'Latar' : 'Background'}</span>
+                                {['#ffffff', '#151411', '#B4232B', '#E2A41C', '#d8a84e', '#2B5C9E', '#0f766e'].map(c => (
+                                    <button key={c} type="button" aria-label={`bg ${c}`} aria-pressed={styleBgColor === c} disabled={styleTransparent} onClick={() => setStyleBgColor(c)}
+                                        className={`swatch${styleBgColor === c ? ' is-on' : ''}`} style={{ background: c }} />
+                                ))}
+                            </div>
+                            <div className="form-check form-switch m-0">
+                                <input className="form-check-input" type="checkbox" id="transparentBg" checked={styleTransparent} onChange={(e) => setStyleTransparent(e.target.checked)} />
+                                <label className="form-check-label" htmlFor="transparentBg" style={{ fontSize: '14px' }}>
+                                    {locale === 'id' ? 'Latar transparan' : 'Transparent background'}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
         </div>
     )
 }

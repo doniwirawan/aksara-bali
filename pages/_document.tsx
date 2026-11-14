@@ -13,9 +13,9 @@ export default function Document() {
                 <link rel="dns-prefetch" href="//fonts.gstatic.com" />
                 <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
 
-                {/* Noto Sans Balinese + Inter from Google Fonts */}
+                {/* Noto Sans Balinese + Schibsted Grotesk from Google Fonts */}
                 <link
-                    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Balinese:wght@400;700&family=Inter:wght@400;500;600;700&display=swap"
+                    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Balinese:wght@400;700&family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap"
                     rel="stylesheet"
                 />
 
@@ -30,6 +30,8 @@ export default function Document() {
                 />
             </Head>
             <body>
+                {/* Apply the saved theme before first paint so every page's colour tokens resolve correctly. */}
+                <script dangerouslySetInnerHTML={{ __html: "try{if(localStorage.getItem('aksara-dark-mode')==='true')document.documentElement.setAttribute('data-bs-theme','dark')}catch(e){}" }} />
                 <Main />
                 <NextScript />
             </body>

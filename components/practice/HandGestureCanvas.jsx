@@ -876,16 +876,16 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
     else document.exitFullscreen?.()
   }, [])
 
-  const bg = darkMode ? '#1a1a2e' : '#fafafa'
-  const border = darkMode ? '#333' : '#e0e0e0'
-  const textColor = darkMode ? '#e0e0e0' : '#333'
+  const bg = darkMode ? 'var(--surface)' : 'var(--surface-2)'
+  const border = darkMode ? '#333' : 'var(--line)'
+  const textColor = darkMode ? 'var(--line)' : '#333'
 
   const COLORS = ['#0d6efd', '#dc3545', '#198754', '#6f42c1', '#fd7e14', '#000000']
   const WIDTHS = [2, 4, 7, 12]
 
   // Icon-button style for the fullscreen floating toolbar
   const fsToolBtn = {
-    height: '32px', minWidth: '32px', borderRadius: '8px',
+    height: '32px', minWidth: '32px', borderRadius: 0,
     border: '1px solid rgba(255,255,255,0.25)', background: 'rgba(255,255,255,0.08)',
     color: '#fff', cursor: 'pointer', fontSize: '13px', fontWeight: 600,
     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -906,19 +906,19 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           textAlign: 'center',
           marginBottom: '16px',
           padding: '12px 20px',
-          borderRadius: '10px',
-          background: darkMode ? '#1e3a5f' : '#e8f0fe',
-          border: `1px solid ${darkMode ? '#2d5a9e' : '#c5d8fc'}`,
+          borderRadius: 0,
+          background: darkMode ? '#1e3a5f' : 'var(--accent-tint)',
+          border: `1px solid ${darkMode ? 'var(--line)' : 'var(--line)'}`,
           position: 'relative',
         }}>
           <button
             onClick={() => setShowRef(v => !v)}
             style={{
               position: 'absolute', top: '8px', right: '10px',
-              padding: '3px 10px', borderRadius: '6px', fontSize: '11px',
-              border: `1px solid ${darkMode ? '#2d5a9e' : '#c5d8fc'}`,
+              padding: '3px 10px', borderRadius: 0, fontSize: '11px',
+              border: `1px solid ${darkMode ? 'var(--line)' : 'var(--line)'}`,
               background: 'transparent', cursor: 'pointer',
-              color: darkMode ? '#8aabdc' : '#4a6fa5',
+              color: darkMode ? 'var(--mute)' : 'var(--mute)',
               display: 'inline-flex', alignItems: 'center', gap: '5px',
             }}
           >
@@ -947,9 +947,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             onClick={() => setMode(m.key)}
             style={{
               padding: '8px 18px',
-              borderRadius: '20px',
-              border: `2px solid ${mode === m.key ? '#0d6efd' : border}`,
-              background: mode === m.key ? '#0d6efd' : 'transparent',
+              borderRadius: 0,
+              border: `2px solid ${mode === m.key ? 'var(--accent)' : border}`,
+              background: mode === m.key ? 'var(--accent)' : 'transparent',
               color: mode === m.key ? '#fff' : textColor,
               cursor: 'pointer',
               fontWeight: '500',
@@ -971,9 +971,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             alignSelf: 'center',
             fontSize: '13px',
             padding: '4px 12px',
-            borderRadius: '12px',
+            borderRadius: 0,
             background: darkMode ? '#1e3a1e' : '#e8f5e9',
-            color: '#198754',
+            color: 'var(--ok)',
           }}>
             {gestureLabel}
           </span>
@@ -984,9 +984,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         <div style={{
           padding: '10px 14px',
           marginBottom: '12px',
-          borderRadius: '8px',
-          background: '#fff3cd',
-          color: '#856404',
+          borderRadius: 0,
+          background: 'var(--warn-tint)',
+          color: 'var(--warn)',
           fontSize: '13px',
           display: 'flex', alignItems: 'center', gap: '8px',
         }}>
@@ -1066,7 +1066,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
                 opacity: mode === 'gesture' ? 0.3 : 0.15,
                 transition: 'opacity 0.3s',
               }}>
-                <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 'min(11cqw, 26cqh)', lineHeight: 1, whiteSpace: 'nowrap', color: mode === 'gesture' ? '#fff' : '#888' }}>{referenceBalinese}</span>
+                <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 'min(11cqw, 26cqh)', lineHeight: 1, whiteSpace: 'nowrap', color: mode === 'gesture' ? '#fff' : 'var(--mute)' }}>{referenceBalinese}</span>
               </div>
             ))
           : (mode === 'mouse' && (
@@ -1074,7 +1074,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
                 position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 pointerEvents: 'none', zIndex: 1,
-                opacity: 0.5, fontSize: '14px', color: '#888',
+                opacity: 0.5, fontSize: '14px', color: 'var(--mute)',
               }}>
                 {ct.placeholder}
               </div>
@@ -1084,7 +1084,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           <div style={{
             position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            background: darkMode ? '#1a1a2e' : '#f5f5f5',
+            background: darkMode ? 'var(--surface)' : 'var(--surface-2)',
             zIndex: 2, gap: '12px',
           }}>
             <Camera size={48} style={{ opacity: 0.6 }} />
@@ -1097,13 +1097,13 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           <div style={{
             position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            background: darkMode ? '#1a1a2e' : '#f5f5f5',
+            background: darkMode ? 'var(--surface)' : 'var(--surface-2)',
             zIndex: 12, gap: '14px', padding: '0 24px',
           }}>
             <Loader size={40} style={{ opacity: 0.7, animation: 'aksara-spin 1s linear infinite' }} />
             <span style={{ fontSize: '14px', opacity: 0.7 }}>{ct.loadingMp} {loadProgress}%</span>
-            <div style={{ width: '100%', maxWidth: '260px', height: '6px', borderRadius: '3px', background: darkMode ? '#333' : '#e0e0e0', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${loadProgress}%`, background: '#0d6efd', borderRadius: '3px', transition: 'width 0.3s ease' }} />
+            <div style={{ width: '100%', maxWidth: '260px', height: '6px', borderRadius: 0, background: darkMode ? '#333' : 'var(--line)', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${loadProgress}%`, background: 'var(--accent)', borderRadius: 0, transition: 'width 0.3s ease' }} />
             </div>
             <style>{`@keyframes aksara-spin { to { transform: rotate(360deg) } }`}</style>
           </div>
@@ -1114,14 +1114,14 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           <div style={{
             position: 'absolute', top: '14px', left: '50%', transform: 'translateX(-50%)',
             zIndex: 14, maxWidth: '92%',
-            padding: '12px 20px', borderRadius: '14px',
+            padding: '12px 20px', borderRadius: 0,
             background: 'rgba(20,20,30,0.88)', color: '#fff',
-            border: `2px solid ${checkResult.status === 'correct' ? '#22c55e' : checkResult.status === 'partial' ? '#f59e0b' : checkResult.status === 'empty' ? '#94a3b8' : '#ef4444'}`,
+            border: `2px solid ${checkResult.status === 'correct' ? 'var(--ok)' : checkResult.status === 'partial' ? 'var(--turmeric)' : checkResult.status === 'empty' ? 'var(--mute)' : 'var(--danger)'}`,
             display: 'flex', alignItems: 'center', gap: '14px',
           }}>
             <span style={{ fontSize: '14px', fontWeight: 500 }}>{checkResult.message}</span>
             {checkResult.status !== 'empty' && (
-              <span style={{ fontSize: '22px', fontWeight: 800, color: checkResult.status === 'correct' ? '#22c55e' : checkResult.status === 'partial' ? '#f59e0b' : '#ef4444' }}>
+              <span style={{ fontSize: '22px', fontWeight: 800, color: checkResult.status === 'correct' ? 'var(--ok)' : checkResult.status === 'partial' ? 'var(--turmeric)' : 'var(--danger)' }}>
                 {checkResult.score}%
               </span>
             )}
@@ -1134,7 +1134,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           aria-label={isFullscreen ? 'Keluar layar penuh' : 'Layar penuh'}
           style={{
             position: 'absolute', top: '10px', right: '10px', zIndex: 13,
-            width: '36px', height: '36px', borderRadius: '8px',
+            width: '36px', height: '36px', borderRadius: 0,
             border: 'none', background: 'rgba(0,0,0,0.45)', color: '#fff',
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
@@ -1148,7 +1148,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             position: 'absolute', bottom: '16px', left: '50%', transform: 'translateX(-50%)',
             zIndex: 13, display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap',
             justifyContent: 'center', maxWidth: '94%',
-            background: 'rgba(20,20,30,0.82)', padding: '10px 14px', borderRadius: '14px',
+            background: 'rgba(20,20,30,0.82)', padding: '10px 14px', borderRadius: 0,
           }}>
             <div style={{ display: 'flex', gap: '6px' }}>
               {COLORS.map(c => (
@@ -1161,11 +1161,11 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             <div style={{ display: 'flex', gap: '6px' }}>
               {WIDTHS.map(w => (
                 <button key={w} onClick={() => setStrokeWidth(w)} aria-label={`Tebal ${w}`} style={{
-                  width: '28px', height: '28px', borderRadius: '6px', background: 'transparent', cursor: 'pointer',
+                  width: '28px', height: '28px', borderRadius: 0, background: 'transparent', cursor: 'pointer',
                   border: strokeWidth === w ? '2px solid #fff' : '2px solid rgba(255,255,255,0.35)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <div style={{ width: Math.min(w * 2, 18), height: w, background: '#fff', borderRadius: '2px' }} />
+                  <div style={{ width: Math.min(w * 2, 18), height: w, background: '#fff', borderRadius: 0 }} />
                 </button>
               ))}
             </div>
@@ -1177,7 +1177,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             <button onClick={undoLast} aria-label={ct.undo} style={fsToolBtn}><Undo2 size={16} /></button>
             <button onClick={() => { clearCanvas(); setCheckResult(null); setHwrResult(null) }} aria-label={ct.clear} style={{ ...fsToolBtn, color: '#ff7a7a' }}><Trash2 size={16} /></button>
             {referenceBalinese && (
-              <button onClick={checkDrawing} style={{ ...fsToolBtn, background: '#0d6efd', color: '#fff', width: 'auto', padding: '0 14px', gap: '6px' }}>
+              <button onClick={checkDrawing} style={{ ...fsToolBtn, background: 'var(--accent)', color: '#fff', width: 'auto', padding: '0 14px', gap: '6px' }}>
                 <Check size={16} /> {ct.check}
               </button>
             )}
@@ -1196,8 +1196,8 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
               onClick={() => setStrokeColor(c)}
               style={{
                 width: '26px', height: '26px', borderRadius: '50%',
-                background: c, border: strokeColor === c ? '3px solid #0d6efd' : '2px solid transparent',
-                cursor: 'pointer', outline: strokeColor === c ? '2px solid rgba(13,110,253,0.3)' : 'none',
+                background: c, border: strokeColor === c ? '3px solid var(--accent)' : '2px solid transparent',
+                cursor: 'pointer', outline: strokeColor === c ? '3px solid var(--turmeric)' : 'none',
               }}
             />
           ))}
@@ -1210,13 +1210,13 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
               key={w}
               onClick={() => setStrokeWidth(w)}
               style={{
-                width: '30px', height: '30px', borderRadius: '6px',
-                border: `2px solid ${strokeWidth === w ? '#0d6efd' : border}`,
+                width: '30px', height: '30px', borderRadius: 0,
+                border: `2px solid ${strokeWidth === w ? 'var(--accent)' : border}`,
                 background: 'transparent', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}
             >
-              <div style={{ width: Math.min(w * 2, 20), height: w, background: strokeColor, borderRadius: '2px' }} />
+              <div style={{ width: Math.min(w * 2, 20), height: w, background: strokeColor, borderRadius: 0 }} />
             </button>
           ))}
         </div>
@@ -1227,8 +1227,8 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             data-track="write-toggle-guide"
             onClick={() => setShowOverlay(v => !v)}
             style={{
-              padding: '7px 16px', borderRadius: '8px',
-              border: `1px solid ${border}`, background: showOverlay ? (darkMode ? '#1e3a5f' : '#e8f0fe') : 'transparent',
+              padding: '7px 16px', borderRadius: 0,
+              border: `1px solid ${border}`, background: showOverlay ? (darkMode ? '#1e3a5f' : 'var(--accent-tint)') : 'transparent',
               cursor: 'pointer', fontSize: '13px', color: textColor,
               display: 'inline-flex', alignItems: 'center', gap: '6px',
             }}
@@ -1243,7 +1243,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         <button
           onClick={undoLast}
           style={{
-            padding: '7px 16px', borderRadius: '8px',
+            padding: '7px 16px', borderRadius: 0,
             border: `1px solid ${border}`, background: 'transparent',
             cursor: 'pointer', fontSize: '13px', color: textColor,
             display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -1256,9 +1256,9 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         <button
           onClick={() => { clearCanvas(); setCheckResult(null); setHwrResult(null) }}
           style={{
-            padding: '7px 16px', borderRadius: '8px',
-            border: '1px solid #dc3545', background: 'transparent',
-            cursor: 'pointer', fontSize: '13px', color: '#dc3545',
+            padding: '7px 16px', borderRadius: 0,
+            border: '1px solid var(--danger)', background: 'transparent',
+            cursor: 'pointer', fontSize: '13px', color: 'var(--danger)',
             display: 'inline-flex', alignItems: 'center', gap: '6px',
           }}
         >
@@ -1272,10 +1272,10 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             onClick={checkDrawing}
             style={{
               flex: '1 1 100%', minWidth: '200px',
-              padding: '14px 28px', borderRadius: '10px',
-              border: 'none', background: '#0d6efd',
+              padding: '14px 28px', borderRadius: 0,
+              border: 'none', background: 'var(--accent)',
               cursor: 'pointer', fontSize: '16px', color: '#fff',
-              fontWeight: '700', boxShadow: '0 2px 8px rgba(13,110,253,0.3)',
+              fontWeight: '700', boxShadow: 'none',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             }}
           >
@@ -1289,14 +1289,14 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         <div style={{
           marginTop: '14px',
           padding: '16px 20px',
-          borderRadius: '12px',
-          border: `2px solid ${checkResult.status === 'correct' ? '#22c55e' : checkResult.status === 'partial' ? '#f59e0b' : checkResult.status === 'empty' ? '#94a3b8' : '#ef4444'}`,
+          borderRadius: 0,
+          border: `2px solid ${checkResult.status === 'correct' ? 'var(--ok)' : checkResult.status === 'partial' ? 'var(--turmeric)' : checkResult.status === 'empty' ? 'var(--mute)' : 'var(--danger)'}`,
           background: checkResult.status === 'correct'
-            ? (darkMode ? '#0d2d0d' : '#f0fff4')
+            ? (darkMode ? '#0d2d0d' : 'var(--ok-tint)')
             : checkResult.status === 'partial'
               ? (darkMode ? '#2d1f00' : '#fffbeb')
               : checkResult.status === 'empty'
-                ? (darkMode ? '#1e1e2e' : '#f8f9fa')
+                ? (darkMode ? 'var(--surface)' : 'var(--surface-2)')
                 : (darkMode ? '#2d0d0d' : '#fff5f5'),
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
@@ -1306,7 +1306,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             {checkResult.status !== 'empty' && (
               <span style={{
                 fontSize: '22px', fontWeight: '700',
-                color: checkResult.status === 'correct' ? '#22c55e' : checkResult.status === 'partial' ? '#f59e0b' : '#ef4444',
+                color: checkResult.status === 'correct' ? 'var(--ok)' : checkResult.status === 'partial' ? 'var(--turmeric)' : 'var(--danger)',
               }}>
                 {checkResult.score}%
               </span>
@@ -1316,19 +1316,19 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           {checkResult.status !== 'empty' && (
             <div style={{ marginTop: '10px' }}>
               {/* Score bar */}
-              <div style={{ height: '6px', borderRadius: '3px', background: darkMode ? '#333' : '#e0e0e0', overflow: 'hidden', marginBottom: '8px' }}>
+              <div style={{ height: '6px', borderRadius: 0, background: darkMode ? '#333' : 'var(--line)', overflow: 'hidden', marginBottom: '8px' }}>
                 <div style={{
-                  height: '100%', borderRadius: '3px',
+                  height: '100%', borderRadius: 0,
                   width: `${checkResult.score}%`,
-                  background: checkResult.status === 'correct' ? '#22c55e' : checkResult.status === 'partial' ? '#f59e0b' : '#ef4444',
+                  background: checkResult.status === 'correct' ? 'var(--ok)' : checkResult.status === 'partial' ? 'var(--turmeric)' : 'var(--danger)',
                   transition: 'width 0.6s ease',
                 }} />
               </div>
-              <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: darkMode ? '#888' : '#666' }}>
+              <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: darkMode ? 'var(--mute)' : 'var(--mute)' }}>
                 <span>{ct.precision} <b>{checkResult.precision}%</b></span>
                 <span>{ct.coverage} <b>{checkResult.recall}%</b></span>
                 {checkResult.status !== 'correct' && (
-                  <span style={{ color: '#0d6efd', cursor: 'pointer' }} onClick={() => { setCheckResult(null); setHwrResult(null) }}>
+                  <span style={{ color: 'var(--accent)', cursor: 'pointer' }} onClick={() => { setCheckResult(null); setHwrResult(null) }}>
                     {ct.tryAgain}
                   </span>
                 )}
@@ -1343,15 +1343,15 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         <div style={{
           marginTop: '10px',
           padding: '10px 16px',
-          borderRadius: '10px',
-          border: `1px solid ${hwrResult.matched ? '#22c55e' : darkMode ? '#333' : '#e0e0e0'}`,
+          borderRadius: 0,
+          border: `1px solid ${hwrResult.matched ? 'var(--ok)' : darkMode ? '#333' : 'var(--line)'}`,
           background: hwrResult.matched
-            ? (darkMode ? '#0d2d0d' : '#f0fff4')
-            : (darkMode ? '#252535' : '#f8f9fa'),
+            ? (darkMode ? '#0d2d0d' : 'var(--ok-tint)')
+            : (darkMode ? 'var(--surface-2)' : 'var(--surface-2)'),
           display: 'flex', alignItems: 'center', gap: '12px',
-          fontSize: '13px', color: darkMode ? '#ccc' : '#555',
+          fontSize: '13px', color: darkMode ? '#ccc' : 'var(--mute)',
         }}>
-          <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: '6px', background: '#0d6efd20', color: '#0d6efd', fontWeight: '600', whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: 0, background: '#0d6efd20', color: 'var(--accent)', fontWeight: '600', whiteSpace: 'nowrap' }}>
             Chrome HWR
           </span>
           <span>
@@ -1361,7 +1361,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             </span>
           </span>
           {hwrResult.matched && (
-            <span style={{ color: '#22c55e', fontWeight: '600', marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ color: 'var(--ok)', fontWeight: '600', marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
               <Check size={14} /> {lang === 'en' ? 'Matches!' : 'Cocok!'}
             </span>
           )}
@@ -1373,10 +1373,10 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
         <div style={{
           marginTop: '12px',
           padding: '12px 14px',
-          borderRadius: '8px',
-          background: darkMode ? '#1a2840' : '#f0f4ff',
+          borderRadius: 0,
+          background: darkMode ? 'var(--accent-tint)' : 'var(--accent-tint)',
           fontSize: '12px',
-          color: darkMode ? '#8aabdc' : '#4a6fa5',
+          color: darkMode ? 'var(--mute)' : 'var(--mute)',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
           gap: '6px',

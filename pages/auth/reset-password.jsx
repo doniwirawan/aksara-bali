@@ -45,26 +45,23 @@ export default function ResetPasswordPage() {
       </Head>
       <div style={{
         minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: '#f5f5f0', fontFamily: 'Inter, system-ui, sans-serif',
+        background: 'var(--surface-2)', fontFamily: 'var(--font-sans)',
       }}>
         <div style={{
-          padding: '40px', borderRadius: '16px', background: '#fff',
-          border: '1px solid #e0e0d8', width: '360px',
+          padding: '40px', borderRadius: 0, background: 'var(--surface)',
+          border: '1px solid var(--line)', width: '360px',
           boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
         }}>
           <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-            <a href="/">
-              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
-                style={{ borderRadius: '12px', marginBottom: '12px', display: 'inline-block' }} />
-            </a>
-            <h1 style={{ fontSize: '20px', fontWeight: '700', margin: '0 0 4px' }}>Reset Password</h1>
-            <p style={{ color: '#888', fontSize: '13px', margin: 0 }}>Masukkan password baru Anda</p>
+            <a href="/" className="site-brand__aksara" style={{ fontSize: 34, textDecoration: 'none', display: 'inline-block', marginBottom: 8 }} aria-label="Aksara Bali">ᬅᬓ᭄ᬱᬭ</a>
+            <h1 style={{ fontSize: '28px', fontWeight: 800, margin: '0 0 4px' }}>Reset Password</h1>
+            <p style={{ color: 'var(--mute)', fontSize: '13px', margin: 0 }}>Masukkan password baru Anda</p>
           </div>
 
           {done ? (
             <div style={{
-              padding: '16px', borderRadius: '10px', background: '#f0fdf4',
-              border: '1px solid #bbf7d0', color: '#166534', fontSize: '14px', lineHeight: 1.5,
+              padding: '16px', borderRadius: 0, background: 'var(--ok-tint)',
+              border: '1px solid var(--ok-tint)', color: '#166534', fontSize: '14px', lineHeight: 1.5,
             }}>
               Password berhasil diubah. Mengalihkan ke halaman masuk...
             </div>
@@ -79,12 +76,12 @@ export default function ResetPasswordPage() {
                   required
                   autoFocus
                   style={{
-                    width: '100%', padding: '12px 44px 12px 14px', borderRadius: '10px',
-                    border: '1px solid #e0e0d8', fontSize: '15px',
+                    width: '100%', padding: '12px 44px 12px 14px', borderRadius: 0,
+                    border: '1px solid var(--line)', fontSize: '15px',
                     boxSizing: 'border-box', outline: 'none',
                   }}
                 />
-                <button type="button" onClick={() => setShowPassword(v => !v)} aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'} style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#888', display: 'flex', alignItems: 'center', padding: '4px' }}>
+                <button type="button" onClick={() => setShowPassword(v => !v)} aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'} style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--mute)', display: 'flex', alignItems: 'center', padding: '4px' }}>
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
@@ -96,22 +93,22 @@ export default function ResetPasswordPage() {
                   onChange={e => setConfirm(e.target.value)}
                   required
                   style={{
-                    width: '100%', padding: '12px 44px 12px 14px', borderRadius: '10px',
-                    border: `1px solid ${error ? '#ef4444' : '#e0e0d8'}`, fontSize: '15px',
+                    width: '100%', padding: '12px 44px 12px 14px', borderRadius: 0,
+                    border: `1px solid ${error ? 'var(--danger)' : 'var(--line)'}`, fontSize: '15px',
                     boxSizing: 'border-box', outline: 'none',
                   }}
                 />
-                <button type="button" onClick={() => setShowConfirm(v => !v)} aria-label={showConfirm ? 'Sembunyikan password' : 'Tampilkan password'} style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#888', display: 'flex', alignItems: 'center', padding: '4px' }}>
+                <button type="button" onClick={() => setShowConfirm(v => !v)} aria-label={showConfirm ? 'Sembunyikan password' : 'Tampilkan password'} style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--mute)', display: 'flex', alignItems: 'center', padding: '4px' }}>
                   {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {error && <p style={{ color: '#ef4444', fontSize: '13px', margin: '0 0 10px' }}>{error}</p>}
+              {error && <p style={{ color: 'var(--danger)', fontSize: '13px', margin: '0 0 10px' }}>{error}</p>}
               <button
                 type="submit"
                 disabled={loading}
                 style={{
-                  width: '100%', padding: '12px', borderRadius: '10px',
-                  background: loading ? '#94b8fd' : '#0d6efd', color: '#fff',
+                  width: '100%', padding: '12px', borderRadius: 0,
+                  background: loading ? 'var(--line)' : 'var(--accent)', color: '#fff',
                   border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
                   fontSize: '15px', fontWeight: '600',
                 }}
@@ -122,7 +119,7 @@ export default function ResetPasswordPage() {
           )}
 
           <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px' }}>
-            <a href="/auth/login" style={{ color: '#888', textDecoration: 'none' }}>← Kembali ke Masuk</a>
+            <a href="/auth/login" style={{ color: 'var(--mute)', textDecoration: 'none' }}>← Kembali ke Masuk</a>
           </p>
         </div>
       </div>

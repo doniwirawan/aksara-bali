@@ -64,11 +64,11 @@ export default function UserDashboard({ locale, setLocale }) {
     return () => document.removeEventListener('visibilitychange', onVisible)
   }, [fetchStats])
 
-  const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
-  const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
-  const mutedColor = darkMode ? '#888' : '#666'
+  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const cardBg = 'var(--surface)'
+  const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
+  const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
+  const mutedColor = darkMode ? 'var(--mute)' : 'var(--mute)'
 
   if (loading || !user) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg }}>
@@ -80,10 +80,10 @@ export default function UserDashboard({ locale, setLocale }) {
   const avatarLetter = user.email?.[0]?.toUpperCase() ?? '?'
 
   const QUICK_LINKS = [
-    { href: '/', icon: Zap, label: 'Konverter', desc: 'Latin → Aksara Bali', color: '#0d6efd' },
-    { href: '/practice', icon: Target, label: 'Latihan', desc: 'Kuis & menulis', color: '#198754' },
-    { href: '/blog', icon: FileText, label: 'Blog', desc: 'Artikel budaya Bali', color: '#6f42c1' },
-    { href: '/faq', icon: HelpCircle, label: 'FAQ', desc: 'Pertanyaan umum', color: '#fd7e14' },
+    { href: '/', icon: Zap, label: 'Konverter', desc: 'Latin → Aksara Bali', color: 'var(--accent)' },
+    { href: '/practice', icon: Target, label: 'Latihan', desc: 'Kuis & menulis', color: 'var(--ok)' },
+    { href: '/blog', icon: FileText, label: 'Blog', desc: 'Artikel budaya Bali', color: 'var(--link)' },
+    { href: '/faq', icon: HelpCircle, label: 'FAQ', desc: 'Pertanyaan umum', color: 'var(--turmeric)' },
   ]
 
   return (
@@ -92,7 +92,7 @@ export default function UserDashboard({ locale, setLocale }) {
         <title>Dashboard — Aksara Bali</title>
         <meta name="robots" content="noindex" />
       </Head>
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}
@@ -103,10 +103,10 @@ export default function UserDashboard({ locale, setLocale }) {
         <main style={{ maxWidth: 900, margin: '0 auto', padding: '36px 16px 80px' }}>
 
           {/* Profile card */}
-          <div data-tour="dash-profile" style={{ background: cardBg, borderRadius: '16px', border: `1px solid ${borderColor}`, padding: '28px', marginBottom: '24px', display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div data-tour="dash-profile" style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, padding: '28px', marginBottom: '24px', display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
             <div style={{
               width: '72px', height: '72px', borderRadius: '50%',
-              background: isAdmin ? 'linear-gradient(135deg,#0d6efd,#6f42c1)' : 'linear-gradient(135deg,#198754,#20c997)',
+              background: isAdmin ? 'var(--turmeric)' : 'var(--red)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: '30px', fontWeight: '700', color: '#fff', flexShrink: 0,
             }}>
@@ -116,18 +116,18 @@ export default function UserDashboard({ locale, setLocale }) {
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '6px' }}>
                 <h1 style={{ fontSize: '20px', fontWeight: '700', margin: 0 }}>{user.email}</h1>
                 {isAdmin && (
-                  <span style={{ fontSize: '11px', padding: '2px 10px', borderRadius: '10px', background: '#0d6efd20', color: '#0d6efd', fontWeight: '700' }}>ADMIN</span>
+                  <span style={{ fontSize: '11px', padding: '2px 10px', borderRadius: 0, background: '#0d6efd20', color: 'var(--accent)', fontWeight: '700' }}>ADMIN</span>
                 )}
               </div>
               <div style={{ fontSize: '13px', color: mutedColor }}>Bergabung: {joinedDate}</div>
             </div>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {isAdmin && (
-                <a href="/admin" style={{ padding: '8px 16px', borderRadius: '10px', background: '#0d6efd', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                <a href="/admin" style={{ padding: '8px 16px', borderRadius: 0, background: 'var(--accent)', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                   <BarChart3 size={15} /> Admin Dashboard
                 </a>
               )}
-              <button onClick={async () => { await signOut(); router.push('/') }} style={{ padding: '8px 16px', borderRadius: '10px', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', fontSize: '13px', color: mutedColor }}>
+              <button onClick={async () => { await signOut(); router.push('/') }} style={{ padding: '8px 16px', borderRadius: 0, border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', fontSize: '13px', color: mutedColor }}>
                 {locale === 'en' ? 'Sign out' : 'Keluar'}
               </button>
               <button
@@ -140,7 +140,7 @@ export default function UserDashboard({ locale, setLocale }) {
                   if (res.ok) { await signOut(); router.push('/') }
                   else { alert(locale === 'en' ? 'Failed to delete account.' : 'Gagal menghapus akun.') }
                 }}
-                style={{ padding: '8px 16px', borderRadius: '10px', border: '1px solid #ef4444', background: 'transparent', cursor: 'pointer', fontSize: '13px', color: '#ef4444' }}
+                style={{ padding: '8px 16px', borderRadius: 0, border: '1px solid var(--danger)', background: 'transparent', cursor: 'pointer', fontSize: '13px', color: 'var(--danger)' }}
               >
                 {locale === 'en' ? 'Delete account' : 'Hapus Akun'}
               </button>
@@ -149,25 +149,25 @@ export default function UserDashboard({ locale, setLocale }) {
 
           {/* Admin section */}
           {isAdmin && (
-            <div style={{ background: cardBg, borderRadius: '16px', border: '2px solid #0d6efd40', padding: '24px', marginBottom: '24px' }}>
+            <div style={{ background: cardBg, borderRadius: 0, border: '2px solid #0d6efd40', padding: '24px', marginBottom: '24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <h2 style={{ fontSize: '16px', fontWeight: '700', margin: 0, color: '#0d6efd', display: 'flex', alignItems: 'center', gap: '8px' }}><Wrench size={18} /> Admin Dashboard</h2>
-                <a href="/admin" style={{ fontSize: '12px', color: '#0d6efd', textDecoration: 'none' }}>Buka lengkap →</a>
+                <h2 style={{ fontSize: '16px', fontWeight: '700', margin: 0, color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '8px' }}><Wrench size={18} /> Admin Dashboard</h2>
+                <a href="/admin" style={{ fontSize: '12px', color: 'var(--accent)', textDecoration: 'none' }}>Buka lengkap →</a>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '10px' }}>
                 {[
-                  { href: '/admin?tab=stats', icon: BarChart3, label: 'Statistik', desc: 'Konversi & kuis', color: '#0d6efd' },
-                  { href: '/admin?tab=blog', icon: PenLine, label: 'Blog', desc: 'Kelola artikel', color: '#6f42c1' },
-                  { href: '/admin?tab=faq', icon: HelpCircle, label: 'FAQ', desc: 'Kelola pertanyaan', color: '#fd7e14' },
-                  { href: '/admin?tab=users', icon: Users, label: 'Pengguna', desc: 'Kelola akun', color: '#198754' },
+                  { href: '/admin?tab=stats', icon: BarChart3, label: 'Statistik', desc: 'Konversi & kuis', color: 'var(--accent)' },
+                  { href: '/admin?tab=blog', icon: PenLine, label: 'Blog', desc: 'Kelola artikel', color: 'var(--link)' },
+                  { href: '/admin?tab=faq', icon: HelpCircle, label: 'FAQ', desc: 'Kelola pertanyaan', color: 'var(--turmeric)' },
+                  { href: '/admin?tab=users', icon: Users, label: 'Pengguna', desc: 'Kelola akun', color: 'var(--ok)' },
                 ].map(item => (
                   <a key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
                     <div style={{
-                      background: darkMode ? '#252535' : '#f8f9ff',
-                      borderRadius: '12px', border: `1px solid ${darkMode ? '#2a2a3e' : '#dde5ff'}`,
+                      background: darkMode ? 'var(--surface-2)' : 'var(--accent-tint)',
+                      borderRadius: 0, border: `1px solid ${darkMode ? 'var(--line)' : '#dde5ff'}`,
                       padding: '16px 14px', cursor: 'pointer',
                     }}
-                      onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 12px rgba(13,110,253,0.15)'}
+                      onMouseEnter={e => e.currentTarget.style.boxShadow = '0 6px 16px rgba(23,20,15,0.10)'}
                       onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
                     >
                       <item.icon size={24} color={item.color} style={{ marginBottom: '8px' }} />
@@ -184,14 +184,14 @@ export default function UserDashboard({ locale, setLocale }) {
           <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px' }}><TrendingUp size={18} /> Statistik Anda</h2>
           <div data-tour="dash-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', marginBottom: '28px' }}>
             {[
-              { label: 'Total Konversi', value: stats?.total ?? '—', icon: Zap, color: '#0d6efd' },
-              { label: 'Sesi Kuis', value: quizStats?.totalSessions ?? '—', icon: Target, color: '#198754' },
-              { label: 'Akurasi Kuis', value: quizStats?.avgAccuracy != null ? `${quizStats.avgAccuracy}%` : '—', icon: Trophy, color: '#fd7e14' },
-              { label: 'Streak Terbaik', value: quizStats?.bestStreak ?? '—', icon: Flame, color: '#dc3545' },
-              { label: 'Latihan Tulis', value: writingStats?.total ?? '—', icon: PenLine, color: '#6f42c1' },
-              { label: 'Skor Tulis', value: writingStats?.avgScore != null ? `${writingStats.avgScore}%` : '—', icon: Ruler, color: '#20c997' },
+              { label: 'Total Konversi', value: stats?.total ?? '—', icon: Zap, color: 'var(--accent)' },
+              { label: 'Sesi Kuis', value: quizStats?.totalSessions ?? '—', icon: Target, color: 'var(--ok)' },
+              { label: 'Akurasi Kuis', value: quizStats?.avgAccuracy != null ? `${quizStats.avgAccuracy}%` : '—', icon: Trophy, color: 'var(--turmeric)' },
+              { label: 'Streak Terbaik', value: quizStats?.bestStreak ?? '—', icon: Flame, color: 'var(--danger)' },
+              { label: 'Latihan Tulis', value: writingStats?.total ?? '—', icon: PenLine, color: 'var(--link)' },
+              { label: 'Skor Tulis', value: writingStats?.avgScore != null ? `${writingStats.avgScore}%` : '—', icon: Ruler, color: 'var(--ok)' },
             ].map(c => (
-              <div key={c.label} style={{ background: cardBg, borderRadius: '12px', border: `1px solid ${borderColor}`, padding: '16px' }}>
+              <div key={c.label} style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, padding: '16px' }}>
                 <c.icon size={22} color={c.color} style={{ marginBottom: '6px' }} />
                 <div style={{ fontSize: '22px', fontWeight: '700', color: c.color }}>{c.value}</div>
                 <div style={{ fontSize: '11px', color: mutedColor, marginTop: '2px' }}>{c.label}</div>
@@ -205,7 +205,7 @@ export default function UserDashboard({ locale, setLocale }) {
             {QUICK_LINKS.map(link => (
               <a key={link.href} href={link.href} style={{ textDecoration: 'none' }}>
                 <div style={{
-                  background: cardBg, borderRadius: '12px', border: `1px solid ${borderColor}`,
+                  background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`,
                   padding: '20px 16px', cursor: 'pointer', transition: 'box-shadow 0.15s',
                 }}
                   onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.1)'}
@@ -220,16 +220,16 @@ export default function UserDashboard({ locale, setLocale }) {
           </div>
 
           {/* Learning tips */}
-          <div style={{ background: cardBg, borderRadius: '14px', border: `1px solid ${borderColor}`, padding: '24px' }}>
+          <div style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, padding: '24px' }}>
             <h2 style={{ fontSize: '16px', fontWeight: '600', margin: '0 0 14px', display: 'flex', alignItems: 'center', gap: '8px' }}><Lightbulb size={18} /> Tips Belajar Aksara Bali</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
               {[
-                { icon: CalendarDays, color: '#0d6efd', tip: 'Belajar 15–20 menit setiap hari lebih efektif daripada belajar panjang sekaligus.' },
-                { icon: Target, color: '#198754', tip: 'Mulai dengan kuis mode Mudah, lalu naikkan kesulitan secara bertahap.' },
-                { icon: PenLine, color: '#6f42c1', tip: 'Gunakan fitur Tulis untuk melatih memori motorik aksara Bali.' },
-                { icon: BookOpen, color: '#fd7e14', tip: 'Baca blog untuk memahami konteks budaya dan sejarah di balik aksara Bali.' },
+                { icon: CalendarDays, color: 'var(--accent)', tip: 'Belajar 15–20 menit setiap hari lebih efektif daripada belajar panjang sekaligus.' },
+                { icon: Target, color: 'var(--ok)', tip: 'Mulai dengan kuis mode Mudah, lalu naikkan kesulitan secara bertahap.' },
+                { icon: PenLine, color: 'var(--link)', tip: 'Gunakan fitur Tulis untuk melatih memori motorik aksara Bali.' },
+                { icon: BookOpen, color: 'var(--turmeric)', tip: 'Baca blog untuk memahami konteks budaya dan sejarah di balik aksara Bali.' },
               ].map((t, i) => (
-                <div key={i} style={{ display: 'flex', gap: '10px', padding: '12px', borderRadius: '10px', background: darkMode ? '#252535' : '#f8f8f8' }}>
+                <div key={i} style={{ display: 'flex', gap: '10px', padding: '12px', borderRadius: 0, background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)' }}>
                   <t.icon size={20} color={t.color} style={{ flexShrink: 0, marginTop: '1px' }} />
                   <span style={{ fontSize: '13px', color: mutedColor, lineHeight: 1.5 }}>{t.tip}</span>
                 </div>

@@ -58,12 +58,12 @@ const SECTIONS = [
 
 export default function AksaraReference({ darkMode, locale }) {
   const id = locale !== 'en'
-  const text = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const muted = darkMode ? '#9a9a9a' : '#666'
-  const tile = darkMode ? '#252535' : '#f7f7fb'
-  const cardBg = darkMode ? '#1e1e2e' : '#ffffff'
-  const border = darkMode ? '#333' : '#e8e8e8'
-  const accent = '#0d6efd'
+  const text = darkMode ? 'var(--ink)' : 'var(--ink)'
+  const muted = darkMode ? '#9a9a9a' : 'var(--mute)'
+  const tile = darkMode ? 'var(--surface-2)' : '#f7f7fb'
+  const cardBg = 'var(--surface)'
+  const border = darkMode ? '#333' : 'var(--ink)'
+  const accent = 'var(--accent)'
 
   const tips = [
     ['ᬓ', id ? "Tiap konsonan sudah membawa vokal 'a' (ᬓ = ka)." : "Each consonant carries an inherent 'a' (ᬓ = ka)."],
@@ -85,15 +85,15 @@ export default function AksaraReference({ darkMode, locale }) {
       {canSpeak() && (
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '6px', marginBottom: '20px',
-          padding: '6px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 600,
-          color: accent, background: darkMode ? 'rgba(13,110,253,0.12)' : '#eef4ff',
+          padding: '6px 12px', borderRadius: 0, fontSize: '12px', fontWeight: 600,
+          color: accent, background: 'var(--accent-tint)',
         }}>
           <Volume2 size={14} /> {id ? 'Ketuk huruf mana pun untuk mendengarnya' : 'Tap any letter to hear it'}
         </div>
       )}
 
       {/* How it works */}
-      <div style={{ background: cardBg, border: `1px solid ${border}`, borderRadius: '14px', padding: '16px', marginBottom: '28px' }}>
+      <div style={{ background: cardBg, border: `1px solid ${border}`, borderRadius: 0, padding: '16px', marginBottom: '28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
           <Lightbulb size={18} color={accent} />
           <span style={{ fontSize: '15px', fontWeight: 700 }}>{id ? 'Cara membaca' : 'How it works'}</span>
@@ -101,8 +101,8 @@ export default function AksaraReference({ darkMode, locale }) {
         {tips.map(([g, t], i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: i === tips.length - 1 ? 0 : '10px' }}>
             <span style={{
-              flexShrink: 0, width: '54px', height: '40px', borderRadius: '8px',
-              background: darkMode ? 'rgba(13,110,253,0.12)' : '#eef4ff',
+              flexShrink: 0, width: '54px', height: '40px', borderRadius: 0,
+              background: 'var(--accent-tint)',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               fontFamily: BALI, fontSize: '22px',
             }}>{g}</span>
@@ -121,7 +121,7 @@ export default function AksaraReference({ darkMode, locale }) {
                 title={id ? 'Ketuk untuk mendengar' : 'Tap to hear'}
                 style={{
                   position: 'relative', background: tile, border: `1px solid transparent`,
-                  borderRadius: '16px', padding: '16px 8px', textAlign: 'center', cursor: 'pointer',
+                  borderRadius: 0, padding: '16px 8px', textAlign: 'center', cursor: 'pointer',
                   transition: 'transform 0.12s, border-color 0.12s',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = accent; e.currentTarget.style.transform = 'translateY(-2px)' }}

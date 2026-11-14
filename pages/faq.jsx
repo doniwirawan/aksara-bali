@@ -238,11 +238,11 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
     en: { title: 'Frequently Asked Questions', subtitle: 'Everything you need to know about Balinese script and this converter', placeholder: 'Search questions...' },
   }[lang]
 
-  const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
-  const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
-  const mutedColor = darkMode ? '#888' : '#666'
+  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const cardBg = 'var(--surface)'
+  const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
+  const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
+  const mutedColor = darkMode ? 'var(--mute)' : 'var(--mute)'
 
   const schemaFAQ = {
     '@context': 'https://schema.org',
@@ -270,7 +270,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaFAQ) }} />
       </Head>
 
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}
@@ -280,17 +280,9 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
 
         <main style={{ maxWidth: 800, margin: '0 auto', padding: '40px 16px 80px' }}>
           {/* Hero with logo */}
-          <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-            <a href="/">
-              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
-                style={{ borderRadius: '14px', marginBottom: '12px', display: 'inline-block', boxShadow: '0 2px 12px rgba(13,110,253,0.2)', background: '#fff', padding: '6px', boxSizing: 'border-box' }} />
-            </a>
-            <h1 style={{ fontSize: '30px', fontWeight: '700', margin: '0 0 10px' }}>
-              {ui.title}
-            </h1>
-            <p style={{ color: mutedColor, fontSize: '15px', margin: 0 }}>
-              {ui.subtitle}
-            </p>
+          <div className="page-head">
+            <h1 className="page-title">{ui.title}</h1>
+            <p className="page-lede">{ui.subtitle}</p>
           </div>
 
           {/* Search */}
@@ -302,7 +294,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
               onChange={e => setSearchQuery(e.target.value)}
               style={{
                 width: '100%', padding: '12px 16px 12px 44px',
-                borderRadius: '12px', border: `1px solid ${borderColor}`,
+                borderRadius: 0, border: `1px solid ${borderColor}`,
                 background: cardBg, color: textColor, fontSize: '15px',
                 outline: 'none', boxSizing: 'border-box',
               }}
@@ -320,7 +312,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
                 }
               </p>
               {filtered.map((item, idx) => (
-                <div key={idx} style={{ padding: '20px', borderRadius: '12px', background: cardBg, border: `1px solid ${borderColor}`, marginBottom: '12px' }}>
+                <div key={idx} style={{ padding: '20px', borderRadius: 0, background: cardBg, border: `1px solid ${borderColor}`, marginBottom: '12px' }}>
                   <div style={{ fontWeight: '600', fontSize: '15px', marginBottom: '10px' }}>{item.q}</div>
                   <div style={{ color: mutedColor, fontSize: '14px', lineHeight: 1.6 }}>{item.a}</div>
                 </div>
@@ -331,7 +323,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
           {/* FAQ categories */}
           {!filtered && activeData.map((cat, catIdx) => (
             <div key={catIdx} style={{ marginBottom: '32px' }}>
-              <h2 style={{ fontSize: '17px', fontWeight: '700', margin: '0 0 14px', color: '#0d6efd' }}>
+              <h2 style={{ fontSize: '17px', fontWeight: '700', margin: '0 0 14px', color: 'var(--accent)' }}>
                 {cat.category}
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -342,8 +334,8 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
                     <div
                       key={qIdx}
                       style={{
-                        borderRadius: '12px',
-                        border: `1px solid ${isOpen ? '#0d6efd' : borderColor}`,
+                        borderRadius: 0,
+                        border: `1px solid ${isOpen ? 'var(--accent)' : borderColor}`,
                         background: cardBg,
                         overflow: 'hidden',
                         transition: 'border-color 0.15s',
@@ -361,7 +353,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
                         <span style={{ fontWeight: '500', fontSize: '15px', color: textColor, lineHeight: 1.4 }}>
                           {item.q}
                         </span>
-                        <span style={{ color: '#0d6efd', fontSize: '20px', flexShrink: 0, transition: 'transform 0.2s', transform: isOpen ? 'rotate(45deg)' : 'rotate(0)' }}>
+                        <span style={{ color: 'var(--accent)', fontSize: '20px', flexShrink: 0, transition: 'transform 0.2s', transform: isOpen ? 'rotate(45deg)' : 'rotate(0)' }}>
                           +
                         </span>
                       </button>
@@ -378,20 +370,20 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
           ))}
 
           {/* CTA */}
-          <div style={{ textAlign: 'center', padding: '32px', borderRadius: '16px', background: darkMode ? '#1a2840' : '#f0f4ff', border: `1px solid ${darkMode ? '#2d5a9e' : '#c5d8fc'}`, marginTop: '40px' }}>
-            <Target size={32} style={{ color: '#0d6efd', marginBottom: '12px' }} />
+          <div style={{ textAlign: 'center', padding: '32px', borderRadius: 0, background: darkMode ? 'var(--accent-tint)' : 'var(--accent-tint)', border: `1px solid ${darkMode ? 'var(--line)' : 'var(--line)'}`, marginTop: '40px' }}>
+            <Target size={32} style={{ color: 'var(--accent)', marginBottom: '12px' }} />
             <h2 style={{ fontSize: '18px', fontWeight: '600', margin: '0 0 8px' }}>Siap untuk mencoba?</h2>
             <p style={{ color: mutedColor, fontSize: '14px', margin: '0 0 20px' }}>
               Gunakan konverter aksara Bali, latih kemampuan Anda, atau baca artikel di blog kami.
             </p>
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href="/" style={{ padding: '10px 24px', borderRadius: '10px', background: '#0d6efd', color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>
+              <a href="/" style={{ padding: '10px 24px', borderRadius: 0, background: 'var(--accent)', color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>
                 Konverter
               </a>
-              <a href="/practice" style={{ padding: '10px 24px', borderRadius: '10px', border: `1px solid ${borderColor}`, color: textColor, textDecoration: 'none', fontSize: '14px' }}>
+              <a href="/practice" style={{ padding: '10px 24px', borderRadius: 0, border: `1px solid ${borderColor}`, color: textColor, textDecoration: 'none', fontSize: '14px' }}>
                 Latihan
               </a>
-              <a href="/blog" style={{ padding: '10px 24px', borderRadius: '10px', border: `1px solid ${borderColor}`, color: textColor, textDecoration: 'none', fontSize: '14px' }}>
+              <a href="/blog" style={{ padding: '10px 24px', borderRadius: 0, border: `1px solid ${borderColor}`, color: textColor, textDecoration: 'none', fontSize: '14px' }}>
                 Blog
               </a>
             </div>

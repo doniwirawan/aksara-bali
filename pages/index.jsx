@@ -1,29 +1,7 @@
 import Head from 'next/head'
 import { useState, useEffect, useCallback } from 'react'
-import {
-    Moon,
-    Sun,
-    Github,
-    Heart,
-    Coffee,
-    Languages,
-    Wifi,
-    WifiOff,
-    ExternalLink,
-    Linkedin,
-    Globe2,
-    Download,
-    X,
-    Smartphone,
-    Bug,
-    Target,
-    PenLine,
-    FileText,
-    LayoutDashboard,
-    HelpCircle,
-    Zap,
-    ScanText
-} from 'lucide-react'
+import { WifiOff, Download, X, Smartphone, PenLine, ArrowRight } from 'lucide-react'
+import { convertLatinToBalinese } from '../utils/balineseConverter'
 import LatinBalineseConverter from '../components/LatinBalineseConverter'
 import PageTour from '../components/PageTour'
 
@@ -337,60 +315,44 @@ export default function Home({ locale, setLocale }) {
                 />
             </Head>
 
-            <div className={`min-vh-100 ${darkMode ? 'bg-dark text-light' : 'bg-light text-dark'}`}>
+            <div className="home">
                 {showInstallPrompt && !isInstalled && (
-                    <div className="alert alert-success m-0 rounded-0 py-3 border-0 shadow-sm" style={{ background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)' }}>
-                        <div className="container-fluid px-3">
-                            <div className="d-flex align-items-center justify-content-between">
-                                <div className="d-flex align-items-center">
-                                    <div className="text-white">
-                                        <div className="fw-bold mb-1">
-                                            <Smartphone size={16} className="me-2" />
-                                            {locale === 'id' ? 'Install Aplikasi' : 'Install App'}
-                                        </div>
-                                        <small className="opacity-90 d-none d-sm-block">
-                                            {locale === 'id'
-                                                ? 'Dapatkan akses cepat dan gunakan offline!'
-                                                : 'Get quick access and use offline!'
-                                            }
-                                        </small>
-                                    </div>
-                                </div>
-
-                                <div className="d-flex align-items-center gap-2">
-                                    <button
-                                        onClick={handleInstallClick}
-                                        className="btn btn-light btn-sm fw-medium d-flex align-items-center"
-                                        style={{ minWidth: '80px' }}
-                                    >
-                                        <Download size={14} className="me-1" />
-                                        {locale === 'id' ? 'Install' : 'Install'}
-                                    </button>
-                                    <button
-                                        onClick={dismissInstallPrompt}
-                                        className="btn btn-link text-white p-1 opacity-75"
-                                        style={{ minWidth: 'auto' }}
-                                        aria-label={locale === 'id' ? 'Tutup' : 'Close'}
-                                    >
-                                        <X size={18} />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                    <div className="strip strip--install" role="region" aria-label={locale === 'id' ? 'Install Aplikasi' : 'Install App'}>
+                        <span>
+                            <strong>{locale === 'id' ? 'Install Aplikasi' : 'Install App'}</strong>
+                            <span className="d-none d-sm-inline">
+                                {' · '}
+                                {locale === 'id'
+                                    ? 'Dapatkan akses cepat dan gunakan offline!'
+                                    : 'Get quick access and use offline!'
+                                }
+                            </span>
+                        </span>
+                        <span className="d-flex align-items-center gap-1">
+                            <button onClick={handleInstallClick} className="strip__btn">
+                                <Download size={14} />
+                                Install
+                            </button>
+                            <button
+                                onClick={dismissInstallPrompt}
+                                className="strip__x"
+                                aria-label={locale === 'id' ? 'Tutup' : 'Close'}
+                            >
+                                <X size={18} />
+                            </button>
+                        </span>
                     </div>
                 )}
 
                 {!isOnline && (
-                    <div className="alert alert-warning m-0 rounded-0 text-center py-2">
-                        <div className="d-flex align-items-center justify-content-center">
-                            <WifiOff size={14} className="me-2" />
-                            <small className="fw-medium">
-                                {locale === 'id'
-                                    ? 'Offline - Konversi dasar tetap berfungsi!'
-                                    : 'Offline - Basic conversion still works!'
-                                }
-                            </small>
-                        </div>
+                    <div className="strip strip--offline" role="status">
+                        <WifiOff size={14} />
+                        <span>
+                            {locale === 'id'
+                                ? 'Offline - Konversi dasar tetap berfungsi!'
+                                : 'Offline - Basic conversion still works!'
+                            }
+                        </span>
                     </div>
                 )}
 
@@ -401,138 +363,120 @@ export default function Home({ locale, setLocale }) {
                     onToggleLocale={() => setLocale(locale === 'id' ? 'en' : 'id')}
                 />
 
-                <main className="pb-4">
+                <main>
                     <LatinBalineseConverter locale={locale} darkMode={darkMode} />
                     <PageTour pageKey="home" locale={locale} steps={HOME_TOUR} />
 
-                    {/* Get the Android app */}
-                    <div style={{ maxWidth: 900, margin: '0 auto', padding: '24px 16px 0', fontFamily: 'Inter, system-ui, sans-serif' }}>
-                        <div style={{
-                            display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', justifyContent: 'space-between',
-                            background: darkMode ? 'linear-gradient(135deg,#13213f,#1a1a2e)' : 'linear-gradient(135deg,#e8f0fe,#f5f8ff)',
-                            border: `1px solid ${darkMode ? '#2d5a9e' : '#c5d8fc'}`,
-                            borderRadius: '16px', padding: '20px 24px',
-                        }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                                <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#0d6efd', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                    <Smartphone size={26} color="#fff" />
-                                </div>
-                                <div>
-                                    <div style={{ fontWeight: '700', fontSize: '16px', color: darkMode ? '#e8e8e8' : '#1a1a1a' }}>
-                                        {locale === 'id' ? 'Dapatkan aplikasi Android' : 'Get the Android app'}
-                                    </div>
-                                    <div style={{ fontSize: '13px', color: darkMode ? '#9aa' : '#666' }}>
-                                        {locale === 'id' ? 'Konversi & latihan aksara Bali di ponsel Anda.' : 'Convert & practice Balinese script on your phone.'}
-                                    </div>
-                                </div>
+                    <div className="page" style={{ paddingTop: 0 }}>
+                        {/* Each tool, shown doing its job on a real word */}
+                        <section className="tools-strip" aria-labelledby="tools-title">
+                            <h2 className="section-title" id="tools-title">
+                                {locale === 'id' ? 'Semua Fitur' : 'All Features'}
+                            </h2>
+                            <p className="section-lede">
+                                {locale === 'id' ? 'Klik untuk menjelajahi lebih lanjut' : 'Click to explore each feature'}
+                            </p>
+                            <div className="tool-rows">
+                                <a href="/translate" className="tool-row">
+                                    <span>
+                                        <span className="tool-row__name">{locale === 'id' ? 'Kamus' : 'Dictionary'}</span>
+                                        <span className="tool-row__desc">{locale === 'id' ? 'Indonesia ⇄ Bali, dengan tingkatan bahasa.' : 'Indonesian ⇄ Balinese, with speech levels.'}</span>
+                                    </span>
+                                    <span className="tool-row__demo">
+                                        <span>abu</span>
+                                        <span className="tool-row__arrow" aria-hidden="true">→</span>
+                                        <span>awu</span>
+                                        <span className="aksara" lang="ban-Bali">{convertLatinToBalinese('awu')}</span>
+                                    </span>
+                                    <span className="tool-row__go">{locale === 'id' ? 'Buka Kamus' : 'Open'} <ArrowRight size={15} /></span>
+                                </a>
+                                <a href="/practice" className="tool-row">
+                                    <span>
+                                        <span className="tool-row__name">{locale === 'id' ? 'Latihan Kuis' : 'Quiz Practice'}</span>
+                                        <span className="tool-row__desc">{locale === 'id' ? 'Uji pengetahuan aksara Bali dengan kuis interaktif bergambar.' : 'Test your Balinese script knowledge with image-based interactive quizzes.'}</span>
+                                    </span>
+                                    <span className="tool-row__demo">
+                                        <span>{locale === 'id' ? 'Mana yang “pura”?' : 'Which is “pura”?'}</span>
+                                        <span className="cells" aria-hidden="true">
+                                            {['dewa', 'pura', 'padi', 'api', 'suka', 'jaya'].map(w => (
+                                                <span key={w} className={w === 'pura' ? 'is-hit' : ''} style={{ fontSize: w.length > 3 ? 17 : 22 }}>{convertLatinToBalinese(w)}</span>
+                                            ))}
+                                        </span>
+                                    </span>
+                                    <span className="tool-row__go">{locale === 'id' ? 'Mulai' : 'Start'} <ArrowRight size={15} /></span>
+                                </a>
+                                <a href="/practice" className="tool-row">
+                                    <span>
+                                        <span className="tool-row__name">{locale === 'id' ? 'Latihan Menulis' : 'Writing Practice'}</span>
+                                        <span className="tool-row__desc">{locale === 'id' ? 'Gambar aksara Bali di kanvas dengan mouse, sentuh, atau gerakan tangan.' : 'Draw Balinese script on a canvas with mouse, touch, or hand gestures.'}</span>
+                                    </span>
+                                    <span className="tool-row__demo">
+                                        <span className="aksara" lang="ban-Bali" style={{ fontSize: 44, color: 'var(--mute)', opacity: .45 }}>{convertLatinToBalinese('ka')}</span>
+                                        <PenLine size={22} />
+                                        <span>{locale === 'id' ? 'Gerakan tangan lewat kamera' : 'Hand gestures via webcam'}</span>
+                                    </span>
+                                    <span className="tool-row__go">{locale === 'id' ? 'Coba' : 'Try it'} <ArrowRight size={15} /></span>
+                                </a>
+                                <a href="/read" className="tool-row">
+                                    <span>
+                                        <span className="tool-row__name">{locale === 'id' ? 'Baca dari Foto' : 'Read from Photo'}</span>
+                                        <span className="tool-row__desc">{locale === 'id' ? 'Potret aksara Bali dan baca hasilnya dalam Latin — OCR langsung di browser.' : 'Snap Balinese script and read it back in Latin — OCR right in your browser.'}</span>
+                                    </span>
+                                    <span className="tool-row__demo">
+                                        <span className="aksara" lang="ban-Bali">{convertLatinToBalinese('pura')}</span>
+                                        <span className="tool-row__arrow" aria-hidden="true">→</span>
+                                        <span>pura</span>
+                                    </span>
+                                    <span className="tool-row__go">{locale === 'id' ? 'Baca' : 'Read'} <ArrowRight size={15} /></span>
+                                </a>
+                                <a href="/blog" className="tool-row">
+                                    <span>
+                                        <span className="tool-row__name">{locale === 'id' ? 'Blog Aksara' : 'Script Blog'}</span>
+                                        <span className="tool-row__desc">{locale === 'id' ? 'Artikel tentang sejarah, struktur, dan pelestarian aksara Bali.' : 'Articles on the history, structure, and preservation of Balinese script.'}</span>
+                                    </span>
+                                    <span className="tool-row__demo" />
+                                    <span className="tool-row__go">{locale === 'id' ? 'Baca artikel' : 'Read articles'} <ArrowRight size={15} /></span>
+                                </a>
+                                <a href="/dashboard" className="tool-row">
+                                    <span>
+                                        <span className="tool-row__name">{locale === 'id' ? 'Dasbor Belajar' : 'Learning Dashboard'}</span>
+                                        <span className="tool-row__desc">{locale === 'id' ? 'Pantau progres belajar, nilai kuis, dan statistik latihan menulismu.' : 'Track your learning progress, quiz scores, and writing practice stats.'}</span>
+                                    </span>
+                                    <span className="tool-row__demo" />
+                                    <span className="tool-row__go">{locale === 'id' ? 'Buka' : 'Open'} <ArrowRight size={15} /></span>
+                                </a>
+                                <a href="/faq" className="tool-row">
+                                    <span>
+                                        <span className="tool-row__name">FAQ</span>
+                                        <span className="tool-row__desc">{locale === 'id' ? 'Pertanyaan umum tentang aksara Bali, cara penggunaan, dan fitur teknis.' : 'Common questions about Balinese script, usage guide, and technical features.'}</span>
+                                    </span>
+                                    <span className="tool-row__demo" />
+                                    <span className="tool-row__go">{locale === 'id' ? 'Lihat' : 'View'} <ArrowRight size={15} /></span>
+                                </a>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                        </section>
+
+                        {/* Get the Android app */}
+                        <section className="app-band" aria-labelledby="app-title">
+                            <div>
+                                <h2 className="app-band__title" id="app-title">
+                                    {locale === 'id' ? 'Dapatkan aplikasi Android' : 'Get the Android app'}
+                                </h2>
+                                <p>
+                                    {locale === 'id' ? 'Konversi & latihan aksara Bali di ponsel Anda.' : 'Convert & practice Balinese script on your phone.'}
+                                </p>
+                            </div>
+                            <div className="app-band__ctas">
                                 <a href="https://play.google.com/apps/internaltest/4700728977787153239" target="_blank" rel="noopener noreferrer"
-                                    data-track="landing-play-store"
-                                    style={{
-                                        display: 'inline-flex', alignItems: 'center', gap: '8px',
-                                        background: '#0d6efd', color: '#fff', textDecoration: 'none',
-                                        padding: '12px 22px', borderRadius: '12px', fontWeight: '600', fontSize: '14px',
-                                        boxShadow: '0 2px 8px rgba(13,110,253,0.3)',
-                                    }}>
+                                    data-track="landing-play-store" className="cta cta--red">
                                     <Smartphone size={18} /> {locale === 'id' ? 'Dapatkan di Google Play' : 'Get it on Google Play'}
                                 </a>
                                 <a href="https://github.com/doniwirawan/aksara-bali/releases/latest" target="_blank" rel="noopener noreferrer"
-                                    data-track="landing-download-apk"
-                                    onClick={handleApkClick}
-                                    style={{
-                                        display: 'inline-flex', alignItems: 'center', gap: '8px',
-                                        background: 'transparent', color: '#0d6efd', textDecoration: 'none',
-                                        padding: '12px 22px', borderRadius: '12px', fontWeight: '600', fontSize: '14px',
-                                        border: '1px solid #0d6efd',
-                                    }}>
+                                    data-track="landing-download-apk" onClick={handleApkClick} className="cta cta--ghost">
                                     <Download size={18} /> {locale === 'id' ? 'Unduh APK' : 'Download APK'}
                                 </a>
                             </div>
-                        </div>
-                    </div>
-
-                    {/* Feature Discovery Section */}
-                    <div style={{ maxWidth: 900, margin: '0 auto', padding: '40px 16px 16px', fontFamily: 'Inter, system-ui, sans-serif' }}>
-                        <h2 style={{ fontSize: '18px', fontWeight: '700', color: darkMode ? '#e8e8e8' : '#1a1a1a', marginBottom: '8px', textAlign: 'center' }}>
-                            {locale === 'id' ? 'Semua Fitur' : 'All Features'}
-                        </h2>
-                        <p style={{ fontSize: '13px', color: darkMode ? '#888' : '#666', textAlign: 'center', marginBottom: '24px' }}>
-                            {locale === 'id' ? 'Klik untuk menjelajahi lebih lanjut' : 'Click to explore each feature'}
-                        </p>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '14px' }}>
-                            {[
-                                {
-                                    href: '/read',
-                                    icon: ScanText,
-                                    title: locale === 'id' ? 'Baca dari Foto' : 'Read from Photo',
-                                    desc: locale === 'id' ? 'Potret aksara Bali dan baca hasilnya dalam Latin — OCR langsung di browser.' : 'Snap Balinese script and read it back in Latin — OCR right in your browser.',
-                                    color: '#0dcaf0',
-                                },
-                                {
-                                    href: '/practice',
-                                    icon: Target,
-                                    title: locale === 'id' ? 'Latihan Kuis' : 'Quiz Practice',
-                                    desc: locale === 'id' ? 'Uji pengetahuan aksara Bali dengan kuis interaktif bergambar.' : 'Test your Balinese script knowledge with image-based interactive quizzes.',
-                                    color: '#0d6efd',
-                                },
-                                {
-                                    href: '/practice',
-                                    icon: PenLine,
-                                    title: locale === 'id' ? 'Latihan Menulis' : 'Writing Practice',
-                                    desc: locale === 'id' ? 'Gambar aksara Bali di kanvas dengan mouse, sentuh, atau gerakan tangan.' : 'Draw Balinese script on a canvas with mouse, touch, or hand gestures.',
-                                    color: '#198754',
-                                },
-                                {
-                                    href: '/blog',
-                                    icon: FileText,
-                                    title: locale === 'id' ? 'Blog Aksara' : 'Script Blog',
-                                    desc: locale === 'id' ? 'Artikel tentang sejarah, struktur, dan pelestarian aksara Bali.' : 'Articles on the history, structure, and preservation of Balinese script.',
-                                    color: '#dc3545',
-                                },
-                                {
-                                    href: '/dashboard',
-                                    icon: LayoutDashboard,
-                                    title: locale === 'id' ? 'Dasbor Belajar' : 'Learning Dashboard',
-                                    desc: locale === 'id' ? 'Pantau progres belajar, nilai kuis, dan statistik latihan menulismu.' : 'Track your learning progress, quiz scores, and writing practice stats.',
-                                    color: '#fd7e14',
-                                },
-                                {
-                                    href: '/faq',
-                                    icon: HelpCircle,
-                                    title: 'FAQ',
-                                    desc: locale === 'id' ? 'Pertanyaan umum tentang aksara Bali, cara penggunaan, dan fitur teknis.' : 'Common questions about Balinese script, usage guide, and technical features.',
-                                    color: '#6f42c1',
-                                },
-                                {
-                                    href: '/',
-                                    icon: Zap,
-                                    title: locale === 'id' ? 'Konverter Latin' : 'Latin Converter',
-                                    desc: locale === 'id' ? 'Konversi teks Latin ke aksara Bali secara real-time dengan dukungan Sansekerta.' : 'Convert Latin text to Balinese script in real-time with full Sanskrit support.',
-                                    color: '#20c997',
-                                },
-                            ].map(f => (
-                                <a key={f.href + f.title} href={f.href} style={{ textDecoration: 'none' }}>
-                                    <div
-                                        style={{
-                                            background: darkMode ? '#1a1a2e' : '#ffffff',
-                                            border: `1px solid ${darkMode ? '#2a2a3e' : '#e8e8e0'}`,
-                                            borderRadius: '14px',
-                                            padding: '20px 16px',
-                                            height: '100%',
-                                            transition: 'box-shadow 0.15s, transform 0.15s',
-                                            cursor: 'pointer',
-                                        }}
-                                        onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 4px 16px ${f.color}30`; e.currentTarget.style.transform = 'translateY(-2px)' }}
-                                        onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}
-                                    >
-                                        <f.icon size={28} color={f.color} style={{ marginBottom: '10px' }} />
-                                        <div style={{ fontSize: '14px', fontWeight: '700', color: f.color, marginBottom: '6px' }}>{f.title}</div>
-                                        <div style={{ fontSize: '12px', color: darkMode ? '#aaa' : '#666', lineHeight: 1.5 }}>{f.desc}</div>
-                                    </div>
-                                </a>
-                            ))}
-                        </div>
+                        </section>
                     </div>
                 </main>
 
@@ -540,216 +484,10 @@ export default function Home({ locale, setLocale }) {
             </div>
 
             <style jsx>{`
-                .min-vh-100 {
-                    overscroll-behavior: none;
+                .home {
                     min-height: 100vh;
                     min-height: 100dvh;
-                }
-
-                @supports (padding: max(0px)) {
-                    .sticky-top {
-                        padding-top: max(0.25rem, env(safe-area-inset-top));
-                    }
-                    
-                    .container-fluid {
-                        padding-left: max(1rem, env(safe-area-inset-left));
-                        padding-right: max(1rem, env(safe-area-inset-right));
-                    }
-                }
-
-                .btn, .alert {
-                    transition: all 0.2s ease-in-out;
-                }
-
-                .btn, .navbar-brand {
-                    user-select: none;
-                    -webkit-user-select: none;
-                    -webkit-touch-callout: none;
-                }
-
-                @media (hover: none) and (pointer: coarse) {
-                    .btn {
-                        min-height: 44px;
-                        min-width: 44px;
-                        padding: 0.5rem;
-                    }
-                    
-                    .btn-sm {
-                        min-height: 36px;
-                        min-width: 36px;
-                        padding: 0.375rem;
-                    }
-                }
-
-                @media (max-width: 991.98px) {
-                    .navbar {
-                        padding-top: 0.5rem !important;
-                        padding-bottom: 0.5rem !important;
-                    }
-                    
-                    .container-fluid {
-                        padding-left: 0.75rem;
-                        padding-right: 0.75rem;
-                    }
-                }
-
-                @media (max-width: 767.98px) {
-                    .container {
-                        padding-left: 0.75rem;
-                        padding-right: 0.75rem;
-                    }
-                    
-                    .navbar-brand {
-                        font-size: 0.9rem;
-                    }
-                    
-                    .navbar-brand span:first-child {
-                        font-size: 1.25rem !important;
-                    }
-                    
-                    .gap-1 {
-                        gap: 0.25rem !important;
-                    }
-                    
-                    .gap-3 {
-                        gap: 0.75rem !important;
-                    }
-                }
-
-                @media (max-width: 575.98px) {
-                    .container-fluid {
-                        padding-left: 0.5rem;
-                        padding-right: 0.5rem;
-                    }
-                    
-                    .navbar-brand .fw-bold {
-                        font-size: 0.875rem !important;
-                    }
-                    
-                    .navbar-brand small {
-                        font-size: 0.6rem !important;
-                    }
-                    
-                    .btn-sm {
-                        padding: 0.25rem 0.375rem;
-                        font-size: 0.75rem;
-                    }
-                    
-                    .d-flex.gap-3 {
-                        flex-direction: column;
-                        align-items: center;
-                        gap: 0.5rem !important;
-                    }
-                }
-
-                [lang="id-ID"] {
-                    font-family: 'Inter', Inter, system-ui, -apple-system, sans-serif;
-                }
-
-                [lang="en-US"] {
-                    font-family: 'Inter', Inter, system-ui, -apple-system, sans-serif;
-                }
-
-                [data-cultural-context="indonesian"] .navbar-brand {
-                    border-left: 2px solid #ff0000;
-                    padding-left: 0.5rem;
-                }
-
-                @media (min-width: 768px) {
-                    [data-cultural-context="indonesian"] .navbar-brand {
-                        border-left: 3px solid #ff0000;
-                        padding-left: 0.75rem;
-                    }
-                }
-
-                .sr-only {
-                    position: absolute;
-                    width: 1px;
-                    height: 1px;
-                    padding: 0;
-                    margin: -1px;
-                    overflow: hidden;
-                    clip: rect(0, 0, 0, 0);
-                    white-space: nowrap;
-                    border: 0;
-                }
-
-                @media (prefers-contrast: high) {
-                    .btn {
-                        border-width: 2px;
-                    }
-                }
-
-                @media (prefers-reduced-motion: reduce) {
-                    *,
-                    *::before,
-                    *::after {
-                        animation-duration: 0.01ms !important;
-                        animation-iteration-count: 1 !important;
-                        transition-duration: 0.01ms !important;
-                    }
-                }
-
-                .btn:focus-visible {
-                    outline: 2px solid currentColor;
-                    outline-offset: 2px;
-                }
-
-                a {
-                    text-decoration: none;
-                    transition: color 0.15s ease-in-out;
-                }
-
-                a:hover {
-                    text-decoration: underline;
-                }
-
-                @media (max-width: 767.98px) {
-                    .alert {
-                        border-radius: 0;
-                        margin-bottom: 0;
-                    }
-                    
-                    .card {
-                        border-radius: 0.5rem;
-                        margin-bottom: 1rem;
-                    }
-                    
-                    .footer a {
-                        padding: 0.25rem;
-                        min-height: 32px;
-                        display: inline-flex;
-                        align-items: center;
-                    }
-                }
-
-                .alert-success {
-                    animation: slideDown 0.3s ease-out;
-                }
-
-                @keyframes slideDown {
-                    from {
-                        transform: translateY(-100%);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: translateY(0);
-                        opacity: 1;
-                    }
-                }
-
-                .navbar-brand img {
-                    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
-                }
-
-                .alert-success .btn-light:hover {
-                    background-color: #f8f9fa;
-                    border-color: #f8f9fa;
-                    transform: translateY(-1px);
-                }
-
-                .alert-success .btn-link:hover {
-                    opacity: 1 !important;
+                    overscroll-behavior: none;
                 }
             `}</style>
         </>

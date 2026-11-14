@@ -11,11 +11,11 @@ export default function TermsPage({ locale, setLocale }) {
   }, [])
 
   const lang = locale === 'en' ? 'en' : 'id'
-  const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
-  const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const mutedColor = darkMode ? '#9aa' : '#555'
-  const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
+  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const cardBg = 'var(--surface)'
+  const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
+  const mutedColor = darkMode ? 'var(--mute)' : 'var(--mute)'
+  const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
 
   const updated = lang === 'en' ? 'Last updated: 23 June 2026' : 'Terakhir diperbarui: 23 Juni 2026'
 
@@ -52,7 +52,7 @@ export default function TermsPage({ locale, setLocale }) {
         <link rel="canonical" href="https://aksarabali.doniwirawan.xyz/terms" />
       </Head>
 
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, -apple-system, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}
@@ -61,10 +61,10 @@ export default function TermsPage({ locale, setLocale }) {
         />
 
         <main style={{ maxWidth: 760, margin: '0 auto', padding: '40px 16px 80px' }}>
-          <h1 style={{ fontSize: '30px', fontWeight: '700', margin: '0 0 6px' }}>{title}</h1>
+          <h1 className="page-title" style={{ marginBottom: 10 }}>{title}</h1>
           <p style={{ color: mutedColor, fontSize: '13px', margin: '0 0 28px' }}>{updated}</p>
 
-          <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: '14px', padding: '28px' }}>
+          <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 0, padding: '28px' }}>
             {sections.map(([heading, body], i) => (
               <section key={i} style={{ marginBottom: i === sections.length - 1 ? 0 : '22px' }}>
                 <h2 style={{ fontSize: '17px', fontWeight: '600', margin: '0 0 8px' }}>{heading}</h2>

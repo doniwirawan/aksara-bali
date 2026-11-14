@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useState, useEffect, useCallback } from 'react'
-import { ScanText, Copy, Check } from 'lucide-react'
+import { Copy, Check } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import OcrPanel from '../components/OcrPanel'
@@ -74,10 +74,10 @@ export default function ReadPage({ locale, setLocale }) {
     } catch { /* ignore */ }
   }, [])
 
-  const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
-  const border = darkMode ? '#2a2a3e' : '#e8e8e0'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const muted = darkMode ? '#9aa' : '#666'
+  const cardBg = 'var(--surface)'
+  const border = darkMode ? 'var(--line)' : 'var(--line)'
+  const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
+  const muted = darkMode ? 'var(--mute)' : 'var(--mute)'
 
   return (
     <>
@@ -94,13 +94,10 @@ export default function ReadPage({ locale, setLocale }) {
           onToggleLocale={() => setLocale(locale === 'id' ? 'en' : 'id')}
         />
 
-        <main style={{ maxWidth: 760, margin: '0 auto', padding: '28px 16px 48px', fontFamily: 'Inter, system-ui, sans-serif' }}>
-          <div style={{ textAlign: 'center', marginBottom: 24 }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 56, height: 56, borderRadius: 16, background: '#0d6efd', marginBottom: 12 }}>
-              <ScanText size={30} color="#fff" />
-            </div>
-            <h1 style={{ fontSize: 24, fontWeight: 800, color: textColor, margin: '0 0 6px' }}>{t.title}</h1>
-            <p style={{ fontSize: 14, color: muted, margin: 0 }}>{t.subtitle}</p>
+        <main style={{ maxWidth: 760, margin: '0 auto', padding: '28px 16px 48px', fontFamily: 'var(--font-sans)' }}>
+          <div className="page-head">
+            <h1 className="page-title">{t.title}</h1>
+            <p className="page-lede">{t.subtitle}</p>
           </div>
 
           <OcrPanel locale={locale} darkMode={darkMode} onResult={setResult} />
@@ -137,7 +134,7 @@ export default function ReadPage({ locale, setLocale }) {
             )
           )}
 
-          <div style={{ marginTop: 32, background: cardBg, border: `1px solid ${border}`, borderRadius: 14, padding: '16px 18px' }}>
+          <div style={{ marginTop: 32, background: cardBg, border: `1px solid ${border}`, borderRadius: 0, padding: '16px 18px' }}>
             <div style={{ fontWeight: 700, fontSize: 13, color: textColor, marginBottom: 8 }}>{t.tipTitle}</div>
             <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: muted, lineHeight: 1.7 }}>
               {t.tips.map((tip) => <li key={tip}>{tip}</li>)}
@@ -153,10 +150,10 @@ export default function ReadPage({ locale, setLocale }) {
 
 function ResultCard({ label, children, onCopy, copied, copyLabel, copiedLabel, cardBg, border, muted }) {
   return (
-    <div style={{ background: cardBg, border: `1px solid ${border}`, borderRadius: 14, padding: '14px 16px' }}>
+    <div style={{ background: cardBg, border: `1px solid ${border}`, borderRadius: 0, padding: '14px 16px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
         <span style={{ fontSize: 12, fontWeight: 600, color: muted, textTransform: 'uppercase', letterSpacing: 0.4 }}>{label}</span>
-        <button onClick={onCopy} className="btn btn-sm btn-link p-0" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, color: copied ? '#198754' : '#0d6efd', textDecoration: 'none' }}>
+        <button onClick={onCopy} className="btn btn-sm btn-link p-0" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, color: copied ? 'var(--ok)' : 'var(--accent)', textDecoration: 'none' }}>
           {copied ? <Check size={14} /> : <Copy size={14} />} {copied ? copiedLabel : copyLabel}
         </button>
       </div>

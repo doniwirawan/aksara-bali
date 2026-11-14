@@ -39,27 +39,24 @@ export default function RegisterPage() {
       </Head>
       <div style={{
         minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: '#f5f5f0', fontFamily: 'Inter, system-ui, sans-serif',
+        background: 'var(--surface-2)', fontFamily: 'var(--font-sans)',
       }}>
         <div style={{
-          padding: '40px', borderRadius: '16px', background: '#fff',
-          border: '1px solid #e0e0d8', width: '360px',
+          padding: '40px', borderRadius: 0, background: 'var(--surface)',
+          border: '1px solid var(--line)', width: '360px',
           boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
         }}>
           <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-            <a href="/">
-              <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="56" height="56"
-                style={{ borderRadius: '12px', marginBottom: '12px', display: 'inline-block' }} />
-            </a>
-            <h1 style={{ fontSize: '20px', fontWeight: '700', margin: '0 0 4px' }}>Buat Akun</h1>
-            <p style={{ color: '#888', fontSize: '13px', margin: 0 }}>Aksara Bali Converter</p>
+            <a href="/" className="site-brand__aksara" style={{ fontSize: 34, textDecoration: 'none', display: 'inline-block', marginBottom: 8 }} aria-label="Aksara Bali">ᬅᬓ᭄ᬱᬭ</a>
+            <h1 style={{ fontSize: '28px', fontWeight: 800, margin: '0 0 4px' }}>Buat Akun</h1>
+            <p style={{ color: 'var(--mute)', fontSize: '13px', margin: 0 }}>Aksara Bali Converter</p>
           </div>
 
           {message ? (
-            <div style={{ padding: '16px', borderRadius: '10px', background: '#d1fae5', color: '#065f46', fontSize: '14px', lineHeight: 1.5 }}>
+            <div style={{ padding: '16px', borderRadius: 0, background: '#d1fae5', color: '#065f46', fontSize: '14px', lineHeight: 1.5 }}>
               {message}
               <div style={{ marginTop: '12px' }}>
-                <a href="/auth/login" style={{ color: '#0d6efd', fontWeight: '600' }}>Masuk sekarang →</a>
+                <a href="/auth/login" style={{ color: 'var(--accent)', fontWeight: '600' }}>Masuk sekarang →</a>
               </div>
             </div>
           ) : (
@@ -72,8 +69,8 @@ export default function RegisterPage() {
                 required
                 autoFocus
                 style={{
-                  width: '100%', padding: '12px 14px', borderRadius: '10px',
-                  border: '1px solid #e0e0d8', fontSize: '15px', marginBottom: '10px',
+                  width: '100%', padding: '12px 14px', borderRadius: 0,
+                  border: '1px solid var(--line)', fontSize: '15px', marginBottom: '10px',
                   boxSizing: 'border-box', outline: 'none',
                 }}
               />
@@ -85,12 +82,12 @@ export default function RegisterPage() {
                   onChange={e => setPassword(e.target.value)}
                   required
                   style={{
-                    width: '100%', padding: '12px 44px 12px 14px', borderRadius: '10px',
-                    border: '1px solid #e0e0d8', fontSize: '15px',
+                    width: '100%', padding: '12px 44px 12px 14px', borderRadius: 0,
+                    border: '1px solid var(--line)', fontSize: '15px',
                     boxSizing: 'border-box', outline: 'none',
                   }}
                 />
-                <button type="button" onClick={() => setShowPassword(v => !v)} aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'} style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#888', display: 'flex', alignItems: 'center', padding: '4px' }}>
+                <button type="button" onClick={() => setShowPassword(v => !v)} aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'} style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--mute)', display: 'flex', alignItems: 'center', padding: '4px' }}>
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
@@ -102,22 +99,22 @@ export default function RegisterPage() {
                   onChange={e => setConfirm(e.target.value)}
                   required
                   style={{
-                    width: '100%', padding: '12px 44px 12px 14px', borderRadius: '10px',
-                    border: `1px solid ${error ? '#ef4444' : '#e0e0d8'}`, fontSize: '15px',
+                    width: '100%', padding: '12px 44px 12px 14px', borderRadius: 0,
+                    border: `1px solid ${error ? 'var(--danger)' : 'var(--line)'}`, fontSize: '15px',
                     boxSizing: 'border-box', outline: 'none',
                   }}
                 />
-                <button type="button" onClick={() => setShowConfirm(v => !v)} aria-label={showConfirm ? 'Sembunyikan password' : 'Tampilkan password'} style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#888', display: 'flex', alignItems: 'center', padding: '4px' }}>
+                <button type="button" onClick={() => setShowConfirm(v => !v)} aria-label={showConfirm ? 'Sembunyikan password' : 'Tampilkan password'} style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--mute)', display: 'flex', alignItems: 'center', padding: '4px' }}>
                   {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {error && <p style={{ color: '#ef4444', fontSize: '13px', margin: '0 0 10px' }}>{error}</p>}
+              {error && <p style={{ color: 'var(--danger)', fontSize: '13px', margin: '0 0 10px' }}>{error}</p>}
               <button
                 type="submit"
                 disabled={loading}
                 style={{
-                  width: '100%', padding: '12px', borderRadius: '10px',
-                  background: loading ? '#94b8fd' : '#0d6efd', color: '#fff',
+                  width: '100%', padding: '12px', borderRadius: 0,
+                  background: loading ? 'var(--line)' : 'var(--accent)', color: '#fff',
                   border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
                   fontSize: '15px', fontWeight: '600',
                 }}
@@ -127,14 +124,14 @@ export default function RegisterPage() {
             </form>
           )}
 
-          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: '#666' }}>
+          <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: 'var(--mute)' }}>
             Sudah punya akun?{' '}
-            <a href="/auth/login" style={{ color: '#0d6efd', textDecoration: 'none', fontWeight: '600' }}>
+            <a href="/auth/login" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: '600' }}>
               Masuk
             </a>
           </p>
           <p style={{ textAlign: 'center', marginTop: '8px', fontSize: '13px' }}>
-            <a href="/" style={{ color: '#888', textDecoration: 'none' }}>← Kembali ke Beranda</a>
+            <a href="/" style={{ color: 'var(--mute)', textDecoration: 'none' }}>← Kembali ke Beranda</a>
           </p>
         </div>
       </div>

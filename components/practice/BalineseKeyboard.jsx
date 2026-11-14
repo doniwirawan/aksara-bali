@@ -109,12 +109,12 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
 
   const currentKeys = KEYBOARD_LAYOUT[TAB_KEYS[activeTab]]
 
-  const keyBg = darkMode ? '#2d2d2d' : '#f8f9fa'
-  const keyBorder = darkMode ? '#444' : '#dee2e6'
+  const keyBg = darkMode ? '#2d2d2d' : 'var(--surface-2)'
+  const keyBorder = darkMode ? '#444' : 'var(--line)'
   const keyHover = darkMode ? '#3d3d3d' : '#e9ecef'
-  const inkColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const subColor = darkMode ? '#888' : '#888'
-  const accent = '#0d6efd'
+  const inkColor = darkMode ? 'var(--ink)' : 'var(--ink)'
+  const subColor = darkMode ? 'var(--mute)' : 'var(--mute)'
+  const accent = 'var(--accent)'
 
   const keyHoverOn = (e) => { e.currentTarget.style.background = keyHover; e.currentTarget.style.borderColor = accent }
   const keyHoverOff = (e) => { e.currentTarget.style.background = keyBg; e.currentTarget.style.borderColor = keyBorder }
@@ -127,7 +127,7 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
       title={label}
       style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        padding: '10px 6px 8px', borderRadius: '8px', border: `1px solid ${keyBorder}`,
+        padding: '10px 6px 8px', borderRadius: 0, border: `1px solid ${keyBorder}`,
         background: keyBg, cursor: 'pointer', transition: 'all 0.1s', minHeight: '60px', gap: '3px',
       }}
       onMouseEnter={keyHoverOn}
@@ -141,7 +141,7 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
   )
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div style={{ fontFamily: 'var(--font-sans)' }}>
       {/* Mode toggle: Aksara grid vs QWERTY */}
       <div style={{ display: 'flex', gap: '6px', marginBottom: '12px' }}>
         {[['grid', Grid3x3, kb.gridMode], ['qwerty', KeyboardIcon, kb.qwertyMode]].map(([m, Icon, label]) => (
@@ -150,11 +150,11 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
             onClick={() => setMode(m)}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
-              padding: '7px 16px', borderRadius: '20px', cursor: 'pointer', fontSize: '13px',
+              padding: '7px 16px', borderRadius: 0, cursor: 'pointer', fontSize: '13px',
               fontWeight: mode === m ? '600' : '400',
               border: `1px solid ${mode === m ? accent : keyBorder}`,
               background: mode === m ? accent : 'transparent',
-              color: mode === m ? '#fff' : (darkMode ? '#ccc' : '#555'),
+              color: mode === m ? '#fff' : (darkMode ? '#ccc' : 'var(--mute)'),
               transition: 'all 0.15s',
             }}
           >
@@ -177,11 +177,11 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
               style={{
                 flex: '1 0 40px', minWidth: '40px',
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                padding: '6px 2px', borderRadius: '8px', border: `1px solid ${keyBorder}`,
-                background: darkMode ? '#20283a' : '#eef4ff', cursor: 'pointer', transition: 'all 0.1s', minHeight: '48px', gap: '2px',
+                padding: '6px 2px', borderRadius: 0, border: `1px solid ${keyBorder}`,
+                background: darkMode ? '#20283a' : 'var(--accent-tint)', cursor: 'pointer', transition: 'all 0.1s', minHeight: '48px', gap: '2px',
               }}
               onMouseEnter={keyHoverOn}
-              onMouseLeave={e => { e.currentTarget.style.background = darkMode ? '#20283a' : '#eef4ff'; e.currentTarget.style.borderColor = keyBorder }}
+              onMouseLeave={e => { e.currentTarget.style.background = darkMode ? '#20283a' : 'var(--accent-tint)'; e.currentTarget.style.borderColor = keyBorder }}
             >
               <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '20px', lineHeight: 1, color: inkColor }}>{'◌' + char}</span>
               <span style={{ fontSize: '10px', color: subColor, fontWeight: '500' }}>{label}</span>
@@ -199,12 +199,12 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
                 key={label}
                 onClick={() => setActiveTab(idx)}
                 style={{
-                  padding: '6px 14px', borderRadius: '20px', border: 'none', cursor: 'pointer', fontSize: '13px',
+                  padding: '6px 14px', borderRadius: 0, border: 'none', cursor: 'pointer', fontSize: '13px',
                   fontWeight: activeTab === idx ? '600' : '400',
                   background: activeTab === idx ? accent : keyBg,
-                  color: activeTab === idx ? '#fff' : (darkMode ? '#ccc' : '#555'),
+                  color: activeTab === idx ? '#fff' : (darkMode ? '#ccc' : 'var(--mute)'),
                   transition: 'all 0.15s',
-                  boxShadow: activeTab === idx ? '0 2px 6px rgba(13,110,253,0.3)' : 'none',
+                  boxShadow: 'none',
                 }}
               >
                 {label}
@@ -236,7 +236,7 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
                   style={{
                     flex: '1 1 0', minWidth: 0, maxWidth: '56px',
                     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                    padding: '8px 2px 6px', borderRadius: '8px', border: `1px solid ${keyBorder}`,
+                    padding: '8px 2px 6px', borderRadius: 0, border: `1px solid ${keyBorder}`,
                     background: keyBg, cursor: char ? 'pointer' : 'default', opacity: char ? 1 : 0.4,
                     transition: 'all 0.1s', minHeight: '52px', gap: '2px',
                   }}
@@ -258,7 +258,7 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
         <button
           onClick={() => onSpace?.()}
-          style={{ flex: 2, padding: '10px', borderRadius: '8px', border: `1px solid ${keyBorder}`, background: keyBg, cursor: 'pointer', fontSize: '13px', color: darkMode ? '#aaa' : '#666', minWidth: '80px' }}
+          style={{ flex: 2, padding: '10px', borderRadius: 0, border: `1px solid ${keyBorder}`, background: keyBg, cursor: 'pointer', fontSize: '13px', color: darkMode ? 'var(--mute)' : 'var(--mute)', minWidth: '80px' }}
           onMouseEnter={e => e.currentTarget.style.background = keyHover}
           onMouseLeave={e => e.currentTarget.style.background = keyBg}
         >
@@ -266,7 +266,7 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
         </button>
         <button
           onClick={() => onBackspace?.()}
-          style={{ flex: 1, padding: '10px', borderRadius: '8px', border: `1px solid ${keyBorder}`, background: keyBg, cursor: 'pointer', fontSize: '13px', color: darkMode ? '#aaa' : '#666', minWidth: '70px' }}
+          style={{ flex: 1, padding: '10px', borderRadius: 0, border: `1px solid ${keyBorder}`, background: keyBg, cursor: 'pointer', fontSize: '13px', color: darkMode ? 'var(--mute)' : 'var(--mute)', minWidth: '70px' }}
           onMouseEnter={e => e.currentTarget.style.background = keyHover}
           onMouseLeave={e => e.currentTarget.style.background = keyBg}
         >
@@ -274,9 +274,9 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
         </button>
         <button
           onClick={() => onClear?.()}
-          style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #dc3545', background: 'transparent', cursor: 'pointer', fontSize: '13px', color: '#dc3545', minWidth: '70px' }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#dc3545'; e.currentTarget.style.color = '#fff' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#dc3545' }}
+          style={{ flex: 1, padding: '10px', borderRadius: 0, border: '1px solid var(--danger)', background: 'transparent', cursor: 'pointer', fontSize: '13px', color: 'var(--danger)', minWidth: '70px' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'var(--danger)'; e.currentTarget.style.color = '#fff' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--danger)' }}
         >
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Trash2 size={15} /> {kb.clear}</span>
         </button>
@@ -284,9 +284,9 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
 
       {/* Legend */}
       <div style={{
-        marginTop: '10px', padding: '8px 12px', borderRadius: '6px',
-        background: darkMode ? '#1a2840' : '#f0f4ff', fontSize: '12px',
-        color: darkMode ? '#8aabdc' : '#4a6fa5', display: 'flex', alignItems: 'flex-start', gap: '8px',
+        marginTop: '10px', padding: '8px 12px', borderRadius: 0,
+        background: darkMode ? 'var(--accent-tint)' : 'var(--accent-tint)', fontSize: '12px',
+        color: darkMode ? 'var(--mute)' : 'var(--mute)', display: 'flex', alignItems: 'flex-start', gap: '8px',
       }}>
         <Info size={15} style={{ flexShrink: 0, marginTop: '1px' }} />
         <span>

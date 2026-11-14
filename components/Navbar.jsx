@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../context/AuthContext'
-import { Zap, Target, FileText, HelpCircle, Globe, Moon, Sun, User, BarChart3, Menu, X, Languages } from 'lucide-react'
+import { Moon, Sun, User, BarChart3, Menu, X, LogOut } from 'lucide-react'
 
 const NAV_LINKS = [
-  { href: '/', label: 'Konverter', labelEn: 'Converter', icon: Zap },
+  { href: '/', label: 'Konverter', labelEn: 'Converter' },
   // /read is hidden from the nav — OCR is reachable from the "Baca dari foto"
   // panel on the converter page.
-  { href: '/translate', label: 'Kamus', labelEn: 'Dictionary', icon: Languages },
-  { href: '/practice', label: 'Latihan', labelEn: 'Practice', icon: Target },
-  { href: '/blog', label: 'Blog', labelEn: 'Blog', icon: FileText },
-  { href: '/faq', label: 'FAQ', labelEn: 'FAQ', icon: HelpCircle },
+  { href: '/translate', label: 'Kamus', labelEn: 'Dictionary' },
+  { href: '/practice', label: 'Latihan', labelEn: 'Practice' },
+  { href: '/blog', label: 'Blog', labelEn: 'Blog' },
+  { href: '/faq', label: 'FAQ', labelEn: 'FAQ' },
 ]
 
 export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLocale }) {
@@ -19,13 +19,16 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
   const [menuOpen, setMenuOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const currentPath = router.pathname
-
-  const bg = darkMode ? '#12121e' : '#ffffff'
-  const borderColor = darkMode ? '#2a2a3e' : '#e8e8e0'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const mutedColor = darkMode ? '#888' : '#666'
+  const en = locale === 'en'
 
   useEffect(() => { setMenuOpen(false) }, [router.pathname])
+
+  // Every page owns its darkMode state; the header keeps the document's
+  // colour tokens in step with it.
+  useEffect(() => {
+    if (darkMode) document.documentElement.setAttribute('data-bs-theme', 'dark')
+    else document.documentElement.removeAttribute('data-bs-theme')
+  }, [darkMode])
 
   const isActive = (href) => {
     if (href === '/') return currentPath === '/'
@@ -47,180 +50,87 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
   }, [profileOpen])
 
   return (
-    <header style={{
-      position: 'sticky', top: 0, zIndex: 200,
-      background: bg,
-      borderBottom: `1px solid ${borderColor}`,
-      boxShadow: '0 1px 8px rgba(0,0,0,0.07)',
-      fontFamily: 'Inter, system-ui, sans-serif',
-    }}>
-      <div style={{
-        maxWidth: 1100, margin: '0 auto', padding: '0 16px',
-        display: 'flex', alignItems: 'center', height: '56px', gap: '8px',
-      }}>
-        {/* Logo */}
-        <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-          <img src="/icons/android-chrome-192x192.png" alt="Aksara Bali" width="36" height="36" style={{ borderRadius: '8px', display: 'block', background: '#fff', padding: '2px', boxSizing: 'border-box' }} />
-          <div>
-            <span style={{ fontWeight: '700', fontSize: '15px', color: textColor, display: 'block', lineHeight: 1.1 }}>
-              Aksara Bali
-            </span>
-            <span style={{ fontSize: '10px', color: mutedColor, letterSpacing: '0.5px' }}>
-              CONVERTER
-            </span>
-          </div>
+    <header className="site-header">
+      <div className="thread" aria-hidden="true" />
+      <div className="site-header__bar">
+        <a href="/" className="site-brand" aria-label="Aksara Bali">
+          <span className="site-brand__aksara" aria-hidden="true">ᬅᬓ᭄ᬱᬭ</span>
+          <span className="site-brand__name">Aksara Bali</span>
         </a>
 
-        {/* Desktop nav */}
-        <nav style={{ display: 'flex', gap: '2px', marginLeft: '16px', flex: 1 }} aria-label="Main navigation">
+        <nav className="site-nav" aria-label="Main navigation">
           {NAV_LINKS.map(link => (
             <a
               key={link.href}
               href={link.href}
               data-track={`nav-${link.label}`}
-              style={{
-                padding: '6px 14px',
-                borderRadius: '20px',
-                textDecoration: 'none',
-                fontSize: '13px',
-                fontWeight: isActive(link.href) ? '600' : '400',
-                background: isActive(link.href) ? (darkMode ? '#1e3a6e' : '#e8f0fe') : 'transparent',
-                color: isActive(link.href) ? '#0d6efd' : mutedColor,
-                transition: 'all 0.15s',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={e => { if (!isActive(link.href)) e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5' }}
-              onMouseLeave={e => { if (!isActive(link.href)) e.currentTarget.style.background = 'transparent' }}
+              className={`site-nav__link${isActive(link.href) ? ' is-active' : ''}`}
+              aria-current={isActive(link.href) ? 'page' : undefined}
             >
-              <link.icon size={15} style={{ flexShrink: 0 }} />
-              <span className="nav-label">{locale === 'en' ? link.labelEn : link.label}</span>
+              {en ? link.labelEn : link.label}
             </a>
           ))}
         </nav>
 
-        <div style={{ flex: 1 }} />
-
-        {/* Right controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          {/* Language toggle */}
+        <div className="site-tools">
           {onToggleLocale && (
             <button
               onClick={onToggleLocale}
-              style={{
-                padding: '5px 10px', borderRadius: '16px',
-                border: `1px solid ${borderColor}`, background: 'transparent',
-                cursor: 'pointer', fontSize: '12px', fontWeight: '600',
-                color: mutedColor, transition: 'all 0.15s',
-                display: 'flex', alignItems: 'center', gap: '5px',
-              }}
+              className="site-tool"
               title="Switch language"
               aria-label="Toggle language"
             >
-              <Globe size={13} /> {locale === 'id' ? 'EN' : 'ID'}
+              {locale === 'id' ? 'EN' : 'ID'}
             </button>
           )}
 
-          {/* Dark mode toggle */}
           <button
             onClick={onToggleDarkMode}
-            style={{
-              padding: '6px 10px', borderRadius: '16px',
-              border: `1px solid ${borderColor}`, background: 'transparent',
-              cursor: 'pointer', lineHeight: 1, color: mutedColor,
-              display: 'flex', alignItems: 'center',
-              transition: 'all 0.15s',
-            }}
+            className="site-tool"
             title={darkMode ? 'Light mode' : 'Dark mode'}
             aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {darkMode ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
-          {/* Profile / Login */}
           {user ? (
-            <div style={{ position: 'relative' }}>
+            <div className="site-profile">
               <button
                 onClick={e => { e.stopPropagation(); setProfileOpen(!profileOpen) }}
-                style={{
-                  width: '34px', height: '34px', borderRadius: '50%',
-                  background: isAdmin ? '#0d6efd' : '#6f42c1',
-                  border: 'none', cursor: 'pointer', fontSize: '14px',
-                  color: '#fff', fontWeight: '700', display: 'flex',
-                  alignItems: 'center', justifyContent: 'center',
-                }}
+                className={`site-avatar${isAdmin ? ' is-admin' : ''}`}
                 title={user.email}
                 aria-label="User profile"
+                aria-expanded={profileOpen}
               >
                 {user.email?.[0]?.toUpperCase() ?? '?'}
               </button>
               {profileOpen && (
-                <div style={{
-                  position: 'absolute', right: 0, top: '42px',
-                  background: bg, border: `1px solid ${borderColor}`,
-                  borderRadius: '12px', padding: '8px',
-                  minWidth: '180px', boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                  zIndex: 300,
-                }}>
-                  <div style={{ padding: '8px 12px', borderBottom: `1px solid ${borderColor}`, marginBottom: '4px' }}>
-                    <div style={{ fontSize: '12px', fontWeight: '600', color: textColor, wordBreak: 'break-all' }}>{user.email}</div>
-                    {isAdmin && <div style={{ fontSize: '11px', color: '#0d6efd', marginTop: '2px' }}>Admin</div>}
+                <div className="site-menu" onClick={e => e.stopPropagation()}>
+                  <div className="site-menu__who">
+                    <div className="site-menu__email">{user.email}</div>
+                    {isAdmin && <div className="site-menu__role">Admin</div>}
                   </div>
-                  <a href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', borderRadius: '8px', fontSize: '13px', color: textColor, textDecoration: 'none' }}
-                    onMouseEnter={e => e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                  <a href="/dashboard" className="site-menu__item">
                     <User size={15} /> Dashboard Saya
                   </a>
                   {isAdmin && (
-                    <a href="/admin" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', borderRadius: '8px', fontSize: '13px', color: textColor, textDecoration: 'none' }}
-                      onMouseEnter={e => e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                    <a href="/admin" className="site-menu__item">
                       <BarChart3 size={15} /> Dashboard Admin
                     </a>
                   )}
-                  <button
-                    onClick={handleSignOut}
-                    style={{
-                      width: '100%', padding: '8px 12px', borderRadius: '8px',
-                      background: 'transparent', border: 'none', cursor: 'pointer',
-                      fontSize: '13px', color: '#ef4444', textAlign: 'left',
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.background = darkMode ? '#252535' : '#f5f5f5'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                  >
-                    Keluar
+                  <button onClick={handleSignOut} className="site-menu__item is-danger">
+                    <LogOut size={15} /> Keluar
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <a
-              href="/auth/login"
-              style={{
-                padding: '6px 14px', borderRadius: '16px',
-                border: `1px solid ${borderColor}`, background: 'transparent',
-                textDecoration: 'none', fontSize: '13px', fontWeight: '600',
-                color: '#0d6efd', transition: 'all 0.15s',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Masuk
-            </a>
+            <a href="/auth/login" className="site-login">Masuk</a>
           )}
 
-          {/* Mobile hamburger */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            style={{
-              display: 'none',
-              padding: '6px 8px', borderRadius: '8px',
-              border: `1px solid ${borderColor}`, background: 'transparent',
-              cursor: 'pointer', lineHeight: 1, color: textColor,
-              alignItems: 'center',
-            }}
-            className="mobile-menu-btn"
+            className="site-tool site-burger"
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
           >
@@ -229,62 +139,33 @@ export default function Navbar({ darkMode, onToggleDarkMode, locale, onToggleLoc
         </div>
       </div>
 
-      {/* Mobile menu */}
       {menuOpen && (
-        <div style={{
-          borderTop: `1px solid ${borderColor}`,
-          background: bg,
-          padding: '8px 16px 16px',
-        }}>
+        <div className="site-drawer">
           {NAV_LINKS.map(link => (
             <a
               key={link.href}
               href={link.href}
               data-track={`nav-${link.label}`}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                padding: '12px 8px',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                fontSize: '15px',
-                fontWeight: isActive(link.href) ? '600' : '400',
-                color: isActive(link.href) ? '#0d6efd' : textColor,
-                background: isActive(link.href) ? (darkMode ? '#1e3a6e' : '#e8f0fe') : 'transparent',
-                marginBottom: '4px',
-              }}
+              className={`site-drawer__link${isActive(link.href) ? ' is-active' : ''}`}
+              aria-current={isActive(link.href) ? 'page' : undefined}
             >
-              <link.icon size={18} style={{ flexShrink: 0 }} />
-              <span>{locale === 'en' ? link.labelEn : link.label}</span>
+              {en ? link.labelEn : link.label}
             </a>
           ))}
-          <div style={{ paddingTop: '8px', borderTop: `1px solid ${borderColor}` }}>
+          <div className="site-drawer__account">
             {user ? (
-              <div>
-                <div style={{ fontSize: '12px', color: mutedColor, padding: '4px 8px', marginBottom: '4px' }}>{user.email}</div>
-                {isAdmin && <a href="/admin" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 8px', color: '#0d6efd', textDecoration: 'none', fontSize: '14px' }}><BarChart3 size={16} /> Dashboard Admin</a>}
-                <button onClick={handleSignOut} style={{ width: '100%', padding: '10px 8px', background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '14px', color: '#ef4444', textAlign: 'left' }}>
-                  Keluar
-                </button>
-              </div>
+              <>
+                <div className="site-drawer__email">{user.email}</div>
+                <a href="/dashboard" className="site-drawer__link">Dashboard Saya</a>
+                {isAdmin && <a href="/admin" className="site-drawer__link">Dashboard Admin</a>}
+                <button onClick={handleSignOut} className="site-drawer__link is-danger">Keluar</button>
+              </>
             ) : (
-              <a href="/auth/login" style={{ display: 'block', padding: '10px 8px', color: '#0d6efd', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>
-                Masuk / Daftar
-              </a>
+              <a href="/auth/login" className="site-drawer__link">Masuk / Daftar</a>
             )}
           </div>
         </div>
       )}
-
-      <style>{`
-        @media (max-width: 640px) {
-          .nav-label { display: none; }
-          .mobile-menu-btn { display: block !important; }
-          nav { display: none !important; }
-        }
-        @media (min-width: 641px) {
-          .mobile-menu-btn { display: none !important; }
-        }
-      `}</style>
     </header>
   )
 }

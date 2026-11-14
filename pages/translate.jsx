@@ -285,11 +285,11 @@ export default function TranslatePage({ locale, setLocale }) {
     } catch { /* clipboard unavailable */ }
   }, [])
 
-  const bg = darkMode ? '#0f0f1a' : '#f5f5f0'
-  const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
-  const borderColor = darkMode ? '#2a2a3e' : '#e0e0d8'
-  const mutedColor = darkMode ? '#8b8b9e' : '#666'
+  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const cardBg = 'var(--surface)'
+  const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
+  const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
+  const mutedColor = darkMode ? '#8b8b9e' : 'var(--mute)'
 
   const pageTitle = lang === 'en'
     ? 'Balinese Dictionary — Indonesian to Balinese with Speech Levels'
@@ -312,7 +312,7 @@ export default function TranslatePage({ locale, setLocale }) {
         <link rel="canonical" href={`${BASE}/translate`} />
       </Head>
 
-      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: bg, color: textColor, fontFamily: 'var(--font-sans)' }}>
         <Navbar
           darkMode={darkMode}
           onToggleDarkMode={() => { const n = !darkMode; setDarkMode(n); localStorage.setItem('aksara-dark-mode', n) }}
@@ -321,7 +321,7 @@ export default function TranslatePage({ locale, setLocale }) {
         />
 
         <main style={{ maxWidth: 860, margin: '0 auto', padding: '32px 16px 80px' }}>
-          <h1 style={{ fontSize: 28, fontWeight: 800, margin: '0 0 8px' }}>{t.title}</h1>
+          <h1 className="page-title" style={{ marginBottom: 12 }}>{t.title}</h1>
           <p style={{ color: mutedColor, margin: '0 0 8px', lineHeight: 1.6, fontSize: 15 }}>{t.subtitle}</p>
           {entries && (
             <p style={{ color: mutedColor, margin: '0 0 24px', fontSize: 13, opacity: 0.85 }}>
@@ -335,10 +335,10 @@ export default function TranslatePage({ locale, setLocale }) {
                 key={key}
                 onClick={() => setMode(key)}
                 style={{
-                  padding: '8px 16px', borderRadius: 999, fontSize: 14, cursor: 'pointer',
+                  padding: '8px 16px', borderRadius: 0, fontSize: 14, cursor: 'pointer',
                   fontWeight: mode === key ? 600 : 400,
-                  border: `1px solid ${mode === key ? '#0d6efd' : borderColor}`,
-                  background: mode === key ? '#0d6efd' : 'transparent',
+                  border: `1px solid ${mode === key ? 'var(--accent)' : borderColor}`,
+                  background: mode === key ? 'var(--accent)' : 'transparent',
                   color: mode === key ? '#fff' : mutedColor,
                 }}
               >
@@ -355,7 +355,7 @@ export default function TranslatePage({ locale, setLocale }) {
                 placeholder={t.sentencePlaceholder}
                 rows={3}
                 style={{
-                  width: '100%', padding: 14, fontSize: 16, borderRadius: 12,
+                  width: '100%', padding: 14, fontSize: 16, borderRadius: 0,
                   border: `1px solid ${borderColor}`, background: cardBg, color: textColor,
                   outline: 'none', resize: 'vertical', fontFamily: 'inherit',
                 }}
@@ -368,10 +368,10 @@ export default function TranslatePage({ locale, setLocale }) {
                     key={key}
                     onClick={() => setLevel(key)}
                     style={{
-                      padding: '5px 12px', borderRadius: 999, fontSize: 13, cursor: 'pointer',
-                      border: `1px solid ${level === key ? '#0d6efd' : borderColor}`,
+                      padding: '5px 12px', borderRadius: 0, fontSize: 13, cursor: 'pointer',
+                      border: `1px solid ${level === key ? 'var(--accent)' : borderColor}`,
                       background: level === key ? '#0d6efd15' : 'transparent',
-                      color: level === key ? '#0d6efd' : mutedColor,
+                      color: level === key ? 'var(--accent)' : mutedColor,
                       fontWeight: level === key ? 600 : 400,
                     }}
                   >
@@ -382,7 +382,7 @@ export default function TranslatePage({ locale, setLocale }) {
 
               <p style={{
                 fontSize: 12.5, lineHeight: 1.7, color: mutedColor, margin: '0 0 14px',
-                padding: '10px 12px', borderRadius: 10,
+                padding: '10px 12px', borderRadius: 0,
                 background: darkMode ? '#241d10' : '#fdf6e3',
                 border: `1px solid ${darkMode ? '#3a3020' : '#efe3c2'}`,
               }}>
@@ -393,7 +393,7 @@ export default function TranslatePage({ locale, setLocale }) {
 
               {sentence.trim() && (
                 <div style={{ display: 'grid', gap: 12 }}>
-                  <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 16 }}>
+                  <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 0, padding: 16 }}>
                     <div style={{ fontSize: 12, color: mutedColor, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>
                       {t.resultBali}
                     </div>
@@ -409,7 +409,7 @@ export default function TranslatePage({ locale, setLocale }) {
                     <p style={{ margin: '10px 0 0', fontSize: 11.5, color: mutedColor }}>{t.unmatched}</p>
                   </div>
 
-                  <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 16 }}>
+                  <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 0, padding: 16 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                       <span style={{ fontSize: 12, color: mutedColor, textTransform: 'uppercase', letterSpacing: 1 }}>
                         {t.resultScript}
@@ -418,7 +418,7 @@ export default function TranslatePage({ locale, setLocale }) {
                         onClick={() => copy(sentenceScript, 'sentence')}
                         style={{
                           marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6,
-                          fontSize: 12, padding: '5px 10px', borderRadius: 8, cursor: 'pointer',
+                          fontSize: 12, padding: '5px 10px', borderRadius: 0, cursor: 'pointer',
                           border: `1px solid ${borderColor}`, background: 'transparent', color: mutedColor,
                         }}
                       >
@@ -444,7 +444,7 @@ export default function TranslatePage({ locale, setLocale }) {
               aria-label={t.placeholder}
               style={{
                 width: '100%', padding: '14px 14px 14px 44px', fontSize: 16,
-                borderRadius: 12, border: `1px solid ${borderColor}`,
+                borderRadius: 0, border: `1px solid ${borderColor}`,
                 background: cardBg, color: textColor, outline: 'none',
               }}
             />
@@ -463,14 +463,14 @@ export default function TranslatePage({ locale, setLocale }) {
               </p>
 
               {results.length === 0 && (
-                <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 12, padding: 20, color: mutedColor }}>
+                <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 0, padding: 20, color: mutedColor }}>
                   {t.empty}
                 </div>
               )}
 
               <div style={{ display: 'grid', gap: 12 }}>
                 {results.map((e, idx) => (
-                  <div key={idx} style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 16 }}>
+                  <div key={idx} style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 0, padding: 16 }}>
                     <div style={{ fontSize: 12, color: mutedColor, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>
                       {t.indonesian}
                     </div>
@@ -484,12 +484,12 @@ export default function TranslatePage({ locale, setLocale }) {
                         return (
                           <div key={l.key} style={{
                             display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
-                            padding: '8px 10px', borderRadius: 10,
+                            padding: '8px 10px', borderRadius: 0,
                             background: darkMode ? '#20203a' : '#f7f7f2',
                           }}>
                             <span style={{
-                              fontSize: 11, fontWeight: 600, color: '#0d6efd',
-                              background: '#0d6efd15', padding: '3px 8px', borderRadius: 8, whiteSpace: 'nowrap',
+                              fontSize: 11, fontWeight: 600, color: 'var(--accent)',
+                              background: '#0d6efd15', padding: '3px 8px', borderRadius: 0, whiteSpace: 'nowrap',
                             }} title={l.hint[lang]}>
                               {l[lang === 'en' ? 'en' : 'id']}
                             </span>
@@ -499,7 +499,7 @@ export default function TranslatePage({ locale, setLocale }) {
                               onClick={() => copy(script, key)}
                               style={{
                                 marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6,
-                                fontSize: 12, padding: '5px 10px', borderRadius: 8, cursor: 'pointer',
+                                fontSize: 12, padding: '5px 10px', borderRadius: 0, cursor: 'pointer',
                                 border: `1px solid ${borderColor}`, background: 'transparent', color: mutedColor,
                               }}
                             >
@@ -512,7 +512,7 @@ export default function TranslatePage({ locale, setLocale }) {
                     </div>
 
                     {flagFor === idx ? (
-                      <div style={{ marginTop: 12, padding: 12, borderRadius: 10, background: darkMode ? '#241d10' : '#fdf6e3', border: `1px solid ${darkMode ? '#3a3020' : '#efe3c2'}` }}>
+                      <div style={{ marginTop: 12, padding: 12, borderRadius: 0, background: darkMode ? '#241d10' : '#fdf6e3', border: `1px solid ${darkMode ? '#3a3020' : '#efe3c2'}` }}>
                         <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{t.flagTitle}</div>
                         <p style={{ fontSize: 12.5, color: mutedColor, margin: '0 0 8px', lineHeight: 1.6 }}>{t.flagBody}</p>
                         <textarea
@@ -521,25 +521,25 @@ export default function TranslatePage({ locale, setLocale }) {
                           placeholder={t.flagPlaceholder}
                           rows={2}
                           style={{
-                            width: '100%', padding: '8px 10px', fontSize: 14, borderRadius: 8,
+                            width: '100%', padding: '8px 10px', fontSize: 14, borderRadius: 0,
                             border: `1px solid ${borderColor}`, background: cardBg, color: textColor,
                             outline: 'none', resize: 'vertical', fontFamily: 'inherit',
                           }}
                         />
-                        {flagState === 'need-note' && <p style={{ color: '#dc2626', fontSize: 12, margin: '6px 0 0' }}>{t.flagNeedNote}</p>}
-                        {flagState === 'failed' && <p style={{ color: '#dc2626', fontSize: 12, margin: '6px 0 0' }}>{t.fFailed}</p>}
-                        {flagState === 'done' && <p style={{ color: '#16a34a', fontSize: 12, margin: '6px 0 0' }}>{t.flagThanks}</p>}
+                        {flagState === 'need-note' && <p style={{ color: 'var(--danger)', fontSize: 12, margin: '6px 0 0' }}>{t.flagNeedNote}</p>}
+                        {flagState === 'failed' && <p style={{ color: 'var(--danger)', fontSize: 12, margin: '6px 0 0' }}>{t.fFailed}</p>}
+                        {flagState === 'done' && <p style={{ color: 'var(--ok)', fontSize: 12, margin: '6px 0 0' }}>{t.flagThanks}</p>}
                         <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                           <button
                             onClick={() => submitFlag(e)}
                             disabled={flagState === 'sending'}
-                            style={{ fontSize: 13, fontWeight: 600, padding: '6px 14px', borderRadius: 8, border: 'none', background: '#0d6efd', color: '#fff', cursor: 'pointer' }}
+                            style={{ fontSize: 13, fontWeight: 600, padding: '6px 14px', borderRadius: 0, border: 'none', background: 'var(--accent)', color: '#fff', cursor: 'pointer' }}
                           >
                             {flagState === 'sending' ? t.fSending : t.flagSubmit}
                           </button>
                           <button
                             onClick={() => { setFlagFor(null); setFlagNote(''); setFlagState('idle') }}
-                            style={{ fontSize: 13, padding: '6px 14px', borderRadius: 8, border: `1px solid ${borderColor}`, background: 'transparent', color: mutedColor, cursor: 'pointer' }}
+                            style={{ fontSize: 13, padding: '6px 14px', borderRadius: 0, border: `1px solid ${borderColor}`, background: 'transparent', color: mutedColor, cursor: 'pointer' }}
                           >
                             {t.flagCancel}
                           </button>
@@ -566,21 +566,21 @@ export default function TranslatePage({ locale, setLocale }) {
           </>
           )}
 
-          <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 18, marginTop: 28 }}>
+          <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 0, padding: 18, marginTop: 28 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 8 }}>
               <Plus size={16} /> {t.contribTitle}
             </h2>
             <p style={{ color: mutedColor, fontSize: 14, lineHeight: 1.7, margin: '0 0 12px' }}>{t.contribBody}</p>
 
             {formState === 'done' && (
-              <p style={{ fontSize: 14, color: '#16a34a', margin: '0 0 12px' }}>{t.fThanks}</p>
+              <p style={{ fontSize: 14, color: 'var(--ok)', margin: '0 0 12px' }}>{t.fThanks}</p>
             )}
 
             <button
               onClick={() => setFormOpen(o => !o)}
               style={{
-                fontSize: 14, fontWeight: 600, padding: '9px 16px', borderRadius: 10, cursor: 'pointer',
-                border: 'none', background: '#0d6efd', color: '#fff',
+                fontSize: 14, fontWeight: 600, padding: '9px 16px', borderRadius: 0, cursor: 'pointer',
+                border: 'none', background: 'var(--accent)', color: '#fff',
               }}
             >
               {formOpen ? t.contribClose : t.contribOpen}
@@ -602,7 +602,7 @@ export default function TranslatePage({ locale, setLocale }) {
                       value={form[key]}
                       onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
                       style={{
-                        padding: '10px 12px', fontSize: 15, borderRadius: 10,
+                        padding: '10px 12px', fontSize: 15, borderRadius: 0,
                         border: `1px solid ${borderColor}`, background: bg, color: textColor, outline: 'none',
                       }}
                     />
@@ -616,7 +616,7 @@ export default function TranslatePage({ locale, setLocale }) {
                     onChange={e => setForm(f => ({ ...f, note: e.target.value }))}
                     rows={3}
                     style={{
-                      padding: '10px 12px', fontSize: 15, borderRadius: 10, resize: 'vertical',
+                      padding: '10px 12px', fontSize: 15, borderRadius: 0, resize: 'vertical',
                       border: `1px solid ${borderColor}`, background: bg, color: textColor,
                       outline: 'none', fontFamily: 'inherit',
                     }}
@@ -631,14 +631,14 @@ export default function TranslatePage({ locale, setLocale }) {
                   style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }}
                 />
 
-                {formError && <p style={{ color: '#dc2626', fontSize: 13, margin: 0 }}>{formError}</p>}
+                {formError && <p style={{ color: 'var(--danger)', fontSize: 13, margin: 0 }}>{formError}</p>}
 
                 <button
                   type="submit"
                   disabled={formState === 'sending'}
                   style={{
                     justifySelf: 'start', fontSize: 14, fontWeight: 600, padding: '10px 18px',
-                    borderRadius: 10, border: 'none', background: '#0d6efd', color: '#fff',
+                    borderRadius: 0, border: 'none', background: 'var(--accent)', color: '#fff',
                     cursor: formState === 'sending' ? 'default' : 'pointer',
                     opacity: formState === 'sending' ? 0.7 : 1,
                   }}
@@ -649,14 +649,14 @@ export default function TranslatePage({ locale, setLocale }) {
             )}
           </div>
 
-          <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 18, marginTop: 28 }}>
+          <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 0, padding: 18, marginTop: 28 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 8 }}>
               <Info size={16} /> {t.levelsTitle}
             </h2>
             <p style={{ color: mutedColor, fontSize: 14, lineHeight: 1.7, margin: 0 }}>{t.levelsBody}</p>
           </div>
 
-          <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 14, padding: 18, marginTop: 16 }}>
+          <div style={{ background: cardBg, border: `1px solid ${borderColor}`, borderRadius: 0, padding: 18, marginTop: 16 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px', display: 'flex', alignItems: 'center', gap: 8 }}>
               <BookOpen size={16} /> {t.sourceTitle}
             </h2>
@@ -664,7 +664,7 @@ export default function TranslatePage({ locale, setLocale }) {
             <div style={{ display: 'grid', gap: 8 }}>
               {LINKS.map(l => (
                 <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#0d6efd', textDecoration: 'none', fontSize: 14 }}>
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--accent)', textDecoration: 'none', fontSize: 14 }}>
                   <ExternalLink size={14} />
                   <span style={{ fontWeight: 600 }}>{l.label}</span>
                   <span style={{ color: mutedColor }}>— {l.note[lang]}</span>
@@ -672,7 +672,7 @@ export default function TranslatePage({ locale, setLocale }) {
               ))}
             </div>
             <p style={{ color: mutedColor, fontSize: 13, lineHeight: 1.7, margin: '14px 0 0' }}>
-              {t.convNote} <a href="/" style={{ color: '#0d6efd' }}>{t.convLink}</a>.
+              {t.convNote} <a href="/" style={{ color: 'var(--accent)' }}>{t.convLink}</a>.
             </p>
             <p style={{ color: mutedColor, fontSize: 12, lineHeight: 1.7, margin: '10px 0 0' }}>{t.disclaimer}</p>
           </div>

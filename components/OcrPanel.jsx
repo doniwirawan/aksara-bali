@@ -77,15 +77,15 @@ export default function OcrPanel({ locale = 'en', darkMode = false, onResult }) 
     }
   }, [imageFile, onResult])
 
-  const cardBg = darkMode ? '#1a1a2e' : '#ffffff'
-  const border = darkMode ? '#2a2a3e' : '#e8e8e0'
-  const muted = darkMode ? '#9aa' : '#666'
-  const textColor = darkMode ? '#e8e8e8' : '#1a1a1a'
+  const cardBg = 'var(--surface)'
+  const border = darkMode ? 'var(--line)' : 'var(--line)'
+  const muted = darkMode ? 'var(--mute)' : 'var(--mute)'
+  const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
 
   return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div style={{ fontFamily: 'var(--font-sans)' }}>
       {modelReady === false && (
-        <div style={{ background: darkMode ? '#3a2e13' : '#fff8e6', border: `1px solid ${darkMode ? '#7a5c1e' : '#f0d98a'}`, borderRadius: 12, padding: '12px 14px', marginBottom: 12, display: 'flex', gap: 10 }}>
+        <div style={{ background: darkMode ? '#3a2e13' : '#fff8e6', border: `1px solid ${darkMode ? '#7a5c1e' : '#f0d98a'}`, borderRadius: 0, padding: '12px 14px', marginBottom: 12, display: 'flex', gap: 10 }}>
           <AlertTriangle size={18} color="#d9a406" style={{ flexShrink: 0, marginTop: 2 }} />
           <div>
             <div style={{ fontWeight: 700, color: textColor, marginBottom: 2, fontSize: 13 }}>{t.modelMissingTitle}</div>
@@ -103,15 +103,15 @@ export default function OcrPanel({ locale = 'en', darkMode = false, onResult }) 
         onDrop={(e) => { e.preventDefault(); setDragOver(false); pickImage(e.dataTransfer.files?.[0]) }}
         style={{
           background: cardBg,
-          border: `2px dashed ${dragOver ? '#0d6efd' : border}`,
-          borderRadius: 14,
+          border: `2px dashed ${dragOver ? 'var(--accent)' : border}`,
+          borderRadius: 0,
           padding: imageUrl ? 10 : '28px 16px',
           textAlign: 'center',
           transition: 'border-color 0.15s',
         }}
       >
         {imageUrl ? (
-          <img src={imageUrl} alt="preview" style={{ maxWidth: '100%', maxHeight: 280, borderRadius: 8, display: 'block', margin: '0 auto' }} />
+          <img src={imageUrl} alt="preview" style={{ maxWidth: '100%', maxHeight: 280, borderRadius: 0, display: 'block', margin: '0 auto' }} />
         ) : (
           <>
             <ImageIcon size={32} color={muted} style={{ marginBottom: 8 }} />
@@ -145,8 +145,8 @@ export default function OcrPanel({ locale = 'en', darkMode = false, onResult }) 
       )}
 
       {status === 'error' && (
-        <div style={{ background: darkMode ? '#3a1a1a' : '#fdecea', border: `1px solid ${darkMode ? '#7a2e2e' : '#f5c2c0'}`, borderRadius: 12, padding: '12px 14px', marginTop: 12 }}>
-          <div style={{ fontWeight: 700, color: '#dc3545', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
+        <div style={{ background: darkMode ? '#3a1a1a' : '#fdecea', border: `1px solid ${darkMode ? '#7a2e2e' : '#f5c2c0'}`, borderRadius: 0, padding: '12px 14px', marginTop: 12 }}>
+          <div style={{ fontWeight: 700, color: 'var(--danger)', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
             <AlertTriangle size={15} /> {t.errorTitle}
           </div>
           <div style={{ fontSize: 12, color: muted, wordBreak: 'break-word' }}>{errorMsg}</div>

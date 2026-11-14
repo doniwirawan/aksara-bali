@@ -95,7 +95,7 @@ export function EmailGateProvider({ children, locale = 'en' }) {
                     <div
                         onClick={e => e.stopPropagation()}
                         style={{
-                            background: '#fff', borderRadius: '16px', padding: '28px', width: '100%',
+                            background: 'var(--surface)', color: 'var(--ink)', borderRadius: 0, padding: '28px', width: '100%',
                             maxWidth: '400px', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', position: 'relative',
                         }}
                     >
@@ -105,19 +105,19 @@ export function EmailGateProvider({ children, locale = 'en' }) {
                             aria-label={id ? 'Tutup' : 'Close'}
                             style={{
                                 position: 'absolute', top: '12px', right: '12px', background: 'none',
-                                border: 'none', cursor: 'pointer', color: '#888', padding: '4px', lineHeight: 0,
+                                border: 'none', cursor: 'pointer', color: 'var(--mute)', padding: '4px', lineHeight: 0,
                             }}
                         >
                             <X size={18} />
                         </button>
 
                         <div style={{ textAlign: 'center', marginBottom: '12px' }}>
-                            <Mail size={36} color="#0d6efd" />
+                            <Mail size={36} color="var(--accent)" />
                         </div>
-                        <h3 style={{ margin: '0 0 8px', fontSize: '17px', fontWeight: '700', textAlign: 'center', color: '#1a1a1a' }}>
+                        <h3 style={{ margin: '0 0 8px', fontSize: '17px', fontWeight: '700', textAlign: 'center', color: 'var(--ink)' }}>
                             {id ? 'Masukkan email untuk mengunduh' : 'Enter your email to download'}
                         </h3>
-                        <p style={{ margin: '0 0 20px', fontSize: '14px', color: '#555', textAlign: 'center', lineHeight: 1.5 }}>
+                        <p style={{ margin: '0 0 20px', fontSize: '14px', color: 'var(--mute)', textAlign: 'center', lineHeight: 1.5 }}>
                             {id
                                 ? 'Unduhan langsung dimulai setelah Anda kirim. Kami hanya mengirim kabar seputar Aksara Bali — tanpa spam.'
                                 : 'Your download starts right after you submit. We only send Aksara Bali updates — no spam.'}
@@ -132,20 +132,20 @@ export function EmailGateProvider({ children, locale = 'en' }) {
                                 autoFocus
                                 required
                                 style={{
-                                    width: '100%', padding: '11px 14px', borderRadius: '10px',
-                                    border: `1px solid ${error ? '#dc3545' : '#ddd'}`, fontSize: '14px',
-                                    marginBottom: error ? '6px' : '14px', outline: 'none', color: '#1a1a1a',
+                                    width: '100%', padding: '11px 14px', borderRadius: 0,
+                                    border: `1px solid ${error ? 'var(--danger)' : 'var(--line)'}`, fontSize: '14px',
+                                    marginBottom: error ? '6px' : '14px', outline: 'none', color: 'var(--ink)',
                                 }}
                             />
                             {error && (
-                                <div style={{ color: '#dc3545', fontSize: '13px', marginBottom: '12px' }}>{error}</div>
+                                <div style={{ color: 'var(--danger)', fontSize: '13px', marginBottom: '12px' }}>{error}</div>
                             )}
                             <button
                                 type="submit"
                                 disabled={saving}
                                 style={{
-                                    width: '100%', padding: '11px', borderRadius: '10px', border: 'none',
-                                    background: saving ? '#6c9fe8' : '#0d6efd', color: '#fff', fontSize: '14px',
+                                    width: '100%', padding: '11px', borderRadius: 0, border: 'none',
+                                    background: saving ? '#6c9fe8' : 'var(--accent)', color: '#fff', fontSize: '14px',
                                     fontWeight: '600', cursor: saving ? 'default' : 'pointer',
                                 }}
                             >

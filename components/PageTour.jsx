@@ -49,10 +49,10 @@ export default function PageTour({ pageKey, steps, locale }) {
       title={lang === 'en' ? 'Show me around this page' : 'Lihat panduan halaman ini'}
       style={{
         position: 'fixed', right: '18px', bottom: '18px', zIndex: 800,
-        width: '44px', height: '44px', borderRadius: '50%', border: 'none',
-        background: '#0d6efd', color: '#fff', cursor: 'pointer',
+        width: '44px', height: '44px', borderRadius: 0, border: '1px solid #3A352D',
+        background: 'var(--black)', color: '#F7F6F2', cursor: 'pointer',
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 4px 14px rgba(13,110,253,0.4)',
+        boxShadow: '0 4px 14px rgba(23,20,15,0.3)',
       }}
     >
       <HelpCircle size={22} />

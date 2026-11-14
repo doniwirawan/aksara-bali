@@ -193,13 +193,13 @@ export default function QuizMode({ darkMode, locale }) {
   }
 
   // ── Theme tokens ──
-  const textColor = darkMode ? '#e0e0e0' : '#1a1a1a'
-  const cardBg = darkMode ? '#1e1e2e' : '#ffffff'
-  const border = darkMode ? '#333' : '#e0e0e0'
-  const muted = darkMode ? '#888' : '#666'
-  const blue = '#0d6efd'
-  const green = '#16a34a'
-  const red = '#dc2626'
+  const textColor = darkMode ? 'var(--line)' : 'var(--ink)'
+  const cardBg = 'var(--surface)'
+  const border = darkMode ? '#333' : 'var(--line)'
+  const muted = darkMode ? 'var(--mute)' : 'var(--mute)'
+  const blue = 'var(--accent)'
+  const green = 'var(--ok)'
+  const red = 'var(--danger)'
 
   // ── Level list ──
   if (active === null) {
@@ -237,13 +237,13 @@ export default function QuizMode({ darkMode, locale }) {
           return (
             <button key={lv.name} onClick={() => open && startLevel(i)} disabled={!open} style={{
               width: '100%', display: 'flex', alignItems: 'center', gap: 14, textAlign: 'left',
-              padding: 16, marginBottom: 12, borderRadius: 14, background: cardBg,
+              padding: 16, marginBottom: 12, borderRadius: 0, background: cardBg,
               border: `1px solid ${border}`, cursor: open ? 'pointer' : 'default', opacity: open ? 1 : 0.6,
             }}>
               <span style={{
-                width: 44, height: 44, flexShrink: 0, borderRadius: 12,
+                width: 44, height: 44, flexShrink: 0, borderRadius: 0,
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                background: open ? 'rgba(13,110,253,0.12)' : (darkMode ? '#2a2a3a' : '#ededf0'),
+                background: open ? 'var(--accent-tint)' : 'var(--surface-2)',
                 color: open ? blue : muted, fontWeight: 800, fontSize: 18,
               }}>
                 {open ? i + 1 : <Lock size={20} />}
@@ -282,7 +282,7 @@ export default function QuizMode({ darkMode, locale }) {
         <span style={{ color: blue, fontWeight: 700 }}>{t.correct}: {correct}</span>
       </div>
 
-      <div style={{ height: 6, borderRadius: 3, background: border, overflow: 'hidden', marginBottom: 14 }}>
+      <div style={{ height: 6, borderRadius: 0, background: border, overflow: 'hidden', marginBottom: 14 }}>
         <div style={{ height: '100%', width: `${progress}%`, background: blue, transition: 'width 0.3s' }} />
       </div>
 
@@ -292,7 +292,7 @@ export default function QuizMode({ darkMode, locale }) {
 
       {mode === 'reading' ? (
         <>
-          <div style={{ padding: '28px 16px', borderRadius: 16, background: cardBg, border: `1px solid ${border}`, textAlign: 'center', marginBottom: 20 }}>
+          <div style={{ padding: '28px 16px', borderRadius: 0, background: cardBg, border: `1px solid ${border}`, textAlign: 'center', marginBottom: 20 }}>
             <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 52, color: textColor, whiteSpace: 'nowrap' }}>
               {convertLatinToBalinese(q.latin)}
             </span>
@@ -305,7 +305,7 @@ export default function QuizMode({ darkMode, locale }) {
             }
             return (
               <button key={opt} onClick={() => answerReading(opt)} style={{
-                width: '100%', textAlign: 'left', padding: '16px', marginBottom: 10, borderRadius: 12,
+                width: '100%', textAlign: 'left', padding: '16px', marginBottom: 10, borderRadius: 0,
                 background: bg, color: fg, border: `1px solid ${bd}`, cursor: 'pointer', fontSize: 16, fontWeight: 600,
               }}>{opt}</button>
             )
@@ -313,7 +313,7 @@ export default function QuizMode({ darkMode, locale }) {
         </>
       ) : (
         <>
-          <div style={{ padding: '20px 16px', borderRadius: 16, background: cardBg, border: `1px solid ${border}`, textAlign: 'center', marginBottom: 14 }}>
+          <div style={{ padding: '20px 16px', borderRadius: 0, background: cardBg, border: `1px solid ${border}`, textAlign: 'center', marginBottom: 14 }}>
             <div style={{ fontSize: 28, fontWeight: 800, color: textColor }}>{q.latin}</div>
             {q.meaning && <div style={{ fontSize: 13, color: muted, marginTop: 4 }}>{q.meaning}</div>}
           </div>
@@ -333,12 +333,12 @@ export default function QuizMode({ darkMode, locale }) {
 
           {writeMethod === 'type' ? (
             <>
-              <div style={{ minHeight: 60, padding: '14px 16px', marginBottom: 12, borderRadius: 12, border: `1px solid ${border}`, background: darkMode ? '#1a1a2e' : '#f8f9ff' }}>
+              <div style={{ minHeight: 60, padding: '14px 16px', marginBottom: 12, borderRadius: 0, border: `1px solid ${border}`, background: darkMode ? 'var(--surface)' : 'var(--accent-tint)' }}>
                 <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: 28, color: textColor }}>
                   {input || <span style={{ color: muted, fontSize: 15, fontFamily: 'system-ui' }}>{t.typeHint}</span>}
                 </span>
               </div>
-              <div style={{ padding: 14, borderRadius: 12, border: `1px solid ${border}`, background: darkMode ? '#161622' : '#fafafa', marginBottom: 14 }}>
+              <div style={{ padding: 14, borderRadius: 0, border: `1px solid ${border}`, background: darkMode ? '#161622' : 'var(--surface-2)', marginBottom: 14 }}>
                 <BalineseKeyboard
                   onKeyPress={(c) => !checked && setInput(p => p + c)}
                   onBackspace={() => !checked && setInput(p => { const a = [...p]; a.pop(); return a.join('') })}
@@ -350,8 +350,8 @@ export default function QuizMode({ darkMode, locale }) {
               </div>
               {!checked && (
                 <button onClick={checkTyping} disabled={!norm(input)} style={{
-                  width: '100%', padding: 14, borderRadius: 10, marginBottom: 8,
-                  background: norm(input) ? blue : (darkMode ? '#333' : '#e0e0e0'),
+                  width: '100%', padding: 14, borderRadius: 0, marginBottom: 8,
+                  background: norm(input) ? blue : (darkMode ? '#333' : 'var(--line)'),
                   color: norm(input) ? '#fff' : muted, border: 'none', cursor: norm(input) ? 'pointer' : 'default',
                   fontSize: 15, fontWeight: 600, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                 }}><Check size={16} /> {t.check}</button>
@@ -410,7 +410,7 @@ export default function QuizMode({ darkMode, locale }) {
                 )}
               </div>
               <button onClick={next} style={{
-                flexShrink: 0, padding: '12px 24px', borderRadius: 12,
+                flexShrink: 0, padding: '12px 24px', borderRadius: 0,
                 background: lastCorrect ? green : red, color: '#fff', border: 'none',
                 cursor: 'pointer', fontSize: 15, fontWeight: 800,
               }}>{idx + 1 >= queue.length ? t.seeResult : t.next}</button>
@@ -430,20 +430,20 @@ export default function QuizMode({ darkMode, locale }) {
 
 function ResultModal({ t, result, darkMode, onClose }) {
   const { correct, score, wrong, passed, allDone, levelName } = result
-  const textColor = darkMode ? '#e0e0e0' : '#1a1a1a'
-  const cardBg = darkMode ? '#1e1e2e' : '#ffffff'
-  const muted = darkMode ? '#888' : '#666'
+  const textColor = darkMode ? 'var(--line)' : 'var(--ink)'
+  const cardBg = 'var(--surface)'
+  const muted = darkMode ? 'var(--mute)' : 'var(--mute)'
   const title = allDone ? t.allDoneTitle : passed ? t.passTitle(levelName) : t.failTitle
   const body = allDone ? t.allDoneBody : passed ? t.passBody(score) : t.failBody
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, zIndex: 1000 }}>
-      <div style={{ maxWidth: 380, width: '100%', background: cardBg, borderRadius: 20, padding: 24, textAlign: 'center', color: textColor }}>
+      <div style={{ maxWidth: 380, width: '100%', background: cardBg, borderRadius: 0, padding: 24, textAlign: 'center', color: textColor }}>
         <h3 style={{ fontSize: 17, fontWeight: 800, lineHeight: 1.3, margin: '0 0 16px' }}>{title}</h3>
-        {passed ? <Trophy size={64} color="#f59e0b" /> : <RotateCcw size={64} color={muted} />}
+        {passed ? <Trophy size={64} color="var(--turmeric)" /> : <RotateCcw size={64} color={muted} />}
         <p style={{ fontSize: 13, color: muted, lineHeight: 1.4, margin: '16px 0 20px' }}>{body}</p>
         <div style={{ display: 'flex', justifyContent: 'space-evenly', marginBottom: 22 }}>
-          {[[CheckCircle, '#16a34a', correct, t.correct], [Trophy, '#f59e0b', score, t.score], [XCircle, '#dc2626', wrong, t.wrong]].map(([Icon, color, val, label], k) => (
+          {[[CheckCircle, 'var(--ok)', correct, t.correct], [Trophy, 'var(--turmeric)', score, t.score], [XCircle, 'var(--danger)', wrong, t.wrong]].map(([Icon, color, val, label], k) => (
             <div key={k}>
               <Icon size={22} color={color} />
               <div style={{ fontSize: 18, fontWeight: 800, color: textColor }}>{val}</div>
@@ -452,8 +452,8 @@ function ResultModal({ t, result, darkMode, onClose }) {
           ))}
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
-          <button onClick={() => onClose(true)} style={{ flex: 1, padding: 12, borderRadius: 10, background: 'transparent', color: textColor, border: `1px solid ${darkMode ? '#444' : '#ccc'}`, cursor: 'pointer', fontWeight: 600 }}>{t.retry}</button>
-          <button onClick={() => onClose(false)} style={{ flex: 1, padding: 12, borderRadius: 10, background: '#0d6efd', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600 }}>{t.detail}</button>
+          <button onClick={() => onClose(true)} style={{ flex: 1, padding: 12, borderRadius: 0, background: 'transparent', color: textColor, border: `1px solid ${darkMode ? '#444' : '#ccc'}`, cursor: 'pointer', fontWeight: 600 }}>{t.retry}</button>
+          <button onClick={() => onClose(false)} style={{ flex: 1, padding: 12, borderRadius: 0, background: 'var(--accent)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600 }}>{t.detail}</button>
         </div>
       </div>
     </div>
