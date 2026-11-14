@@ -450,8 +450,6 @@ function MyApp({ Component, pageProps }) {
 
                 {/* Enhanced Viewport and Mobile */}
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
-                <meta name="theme-color" content="#0d6efd" />
-                <meta name="msapplication-TileColor" content="#0d6efd" />
                 <meta name="mobile-web-app-capable" content="yes" />
                 <meta name="apple-mobile-web-app-capable" content="yes" />
                 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -461,14 +459,16 @@ function MyApp({ Component, pageProps }) {
 
                 {/* <!-- Favicon and Icons --> */}
                 <link rel="icon" href="/icons/favicon.ico" sizes="any" />
+                <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
                 <link rel="icon" href="/icons/favicon-16x16.png" type="image/png" sizes="16x16" />
                 <link rel="icon" href="/icons/favicon-32x32.png" type="image/png" sizes="32x32" />
-                <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+                <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
                 <link rel="icon" type="image/png" sizes="192x192" href="/icons/android-chrome-192x192.png" />
                 <link rel="icon" type="image/png" sizes="512x512" href="/icons/android-chrome-512x512.png" />
                 <link rel="manifest" href="/site.webmanifest" />
-                <meta name="theme-color" content="#ffffff" />
-                <meta name="msapplication-TileColor" content="#ffffff" />
+                {/* The site header's black, so the browser chrome runs into it. */}
+                <meta name="theme-color" content="#17140F" />
+                <meta name="msapplication-TileColor" content="#B4232B" />
                 <meta name="msapplication-TileImage" content="/icons/android-chrome-192x192.png" />
 
                 {/* Enhanced Language and Locale */}
@@ -536,25 +536,6 @@ function MyApp({ Component, pageProps }) {
                 <link rel="dns-prefetch" href="//www.google-analytics.com" />
                 <link rel="preload" href="/fonts/NotoSansBalinese-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
 
-                {/* Enhanced Favicon and Icons */}
-                <link rel="icon" href="/favicon.ico" sizes="any" />
-                <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
-                <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
-                <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-                <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-
-                {/* Android Chrome Icons */}
-                <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
-                <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
-
-                {/* Theme color for browsers */}
-                <meta name="theme-color" content="#0d6efd" />
-                <meta name="msapplication-TileColor" content="#0d6efd" />
-                <meta name="msapplication-TileImage" content="/android-chrome-192x192.png" />
-
-                {/* PWA Manifest */}
-                <link rel="manifest" href="/manifest.json" />
-
                 {/* Enhanced Structured Data */}
                 {mounted && (
                     <>
@@ -603,9 +584,6 @@ function MyApp({ Component, pageProps }) {
                         />
                     </>
                 )}
-
-                {/* PWA Manifest */}
-                <link rel="manifest" href="/site.webmanifest" />
 
                 {/* Service Worker Registration */}
                 <script dangerouslySetInnerHTML={{

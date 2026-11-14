@@ -1,16 +1,18 @@
-const CACHE_NAME = 'aksara-bali-v2.3.0';
+const CACHE_NAME = 'aksara-bali-v2.4.0';
+// cache.addAll fails as a whole if any URL 404s, so every path here must exist.
 const urlsToCache = [
     '/',
     '/practice',
     '/blog',
     '/faq',
     '/sitemap.xml',
-    '/android-chrome-192x192.png',
-    '/android-chrome-512x512.png',
-    '/apple-touch-icon.png',
-    '/favicon.ico',
-    '/favicon-16x16.png',
-    '/favicon-32x32.png',
+    '/icons/android-chrome-192x192.png',
+    '/icons/android-chrome-512x512.png',
+    '/icons/apple-touch-icon.png',
+    '/icons/favicon.ico',
+    '/icons/favicon.svg',
+    '/icons/favicon-16x16.png',
+    '/icons/favicon-32x32.png',
     '/robots.txt',
 ];
 
