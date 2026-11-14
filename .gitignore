@@ -52,3 +52,6 @@ next-env.d.ts
 767595183-Kamus-Bahasa-Bali.*
 # source dictionary scan — kept local, not published
 scripts/data/kamus-bahasa-bali.txt
+
+# built package output
+packages/*/dist

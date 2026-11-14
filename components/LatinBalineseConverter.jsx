@@ -25,6 +25,10 @@ import { trackEvent } from '../utils/analytics'
 import { useEmailGate } from './EmailGate'
 import { speak, canSpeak } from '../utils/speak'
 import OcrPanel from './OcrPanel'
+import {
+    Page, Workbench, BenchSeam, BenchPane, BenchInput, BenchOutput, BenchTools,
+    BenchKey, BenchChip, BenchIcon, BenchActions, BenchAction, BenchFlip,
+} from '@aksara-bali/react'
 
 const translations = {
     en: {
@@ -1256,79 +1260,65 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     const outputValue = isReverseMode ? latinText : balineseText
 
     return (
-        <div className="page">
-            <div className="page-head">
-                <h1 className="page-title">{t.title}</h1>
-                <p className="page-lede">{t.subtitle}</p>
-            </div>
-
-            <div className={`bench${outputValue ? ' is-pulled' : ''}`} key={isReverseMode ? 'rev' : 'fwd'}>
-                <div className="bench__pane" data-tour="conv-input">
-                    <div className="bench__label">
-                        <label htmlFor="bench-input" style={{ margin: 0 }}>{isReverseMode ? t.balineseInput : t.latinInput}</label>
+        <Page title={t.title} lede={t.subtitle}>
+            <Workbench pulled={!!outputValue} key={isReverseMode ? 'rev' : 'fwd'}>
+                <BenchPane
+                    data-tour="conv-input"
+                    label={isReverseMode ? t.balineseInput : t.latinInput}
+                    labelFor="bench-input"
+                    aside={
                         <span className="bench__mini">
                             <span className="bench__count">{(inputValue || '').length}</span>
-                            <button
+                            <BenchIcon
                                 onClick={handleCopyLeft}
-                                className="bench__icon"
                                 disabled={isReverseMode ? !balineseText : !latinText}
                                 aria-label={copySuccessLeft ? t.copied : t.copy}
                                 title={copySuccessLeft ? t.copied : t.copy}
                             >
                                 {copySuccessLeft ? <CheckCircle size={16} /> : <Copy size={16} />}
-                            </button>
-                            <button
+                            </BenchIcon>
+                            <BenchIcon
                                 onClick={handleDownloadLeft}
-                                className="bench__icon"
                                 disabled={isReverseMode ? !balineseText : !latinText}
                                 aria-label={t.download}
                                 title={t.download}
                             >
                                 <Download size={16} />
-                            </button>
-                            <button
+                            </BenchIcon>
+                            <BenchIcon
                                 onClick={handleReset}
-                                className="bench__icon"
                                 disabled={!latinText && !balineseText}
                                 aria-label={t.reset}
                                 title={t.reset}
                             >
                                 <RotateCcw size={16} />
-                            </button>
+                            </BenchIcon>
                         </span>
-                    </div>
-                    <textarea
+                    }
+                >
+                    <BenchInput
                         id="bench-input"
-                        className={`bench__input${isReverseMode ? ' is-aksara' : ''}`}
+                        script={isReverseMode}
                         value={inputValue}
                         onChange={(e) => isReverseMode ? setBalineseText(e.target.value) : setLatinText(e.target.value)}
                         placeholder={isReverseMode ? t.balineseplaceholder : t.placeholder}
                         rows="6"
-                        spellCheck={false}
-                        autoCapitalize="none"
                     />
-                    <div className="bench__tools">
+                    <BenchTools>
                         {!isReverseMode && ['ā', 'ī', 'ū', 'ě', 'ṇ'].map(ch => (
-                            <button
+                            <BenchKey
                                 key={ch}
-                                type="button"
-                                className="bench__key"
                                 onClick={() => setLatinText(latinText + ch)}
                                 aria-label={`${locale === 'id' ? 'Sisipkan' : 'Insert'} ${ch}`}
                             >
                                 {ch}
-                            </button>
+                            </BenchKey>
                         ))}
-                        <button
-                            type="button"
-                            onClick={() => setShowOcr(v => !v)}
-                            className="bench__chip is-push"
-                            aria-expanded={showOcr}
-                        >
+                        <BenchChip push onClick={() => setShowOcr(v => !v)} aria-expanded={showOcr}>
                             <ScanText size={16} />
                             {locale === 'id' ? 'Baca dari foto' : 'Read from photo'}
-                        </button>
-                    </div>
+                        </BenchChip>
+                    </BenchTools>
                     {showOcr && (
                         <div className="bench__ocr">
                             <OcrPanel
@@ -1343,73 +1333,69 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                             />
                         </div>
                     )}
-                </div>
+                </BenchPane>
 
-                <div className="bench__seam" aria-hidden="true" />
+                <BenchSeam />
 
-                <div className="bench__pane is-script" data-tour="conv-output">
-                    <div className="bench__label">
-                        <span>{isReverseMode ? t.latinOutput : t.balineseOutput}</span>
-                        <button
-                            type="button"
+                <BenchPane
+                    script
+                    data-tour="conv-output"
+                    label={isReverseMode ? t.latinOutput : t.balineseOutput}
+                    aside={
+                        <BenchFlip
                             onClick={handleModeSwitch}
-                            className="bench__flip"
                             data-tour="conv-switch"
                             title={isReverseMode ? t.switchToNormal : t.switchToReverse}
                         >
                             <ArrowLeftRight size={14} />
                             {isReverseMode ? t.switchToNormal : t.switchToReverse}
-                        </button>
-                    </div>
-                    <div
-                        key={outputValue}
-                        className={`bench__output${isReverseMode ? ' is-latin' : ''}${!outputValue ? ' is-empty' : ' is-fresh'}`}
-                        lang={isReverseMode ? undefined : 'ban-Bali'}
-                        aria-live="polite"
-                    >
-                        {outputValue || (isReverseMode ? t.latinOutputPlaceholder : t.outputPlaceholder)}
-                    </div>
-                    <div className="bench__actions">
-                        <button
+                        </BenchFlip>
+                    }
+                >
+                    <BenchOutput
+                        value={outputValue}
+                        latin={isReverseMode}
+                        lang="ban-Bali"
+                        placeholder={isReverseMode ? t.latinOutputPlaceholder : t.outputPlaceholder}
+                    />
+                    <BenchActions>
+                        <BenchAction
+                            primary
                             onClick={handleCopyRight}
-                            className="bench__act is-primary"
                             disabled={isReverseMode ? !latinText : !balineseText}
                         >
                             {copySuccessRight ? <CheckCircle size={17} /> : <Copy size={17} />}
                             {copySuccessRight ? t.copied : t.copy}
-                        </button>
-                        <button
+                        </BenchAction>
+                        <BenchAction
                             onClick={handleDownloadRight}
-                            className="bench__act"
                             disabled={isReverseMode ? !latinText : !balineseText}
                         >
                             <Download size={17} />
                             {t.download}
-                        </button>
+                        </BenchAction>
                         {canSpeak() && (
-                            <button
+                            <BenchAction
                                 onClick={handleListen}
-                                className="bench__act"
                                 disabled={!latinText}
                                 title={locale === 'id' ? 'Dengar pengucapan' : 'Hear pronunciation'}
                                 data-tour="conv-listen"
                             >
                                 <Volume2 size={17} />
                                 {locale === 'id' ? 'Dengar' : 'Listen'}
-                            </button>
+                            </BenchAction>
                         )}
-                        <button
+                        <BenchAction
                             onClick={handleShare}
-                            className="bench__act"
                             disabled={isReverseMode ? !latinText : !balineseText}
                             title={t.share}
                         >
                             <Share2 size={17} />
                             {t.share}
-                        </button>
-                    </div>
-                </div>
-            </div>
+                        </BenchAction>
+                    </BenchActions>
+                </BenchPane>
+            </Workbench>
 
             <div className="bench-below">
                 {!isReverseMode ? (
@@ -1508,7 +1494,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                     </div>
                 </section>
             )}
-        </div>
+        </Page>
     )
 }
 

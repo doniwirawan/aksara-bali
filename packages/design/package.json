@@ -1,0 +1,27 @@
+{
+  "name": "@aksara-bali/design",
+  "version": "0.1.0",
+  "description": "Tridatu: the Aksara Bali design system as plain CSS. Tokens, light and dark themes, the braided thread, shell and converter workbench components, plus optional Bootstrap 5 and driver.js themes.",
+  "style": "./index.css",
+  "exports": {
+    ".": "./index.css",
+    "./index.css": "./index.css",
+    "./tokens.css": "./tokens.css",
+    "./base.css": "./base.css",
+    "./components.css": "./components.css",
+    "./bootstrap.css": "./bootstrap.css",
+    "./driver.css": "./driver.css",
+    "./DESIGN.md": "./DESIGN.md"
+  },
+  "files": ["*.css", "DESIGN.md", "README.md", "LICENSE"],
+  "sideEffects": ["*.css"],
+  "keywords": ["design-system", "css", "balinese", "aksara-bali", "tokens", "dark-mode"],
+  "author": "Doni Wirawan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doniwirawan/aksara-bali.git",
+    "directory": "packages/design"
+  },
+  "homepage": "https://aksarabali.doniwirawan.xyz"
+}

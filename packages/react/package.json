@@ -1,0 +1,31 @@
+{
+  "name": "@aksara-bali/react",
+  "version": "0.1.0",
+  "description": "React components for script-converter tools in the Tridatu design: workbench, site shell, glyph grid and on-screen script keyboard.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "esbuild src/index.js --bundle --format=esm --jsx=automatic --external:react --external:react/jsx-runtime --outfile=dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  },
+  "keywords": ["react", "balinese", "aksara-bali", "transliteration", "keyboard", "design-system"],
+  "author": "Doni Wirawan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doniwirawan/aksara-bali.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://aksarabali.doniwirawan.xyz"
+}

@@ -1,0 +1,103 @@
+/* Tridatu base: reset, type, links, script text, the thread, browser surfaces. */
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  background-color: var(--ground);
+  color: var(--ink);
+  overscroll-behavior-x: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  caret-color: var(--red);
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-wrap: balance;
+  color: inherit;
+}
+
+p { text-wrap: pretty; }
+
+a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--accent); }
+
+.balinese-text, .aksara {
+  font-family: var(--font-balinese);
+  font-feature-settings: 'liga' on, 'calt' on;
+  line-height: 1.8;
+}
+
+/* ---------- Tridatu thread ---------- */
+.thread {
+  height: 6px;
+  background: var(--thread);
+  background-size: 28px 6px;
+}
+.thread-v {
+  background: var(--thread-v);
+}
+@keyframes threadPull { from { background-position: 0 0; } to { background-position: 56px 0; } }
+@keyframes threadPullV { from { background-position: 0 0; } to { background-position: 0 60px; } }
+
+/* ---------- Browser surfaces ---------- */
+::selection { background-color: var(--turmeric); color: var(--turmeric-ink); }
+::-moz-selection { background-color: var(--turmeric); color: var(--turmeric-ink); }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--ground); }
+::-webkit-scrollbar-thumb { background: var(--line); border: 2px solid var(--ground); }
+::-webkit-scrollbar-thumb:hover { background: var(--mute); }
+
+:focus { outline: none; }
+:focus-visible {
+  outline: 3px solid var(--turmeric);
+  outline-offset: 2px;
+}
+
+.loading { opacity: 0.6; pointer-events: none; }
+
+/* Print */
+@media print {
+  .btn, .alert, .card-header, .site-header, .site-footer { display: none !important; }
+  .card { border: 1px solid #ccc !important; }
+  body { font-size: 12pt; line-height: 1.5; background: #fff; color: #000; }
+  .balinese-text { font-size: 14pt; line-height: 1.8; }
+}
+
+@media (prefers-contrast: high) {
+  .card { border: 2px solid var(--ink); }
+  .btn { border-width: 2px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}

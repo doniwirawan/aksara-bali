@@ -117,7 +117,7 @@ export default function Footer({ darkMode, locale }) {
 
         <div className="site-footer__bottom">
           <small>
-            © {new Date().getFullYear()} Doni Wirawan · MIT License ·{' '}
+            © {new Date().getFullYear()} Doni Wirawan · <a href="https://polyformproject.org/licenses/noncommercial/1.0.0" target="_blank" rel="noopener noreferrer">PolyForm Noncommercial License</a> ·{' '}
             {id ? 'Terinspirasi dari ' : 'Inspired by '}
             <a href="https://github.com/bennylin/transliterasijawa" target="_blank" rel="noopener noreferrer">
               transliterasijawa

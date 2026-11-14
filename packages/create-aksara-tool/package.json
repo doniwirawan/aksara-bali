@@ -1,0 +1,19 @@
+{
+  "name": "create-aksara-tool",
+  "version": "0.1.0",
+  "description": "Start a script-converter web app (Next.js) in the Aksara Bali Tridatu design: npm create aksara-tool my-tool",
+  "type": "module",
+  "bin": {
+    "create-aksara-tool": "index.js"
+  },
+  "files": ["index.js", "template", "README.md", "LICENSE"],
+  "keywords": ["create", "starter", "nextjs", "balinese", "aksara", "transliteration"],
+  "author": "Doni Wirawan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doniwirawan/aksara-bali.git",
+    "directory": "packages/create-aksara-tool"
+  },
+  "homepage": "https://aksarabali.doniwirawan.xyz"
+}

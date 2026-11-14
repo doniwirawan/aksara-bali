@@ -1,0 +1,188 @@
+/* Bootstrap 5, re-pointed at the Tridatu tokens. Load after bootstrap.min.css. */
+
+:root {
+  --bs-body-font-family: var(--font-sans);
+  --bs-body-bg: var(--ground);
+  --bs-body-color: var(--ink);
+  --bs-secondary-color: var(--mute);
+  --bs-border-color: var(--line);
+  --bs-primary: #B4232B;
+  --bs-primary-rgb: 180, 35, 43;
+  --bs-success: #2F7D4A;
+  --bs-success-rgb: 47, 125, 74;
+  --bs-danger: #A11D24;
+  --bs-danger-rgb: 161, 29, 36;
+  --bs-warning: #E2A41C;
+  --bs-warning-rgb: 226, 164, 28;
+  --bs-info: #2B5C9E;
+  --bs-info-rgb: 43, 92, 158;
+  --bs-link-color: #2B5C9E;
+  --bs-link-color-rgb: 43, 92, 158;
+  --bs-link-hover-color: #B4232B;
+  --bs-border-radius: 0;
+  --bs-border-radius-sm: 0;
+  --bs-border-radius-lg: 0;
+  --bs-border-radius-xl: 0;
+  --bs-border-radius-pill: 0;
+  --bs-focus-ring-color: rgba(226, 164, 28, 0.55);
+}
+
+[data-bs-theme="dark"] {
+  --bs-body-bg: var(--ground);
+  --bs-body-color: var(--ink);
+  --bs-secondary-color: var(--mute);
+  --bs-border-color: var(--line);
+  --bs-primary: #E0575E;
+  --bs-primary-rgb: 224, 87, 94;
+  --bs-link-color: #93B8EC;
+  --bs-link-color-rgb: 147, 184, 236;
+  --bs-link-hover-color: #E0575E;
+  --bs-tertiary-bg: var(--surface-2);
+  --bs-secondary-bg: var(--surface-2);
+}
+
+/* Pages still carry Bootstrap's bg-light / bg-dark wrappers; the tokens own the ground now. */
+.bg-light, .bg-dark { background-color: var(--ground) !important; }
+.text-light, .text-dark { color: var(--ink) !important; }
+.text-muted, .text-secondary { color: var(--mute) !important; }
+.text-primary { color: var(--accent) !important; }
+.bg-primary { background-color: var(--red) !important; color: var(--red-ink) !important; }
+.bg-success { background-color: var(--black) !important; color: #F7F6F2 !important; }
+
+/* ---------- Bootstrap primitives in the Tridatu vocabulary ---------- */
+.btn {
+  --bs-btn-border-radius: 0;
+  --bs-btn-font-weight: 600;
+  border-radius: 0;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  transition: background-color .15s var(--ease-out), color .15s var(--ease-out), border-color .15s var(--ease-out);
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  --bs-btn-bg: var(--ink);
+  --bs-btn-border-color: var(--ink);
+  --bs-btn-color: var(--ground);
+  --bs-btn-hover-bg: var(--red);
+  --bs-btn-hover-border-color: var(--red);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-active-bg: var(--red-deep);
+  --bs-btn-active-border-color: var(--red-deep);
+  --bs-btn-disabled-bg: var(--ink);
+  --bs-btn-disabled-border-color: var(--ink);
+  --bs-btn-disabled-color: var(--ground);
+}
+.btn-success, .btn-danger {
+  --bs-btn-bg: var(--red);
+  --bs-btn-border-color: var(--red);
+  --bs-btn-color: #fff;
+  --bs-btn-hover-bg: var(--red-deep);
+  --bs-btn-hover-border-color: var(--red-deep);
+  --bs-btn-hover-color: #fff;
+}
+.btn-warning {
+  --bs-btn-bg: var(--turmeric);
+  --bs-btn-border-color: var(--turmeric);
+  --bs-btn-color: var(--turmeric-ink);
+  --bs-btn-hover-bg: #C98F12;
+  --bs-btn-hover-border-color: #C98F12;
+}
+.btn-outline-primary, .btn-outline-secondary, .btn-outline-success,
+.btn-outline-info, .btn-outline-dark, .btn-outline-light, .btn-light {
+  --bs-btn-color: var(--ink);
+  --bs-btn-bg: var(--surface);
+  --bs-btn-border-color: var(--line);
+  --bs-btn-hover-color: var(--ink);
+  --bs-btn-hover-bg: var(--surface-2);
+  --bs-btn-hover-border-color: var(--ink);
+  --bs-btn-active-color: var(--ink);
+  --bs-btn-active-bg: var(--surface-2);
+  --bs-btn-active-border-color: var(--ink);
+  --bs-btn-disabled-color: var(--mute);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--line);
+}
+.btn-outline-danger {
+  --bs-btn-color: var(--danger);
+  --bs-btn-border-color: var(--danger);
+  --bs-btn-hover-bg: var(--danger);
+  --bs-btn-hover-border-color: var(--danger);
+  --bs-btn-hover-color: #fff;
+}
+.btn-link { --bs-btn-color: var(--link); --bs-btn-hover-color: var(--accent); }
+
+.card {
+  --bs-card-bg: var(--surface);
+  --bs-card-border-color: var(--line);
+  --bs-card-border-radius: 0;
+  --bs-card-inner-border-radius: 0;
+  --bs-card-cap-bg: var(--surface);
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--ink);
+}
+.card-header {
+  border-radius: 0 !important;
+  font-weight: 700;
+  border-bottom: 1px solid var(--line);
+}
+
+.form-control, .form-select {
+  border-radius: 0;
+  border: 1px solid var(--line);
+  background-color: var(--surface);
+  color: var(--ink);
+  transition: border-color .15s var(--ease-out), box-shadow .15s var(--ease-out);
+}
+.form-control::placeholder { color: var(--mute); opacity: 1; }
+.form-control:focus, .form-select:focus {
+  border-color: var(--ink);
+  background-color: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(226, 164, 28, 0.45);
+}
+.form-check-input { border-color: var(--mute); }
+.form-check-input:checked { background-color: var(--red); border-color: var(--red); }
+.form-check-input:focus { box-shadow: 0 0 0 3px rgba(226, 164, 28, 0.45); border-color: var(--ink); }
+.form-range::-webkit-slider-thumb { background: var(--red); }
+.form-range::-moz-range-thumb { background: var(--red); }
+input[type="range"] { accent-color: var(--red); }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--red); }
+
+.alert {
+  border-radius: 0;
+  border: 1px solid var(--line);
+  box-shadow: none;
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.alert-success { background: var(--ok-tint); border-color: var(--ok); color: var(--ink); }
+.alert-danger { background: var(--danger-tint); border-color: var(--danger); color: var(--ink); }
+.alert-warning { background: var(--warn-tint); border-color: var(--turmeric); color: var(--ink); }
+.alert-info { background: var(--surface-2); border-color: var(--line); color: var(--ink); }
+
+.badge { font-weight: 600; border-radius: 0; padding: 0.3rem 0.55rem; }
+
+.nav-pills .nav-link, .nav-tabs .nav-link { border-radius: 0; color: var(--mute); font-weight: 600; }
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 -3px 0 var(--turmeric);
+}
+.nav-tabs { border-bottom-color: var(--line); }
+.nav-tabs .nav-link.active { background: var(--surface); color: var(--ink); border-color: var(--line) var(--line) var(--surface); }
+
+.progress { border-radius: 0; background: var(--surface-2); }
+.progress-bar { background: var(--thread); background-size: 28px 100%; }
+
+.spinner-border { color: var(--red); }
+
+.dropdown-menu { border-radius: 0; border-color: var(--line); background: var(--surface); }
+.modal-content { border-radius: 0; background: var(--surface); color: var(--ink); }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 575.98px) {
+  .btn { min-height: 44px; }
+  .form-control { font-size: 1rem; }
+}

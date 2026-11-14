@@ -1,0 +1,22 @@
+/* Optional: driver.js page tours in the Tridatu world. Load after driver.css. */
+
+/* driver.js tour, set in the same world */
+.driver-popover {
+  border-radius: 0 !important;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-top: 6px solid transparent !important;
+  border-image: var(--thread) 6 0 0 0 !important;
+  font-family: var(--font-sans) !important;
+}
+.driver-popover-title { font-family: var(--font-sans) !important; font-weight: 800 !important; }
+.driver-popover-description { color: var(--mute) !important; }
+.driver-popover-footer button {
+  border-radius: 0 !important;
+  text-shadow: none !important;
+  font-family: var(--font-sans) !important;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line) !important;
+}
+.driver-popover-footer .driver-popover-next-btn { background: var(--ink) !important; color: var(--ground) !important; border-color: var(--ink) !important; }

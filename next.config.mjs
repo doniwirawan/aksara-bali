@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 
 const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'))
 // Short commit on Vercel, else build date — so we can tell which build is live.
@@ -16,6 +17,13 @@ const nextConfig = {
 
     images: {
         unoptimized: true
+    },
+
+    // The site builds @aksara-bali/react from its source in packages/, so a
+    // deploy never depends on the package's dist/ having been built first.
+    webpack: (config) => {
+        config.resolve.alias['@aksara-bali/react$'] = fileURLToPath(new URL('./packages/react/src/index.js', import.meta.url))
+        return config
     },
 
     // PWA configuration
