@@ -285,7 +285,7 @@ export default function TranslatePage({ locale, setLocale }) {
     } catch { /* clipboard unavailable */ }
   }, [])
 
-  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const bg = 'var(--ground)'
   const cardBg = 'var(--surface)'
   const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
   const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
@@ -370,7 +370,7 @@ export default function TranslatePage({ locale, setLocale }) {
                     style={{
                       padding: '5px 12px', borderRadius: 0, fontSize: 13, cursor: 'pointer',
                       border: `1px solid ${level === key ? 'var(--accent)' : borderColor}`,
-                      background: level === key ? '#0d6efd15' : 'transparent',
+                      background: level === key ? 'var(--surface-2)' : 'transparent',
                       color: level === key ? 'var(--accent)' : mutedColor,
                       fontWeight: level === key ? 600 : 400,
                     }}
@@ -383,8 +383,8 @@ export default function TranslatePage({ locale, setLocale }) {
               <p style={{
                 fontSize: 12.5, lineHeight: 1.7, color: mutedColor, margin: '0 0 14px',
                 padding: '10px 12px', borderRadius: 0,
-                background: darkMode ? '#241d10' : '#fdf6e3',
-                border: `1px solid ${darkMode ? '#3a3020' : '#efe3c2'}`,
+                background: 'var(--warn-tint)',
+                border: '1px solid var(--turmeric)',
               }}>
                 {t.sentenceWarn}
               </p>
@@ -475,6 +475,14 @@ export default function TranslatePage({ locale, setLocale }) {
                       {t.indonesian}
                     </div>
                     <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>{e.i}</div>
+                    {e.src === 'komunitas' && (
+                      <div style={{ fontSize: 12.5, color: mutedColor, margin: '-6px 0 12px', lineHeight: 1.5 }}>
+                        {lang === 'en'
+                          ? 'Community addition from a thread on Balinese words falling out of use; not from the printed dictionary.'
+                          : 'Tambahan dari komunitas (utas kata Bali yang mulai jarang dipakai), bukan dari kamus cetak.'}
+                        {e.n ? ` · ${e.n}` : ''}
+                      </div>
+                    )}
 
                     <div style={{ display: 'grid', gap: 8 }}>
                       {LEVELS.filter(l => e[l.key]).map(l => {
@@ -485,11 +493,11 @@ export default function TranslatePage({ locale, setLocale }) {
                           <div key={l.key} style={{
                             display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
                             padding: '8px 10px', borderRadius: 0,
-                            background: darkMode ? '#20203a' : '#f7f7f2',
+                            background: 'var(--surface-2)',
                           }}>
                             <span style={{
                               fontSize: 11, fontWeight: 600, color: 'var(--accent)',
-                              background: '#0d6efd15', padding: '3px 8px', borderRadius: 0, whiteSpace: 'nowrap',
+                              background: 'var(--surface-2)', padding: '3px 8px', borderRadius: 0, whiteSpace: 'nowrap',
                             }} title={l.hint[lang]}>
                               {l[lang === 'en' ? 'en' : 'id']}
                             </span>
@@ -512,7 +520,7 @@ export default function TranslatePage({ locale, setLocale }) {
                     </div>
 
                     {flagFor === idx ? (
-                      <div style={{ marginTop: 12, padding: 12, borderRadius: 0, background: darkMode ? '#241d10' : '#fdf6e3', border: `1px solid ${darkMode ? '#3a3020' : '#efe3c2'}` }}>
+                      <div style={{ marginTop: 12, padding: 12, borderRadius: 0, background: 'var(--warn-tint)', border: '1px solid var(--turmeric)' }}>
                         <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{t.flagTitle}</div>
                         <p style={{ fontSize: 12.5, color: mutedColor, margin: '0 0 8px', lineHeight: 1.6 }}>{t.flagBody}</p>
                         <textarea

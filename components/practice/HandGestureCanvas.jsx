@@ -133,7 +133,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const [mode, setMode] = useState('mouse') // 'mouse' | 'gesture'
   const [status, setStatus] = useState('idle') // 'idle' | 'loading' | 'ready' | 'error'
   const [gesture, setGesture] = useState('none')
-  const [strokeColor, setStrokeColor] = useState('#0d6efd')
+  const [strokeColor, setStrokeColor] = useState('#17140F')
   const [strokeWidth, setStrokeWidth] = useState(4)
   const [errorMsg, setErrorMsg] = useState('')
   const [isDrawingMouse, setIsDrawingMouse] = useState(false)
@@ -880,7 +880,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
   const border = darkMode ? '#333' : 'var(--line)'
   const textColor = darkMode ? 'var(--line)' : '#333'
 
-  const COLORS = ['#0d6efd', '#dc3545', '#198754', '#6f42c1', '#fd7e14', '#000000']
+  const COLORS = ['#17140F', '#B4232B', '#2B5C9E', '#2F7D4A', '#E2A41C']
   const WIDTHS = [2, 4, 7, 12]
 
   // Icon-button style for the fullscreen floating toolbar
@@ -907,7 +907,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           marginBottom: '16px',
           padding: '12px 20px',
           borderRadius: 0,
-          background: darkMode ? '#1e3a5f' : 'var(--accent-tint)',
+          background: 'var(--accent-tint)',
           border: `1px solid ${darkMode ? 'var(--line)' : 'var(--line)'}`,
           position: 'relative',
         }}>
@@ -1153,7 +1153,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             <div style={{ display: 'flex', gap: '6px' }}>
               {COLORS.map(c => (
                 <button key={c} onClick={() => setStrokeColor(c)} aria-label={`Warna ${c}`} style={{
-                  width: '24px', height: '24px', borderRadius: '50%', background: c, cursor: 'pointer',
+                  width: '24px', height: '24px', borderRadius: 0, background: c, cursor: 'pointer',
                   border: strokeColor === c ? '3px solid #fff' : '2px solid rgba(255,255,255,0.35)',
                 }} />
               ))}
@@ -1195,7 +1195,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
               key={c}
               onClick={() => setStrokeColor(c)}
               style={{
-                width: '26px', height: '26px', borderRadius: '50%',
+                width: '26px', height: '26px', borderRadius: 0,
                 background: c, border: strokeColor === c ? '3px solid var(--accent)' : '2px solid transparent',
                 cursor: 'pointer', outline: strokeColor === c ? '3px solid var(--turmeric)' : 'none',
               }}
@@ -1228,7 +1228,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
             onClick={() => setShowOverlay(v => !v)}
             style={{
               padding: '7px 16px', borderRadius: 0,
-              border: `1px solid ${border}`, background: showOverlay ? (darkMode ? '#1e3a5f' : 'var(--accent-tint)') : 'transparent',
+              border: `1px solid ${border}`, background: showOverlay ? ('var(--accent-tint)') : 'transparent',
               cursor: 'pointer', fontSize: '13px', color: textColor,
               display: 'inline-flex', alignItems: 'center', gap: '6px',
             }}
@@ -1351,7 +1351,7 @@ export default function HandGestureCanvas({ darkMode, referenceText, referenceBa
           display: 'flex', alignItems: 'center', gap: '12px',
           fontSize: '13px', color: darkMode ? '#ccc' : 'var(--mute)',
         }}>
-          <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: 0, background: '#0d6efd20', color: 'var(--accent)', fontWeight: '600', whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: '11px', padding: '2px 8px', borderRadius: 0, background: 'var(--surface-2)', color: 'var(--ink)', fontWeight: '600', whiteSpace: 'nowrap' }}>
             Chrome HWR
           </span>
           <span>

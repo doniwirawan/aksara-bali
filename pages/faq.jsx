@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { Search, Target } from 'lucide-react'
+import { Search } from 'lucide-react'
 import PageTour from '../components/PageTour'
 
 const FAQ_TOUR = [
@@ -238,7 +238,7 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
     en: { title: 'Frequently Asked Questions', subtitle: 'Everything you need to know about Balinese script and this converter', placeholder: 'Search questions...' },
   }[lang]
 
-  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const bg = 'var(--ground)'
   const cardBg = 'var(--surface)'
   const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
   const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
@@ -370,24 +370,17 @@ export default function FAQPage({ locale, setLocale, faqDataFromDB }) {
           ))}
 
           {/* CTA */}
-          <div style={{ textAlign: 'center', padding: '32px', borderRadius: 0, background: darkMode ? 'var(--accent-tint)' : 'var(--accent-tint)', border: `1px solid ${darkMode ? 'var(--line)' : 'var(--line)'}`, marginTop: '40px' }}>
-            <Target size={32} style={{ color: 'var(--accent)', marginBottom: '12px' }} />
-            <h2 style={{ fontSize: '18px', fontWeight: '600', margin: '0 0 8px' }}>Siap untuk mencoba?</h2>
-            <p style={{ color: mutedColor, fontSize: '14px', margin: '0 0 20px' }}>
-              Gunakan konverter aksara Bali, latih kemampuan Anda, atau baca artikel di blog kami.
-            </p>
-            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href="/" style={{ padding: '10px 24px', borderRadius: 0, background: 'var(--accent)', color: '#fff', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>
-                Konverter
-              </a>
-              <a href="/practice" style={{ padding: '10px 24px', borderRadius: 0, border: `1px solid ${borderColor}`, color: textColor, textDecoration: 'none', fontSize: '14px' }}>
-                Latihan
-              </a>
-              <a href="/blog" style={{ padding: '10px 24px', borderRadius: 0, border: `1px solid ${borderColor}`, color: textColor, textDecoration: 'none', fontSize: '14px' }}>
-                Blog
-              </a>
+          <section className="app-band">
+            <div>
+              <h2 className="app-band__title">Siap untuk mencoba?</h2>
+              <p>Gunakan konverter aksara Bali, latih kemampuan Anda, atau baca artikel di blog kami.</p>
             </div>
-          </div>
+            <div className="app-band__ctas">
+              <a href="/" className="cta cta--red">Konverter</a>
+              <a href="/practice" className="cta cta--ghost">Latihan</a>
+              <a href="/blog" className="cta cta--ghost">Blog</a>
+            </div>
+          </section>
         </main>
         <PageTour pageKey="faq" locale={locale} steps={FAQ_TOUR} />
         <Footer darkMode={darkMode} locale={locale || 'id'} />

@@ -219,7 +219,7 @@ export default function QuizMode({ darkMode, locale }) {
             <button key={m} onClick={() => setMode(m)} style={{
               display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 18px',
               border: `1px solid ${mode === m ? blue : border}`,
-              borderRadius: k === 0 ? '10px 0 0 10px' : '0 10px 10px 0',
+              borderRadius: 0,
               background: mode === m ? blue : cardBg, color: mode === m ? '#fff' : muted,
               cursor: 'pointer', fontSize: 14, fontWeight: 600,
             }}>
@@ -324,7 +324,7 @@ export default function QuizMode({ darkMode, locale }) {
               <button key={m} onClick={() => !checked && setWriteMethod(m)} disabled={checked} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 18px',
                 border: `1px solid ${writeMethod === m ? blue : border}`,
-                borderRadius: k === 0 ? '10px 0 0 10px' : '0 10px 10px 0',
+                borderRadius: 0,
                 background: writeMethod === m ? blue : cardBg, color: writeMethod === m ? '#fff' : muted,
                 cursor: checked ? 'default' : 'pointer', fontSize: 13, fontWeight: 600,
               }}><Icon size={15} /> {label}</button>
@@ -338,7 +338,7 @@ export default function QuizMode({ darkMode, locale }) {
                   {input || <span style={{ color: muted, fontSize: 15, fontFamily: 'system-ui' }}>{t.typeHint}</span>}
                 </span>
               </div>
-              <div style={{ padding: 14, borderRadius: 0, border: `1px solid ${border}`, background: darkMode ? '#161622' : 'var(--surface-2)', marginBottom: 14 }}>
+              <div style={{ padding: 14, borderRadius: 0, border: `1px solid ${border}`, background: 'var(--surface-2)', marginBottom: 14 }}>
                 <BalineseKeyboard
                   onKeyPress={(c) => !checked && setInput(p => p + c)}
                   onBackspace={() => !checked && setInput(p => { const a = [...p]; a.pop(); return a.join('') })}
@@ -380,12 +380,12 @@ export default function QuizMode({ darkMode, locale }) {
             position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 900,
             background: lastCorrect ? (darkMode ? '#0d2d1f' : '#d7f5e3') : (darkMode ? '#2d0a0a' : '#ffe3e3'),
             borderTop: `2px solid ${lastCorrect ? green : red}`,
-            boxShadow: '0 -6px 24px rgba(0,0,0,0.14)',
+            boxShadow: 'none',
             animation: 'aksaraSlideUp 0.22s ease-out',
           }}>
             <div style={{ maxWidth: 600, margin: '0 auto', padding: '16px', display: 'flex', alignItems: 'center', gap: 14 }}>
               <div style={{
-                width: 44, height: 44, flexShrink: 0, borderRadius: '50%',
+                width: 44, height: 44, flexShrink: 0, borderRadius: 0,
                 background: lastCorrect ? green : red, color: '#fff',
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               }}>

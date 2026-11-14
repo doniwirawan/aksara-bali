@@ -64,7 +64,7 @@ export default function UserDashboard({ locale, setLocale }) {
     return () => document.removeEventListener('visibilitychange', onVisible)
   }, [fetchStats])
 
-  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const bg = 'var(--ground)'
   const cardBg = 'var(--surface)'
   const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
   const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
@@ -105,7 +105,7 @@ export default function UserDashboard({ locale, setLocale }) {
           {/* Profile card */}
           <div data-tour="dash-profile" style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, padding: '28px', marginBottom: '24px', display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
             <div style={{
-              width: '72px', height: '72px', borderRadius: '50%',
+              width: '72px', height: '72px', borderRadius: 0,
               background: isAdmin ? 'var(--turmeric)' : 'var(--red)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: '30px', fontWeight: '700', color: '#fff', flexShrink: 0,
@@ -116,7 +116,7 @@ export default function UserDashboard({ locale, setLocale }) {
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '6px' }}>
                 <h1 style={{ fontSize: '20px', fontWeight: '700', margin: 0 }}>{user.email}</h1>
                 {isAdmin && (
-                  <span style={{ fontSize: '11px', padding: '2px 10px', borderRadius: 0, background: '#0d6efd20', color: 'var(--accent)', fontWeight: '700' }}>ADMIN</span>
+                  <span style={{ fontSize: '11px', padding: '2px 10px', borderRadius: 0, background: 'var(--surface-2)', color: 'var(--ink)', fontWeight: '700' }}>ADMIN</span>
                 )}
               </div>
               <div style={{ fontSize: '13px', color: mutedColor }}>Bergabung: {joinedDate}</div>
@@ -149,7 +149,7 @@ export default function UserDashboard({ locale, setLocale }) {
 
           {/* Admin section */}
           {isAdmin && (
-            <div style={{ background: cardBg, borderRadius: 0, border: '2px solid #0d6efd40', padding: '24px', marginBottom: '24px' }}>
+            <div style={{ background: cardBg, borderRadius: 0, border: '2px solid var(--line-strong)', padding: '24px', marginBottom: '24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                 <h2 style={{ fontSize: '16px', fontWeight: '700', margin: 0, color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: '8px' }}><Wrench size={18} /> Admin Dashboard</h2>
                 <a href="/admin" style={{ fontSize: '12px', color: 'var(--accent)', textDecoration: 'none' }}>Buka lengkap →</a>
@@ -167,7 +167,7 @@ export default function UserDashboard({ locale, setLocale }) {
                       borderRadius: 0, border: `1px solid ${darkMode ? 'var(--line)' : '#dde5ff'}`,
                       padding: '16px 14px', cursor: 'pointer',
                     }}
-                      onMouseEnter={e => e.currentTarget.style.boxShadow = '0 6px 16px rgba(23,20,15,0.10)'}
+                      onMouseEnter={e => e.currentTarget.style.boxShadow = 'none'}
                       onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
                     >
                       <item.icon size={24} color={item.color} style={{ marginBottom: '8px' }} />
@@ -208,7 +208,7 @@ export default function UserDashboard({ locale, setLocale }) {
                   background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`,
                   padding: '20px 16px', cursor: 'pointer', transition: 'box-shadow 0.15s',
                 }}
-                  onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.1)'}
+                  onMouseEnter={e => e.currentTarget.style.boxShadow = 'none'}
                   onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
                 >
                   <link.icon size={28} color={link.color} style={{ marginBottom: '10px' }} />

@@ -96,7 +96,7 @@ export function EmailGateProvider({ children, locale = 'en' }) {
                         onClick={e => e.stopPropagation()}
                         style={{
                             background: 'var(--surface)', color: 'var(--ink)', borderRadius: 0, padding: '28px', width: '100%',
-                            maxWidth: '400px', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', position: 'relative',
+                            maxWidth: '400px', boxShadow: 'none', position: 'relative',
                         }}
                     >
                         <button

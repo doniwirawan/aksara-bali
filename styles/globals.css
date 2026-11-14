@@ -23,7 +23,7 @@
 
   --accent: #B4232B;
   --accent-ink: #FFFFFF;
-  --accent-tint: #F6E3E2;
+  --accent-tint: #FBF0D6;
   --link: #2B5C9E;
   --ok: #2F7D4A;
   --ok-tint: #E4F1E8;
@@ -81,7 +81,7 @@
   --line-strong: #F1EEE6;
   --accent: #E0575E;
   --accent-ink: #12100C;
-  --accent-tint: #3A1D1E;
+  --accent-tint: #352A12;
   --link: #93B8EC;
   --ok: #6CC08A;
   --ok-tint: #1D2E22;
@@ -392,7 +392,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--red); }
 .site-profile { position: relative; }
 .site-avatar { width: 34px; height: 34px; border: 0; background: var(--red); color: #fff; font-weight: 800; cursor: pointer; }
 .site-avatar.is-admin { background: var(--turmeric); color: var(--black); }
-.site-menu { position: absolute; right: 0; top: 44px; min-width: 220px; background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong); padding: 6px; z-index: 300; box-shadow: 0 12px 28px rgba(0,0,0,.18); }
+.site-menu { position: absolute; right: 0; top: 44px; min-width: 220px; background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong); padding: 6px; z-index: 300; }
 .site-menu__who { padding: 8px 10px 10px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
 .site-menu__email { font-size: 13px; font-weight: 700; word-break: break-all; }
 .site-menu__role { font-size: 12px; color: var(--mute); }
@@ -567,8 +567,28 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--red); }
 .cta--ghost { border-color: #5A5348; color: #F7F6F2; }
 .cta--ghost:hover { border-color: #F7F6F2; color: #F7F6F2; }
 @media (max-width: 440px) {
-  .site-brand__aksara { display: none; }
+  .site-brand { gap: 6px; }
+  .site-brand__aksara { font-size: 17px; }
+  .site-brand__name { font-size: 15px; }
   .site-tools { gap: 4px; }
   .site-tool { padding: 0 8px; }
   .site-login { padding: 0 12px; }
+}
+
+.bench__mini { display: inline-flex; align-items: center; gap: 2px; text-transform: none; letter-spacing: 0; }
+.bench__mini .bench__count { margin-right: 8px; }
+.bench__icon { width: 34px; height: 34px; display: inline-grid; place-items: center; border: 1px solid transparent; background: transparent; color: var(--ink); cursor: pointer; }
+.bench__icon:hover { border-color: var(--line); }
+.bench__icon:disabled { color: var(--line); cursor: not-allowed; border-color: transparent; }
+
+/* Page tour: sits in the side gutter on wide screens; in the page flow elsewhere,
+   so it never floats over the workbench. */
+.tour-btn { display: inline-flex; align-items: center; gap: 8px; margin: 32px auto 0; padding: 0 14px; height: 40px;
+  background: transparent; color: var(--ink); border: 1px solid var(--line); font: 600 14px var(--font-sans); cursor: pointer; }
+.tour-btn:hover { border-color: var(--ink); }
+main + .tour-btn, .tour-btn { position: relative; left: 50%; transform: translateX(-50%); }
+@media (min-width: 1360px) {
+  .tour-btn { position: fixed; left: auto; right: 18px; bottom: 18px; transform: none; margin: 0; z-index: 800;
+    width: 44px; height: 44px; padding: 0; justify-content: center; background: var(--black); color: #F7F6F2; border-color: #3A352D; }
+  .tour-btn__label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }

@@ -1266,7 +1266,36 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                 <div className="bench__pane" data-tour="conv-input">
                     <div className="bench__label">
                         <label htmlFor="bench-input" style={{ margin: 0 }}>{isReverseMode ? t.balineseInput : t.latinInput}</label>
-                        <span className="bench__count">{(inputValue || '').length}</span>
+                        <span className="bench__mini">
+                            <span className="bench__count">{(inputValue || '').length}</span>
+                            <button
+                                onClick={handleCopyLeft}
+                                className="bench__icon"
+                                disabled={isReverseMode ? !balineseText : !latinText}
+                                aria-label={copySuccessLeft ? t.copied : t.copy}
+                                title={copySuccessLeft ? t.copied : t.copy}
+                            >
+                                {copySuccessLeft ? <CheckCircle size={16} /> : <Copy size={16} />}
+                            </button>
+                            <button
+                                onClick={handleDownloadLeft}
+                                className="bench__icon"
+                                disabled={isReverseMode ? !balineseText : !latinText}
+                                aria-label={t.download}
+                                title={t.download}
+                            >
+                                <Download size={16} />
+                            </button>
+                            <button
+                                onClick={handleReset}
+                                className="bench__icon"
+                                disabled={!latinText && !balineseText}
+                                aria-label={t.reset}
+                                title={t.reset}
+                            >
+                                <RotateCcw size={16} />
+                            </button>
+                        </span>
                     </div>
                     <textarea
                         id="bench-input"
@@ -1314,28 +1343,6 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                             />
                         </div>
                     )}
-                    <div className="bench__tools">
-                        <button
-                            onClick={handleCopyLeft}
-                            className="bench__chip"
-                            disabled={isReverseMode ? !balineseText : !latinText}
-                        >
-                            {copySuccessLeft ? <CheckCircle size={16} /> : <Copy size={16} />}
-                            {copySuccessLeft ? t.copied : t.copy}
-                        </button>
-                        <button
-                            onClick={handleDownloadLeft}
-                            className="bench__chip"
-                            disabled={isReverseMode ? !balineseText : !latinText}
-                        >
-                            <Download size={16} />
-                            {t.download}
-                        </button>
-                        <button onClick={handleReset} className="bench__chip" disabled={!latinText && !balineseText}>
-                            <RotateCcw size={16} />
-                            {t.reset}
-                        </button>
-                    </div>
                 </div>
 
                 <div className="bench__seam" aria-hidden="true" />

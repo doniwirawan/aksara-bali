@@ -178,10 +178,10 @@ export default function BalineseKeyboard({ onKeyPress, onBackspace, onSpace, onC
                 flex: '1 0 40px', minWidth: '40px',
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 padding: '6px 2px', borderRadius: 0, border: `1px solid ${keyBorder}`,
-                background: darkMode ? '#20283a' : 'var(--accent-tint)', cursor: 'pointer', transition: 'all 0.1s', minHeight: '48px', gap: '2px',
+                background: 'var(--accent-tint)', cursor: 'pointer', transition: 'all 0.1s', minHeight: '48px', gap: '2px',
               }}
               onMouseEnter={keyHoverOn}
-              onMouseLeave={e => { e.currentTarget.style.background = darkMode ? '#20283a' : 'var(--accent-tint)'; e.currentTarget.style.borderColor = keyBorder }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'var(--accent-tint)'; e.currentTarget.style.borderColor = keyBorder }}
             >
               <span style={{ fontFamily: '"Noto Sans Balinese", serif', fontSize: '20px', lineHeight: 1, color: inkColor }}>{'◌' + char}</span>
               <span style={{ fontSize: '10px', color: subColor, fontWeight: '500' }}>{label}</span>

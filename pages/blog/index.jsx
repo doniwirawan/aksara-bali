@@ -76,7 +76,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
     return matchCategory && matchSearch
   })
 
-  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const bg = 'var(--ground)'
   const cardBg = 'var(--surface)'
   const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
   const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
@@ -193,11 +193,11 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                 padding: '28px', borderRadius: 0,
                 background: cardBg, border: `1px solid ${borderColor}`,
                 marginBottom: '24px', cursor: 'pointer',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+                boxShadow: 'none',
                 transition: 'box-shadow 0.2s',
               }}
-                onMouseEnter={e => e.currentTarget.style.boxShadow = '0 6px 24px rgba(0,0,0,0.12)'}
-                onMouseLeave={e => e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)'}
+                onMouseEnter={e => e.currentTarget.style.boxShadow = 'none'}
+                onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
               >
                 <div style={{ borderRadius: 0, overflow: 'hidden', aspectRatio: '4/3', background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)', minHeight: '160px' }}>
                   <img
@@ -209,7 +209,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                 </div>
                 <div>
                   <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: 0, background: '#0d6efd20', color: 'var(--accent)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: 0, background: 'var(--surface-2)', color: 'var(--ink)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                       <Star size={11} fill="currentColor" /> {lang === 'en' ? 'Featured' : 'Unggulan'}
                     </span>
                     <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: 0, background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)', color: mutedColor }}>
@@ -242,11 +242,11 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                     background: cardBg, border: `1px solid ${borderColor}`,
                     cursor: 'pointer', height: '100%',
                     transition: 'box-shadow 0.2s, transform 0.15s',
-                    boxShadow: '0 1px 6px rgba(0,0,0,0.04)',
+                    boxShadow: 'none',
                     display: 'flex', flexDirection: 'column',
                   }}
-                    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-                    onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 1px 6px rgba(0,0,0,0.04)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                    onMouseEnter={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)' }}
                   >
                     <div style={{ borderRadius: 0, overflow: 'hidden', marginBottom: '12px', aspectRatio: '16/9', background: darkMode ? 'var(--surface-2)' : 'var(--surface-2)' }}>
                       <img
@@ -271,7 +271,7 @@ export default function BlogIndex({ locale, setLocale, posts = [] }) {
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '10px' }}>
                       {post.tags.slice(0, 3).map(tag => (
-                        <span key={tag} style={{ fontSize: '10px', padding: '2px 8px', borderRadius: 0, background: '#0d6efd15', color: 'var(--accent)' }}>
+                        <span key={tag} style={{ fontSize: '10px', padding: '2px 8px', borderRadius: 0, background: 'var(--surface-2)', color: 'var(--ink)' }}>
                           #{tag}
                         </span>
                       ))}

@@ -11,7 +11,7 @@ export default function TermsPage({ locale, setLocale }) {
   }, [])
 
   const lang = locale === 'en' ? 'en' : 'id'
-  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const bg = 'var(--ground)'
   const cardBg = 'var(--surface)'
   const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
   const mutedColor = darkMode ? 'var(--mute)' : 'var(--mute)'

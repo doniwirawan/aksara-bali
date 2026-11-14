@@ -711,7 +711,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
   const displayDescription = lang === 'en' && post.descriptionEn ? post.descriptionEn : post.description
   const displayContent = lang === 'en' && post.contentEn ? post.contentEn : post.content
 
-  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const bg = 'var(--ground)'
   const cardBg = 'var(--surface)'
   const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
   const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
@@ -790,7 +790,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
                 {post.category}
               </span>
               {post.tags.map(tag => (
-                <span key={tag} style={{ fontSize: '11px', padding: '3px 10px', borderRadius: 0, background: '#0d6efd15', color: 'var(--accent)' }}>
+                <span key={tag} style={{ fontSize: '11px', padding: '3px 10px', borderRadius: 0, background: 'var(--surface-2)', color: 'var(--ink)' }}>
                   #{tag}
                 </span>
               ))}
@@ -882,7 +882,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
                   <a key={r.slug} href={`/blog/${r.slug}`} style={{ textDecoration: 'none' }}>
                     <div
                       style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, overflow: 'hidden', height: '100%' }}
-                      onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.1)'}
+                      onMouseEnter={e => e.currentTarget.style.boxShadow = 'none'}
                       onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
                     >
                       <div style={{ height: '140px', overflow: 'hidden' }}>
@@ -893,7 +893,7 @@ export default function BlogPost({ post, slug, locale, setLocale, relatedPosts =
                         />
                       </div>
                       <div style={{ padding: '14px' }}>
-                        <span style={{ fontSize: '11px', background: '#0d6efd15', color: 'var(--accent)', padding: '2px 8px', borderRadius: 0, fontWeight: '600' }}>
+                        <span style={{ fontSize: '11px', background: 'var(--surface-2)', color: 'var(--ink)', padding: '2px 8px', borderRadius: 0, fontWeight: '600' }}>
                           {r.category}
                         </span>
                         <div style={{ fontWeight: '600', fontSize: '14px', color: textColor, margin: '8px 0 4px', lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>

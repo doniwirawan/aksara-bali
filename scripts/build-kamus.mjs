@@ -86,6 +86,13 @@ const entries = rows.filter(e => {
 })
 const partial = entries.filter(e => e.partial).length
 
+// Words the printed book lacks, added by hand from community threads
+// (e.g. lists of Balinese words falling out of use). Kept in their own file so
+// a rebuild from the scan never drops them; the page labels them as such.
+const EXTRA = path.join('scripts', 'data', 'kamus-tambahan.json')
+const extra = JSON.parse(await fs.readFile(EXTRA, 'utf8')).map(e => ({ ...e, src: 'komunitas' }))
+entries.push(...extra)
+
 await fs.mkdir(path.dirname(OUT), { recursive: true })
 await fs.writeFile(OUT, JSON.stringify({
   source: 'Kamus Anggah-Ungguh Kruna Bali–Indonesia / Indonesia–Bali',

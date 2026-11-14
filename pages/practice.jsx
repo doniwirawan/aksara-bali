@@ -81,7 +81,7 @@ export default function PracticePage({ locale, setLocale }) {
   const nextWord = () => setPracticeWordIdx(prev => (prev + 1) % PRACTICE_WORDS.length)
   const prevWord = () => setPracticeWordIdx(prev => (prev - 1 + PRACTICE_WORDS.length) % PRACTICE_WORDS.length)
 
-  const bg = darkMode ? 'var(--ground)' : 'var(--surface-2)'
+  const bg = 'var(--ground)'
   const cardBg = 'var(--surface)'
   const textColor = darkMode ? 'var(--ink)' : 'var(--ink)'
   const borderColor = darkMode ? 'var(--line)' : 'var(--line)'
@@ -173,7 +173,7 @@ export default function PracticePage({ locale, setLocale }) {
           </div>
 
           {/* Tab content */}
-          <div style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, padding: '24px', boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}>
+          <div style={{ background: cardBg, borderRadius: 0, border: `1px solid ${borderColor}`, padding: '24px', boxShadow: 'none' }}>
 
             {/* QUIZ TAB — kept mounted (just hidden) so quiz progress, level,
                 and score survive switching to other tabs and back. */}
@@ -215,7 +215,7 @@ export default function PracticePage({ locale, setLocale }) {
                           onClick={prevWord}
                           aria-label={lang === 'id' ? 'Kata sebelumnya' : 'Previous word'}
                           title={lang === 'id' ? 'Kata sebelumnya' : 'Previous word'}
-                          style={{ width: 34, height: 34, borderRadius: '50%', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', color: textColor, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                          style={{ width: 34, height: 34, borderRadius: 0, border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', color: textColor, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                         >
                           <ChevronLeft size={16} />
                         </button>
@@ -223,7 +223,7 @@ export default function PracticePage({ locale, setLocale }) {
                           onClick={nextWord}
                           aria-label={lang === 'id' ? 'Kata berikutnya' : 'Next word'}
                           title={lang === 'id' ? 'Kata berikutnya' : 'Next word'}
-                          style={{ width: 34, height: 34, borderRadius: '50%', border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', color: textColor, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                          style={{ width: 34, height: 34, borderRadius: 0, border: `1px solid ${borderColor}`, background: 'transparent', cursor: 'pointer', color: textColor, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                         >
                           <ChevronRight size={16} />
                         </button>

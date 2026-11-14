@@ -1,3 +1,4 @@
+import { ArrowLeft } from 'lucide-react'
 import Head from 'next/head'
 import { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
@@ -30,12 +31,12 @@ export default function ForgotPasswordPage() {
       </Head>
       <div style={{
         minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'var(--surface-2)', fontFamily: 'var(--font-sans)',
+        background: 'var(--ground)', fontFamily: 'var(--font-sans)',
       }}>
         <div style={{
           padding: '40px', borderRadius: 0, background: 'var(--surface)',
           border: '1px solid var(--line)', width: '360px',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          boxShadow: 'none',
         }}>
           <div style={{ textAlign: 'center', marginBottom: '28px' }}>
             <a href="/" className="site-brand__aksara" style={{ fontSize: 34, textDecoration: 'none', display: 'inline-block', marginBottom: 8 }} aria-label="Aksara Bali">ᬅᬓ᭄ᬱᬭ</a>
@@ -85,7 +86,7 @@ export default function ForgotPasswordPage() {
           )}
 
           <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px' }}>
-            <a href="/auth/login" style={{ color: 'var(--mute)', textDecoration: 'none' }}>← Kembali ke Masuk</a>
+            <a href="/auth/login" style={{ color: 'var(--mute)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}><ArrowLeft size={14} /> Kembali ke Masuk</a>
           </p>
         </div>
       </div>

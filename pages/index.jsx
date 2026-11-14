@@ -373,9 +373,6 @@ export default function Home({ locale, setLocale }) {
                             <h2 className="section-title" id="tools-title">
                                 {locale === 'id' ? 'Semua Fitur' : 'All Features'}
                             </h2>
-                            <p className="section-lede">
-                                {locale === 'id' ? 'Klik untuk menjelajahi lebih lanjut' : 'Click to explore each feature'}
-                            </p>
                             <div className="tool-rows">
                                 <a href="/translate" className="tool-row">
                                     <span>
@@ -434,7 +431,6 @@ export default function Home({ locale, setLocale }) {
                                         <span className="tool-row__name">{locale === 'id' ? 'Blog Aksara' : 'Script Blog'}</span>
                                         <span className="tool-row__desc">{locale === 'id' ? 'Artikel tentang sejarah, struktur, dan pelestarian aksara Bali.' : 'Articles on the history, structure, and preservation of Balinese script.'}</span>
                                     </span>
-                                    <span className="tool-row__demo" />
                                     <span className="tool-row__go">{locale === 'id' ? 'Baca artikel' : 'Read articles'} <ArrowRight size={15} /></span>
                                 </a>
                                 <a href="/dashboard" className="tool-row">
@@ -442,7 +438,6 @@ export default function Home({ locale, setLocale }) {
                                         <span className="tool-row__name">{locale === 'id' ? 'Dasbor Belajar' : 'Learning Dashboard'}</span>
                                         <span className="tool-row__desc">{locale === 'id' ? 'Pantau progres belajar, nilai kuis, dan statistik latihan menulismu.' : 'Track your learning progress, quiz scores, and writing practice stats.'}</span>
                                     </span>
-                                    <span className="tool-row__demo" />
                                     <span className="tool-row__go">{locale === 'id' ? 'Buka' : 'Open'} <ArrowRight size={15} /></span>
                                 </a>
                                 <a href="/faq" className="tool-row">
@@ -450,7 +445,6 @@ export default function Home({ locale, setLocale }) {
                                         <span className="tool-row__name">FAQ</span>
                                         <span className="tool-row__desc">{locale === 'id' ? 'Pertanyaan umum tentang aksara Bali, cara penggunaan, dan fitur teknis.' : 'Common questions about Balinese script, usage guide, and technical features.'}</span>
                                     </span>
-                                    <span className="tool-row__demo" />
                                     <span className="tool-row__go">{locale === 'id' ? 'Lihat' : 'View'} <ArrowRight size={15} /></span>
                                 </a>
                             </div>

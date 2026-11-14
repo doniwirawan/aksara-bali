@@ -47,15 +47,10 @@ export default function PageTour({ pageKey, steps, locale }) {
       data-track={`tour-replay-${pageKey}`}
       aria-label={lang === 'en' ? 'Page tour' : 'Tur halaman'}
       title={lang === 'en' ? 'Show me around this page' : 'Lihat panduan halaman ini'}
-      style={{
-        position: 'fixed', right: '18px', bottom: '18px', zIndex: 800,
-        width: '44px', height: '44px', borderRadius: 0, border: '1px solid #3A352D',
-        background: 'var(--black)', color: '#F7F6F2', cursor: 'pointer',
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 4px 14px rgba(23,20,15,0.3)',
-      }}
+      className="tour-btn"
     >
-      <HelpCircle size={22} />
+      <HelpCircle size={18} />
+      <span className="tour-btn__label">{lang === 'en' ? 'Page tour' : 'Tur halaman'}</span>
     </button>
   )
 }
