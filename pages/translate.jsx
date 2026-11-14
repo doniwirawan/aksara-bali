@@ -36,6 +36,10 @@ const T = {
     convLink: 'konverter aksara Bali',
     tabWord: 'Cari kata',
     tabSentence: 'Bantu kalimat',
+    tabKuno: 'Bali Kuno',
+    kunoPlaceholder: 'Cari kata Bali Kuno atau artinya, misalnya "wuri" atau "ayam"...',
+    kunoNote: 'Bahasa Bali Kuno dari prasasti abad ke-9 sampai ke-14, bukan bahasa Bali sehari-hari. Entri dari Kamus Bahasa Bali Kuno–Indonesia (Pusat Pembinaan dan Pengembangan Bahasa, 1985; CC BY-NC 4.0), dibaca otomatis dari pindaian; hanya entri yang lolos pemeriksaan yang ditampilkan.',
+    kunoStats: (n) => `${n.toLocaleString('id-ID')} entri Bali Kuno`,
     sentencePlaceholder: 'Tulis kalimat bahasa Indonesia, misalnya "saya belajar aksara bali di rumah"...',
     sentenceWarn: 'Ini penggantian kata per kata, bukan terjemahan. Urutan kata bahasa Bali bisa berbeda, dan pilihan kata bergantung pada lawan bicara. Pakai hasilnya sebagai titik awal, lalu periksa bersama penutur asli.',
     levelPick: 'Ragam bahasa',
@@ -92,6 +96,10 @@ const T = {
     convLink: 'Balinese script converter',
     tabWord: 'Word search',
     tabSentence: 'Sentence helper',
+    tabKuno: 'Old Balinese',
+    kunoPlaceholder: 'Search an Old Balinese word or its meaning, e.g. "wuri" or "ayam"...',
+    kunoNote: 'Old Balinese is the language of 9th–14th century inscriptions, not everyday Balinese. Entries come from the Kamus Bahasa Bali Kuno–Indonesia (Pusat Pembinaan dan Pengembangan Bahasa, 1985; CC BY-NC 4.0), read automatically from the scan; only entries that passed checking are shown.',
+    kunoStats: (n) => `${n.toLocaleString('en-US')} Old Balinese entries`,
     sentencePlaceholder: 'Write an Indonesian sentence, e.g. "saya belajar aksara bali di rumah"...',
     sentenceWarn: 'This is word-by-word substitution, not translation. Balinese word order can differ, and word choice depends on who you are addressing. Treat the result as a starting point and check it with a native speaker.',
     levelPick: 'Register',
@@ -131,6 +139,7 @@ const T = {
 }
 
 const LINKS = [
+  { href: 'https://repositori.kemendikdasmen.go.id/2854/', label: 'Kamus Bahasa Bali Kuno–Indonesia (1985)', note: { id: 'Pusat Bahasa, CC BY-NC 4.0', en: 'Pusat Bahasa, CC BY-NC 4.0' } },
   { href: 'https://repositori.kemendikdasmen.go.id/16215/', label: 'Kamus Bali–Indonesia (2016)', note: { id: 'Badan Bahasa, edisi ke-3, CC BY-NC 4.0', en: 'Badan Bahasa, 3rd edition, CC BY-NC 4.0' } },
   { href: 'https://dictionary.basabali.org/', label: 'BASAbali Wiki', note: { id: 'kamus dan korpus bahasa Bali', en: 'Balinese dictionary and corpus' } },
   { href: 'https://ban.wikipedia.org/', label: 'Wikipedia Basa Bali', note: { id: 'ensiklopedia berbahasa Bali', en: 'Balinese-language encyclopedia' } },
@@ -168,6 +177,8 @@ export default function TranslatePage({ locale, setLocale }) {
   const [copied, setCopied] = useState('')
   const [mode, setMode] = useState('word')
   const [sentence, setSentence] = useState('')
+  const [kuno, setKuno] = useState(null)
+  const [kunoQuery, setKunoQuery] = useState('')
   const [level, setLevel] = useState('andap')
   const [formOpen, setFormOpen] = useState(false)
   const [form, setForm] = useState({ indonesian: '', andap: '', singgih: '', sor: '', mider: '', note: '', contributor: '', website: '' })
@@ -190,6 +201,27 @@ export default function TranslatePage({ locale, setLocale }) {
       .then(d => setEntries(d.entries || []))
       .catch(() => setEntries([]))
   }, [])
+
+  // Old Balinese is a separate dictionary, loaded only when its tab opens.
+  useEffect(() => {
+    if (mode !== 'kuno' || kuno) return
+    fetch('/data/kamus-bali-kuno.json')
+      .then(r => r.json())
+      .then(d => setKuno(d.entries || []))
+      .catch(() => setKuno([]))
+  }, [mode, kuno])
+
+  const kunoResults = useMemo(() => {
+    const q = norm(kunoQuery)
+    if (!kuno || q.length < 2) return []
+    const scored = []
+    for (const e of kuno) {
+      const k = norm(e.k), i = norm(e.i)
+      const best = k === q || i.split(/[;,]\s*/).includes(q) ? 3 : k.startsWith(q) ? 2 : (k.includes(q) || i.includes(q)) ? 1 : 0
+      if (best) scored.push({ e, best })
+    }
+    return scored.sort((x, y) => y.best - x.best).slice(0, 40).map(s => s.e)
+  }, [kuno, kunoQuery])
 
   const results = useMemo(() => {
     const q = norm(query)
@@ -331,7 +363,7 @@ export default function TranslatePage({ locale, setLocale }) {
           )}
 
           <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
-            {[['word', t.tabWord], ['sentence', t.tabSentence]].map(([key, label]) => (
+            {[['word', t.tabWord], ['sentence', t.tabSentence], ['kuno', t.tabKuno]].map(([key, label]) => (
               <button
                 key={key}
                 onClick={() => setMode(key)}
@@ -430,6 +462,59 @@ export default function TranslatePage({ locale, setLocale }) {
                     <p style={{ margin: 0, fontSize: 24, lineHeight: 1.9 }}>{sentenceScript}</p>
                   </div>
                 </div>
+              )}
+            </div>
+          )}
+
+          {mode === 'kuno' && (
+            <div style={{ marginBottom: 28 }}>
+              <p style={{
+                fontSize: 12.5, lineHeight: 1.7, color: mutedColor, margin: '0 0 14px',
+                padding: '10px 12px', background: 'var(--surface-2)', border: `1px solid ${borderColor}`,
+              }}>
+                {t.kunoNote}
+              </p>
+              {kuno && <p style={{ color: mutedColor, margin: '0 0 12px', fontSize: 13 }}>{t.kunoStats(kuno.length)}</p>}
+              <div style={{ position: 'relative', marginBottom: 20 }}>
+                <Search size={18} style={{ position: 'absolute', left: 14, top: 15, color: mutedColor }} />
+                <input
+                  value={kunoQuery}
+                  onChange={e => setKunoQuery(e.target.value)}
+                  placeholder={t.kunoPlaceholder}
+                  aria-label={t.kunoPlaceholder}
+                  style={{
+                    width: '100%', padding: '14px 14px 14px 44px', fontSize: 16, borderRadius: 0,
+                    border: `1px solid ${borderColor}`, background: cardBg, color: textColor, outline: 'none',
+                  }}
+                />
+              </div>
+              {kunoQuery.trim().length >= 2 && kuno && (
+                <>
+                  <p style={{ fontSize: 13, color: mutedColor, margin: '0 0 12px' }}>{t.resultsFor(kunoResults.length, kunoQuery.trim())}</p>
+                  <div style={{ display: 'grid', gap: 8 }}>
+                    {kunoResults.map((e, idx) => {
+                      const script = convertLatinToBalinese(e.k)
+                      const key = `kuno-${idx}`
+                      return (
+                        <div key={key} style={{ background: cardBg, border: `1px solid ${borderColor}`, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+                          <span style={{ fontWeight: 700, fontSize: 17 }}>{e.k}</span>
+                          <span style={{ fontFamily: 'var(--font-balinese)', fontSize: 22, lineHeight: 1.6 }} lang="ban-Bali">{script}</span>
+                          <span style={{ color: mutedColor, flex: '1 1 220px' }}>{e.i}</span>
+                          <button
+                            onClick={() => copy(script, key)}
+                            style={{
+                              display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, padding: '5px 10px',
+                              borderRadius: 0, cursor: 'pointer', border: `1px solid ${borderColor}`, background: 'transparent', color: mutedColor,
+                            }}
+                          >
+                            {copied === key ? <Check size={13} /> : <Copy size={13} />}
+                            {copied === key ? t.copied : t.copy}
+                          </button>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </>
               )}
             </div>
           )}

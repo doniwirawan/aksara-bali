@@ -5,8 +5,6 @@ import { Moon, Sun, User, BarChart3, Menu, X, LogOut } from 'lucide-react'
 
 const NAV_LINKS = [
   { href: '/', label: 'Konverter', labelEn: 'Converter' },
-  // /read is hidden from the nav — OCR is reachable from the "Baca dari foto"
-  // panel on the converter page.
   { href: '/translate', label: 'Kamus', labelEn: 'Dictionary' },
   { href: '/practice', label: 'Latihan', labelEn: 'Practice' },
   { href: '/blog', label: 'Blog', labelEn: 'Blog' },

@@ -17,7 +17,6 @@ export default function Footer({ darkMode, locale }) {
     { href: '/', label: id ? 'Konverter' : 'Converter' },
     { href: '/translate', label: id ? 'Kamus' : 'Dictionary' },
     { href: '/practice', label: id ? 'Latihan' : 'Practice' },
-    { href: '/read', label: id ? 'Baca dari foto' : 'Read from photo' },
     { href: '/blog', label: 'Blog' },
     { href: '/faq', label: 'FAQ' },
   ]

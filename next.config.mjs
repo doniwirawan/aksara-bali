@@ -55,6 +55,12 @@ const nextConfig = {
     },
 
     // Ensure proper PWA caching
+    // Read-from-photo is paused until the OCR model reads reliably; its code
+    // (components/OcrPanel.jsx, utils/balineseOcr.js, scripts/ocr/) is kept.
+    async redirects() {
+        return [{ source: '/read', destination: '/', permanent: false }]
+    },
+
     async rewrites() {
         return [
             {

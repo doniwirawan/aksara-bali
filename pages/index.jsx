@@ -414,18 +414,6 @@ export default function Home({ locale, setLocale }) {
                                     </span>
                                     <span className="tool-row__go">{locale === 'id' ? 'Coba' : 'Try it'} <ArrowRight size={15} /></span>
                                 </a>
-                                <a href="/read" className="tool-row">
-                                    <span>
-                                        <span className="tool-row__name">{locale === 'id' ? 'Baca dari Foto' : 'Read from Photo'}</span>
-                                        <span className="tool-row__desc">{locale === 'id' ? 'Potret aksara Bali dan baca hasilnya dalam Latin — OCR langsung di browser.' : 'Snap Balinese script and read it back in Latin — OCR right in your browser.'}</span>
-                                    </span>
-                                    <span className="tool-row__demo">
-                                        <span className="aksara" lang="ban-Bali">{convertLatinToBalinese('pura')}</span>
-                                        <span className="tool-row__arrow" aria-hidden="true">→</span>
-                                        <span>pura</span>
-                                    </span>
-                                    <span className="tool-row__go">{locale === 'id' ? 'Baca' : 'Read'} <ArrowRight size={15} /></span>
-                                </a>
                                 <a href="/blog" className="tool-row">
                                     <span>
                                         <span className="tool-row__name">{locale === 'id' ? 'Blog Aksara' : 'Script Blog'}</span>

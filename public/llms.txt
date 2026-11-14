@@ -28,7 +28,7 @@ is "matur suksma" (ᬫᬢᬸᬭ᭄ ᬲᬸᬓ᭄ᬲ᭄ᬫ).
 ## Pages
 
 ### Core Pages
-- `/` — Main Latin to Balinese script converter (real-time conversion, reverse mode, copy/download/share, word-art PNG export, text-to-speech) plus the "Baca dari foto" panel, which reads Balinese script from an uploaded or camera photo via OCR
+- `/` — Main Latin to Balinese script converter (real-time conversion, reverse mode, copy/download/share, word-art PNG export, text-to-speech)
 - `/translate` — Balinese dictionary: search an Indonesian or Balinese word and see its andap, alus singgih, alus sor, and mider forms with Balinese script, built from the Kamus Anggah-Ungguh Kruna Bali–Indonesia
 - `/practice` — Interactive learning: leveled quiz, writing canvas with hand gesture recognition, virtual Balinese keyboard (including the pepet key), script reference
 - `/blog` — Articles about Balinese script, history, culture, linguistics, and how to use the tools
@@ -88,8 +88,7 @@ first, then convert the writing.
 **Why does the output look like empty boxes (□□□)?** The text is correct but the device lacks a
 Balinese font. See `/blog/cara-instal-font-aksara-bali`, or export the result as a PNG image.
 
-**Can it go from Balinese script back to Latin?** Yes — use reverse mode on `/`, or the
-"Baca dari foto" panel on `/` to recognise script from a photo via OCR.
+**Can it go from Balinese script back to Latin?** Yes — use reverse mode on `/`.
 
 **What is the difference between taling and pepet?** Romanised "e" covers two Balinese sounds:
 taling (ᬾ) for /e/ and pepet (ᭂ) for the schwa /ə/. The Latin converter writes taling for "e";

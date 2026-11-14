@@ -17,14 +17,12 @@ import {
     AlignLeft,
     AlignCenter,
     AlignRight,
-    Volume2,
-    ScanText
+    Volume2
 } from 'lucide-react'
 import { authedFetch } from '../utils/supabase'
 import { trackEvent } from '../utils/analytics'
 import { useEmailGate } from './EmailGate'
 import { speak, canSpeak } from '../utils/speak'
-import OcrPanel from './OcrPanel'
 import {
     Page, Workbench, BenchSeam, BenchPane, BenchInput, BenchOutput, BenchTools,
     BenchKey, BenchChip, BenchIcon, BenchActions, BenchAction, BenchFlip,
@@ -173,7 +171,6 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
     const [copySuccessRight, setCopySuccessRight] = useState(false)
     const [transliterationMode, setTransliterationMode] = useState('auto')
     const [isReverseMode, setIsReverseMode] = useState(false)
-    const [showOcr, setShowOcr] = useState(false)
 
     const { requireEmail } = useEmailGate()
 
@@ -1314,25 +1311,7 @@ const LatinBalineseConverter = ({ locale: propLocale, setLocale: propSetLocale, 
                                 {ch}
                             </BenchKey>
                         ))}
-                        <BenchChip push onClick={() => setShowOcr(v => !v)} aria-expanded={showOcr}>
-                            <ScanText size={16} />
-                            {locale === 'id' ? 'Baca dari foto' : 'Read from photo'}
-                        </BenchChip>
                     </BenchTools>
-                    {showOcr && (
-                        <div className="bench__ocr">
-                            <OcrPanel
-                                locale={locale}
-                                darkMode={darkMode}
-                                onResult={(res) => {
-                                    if (res?.balinese) {
-                                        setIsReverseMode(true)
-                                        setBalineseText(res.balinese)
-                                    }
-                                }}
-                            />
-                        </div>
-                    )}
                 </BenchPane>
 
                 <BenchSeam />
