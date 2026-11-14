@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aksara-bali-v2.4.0';
+const CACHE_NAME = 'aksara-bali-v2.4.1';
 // cache.addAll fails as a whole if any URL 404s, so every path here must exist.
 const urlsToCache = [
     '/',

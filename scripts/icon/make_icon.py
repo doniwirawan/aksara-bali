@@ -58,9 +58,10 @@ def png(svg_text, px):
     return Image.open(io.BytesIO(pix.tobytes('png'))).convert('RGB')
 
 full = svg(512, thread=True, glyph_box=0.66)
-small = svg(512, thread=False, glyph_box=0.94)  # favicons: no braid, glyph edge to edge
+small = svg(512, thread=False, glyph_box=0.80)  # 16/32 px PNG favicons: no braid, a little room
+mark = svg(512, thread=False, glyph_box=0.70)   # SVG favicon + header mark: generous padding
 open(os.path.join(out, 'icon.svg'), 'w', encoding='utf-8').write(full)
-open(os.path.join(out, 'favicon.svg'), 'w', encoding='utf-8').write(small)
+open(os.path.join(out, 'favicon.svg'), 'w', encoding='utf-8').write(mark)
 
 targets = {
     'android-chrome-512x512.png': (full, 512),
